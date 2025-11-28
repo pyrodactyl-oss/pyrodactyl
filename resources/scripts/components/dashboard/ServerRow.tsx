@@ -7,15 +7,20 @@ import { bytesToString, ip } from '@/lib/formatters';
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
 
-// If you already have a power API, import it instead of this.
-async function startServer(uuid: string): Promise<void> {
-    // Example minimal POST; replace with your existing helper.
+// If you already have a power helper, import it and remove the fallback below:
+// import { sendPowerSignal } from '@/api/server/power';
+
+// Minimal fallback helper (replace with your real one)
+async function sendPowerSignal(uuid: string, signal: 'start' | 'stop' | 'restart' | 'kill') {
     const res = await fetch(`/api/client/servers/${uuid}/power`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signal: 'start' }),
+        body: JSON.stringify({ signal }),
     });
-    if (!res.ok) throw new Error('Failed to start server');
+    if (!res.ok) {
+        const text = await res.text().catch(() => '');
+        throw new Error(`Power action failed: ${res.status} ${text}`);
+    }
 }
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
@@ -81,10 +86,7 @@ const ServerRow = ({
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
     const [stats, setStats] = useState<ServerStats | null>(null);
 
-    // NEW: copy feedback for IP button
     const [copied, setCopied] = useState(false);
-
-    // NEW: local starting state to disable the Start button and show spinner
     const [isStarting, setIsStarting] = useState(false);
 
     const getStats = () =>
@@ -142,16 +144,14 @@ const ServerRow = ({
         (!stats && (server.status === 'offline' || server.status === null));
 
     const handleStart = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        // Prevent navigation
         e.preventDefault();
         e.stopPropagation();
-
         if (isStarting) return;
 
         try {
             setIsStarting(true);
-            await startServer(server.uuid);
-            // Optimistically fetch stats after starting
+            await sendPowerSignal(server.uuid, 'start');
+            // Optimistic refresh
             setTimeout(() => {
                 getStats().catch(() => undefined);
             }, 1000);
@@ -161,6 +161,16 @@ const ServerRow = ({
             setIsStarting(false);
         }
     };
+
+    // Shared card styles: keep width consistent
+    // We emulate the width resources would take with a min-width.
+    // Adjust minWidth if your design differs.
+    const cardClass =
+        'h-full hidden sm:flex items-center justify-between border-[1px] border-[#ffffff12] shadow-md rounded-lg w-fit whitespace-nowrap px-4 py-2 text-sm gap-4';
+    const cardStyle = {
+        background: 'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+        minWidth: '360px', // ensure same width as the three-metric layout
+    } as const;
 
     return (
         <StatusIndicatorBox
@@ -177,7 +187,6 @@ const ServerRow = ({
                         <div className='status-bar' />
                     </div>
 
-                    {/* IP + copy button */}
                     {defaultAllocation && (
                         <div className='mt-1 flex items-center gap-2 text-sm text-[#ffffff66]'>
                             <span>
@@ -219,14 +228,7 @@ const ServerRow = ({
                 </div>
             </div>
 
-            {/* Right side: stats card or offline card */}
-            <div
-                style={{
-                    background:
-                        'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                }}
-                className='h-full hidden sm:flex items-center justify-center border-[1px] border-[#ffffff12] shadow-md rounded-lg w-fit whitespace-nowrap px-4 py-2 text-sm gap-4'
-            >
+            <div style={cardStyle} className={cardClass}>
                 {isSuspended ? (
                     <div className='flex-1 text-center'>
                         <span className='text-red-100 text-xs'>
@@ -234,12 +236,12 @@ const ServerRow = ({
                         </span>
                     </div>
                 ) : isOffline ? (
-                    <div className='flex items-center gap-4'>
+                    <div className='flex items-center justify-between w-full gap-4'>
                         <span className='text-xs text-zinc-300'>Server is offline</span>
                         <button
                             onClick={handleStart}
                             disabled={isStarting}
-                            className='inline-flex items-center gap-2 rounded-full bg-[#18a34a] hover:bg-[#159141] disabled:opacity-70 disabled:cursor-not-allowed text-white px-3 py-1.5 text-xs font-semibold transition-colors'
+                            className='inline-flex items-center gap-2 rounded-full bg-[#3f3f46] hover:bg-[#52525b] disabled:opacity-70 disabled:cursor-not-allowed text-white px-3 py-1.5 text-xs font-semibold transition-colors'
                         >
                             {isStarting && (
                                 <svg
