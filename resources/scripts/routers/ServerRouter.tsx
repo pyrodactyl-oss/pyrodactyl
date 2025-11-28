@@ -415,7 +415,6 @@ const ServerRouter = () => {
                                             to={`/server/${id}/files`}
                                         >
                                             <HugeIconsFolder fill='currentColor' />
-                                            <HugeIconsFolder fill='currentColor' />
                                             <p>Files</p>
                                         </NavLink>
                                     </Can>
