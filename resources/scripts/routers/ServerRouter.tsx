@@ -483,17 +483,17 @@ const ServerRouter = () => {
                                         </NavLink>
                                     </Can>
                                     {/* {/* TODO: finish modrinth support *\} */}
-                                    <Can action={['modrinth.*', 'modrinth.download']} matchAny>
-                                        <NavLink
-                                            className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md sm:hidden md:show'
-                                            ref={NavigationMod}
-                                            to={`/server/${id}/mods`}
-                                            end
-                                        >
-                                            <ModrinthLogo fill='currentColor' />
-                                            <p>Mods/Plugins</p>
-                                        </NavLink>
-                                    </Can>
+                                    {/* <Can action={['modrinth.*', 'modrinth.download']} matchAny> */}
+                                    {/*     <NavLink */}
+                                    {/*         className='flex flex-row items-center sm:hidden md:show' */}
+                                    {/*         ref={NavigationMod} */}
+                                    {/*         to={`/server/${id}/mods`} */}
+                                    {/*         end */}
+                                    {/*     > */}
+                                    {/*         <ModrinthLogo /> */}
+                                    {/*         <p>Mods/Plugins</p> */}
+                                    {/*     </NavLink> */}
+                                    {/* </Can> */}
                                 </>
                                 <Can action={'startup.software'}>
                                     <NavLink
