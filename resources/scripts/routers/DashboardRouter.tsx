@@ -5,6 +5,7 @@ import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import routes from '@/routers/routes';
 
 import DashboardContainer from '@/components/dashboard/DashboardContainer';
+import SupportContainer from '@/components/dashboard/SupportContainer';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,11 +19,12 @@ import { DashboardMobileMenu } from '@/components/elements/MobileFullScreenMenu'
 import MobileTopBar from '@/components/elements/MobileTopBar';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound } from '@/components/elements/ScreenBlock';
-import HugeIconsApi from '@/components/elements/hugeicons/Api';
+// import HugeIconsApi from '@/components/elements/hugeicons/Api';
 import HugeIconsCashIcon from '@/components/elements/hugeicons/CashIcon';
 import HugeIconsDashboardSettings from '@/components/elements/hugeicons/DashboardSettings';
 import HugeIconsHome from '@/components/elements/hugeicons/Home';
-import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
+
+// import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 
 import http from '@/api/http';
 
@@ -58,6 +60,7 @@ const DashboardRouter = () => {
     const NavigationSettings = useRef<HTMLAnchorElement | null>(null);
     const NavigationApi = useRef<HTMLAnchorElement | null>(null);
     const NavigationSSH = useRef<HTMLAnchorElement | null>(null);
+    const NavigationSupport = useRef<HTMLAnchorElement | null>(null);
 
     const calculateTop = (pathname: string) => {
         // Get currents of navigation refs.
@@ -66,6 +69,7 @@ const DashboardRouter = () => {
         const ButtonSettings = NavigationSettings.current;
         const ButtonApi = NavigationApi.current;
         const ButtonSSH = NavigationSSH.current;
+        const ButtonSupport = NavigationSupport.current;
 
         // Perfectly center the page highlighter with simple math.
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 divided by 2 is 8.
@@ -78,6 +82,8 @@ const DashboardRouter = () => {
         if (pathname.endsWith('/ssh') && ButtonSSH != null) return (ButtonSSH as any).offsetTop + HighlightOffset;
         if (pathname.includes('/billing') && ButtonSettingsBilling != null)
             return (ButtonSettingsBilling as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith('/support') && ButtonSupport != null)
+            return (ButtonSupport as any).offsetTop + HighlightOffset;
 
         return '0';
     };
@@ -166,6 +172,10 @@ const DashboardRouter = () => {
                             <HugeIconsHome fill='currentColor' />
                             <p>Your Servers</p>
                         </NavLink>
+                        <NavLink to={'/support'} end className='flex flex-row items-center' ref={NavigationSupport}>
+                            <HugeIconsHome fill='currentColor' />
+                            <p>Support</p>
+                        </NavLink>
 
                         {/* Optional future items
             <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
@@ -210,6 +220,8 @@ const DashboardRouter = () => {
                                         element={<Component />}
                                     />
                                 ))}
+
+                                <Route path='/support' element={<SupportContainer />} />
 
                                 <Route path='*' element={<NotFound />} />
                             </Routes>
