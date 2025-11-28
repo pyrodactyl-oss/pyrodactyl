@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useStoreState } from 'easy-peasy';
 import { useEffect, useMemo, useState } from 'react';
 
 import StatBlock from '@/components/server/console/StatBlock';
@@ -8,6 +9,7 @@ import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
 
 import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
 
+import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
@@ -19,7 +21,14 @@ type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
 const Limit = ({ limit, children }: { limit: string | null; children: React.ReactNode }) => <>{children}</>;
 
 const ServerDetailsBlock = ({ className }: { className?: string }) => {
-    const [stats, setStats] = useState<Stats>({ memory: 0, cpu: 0, disk: 0, uptime: 0, tx: 0, rx: 0 });
+    const [stats, setStats] = useState<Stats>({
+        memory: 0,
+        cpu: 0,
+        disk: 0,
+        uptime: 0,
+        tx: 0,
+        rx: 0,
+    });
     const [subdomainInfo, setSubdomainInfo] = useState<SubdomainInfo | null>(null);
 
     const status = ServerContext.useStoreState((state) => state.status.value);
@@ -28,6 +37,9 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
+
+    // Read privacy flag from user store (set via your ConfigurePrivacyForm)
+    const privacyBlur = useStoreState((s: ApplicationStore) => !!s.user.data?.privacyBlur);
 
     const textLimits = useMemo(
         () => ({
@@ -40,7 +52,6 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     const allocation = ServerContext.useStoreState((state) => {
         const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
-
         return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
     });
 
@@ -60,7 +71,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
             try {
                 const data = await getSubdomainInfo(uuid);
                 setSubdomainInfo(data);
-            } catch (error) {
+            } catch {
                 // Silently fail - subdomain feature might not be available
                 setSubdomainInfo(null);
             }
@@ -70,10 +81,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     }, [uuid]);
 
     useEffect(() => {
-        if (!connected || !instance) {
-            return;
-        }
-
+        if (!connected || !instance) return;
         instance.send(SocketRequest.SEND_STATS);
     }, [instance, connected]);
 
@@ -81,7 +89,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
         let parsed: any = {};
         try {
             parsed = JSON.parse(data);
-        } catch (e) {
+        } catch {
             return;
         }
 
@@ -97,6 +105,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
 
     return (
         <div className={clsx('grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4', className)}>
+            {/* Allocation / IP Address (blurred when privacy is enabled) */}
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{
@@ -105,10 +114,21 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                         'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                 }}
             >
-                <StatBlock title={'IP Address'} copyOnClick={displayAddress}>
-                    {displayAddress}
+                <StatBlock
+                    title={'IP Address'}
+                    // Disable copy when blurred (so it doesn't leak); remove this ternary if you want to allow copying
+                    copyOnClick={privacyBlur ? undefined : displayAddress}
+                >
+                    <span
+                        className={privacyBlur ? 'blur-privacy select-none' : ''}
+                        title={privacyBlur ? 'Hidden by privacy settings' : undefined}
+                    >
+                        {displayAddress}
+                    </span>
                 </StatBlock>
             </div>
+
+            {/* CPU */}
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{
@@ -121,12 +141,17 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     {status === 'offline' ? (
                         <span className={'text-zinc-400'}>Offline</span>
                     ) : (
-                        <Limit
-                            limit={textLimits.cpu}
-                        >{`${stats.cpu.toFixed(2)}% / ${textLimits.cpu ?? 'Unlimited'}`}</Limit>
+                        <Limit limit={textLimits.cpu}>
+                            {
+                                `${stats.cpu.toFixed(2)}% / ${textLimits.cpu ?? 'Unlimited'}`
+                                // If you prefer ∞ for unlimited: replace 'Unlimited' with '∞'
+                            }
+                        </Limit>
                     )}
                 </StatBlock>
             </div>
+
+            {/* RAM */}
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{
@@ -145,6 +170,8 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     )}
                 </StatBlock>
             </div>
+
+            {/* Storage */}
             <div
                 className='transform-gpu skeleton-anim-2'
                 style={{
@@ -154,9 +181,9 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                 }}
             >
                 <StatBlock title={'Storage'}>
-                    <Limit
-                        limit={textLimits.disk}
-                    >{`${bytesToString(stats.disk)} / ${textLimits.disk ?? 'Unlimited'}`}</Limit>
+                    <Limit limit={textLimits.disk}>
+                        {`${bytesToString(stats.disk)} / ${textLimits.disk ?? 'Unlimited'}`}
+                    </Limit>
                 </StatBlock>
             </div>
         </div>
