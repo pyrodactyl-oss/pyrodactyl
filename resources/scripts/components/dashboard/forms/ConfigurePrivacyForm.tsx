@@ -1,54 +1,50 @@
-import { useStoreActions, useStoreState } from 'easy-peasy';
+import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
+import DisableTOTPDialog from '@/components/dashboard/forms/DisableTOTPDialog';
+import RecoveryTokensDialog from '@/components/dashboard/forms/RecoveryTokensDialog';
+import SetupTOTPDialog from '@/components/dashboard/forms/SetupTOTPDialog';
 import ActionButton from '@/components/elements/ActionButton';
-
-import { getPrivacy, updatePrivacy } from '@/api/account/privacy';
 
 import { ApplicationStore } from '@/state';
 
-const ConfigurePrivacyForm = () => {
-    const user = useStoreState((state: ApplicationStore) => state.user.data!);
-    const setUser = useStoreActions((actions: ApplicationStore) => actions.user.setUserData);
+import { useFlashKey } from '@/plugins/useFlash';
 
-    const [loading, setLoading] = useState(false);
-    const isEnabled = !!user.privacyBlur;
+const ConfigurePrivacyForm = () => {
+    const [tokens, setTokens] = useState<string[]>([]);
+    const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
+    const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
+    const { clearAndAddHttpError } = useFlashKey('account:two-step');
 
     useEffect(() => {
-        // hydrate on mount if not present
-        if (typeof user.privacyBlur === 'undefined') {
-            getPrivacy()
-                .then((res) => {
-                    setUser({ ...user, privacyBlur: res.privacy_blur });
-                })
-                .catch(() => {});
-        }
-    }, []);
+        return () => {
+            clearAndAddHttpError();
+        };
+    }, [visible]);
 
-    const onToggle = async () => {
-        try {
-            setLoading(true);
-            const next = !isEnabled;
-            const res = await updatePrivacy(next);
-            setUser({ ...user, privacyBlur: res.privacy_blur });
-            toast.success(res.privacy_blur ? 'Privacy blur enabled.' : 'Privacy blur disabled.');
-        } catch (err: any) {
-            toast.error('Failed to update privacy preference.');
-        } finally {
-            setLoading(false);
-        }
+    const onTokens = (tokens: string[]) => {
+        setTokens(tokens);
+        setVisible(null);
     };
 
     return (
         <div className='contents'>
-            <p className='text-sm'>
-                When enabled, server allocations and similar sensitive data will be blurred until disabled.
+            <SetupTOTPDialog open={visible === 'enable'} onClose={() => setVisible(null)} onTokens={onTokens} />
+            <RecoveryTokensDialog tokens={tokens} open={tokens.length > 0} onClose={() => setTokens([])} />
+            <DisableTOTPDialog open={visible === 'disable'} onClose={() => setVisible(null)} />
+            <p className={`text-sm`}>
+                When this is enabled, IP addresses and certain other personal data will be blurred until you disable it.
             </p>
-            <div className='mt-6'>
-                <ActionButton variant={isEnabled ? 'danger' : 'primary'} onClick={onToggle} isLoading={loading}>
-                    {isEnabled ? 'Disable Privacy Blur' : 'Enable Privacy Blur'}
-                </ActionButton>
+            <div className={`mt-6`}>
+                {isEnabled ? (
+                    <ActionButton variant='danger' onClick={() => setVisible('disable')}>
+                        Disable Privacy Blur
+                    </ActionButton>
+                ) : (
+                    <ActionButton variant='primary' onClick={() => setVisible('enable')}>
+                        Enable Privacy Blur
+                    </ActionButton>
+                )}
             </div>
         </div>
     );
