@@ -128,7 +128,6 @@ class User extends Model implements
         'totp_authenticated_at',
         'gravatar',
         'root_admin',
-        'privacy_blur',
     ];
 
     /**
@@ -139,7 +138,6 @@ class User extends Model implements
         'use_totp' => 'boolean',
         'gravatar' => 'boolean',
         'totp_authenticated_at' => 'datetime',
-        'privacy_blur' => 'boolean',
     ];
 
     /**
