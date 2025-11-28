@@ -25,7 +25,7 @@ const faqs: Faq[] = [
     },
 ];
 
-const FAQContainer = () => {
+const SupportContainer = () => {
     return (
         <div
             className='m-15 transform-gpu skeleton-anim-2'
@@ -87,4 +87,4 @@ const FAQContainer = () => {
     );
 };
 
-export default FAQContainer;
+export default SupportContainer;

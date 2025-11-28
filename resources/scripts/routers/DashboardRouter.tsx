@@ -14,7 +14,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import MainSidebar from '@/components/elements/MainSidebar';
 import MainWrapper from '@/components/elements/MainWrapper';
-import FAQContainer from '@/components/dashboard/FaqContainer';
+import SupportContainer from '@/components/dashboard/SupportContainer';
 import { DashboardMobileMenu } from '@/components/elements/MobileFullScreenMenu';
 import MobileTopBar from '@/components/elements/MobileTopBar';
 import Logo from '@/components/elements/PyroLogo';
@@ -61,7 +61,7 @@ const DashboardRouter = () => {
   const NavigationSettings = useRef<HTMLAnchorElement | null>(null);
   const NavigationApi = useRef<HTMLAnchorElement | null>(null);
   const NavigationSSH = useRef<HTMLAnchorElement | null>(null);
-  const NavigationFaq = useRef<HTMLAnchorElement | null>(null);
+  const NavigationSupport = useRef<HTMLAnchorElement | null>(null);
 
   const calculateTop = (pathname: string) => {
     // Get currents of navigation refs.
@@ -70,7 +70,7 @@ const DashboardRouter = () => {
     const ButtonSettings = NavigationSettings.current;
     const ButtonApi = NavigationApi.current;
     const ButtonSSH = NavigationSSH.current;
-    const ButtonFaq = NavigationFaq.current;
+    const ButtonSupport = NavigationSupport.current;
 
 
     // Perfectly center the page highlighter with simple math.
@@ -87,8 +87,8 @@ const DashboardRouter = () => {
       return (ButtonSSH as any).offsetTop + HighlightOffset;
     if (pathname.includes('/billing') && ButtonSettingsBilling != null)
       return (ButtonSettingsBilling as any).offsetTop + HighlightOffset;
-    if (pathname.endsWith('/faq') && ButtonFaq != null)
-      return (ButtonFaq as any).offsetTop + HighlightOffset;
+    if (pathname.endsWith('/support') && ButtonSupport != null)
+      return (ButtonSupport as any).offsetTop + HighlightOffset;
     return '0';
   };
 
@@ -190,13 +190,13 @@ const DashboardRouter = () => {
               <p>Your Servers</p>
             </NavLink>
             <NavLink
-              to={'/faq'}
+              to={'/support'}
               end
               className="flex flex-row items-center"
-              ref={NavigationFaq}
+              ref={NavigationSupport}
             >
               <HugeIconsQuestion fill="currentColor" />
-              <p>FAQ</p>
+              <p>Support</p>
             </NavLink>
 
             {/* Optional future items
@@ -252,7 +252,7 @@ const DashboardRouter = () => {
                   />
                 ))}
 
-                <Route path="faq" element={<FAQContainer />} />
+                <Route path="Support" element={<SupportContainer />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

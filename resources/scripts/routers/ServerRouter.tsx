@@ -20,6 +20,7 @@ import MainWrapper from '@/components/elements/MainWrapper';
 import { ServerMobileMenu } from '@/components/elements/MobileFullScreenMenu';
 import MobileTopBar from '@/components/elements/MobileTopBar';
 // import ModrinthLogo from '@/components/elements/ModrinthLogo';
+// import ModrinthLogo from '@/components/elements/ModrinthLogo';
 import PermissionRoute from '@/components/elements/PermissionRoute';
 import Logo from '@/components/elements/PyroLogo';
 import { NotFound, ServerError } from '@/components/elements/ScreenBlock';
@@ -414,6 +415,7 @@ const ServerRouter = () => {
                                             to={`/server/${id}/files`}
                                         >
                                             <HugeIconsFolder fill='currentColor' />
+                                            <HugeIconsFolder fill='currentColor' />
                                             <p>Files</p>
                                         </NavLink>
                                     </Can>
@@ -468,6 +470,7 @@ const ServerRouter = () => {
                                             end
                                         >
                                             <HugeIconsDashboardSettings fill='currentColor' />
+
                                             <p>Settings</p>
                                         </NavLink>
                                     </Can>
@@ -503,7 +506,11 @@ const ServerRouter = () => {
                                         end
                                     >
                                         <HugeIconsController fill='currentColor' />
+<<<<<<< HEAD
                                         <p>Games</p>
+=======
+                                        <p>Software</p>
+>>>>>>> c4e44a567 (Supportt rebrand and some fixes)
                                     </NavLink>
                                 </Can>
                             </ul>
@@ -529,7 +536,7 @@ const ServerRouter = () => {
                                 className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
-                                    (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                        (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                     <ConflictStateRenderer />
                                 ) : (
                                     <ErrorBoundary>
