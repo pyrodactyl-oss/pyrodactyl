@@ -298,3 +298,12 @@
         border-color: var(--color-gray-200, currentcolor);
     }
 }
+
+.blur-privacy {
+  filter: blur(6px);
+  user-select: none;
+  transition: filter 150ms ease;
+}
+.blur-privacy.revealed {
+  filter: none;
+}
