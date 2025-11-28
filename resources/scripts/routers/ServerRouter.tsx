@@ -503,7 +503,7 @@ const ServerRouter = () => {
                                         end
                                     >
                                         <HugeIconsController fill='currentColor' />
-                                        <p>Software</p>
+                                        <p>Games</p>
                                     </NavLink>
                                 </Can>
                             </ul>
