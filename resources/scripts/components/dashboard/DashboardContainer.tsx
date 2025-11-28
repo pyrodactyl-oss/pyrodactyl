@@ -38,12 +38,17 @@ import getAnnouncements, { Announcement as AnnouncementType } from '@/api/getAnn
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
-import { SortOption, getServerPreferences, updateServerPreferences } from '@/api/servers/serverOrder';
+// If you have a shared SortOption type, use that import and remove the inline type below.
+// import { SortOption, getServerPreferences, updateServerPreferences } from '@/api/servers/serverOrder';
+import { getServerPreferences, updateServerPreferences } from '@/api/servers/serverOrder';
 
 import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
 
 import { MainPageHeader } from '../elements/MainPageHeader';
+
+// Inline SortOption extension (remove if using shared type from your API layer)
+type SortOption = 'default' | 'name_asc' | 'custom' | 'cpu_desc' | 'ram_desc' | 'disk_desc';
 
 const DashboardContainer = () => {
     const { search } = useLocation();
@@ -104,7 +109,9 @@ const DashboardContainer = () => {
         getServerPreferences()
             .then((prefs) => {
                 setCustomOrder(prefs.order);
-                setSortOption(prefs.sortOption);
+                // If your backend has not been updated to return the new options,
+                // it will still return one of the known values.
+                setSortOption(prefs.sortOption as SortOption);
             })
             .catch((err) => console.error('Failed to fetch server preferences:', err));
     }, []);
@@ -112,15 +119,12 @@ const DashboardContainer = () => {
     // When entering edit mode, initialize customOrder if empty or sync with current servers
     useEffect(() => {
         if (isEditingOrder && servers) {
-            // If customOrder is empty or doesn't match current servers, initialize it
             const currentServerUuids = servers.items.map((s) => s.uuid);
 
             if (customOrder.length === 0) {
-                // Initialize with current server order
                 setCustomOrder(currentServerUuids);
             } else {
-                // Add any new servers that aren't in the custom order
-                const newServers = currentServerUuids.filter((uuid) => !customOrder.includes(uuid));
+                const newServers = currentServerUuids.filter((id) => !customOrder.includes(id));
                 if (newServers.length > 0) {
                     setCustomOrder([...customOrder, ...newServers]);
                 }
@@ -130,6 +134,22 @@ const DashboardContainer = () => {
 
     // Helper: safely get server name (adjust if your Server type differs)
     const getServerName = (server: Server) => (server as any).name?.toString?.() ?? '';
+
+    // Helpers to read limits safely (assuming limits.memory & limits.disk are in MB; cpu in %)
+    const getCpuLimit = (s: Server) => {
+        const v = Number((s as any)?.limits?.cpu);
+        return isNaN(v) ? 0 : v;
+    };
+    const getRamLimitBytes = (s: Server) => {
+        const mb = Number((s as any)?.limits?.memory);
+        if (!isFinite(mb) || isNaN(mb)) return 0;
+        return mb * 1024 * 1024;
+    };
+    const getDiskLimitBytes = (s: Server) => {
+        const mb = Number((s as any)?.limits?.disk);
+        if (!isFinite(mb) || isNaN(mb)) return 0;
+        return mb * 1024 * 1024;
+    };
 
     // Drag and drop sensors
     const sensors = useSensors(
@@ -179,25 +199,20 @@ const DashboardContainer = () => {
         setSortOption(newSortOption);
 
         try {
-            // If switching to custom and customOrder is empty, initialize it with current server order
             if (newSortOption === 'custom' && servers) {
                 const currentServerUuids = servers.items.map((s) => s.uuid);
 
-                // If customOrder is empty or doesn't match current servers, initialize it
                 if (customOrder.length === 0) {
                     setCustomOrder(currentServerUuids);
                     await updateServerPreferences({
                         sortOption: newSortOption,
-                        order: currentServerUuids, // Save the initial order
+                        order: currentServerUuids,
                     });
                 } else {
-                    // Add any new servers that aren't in the custom order
-                    const newServers = currentServerUuids.filter((uuid) => !customOrder.includes(uuid));
+                    const newServers = currentServerUuids.filter((id) => !customOrder.includes(id));
                     const updatedOrder = newServers.length > 0 ? [...customOrder, ...newServers] : customOrder;
 
-                    if (newServers.length > 0) {
-                        setCustomOrder(updatedOrder);
-                    }
+                    if (newServers.length > 0) setCustomOrder(updatedOrder);
 
                     await updateServerPreferences({
                         sortOption: newSortOption,
@@ -205,7 +220,6 @@ const DashboardContainer = () => {
                     });
                 }
             } else {
-                // For other sort options, just save the sort option
                 await updateServerPreferences({ sortOption: newSortOption });
             }
         } catch (err) {
@@ -228,12 +242,9 @@ const DashboardContainer = () => {
         }
 
         if (sortOption === 'custom') {
-            // When in edit mode, use customOrder state
-            // Otherwise apply saved custom order
             const orderToUse = isEditingOrder ? customOrder : customOrder;
 
             if (orderToUse.length === 0) {
-                // No custom order yet, use default order
                 return servers;
             }
 
@@ -242,7 +253,6 @@ const DashboardContainer = () => {
                 const indexA = orderToUse.indexOf(a.uuid);
                 const indexB = orderToUse.indexOf(b.uuid);
 
-                // If server not in custom order, put it at the end
                 if (indexA === -1 && indexB === -1) return 0;
                 if (indexA === -1) return 1;
                 if (indexB === -1) return -1;
@@ -250,6 +260,24 @@ const DashboardContainer = () => {
                 return indexA - indexB;
             });
 
+            return { ...servers, items: copy };
+        }
+
+        if (sortOption === 'cpu_desc') {
+            const copy = [...servers.items];
+            copy.sort((a, b) => getCpuLimit(b) - getCpuLimit(a));
+            return { ...servers, items: copy };
+        }
+
+        if (sortOption === 'ram_desc') {
+            const copy = [...servers.items];
+            copy.sort((a, b) => getRamLimitBytes(b) - getRamLimitBytes(a));
+            return { ...servers, items: copy };
+        }
+
+        if (sortOption === 'disk_desc') {
+            const copy = [...servers.items];
+            copy.sort((a, b) => getDiskLimitBytes(b) - getDiskLimitBytes(a));
             return { ...servers, items: copy };
         }
 
@@ -332,6 +360,18 @@ const DashboardContainer = () => {
                                             <DropdownMenuItem onSelect={() => handleSortOptionChange('custom')}>
                                                 {sortOption === 'custom' ? '• ' : ''}
                                                 Custom
+                                            </DropdownMenuItem>
+
+                                            <div className='border-t border-[#ffffff12] my-1' />
+
+                                            <DropdownMenuItem onSelect={() => handleSortOptionChange('cpu_desc')}>
+                                                {sortOption === 'cpu_desc' ? '• ' : ''} CPU (high → low)
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => handleSortOptionChange('ram_desc')}>
+                                                {sortOption === 'ram_desc' ? '• ' : ''} RAM (high → low)
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={() => handleSortOptionChange('disk_desc')}>
+                                                {sortOption === 'disk_desc' ? '• ' : ''} Storage (high → low)
                                             </DropdownMenuItem>
 
                                             {/* Edit Order / Save Order button - shown when custom is selected */}
