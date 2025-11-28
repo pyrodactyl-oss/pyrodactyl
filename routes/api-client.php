@@ -8,6 +8,7 @@ use Pterodactyl\Http\Middleware\RequireTwoFactorAuthentication;
 use Pterodactyl\Http\Middleware\Api\Client\Server\ResourceBelongsToServer;
 use Pterodactyl\Http\Middleware\Api\Client\Server\AuthenticateServerAccess;
 use Pterodactyl\Http\Controllers\Api\Client\ServersOrderController;
+use App\Http\Controllers\Client\UserPrivacyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,3 +198,10 @@ Route::group([
         Route::get('/{operationId}', [Client\Servers\SettingsController::class, 'getOperationStatus']);
     });
 });
+
+Route::middleware(['auth:sanctum'])
+    ->prefix('/client/account')
+    ->group(function () {
+        Route::get('/privacy', [UserPrivacyController::class, 'show']);
+        Route::put('/privacy', [UserPrivacyController::class, 'update']);
+    });
