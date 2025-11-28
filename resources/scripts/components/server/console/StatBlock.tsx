@@ -21,9 +21,11 @@ const StatBlock = ({ title, copyOnClick, className, children }: StatBlockProps) 
                 )}
             >
                 <div className={'flex flex-col justify-center overflow-hidden w-full'}>
-                    <p className={'leading-tight text-xs text-zinc-400 mb-2 uppercase tracking-wide font-medium'}>
-                        {title}
-                    </p>
+                    {title ? (
+                        <p className='leading-tight text-xs text-zinc-400 mb-2 uppercase tracking-wide font-medium'>
+                            {title}
+                        </p>
+                    ) : null}
                     <div
                         className={
                             'text-lg sm:text-xl font-bold leading-tight tracking-tight w-full truncate text-zinc-100 group-hover:text-white transition-colors duration-150'

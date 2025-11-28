@@ -519,7 +519,7 @@ const ServerRouter = () => {
                                 >
                                     {serverName}
                                 </StatBlock>
-                                <StatBlock className='p-1 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-pointer mt-2'>
+                                <StatBlock className='p-1 sm:p-2 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-pointer mt-2'>
                                     Open in Billing
                                 </StatBlock>
                             </div>
