@@ -14,7 +14,7 @@ export type BillingService = {
     interval: 'day' | 'week' | 'month' | 'year';
     status: BillingStatus;
     nextRenewalAt?: string;
-    manageUrl?: string;
+    manageUrl?: string; // used only by the Manage button now
     canCancel?: boolean;
     canResume?: boolean;
     priceFormatted?: string;
@@ -30,7 +30,7 @@ const StatusIndicatorBox = styled.div<{ $status: BillingStatus | undefined }>`
     border: 1px solid #ffffff12;
     transition: all 250ms ease-in-out;
     padding: 1.75rem 2rem;
-    cursor: pointer;
+    cursor: default; /* no pointer cursor since row is not clickable */
     border-radius: 0.75rem;
     display: flex;
     align-items: center;
@@ -136,14 +136,8 @@ export function BillingServiceRow({
         await onResume(service.id);
     };
 
-    // Use "as" polymorphism instead of withComponent
-    const Component = service.manageUrl ? (Link as any) : 'div';
-    const linkProps = service.manageUrl ? { to: service.manageUrl } : {};
-
     return (
         <StatusIndicatorBox
-            as={Component}
-            {...linkProps}
             className={className}
             $status={service.status}
             style={isEditMode ? { pointerEvents: 'none' } : undefined}
@@ -192,6 +186,7 @@ export function BillingServiceRow({
                                     if (!service.manageUrl) e.preventDefault();
                                 }}
                                 className='inline-flex items-center gap-2 rounded-full bg-[#3f3f46] hover:bg-[#52525b] text-white px-3 py-1.5 text-xs font-semibold transition-colors'
+                                aria-label='Manage subscription'
                             >
                                 Manage
                             </Link>
