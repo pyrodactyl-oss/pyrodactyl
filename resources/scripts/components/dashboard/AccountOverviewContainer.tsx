@@ -72,7 +72,7 @@ const AccountOverviewContainer = () => {
                     >
                         <ContentBox title={'Panel Version'}>
                             <p className='text-sm mb-4 text-zinc-300'>
-                                This is useful to provide Pyro staff if you run into an unexpected issue.
+                                This is useful to provide Quark staff if you run into an unexpected issue.
                             </p>
                             <div className='flex flex-col gap-4'>
                                 <Code>
