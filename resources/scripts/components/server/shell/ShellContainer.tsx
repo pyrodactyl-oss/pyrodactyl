@@ -655,7 +655,7 @@ const SoftwareContainer = () => {
                         disabled={isLoading}
                     >
                         {isLoading && <Spinner size='small' />}
-                        Change Game
+                        Change Software
                     </ActionButton>
                 </div>
             </div>
