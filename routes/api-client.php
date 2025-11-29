@@ -197,3 +197,17 @@ Route::group([
         Route::get('/{operationId}', [Client\Servers\SettingsController::class, 'getOperationStatus']);
     });
 });
+
+Route::get('/announcements', function () {
+    $now = now();
+    $announcements = Announcement::query()
+        ->where('active', true)
+        ->where(function ($q) use ($now) {
+            $q->whereNull('published_at')->orWhere('published_at', '<=', $now);
+        })
+        ->orderByDesc('published_at')
+        ->orderByDesc('created_at')
+        ->get(['id', 'title', 'message', 'type', 'published_at', 'created_at']);
+
+    return response()->json($announcements);
+});
