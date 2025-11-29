@@ -17,6 +17,9 @@ import HugeIconsPeople from '@/components/elements/hugeicons/People';
 import HugeIconsSsh from '@/components/elements/hugeicons/Ssh';
 import HugeIconsX from '@/components/elements/hugeicons/X';
 
+import HugeIconsCashIcon from './hugeicons/CashIcon';
+import HugeIconsQuestion from './hugeicons/Question';
+
 interface MobileFullScreenMenuProps {
     isVisible: boolean;
     onClose: () => void;
@@ -92,6 +95,12 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={HugeIconsSsh} end>
                 SSH Keys
+            </NavigationItem>
+            <NavigationItem to='/billing' icon={HugeIconsCashIcon} end>
+                Billing
+            </NavigationItem>
+            <NavigationItem to='/support' icon={HugeIconsQuestion} end>
+                Support
             </NavigationItem>
             <NavigationItem to='/account' icon={HugeIconsDashboardSettings} end>
                 Settings
