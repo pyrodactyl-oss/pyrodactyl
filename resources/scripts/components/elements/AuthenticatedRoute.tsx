@@ -12,7 +12,7 @@ function AuthenticatedRoute({ children }: { children?: ReactNode }): JSX.Element
         return <>{children}</>;
     }
 
-    return <Navigate to='/auth/login' state={{ from: location.pathname }} />;
+    return <Navigate to='/hosting' state={{ from: location.pathname }} />;
 }
 
 export default AuthenticatedRoute;

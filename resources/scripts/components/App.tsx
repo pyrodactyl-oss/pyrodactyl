@@ -23,6 +23,7 @@ import PyrodactylProvider from './PyrodactylProvider';
 const DashboardRouter = lazy(() => import('@/routers/DashboardRouter'));
 const ServerRouter = lazy(() => import('@/routers/ServerRouter'));
 const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
+const HostingContainer = lazy(() => import('@/components/hosting/HostingContainer'));
 
 interface ExtendedWindow extends Window {
     SiteConfiguration?: SiteSettings;
@@ -97,6 +98,15 @@ const App = () => {
                                                 </ServerContext.Provider>
                                             </Spinner.Suspense>
                                         </AuthenticatedRoute>
+                                    }
+                                />
+
+                                <Route
+                                    path='/hosting'
+                                    element={
+                                        <Spinner.Suspense>
+                                            <HostingContainer />
+                                        </Spinner.Suspense>
                                     }
                                 />
 
