@@ -24,7 +24,7 @@ RUN if [ "$DEV" = "false" ]; then \
 
 # Stage 1:
 # Build the actual container with all of the needed PHP dependencies that will run the application
-FROM --platform=$TARGETOS/$TARGETARCH php:8.3-fpm-alpine AS php
+FROM --platform=$TARGETOS/$TARGETARCH php:8.4-fpm-alpine AS php
 ARG DEV=false
 WORKDIR /app
 
@@ -40,7 +40,7 @@ RUN apk add --no-cache --virtual .build-deps \
 # Runtime packages
 RUN apk add --no-cache \
     ca-certificates curl git supervisor nginx dcron \
-    tar unzip certbot certbot-nginx mysql-client \
+    tar unzip certbot certbot-nginx mysql-client postgresql17-client \
     && ln -s /bin/ash /bin/bash
 
 # Copy frontend build

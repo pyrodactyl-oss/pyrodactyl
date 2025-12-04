@@ -1,3 +1,12 @@
+import {
+    ArrowDownToLine,
+    Bars,
+    CloudArrowUpIn,
+    Pencil,
+    Shield,
+    TrashBin,
+    TriangleExclamation,
+} from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
@@ -14,13 +23,6 @@ import {
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
-import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import HugeIconsCloudUp from '@/components/elements/hugeicons/CloudUp';
-import HugeIconsDelete from '@/components/elements/hugeicons/Delete';
-import HugeIconsFileDownload from '@/components/elements/hugeicons/FileDownload';
-import HugeIconsFileSecurity from '@/components/elements/hugeicons/FileSecurity';
-import HugeIconsPencil from '@/components/elements/hugeicons/Pencil';
-import HugeIconsHamburger from '@/components/elements/hugeicons/hamburger';
 
 import http, { httpErrorToHuman } from '@/api/http';
 import { getServerBackupDownloadUrl } from '@/api/server/backups';
@@ -264,7 +266,12 @@ const BackupContextMenu = ({ backup }: Props) => {
 
                     <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                         <div className='flex items-start space-x-3'>
-                            <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
+                            <TriangleExclamation
+                                width={22}
+                                height={22}
+                                fill='currentColor'
+                                className=' text-red-400 flex-shrink-0 mt-0.5'
+                            />
                             <div className='space-y-1'>
                                 <h4 className='text-sm text-red-200 font-medium'>
                                     Destructive Action - Complete Server Restore
@@ -442,30 +449,32 @@ const BackupContextMenu = ({ backup }: Props) => {
                             disabled={loading}
                             className='flex items-center justify-center w-8 h-8 p-0 hover:bg-zinc-700'
                         >
-                            <HugeIconsHamburger className='h-4 w-4' fill='currentColor' />
+                            <div>
+                                <Bars width={22} height={22} fill='currentColor' />
+                            </div>
                         </ActionButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align='end' className='w-48'>
                         <Can action={'backup.download'}>
                             <DropdownMenuItem onClick={doDownload} className='cursor-pointer'>
-                                <HugeIconsFileDownload className='h-4 w-4 mr-2' fill='currentColor' />
+                                <ArrowDownToLine width={22} height={22} className='mr-2' fill='currentColor' />
                                 Download
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.restore'}>
                             <DropdownMenuItem onClick={() => setModal('restore')} className='cursor-pointer'>
-                                <HugeIconsCloudUp className='h-4 w-4 mr-2' fill='currentColor' />
+                                <CloudArrowUpIn width={22} height={22} className=' mr-2' fill='currentColor' />
                                 Restore
                             </DropdownMenuItem>
                         </Can>
                         <Can action={'backup.delete'}>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => setModal('rename')} className='cursor-pointer'>
-                                <HugeIconsPencil className='h-4 w-4 mr-2' fill='currentColor' />
+                                <Pencil width={22} height={22} className=' mr-2' fill='currentColor' />
                                 Rename
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={onLockToggle} className='cursor-pointer'>
-                                <HugeIconsFileSecurity className='h-4 w-4 mr-2' fill='currentColor' />
+                                <Shield width={22} height={22} className=' mr-2' fill='currentColor' />
                                 {backup.isLocked ? 'Unlock' : 'Lock'}
                             </DropdownMenuItem>
                             {!backup.isLocked && (
@@ -475,7 +484,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                                         onClick={() => setModal('delete')}
                                         className='cursor-pointer text-red-400 focus:text-red-300'
                                     >
-                                        <HugeIconsDelete className='h-4 w-4 mr-2' fill='currentColor' />
+                                        <TrashBin width={22} height={22} className=' mr-2' fill='currentColor' />
                                         Delete
                                     </DropdownMenuItem>
                                 </>
@@ -491,7 +500,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     disabled={loading}
                     className='flex items-center gap-2'
                 >
-                    <HugeIconsDelete className='h-4 w-4' fill='currentColor' />
+                    <TrashBin width={22} height={22} fill='currentColor' />
                     <span className='hidden sm:inline'>Delete</span>
                 </ActionButton>
             )}

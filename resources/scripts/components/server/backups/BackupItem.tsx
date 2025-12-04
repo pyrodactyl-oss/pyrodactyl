@@ -1,11 +1,9 @@
+import { Cloud, CloudArrowUpIn, Lock } from '@gravity-ui/icons';
 import { format, formatDistanceToNow } from 'date-fns';
 
 import Can from '@/components/elements/Can';
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import Spinner from '@/components/elements/Spinner';
-import HugeIconsRefresh from '@/components/elements/hugeicons/Refresh';
-import HugeIconsSquareLock from '@/components/elements/hugeicons/SquareLock';
-import HugeIconsStorage from '@/components/elements/hugeicons/Storage';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { bytesToString } from '@/lib/formatters';
@@ -74,11 +72,11 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
         if (isActive) {
             return <Spinner size={'small'} />;
         } else if (backup.isLocked) {
-            return <HugeIconsSquareLock className='text-red-400 w-4 h-4' fill='currentColor' />;
+            return <Lock width={22} height={22} className='text-red-400 ' fill='currentColor' />;
         } else if (backup.status === 'completed' || backup.isSuccessful) {
-            return <HugeIconsStorage className='text-green-400 w-4 h-4' fill='currentColor' />;
+            return <Cloud width={22} height={22} className='text-green-400 ' fill='currentColor' />;
         } else {
-            return <HugeIconsStorage className='text-red-400 w-4 h-4' fill='currentColor' />;
+            return <Cloud width={22} height={22} className='text-red-400 ' fill='currentColor' />;
         }
     };
 
@@ -224,7 +222,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                                 className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
                                 title='Retry backup'
                             >
-                                <HugeIconsRefresh className='w-4 h-4' />
+                                <CloudArrowUpIn width={22} height={22} />
                             </button>
                         </Can>
                     )}

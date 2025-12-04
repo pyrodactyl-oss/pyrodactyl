@@ -1,3 +1,4 @@
+import { ArrowDownToLine } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, Field as FormikField, FormikHelpers, useFormikContext } from 'formik';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
@@ -649,13 +650,12 @@ const BackupContainer = () => {
                 <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
                     <div className='text-center'>
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <svg className='w-8 h-8 text-zinc-400' fill='currentColor' viewBox='0 0 20 20'>
-                                <path
-                                    fillRule='evenodd'
-                                    d='M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z'
-                                    clipRule='evenodd'
-                                />
-                            </svg>
+                            <ArrowDownToLine
+                                width={22}
+                                height={22}
+                                className='w-6 h-6 text-zinc-400'
+                                fill=' currentColor'
+                            />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                             {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}

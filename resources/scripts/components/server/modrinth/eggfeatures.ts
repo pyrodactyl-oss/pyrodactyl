@@ -12,7 +12,6 @@ export const parseEggFeatures = (features: string[]): LoaderMatch[] => {
     features.forEach((feature) => {
         const normalized = feature.toLowerCase().trim();
 
-        // Exact pattern matching: mod/loader or plugin/loader
         if (normalized.match(/^(mod|plugin)\/[a-zA-Z0-9]+$/)) {
             const [type, loader] = normalized.split('/') as ['mod' | 'plugin', string];
             const matchedLoader = allLoaders.find((l) => l.toLowerCase() === loader.toLowerCase());
@@ -27,7 +26,6 @@ export const parseEggFeatures = (features: string[]): LoaderMatch[] => {
             }
         }
 
-        // Fuzzy matching for loader names
         allLoaders.forEach((loader) => {
             if (normalized.includes(loader.toLowerCase())) {
                 const type = normalized.includes('mod') ? 'mod' : 'plugin';
@@ -49,7 +47,6 @@ export const parseEggFeatures = (features: string[]): LoaderMatch[] => {
         .sort((a, b) => (b.exactMatch ? 1 : 0) - (a.exactMatch ? 1 : 0));
 };
 
-// Helper functions for specific selectors
 export const getAvailableLoaders = (features: string[]): string[] => {
     const matches = parseEggFeatures(features);
     return [...new Set(matches.map((match) => match.loader))];

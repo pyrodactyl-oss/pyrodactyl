@@ -21,7 +21,7 @@ const Checkbox = React.forwardRef<
                     onClick={handleClick}
                     className={cn(
                         'inline-block rounded-lg w-full px-2 py-1 cursor-pointer transition-colors duration-200 mb-2',
-                        checked ? 'bg-green-800 text-white' : 'border-transparent hover:bg-gray-700',
+                        checked ? 'bg-brand/40 text-white' : 'border-transparent hover:bg-gray-700/30',
                     )}
                 >
                     {label}

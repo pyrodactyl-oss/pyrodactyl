@@ -1,3 +1,4 @@
+import { Box, TriangleExclamation } from '@gravity-ui/icons';
 import { useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
@@ -16,8 +17,6 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import Spinner from '@/components/elements/Spinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import HugeIconsAlert from '@/components/elements/hugeicons/Alert';
-import HugeIconsEggs from '@/components/elements/hugeicons/Egg';
 import OperationProgressModal from '@/components/server/operations/OperationProgressModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -617,7 +616,12 @@ const SoftwareContainer = () => {
             <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
                 <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
                     <div className='w-10 h-10 sm:w-12 sm:h-12 bg-[#ffffff11] rounded-lg flex items-center justify-center flex-shrink-0'>
-                        <HugeIconsEggs fill='currentColor' className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300' />
+                        <Box
+                            width={22}
+                            height={22}
+                            fill='currentColor'
+                            className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300'
+                        />
                     </div>
                     <div className='min-w-0 flex-1'>
                         {currentEggName ? (
@@ -1098,7 +1102,9 @@ const SoftwareContainer = () => {
                                         }`}
                                     >
                                         <div className='flex items-start gap-3'>
-                                            <HugeIconsAlert
+                                            <TriangleExclamation
+                                                width={22}
+                                                height={22}
                                                 fill='currentColor'
                                                 className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
                                                     warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
@@ -1125,7 +1131,9 @@ const SoftwareContainer = () => {
                         {/* General Warning */}
                         <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
                             <div className='flex items-start gap-3'>
-                                <HugeIconsAlert
+                                <TriangleExclamation
+                                    width={22}
+                                    height={22}
                                     fill='currentColor'
                                     className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
                                 />
@@ -1236,7 +1244,12 @@ const SoftwareContainer = () => {
             >
                 <div className='space-y-4'>
                     <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
-                        <HugeIconsAlert fill='currentColor' className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5' />
+                        <TriangleExclamation
+                            width={22}
+                            height={22}
+                            fill='currentColor'
+                            className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
+                        />
                         <div>
                             <h4 className='text-red-400 font-semibold mb-2'>DANGER: No Backup Selected</h4>
                             <p className='text-sm text-neutral-300'>
