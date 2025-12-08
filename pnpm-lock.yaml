@@ -198,8 +198,8 @@ importers:
         specifier: ^8.39.0
         version: 8.39.0(eslint@9.32.0(jiti@2.4.2))(typescript@5.9.2)
       uuid:
-        specifier: ^11.1.0
-        version: 11.1.0
+        specifier: ^13.0.0
+        version: 13.0.0
       vite:
         specifier: ^7.0.6
         version: 7.0.6(@types/node@24.2.0)(jiti@2.4.2)(lightningcss@1.30.1)
@@ -3718,8 +3718,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  uuid@11.1.0:
-    resolution: {integrity: sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==}
+  uuid@13.0.0:
+    resolution: {integrity: sha512-XQegIaBTVUjSHliKqcnFqYypAd4S+WCYt5NIeRs6w/UAry7z8Y9j5ZwRRL4kzq9U3sD6v+85er9FvkEaBpji2w==}
     hasBin: true
 
   vite-plugin-full-reload@1.2.0:
@@ -7562,7 +7562,7 @@ snapshots:
     dependencies:
       react: 19.1.1
 
-  uuid@11.1.0: {}
+  uuid@13.0.0: {}
 
   vite-plugin-full-reload@1.2.0:
     dependencies:
