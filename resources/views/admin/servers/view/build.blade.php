@@ -134,14 +134,14 @@
                                     <div>
                                         <input type="text" name="allocation_limit" class="form-control" value="{{ old('allocation_limit', $server->allocation_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                                    <p class="text-muted small">The total number of additional allocations a user is allowed to create for this server. Set to -1 for unlimited, set to 0 for primary allocation only.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="backup_limit" class="control-label">Backup Limit</label>
                                     <div>
                                         <input type="text" name="backup_limit" class="form-control" value="{{ old('backup_limit', $server->backup_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of backups that can be created for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                                    <p class="text-muted small">The total number of additional allocations a user is allowed to create for this server. Set to -1 for unlimited, set to 0 for primary allocation only.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="backup_storage_limit" class="control-label">Backup Storage Limit</label>

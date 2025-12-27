@@ -239,7 +239,7 @@ class Server extends Model
         if (!$this->egg || !is_array($this->egg->docker_images) || empty($this->egg->docker_images)) {
             return false;
         }
-        
+
         return !in_array($this->image, array_values($this->egg->docker_images));
     }
 
@@ -252,14 +252,14 @@ class Server extends Model
         if (!$this->egg || !is_array($this->egg->docker_images) || empty($this->egg->docker_images)) {
             throw new \RuntimeException('Server egg has no docker images configured.');
         }
-        
+
         $eggDockerImages = $this->egg->docker_images;
         $defaultImage = reset($eggDockerImages);
-        
+
         if (empty($defaultImage)) {
             throw new \RuntimeException('Server egg has no valid default docker image.');
         }
-        
+
         return $defaultImage;
     }
 
@@ -418,12 +418,12 @@ class Server extends Model
 
     public function hasAllocationLimit(): bool
     {
-        return !is_null($this->allocation_limit) && $this->allocation_limit > 0;
+        return !is_null($this->allocation_limit) && $this->allocation_limit > 0 && $this->allocation_limit !== -1;
     }
 
     public function allowsAllocations(): bool
     {
-        return is_null($this->allocation_limit) || $this->allocation_limit > 0;
+        return is_null($this->allocation_limit) || $this->allocation_limit === -1 || $this->allocation_limit > 0;
     }
 
     /**

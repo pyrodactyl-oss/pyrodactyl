@@ -76,7 +76,7 @@ const NetworkContainer = () => {
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
-                                    {allocationLimit === null && (
+                                    {(allocationLimit === null || allocationLimit === -1) && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
                                             {data.filter((allocation) => !allocation.isDefault).length} allocations
                                             (unlimited)
@@ -94,6 +94,7 @@ const NetworkContainer = () => {
                                         </span>
                                     )}
                                     {(allocationLimit === null ||
+                                        allocationLimit === -1 ||
                                         (allocationLimit > 0 &&
                                             allocationLimit >
                                                 data.filter((allocation) => !allocation.isDefault).length)) && (
