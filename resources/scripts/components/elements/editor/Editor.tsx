@@ -1,7 +1,7 @@
 import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete';
 import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands';
 import {
-    LanguageDescription,
+    type LanguageDescription,
     LanguageSupport,
     bracketMatching,
     defaultHighlightStyle,
@@ -11,7 +11,6 @@ import {
     indentUnit,
     syntaxHighlighting,
 } from '@codemirror/language';
-import { languages } from '@codemirror/language-data';
 import { lintKeymap } from '@codemirror/lint';
 import { highlightSelectionMatches, searchKeymap } from '@codemirror/search';
 import type { Extension } from '@codemirror/state';
@@ -31,16 +30,8 @@ import {
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
+import { findLanguageByFilename } from './languages';
 import { ayuMirageHighlightStyle, ayuMirageTheme } from './theme';
-
-function findLanguageByFilename(filename: string): LanguageDescription | undefined {
-    const language = LanguageDescription.matchFilename(languages, filename);
-    if (language !== null) {
-        return language;
-    }
-
-    return undefined;
-}
 
 const defaultExtensions: Extension = [
     // Ayu Mirage
