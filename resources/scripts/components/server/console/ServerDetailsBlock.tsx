@@ -41,6 +41,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
+    const customDomain = ServerContext.useStoreState((state) => state.server.data!.customDomain);
 
     const textLimits = useMemo(
         () => ({
@@ -54,19 +55,22 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const allocation = ServerContext.useStoreState((state) => {
         const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
 
-        return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
+        return !match
+            ? { host: 'n/a', port: null as number | null }
+            : { host: match.alias || ip(match.ip), port: match.port };
     });
 
-    // Get display address (subdomain if available and active, otherwise IP)
+    // Get display address (custom domain > allocation alias > allocation IP)
     const displayAddress = useMemo(() => {
-        if (
+        const hostFromSubdomain =
             subdomainInfo?.current_subdomain?.attributes?.is_active &&
             subdomainInfo.current_subdomain.attributes.full_domain
-        ) {
-            return subdomainInfo.current_subdomain.attributes.full_domain;
-        }
-        return allocation;
-    }, [subdomainInfo, allocation, serverAllocations]);
+                ? subdomainInfo.current_subdomain.attributes.full_domain
+                : null;
+
+        const host = customDomain || hostFromSubdomain || allocation.host;
+        return allocation.port !== null ? `${host}:${allocation.port}` : host;
+    }, [customDomain, subdomainInfo, allocation, serverAllocations]);
 
     useEffect(() => {
         const loadSubdomainInfo = async () => {

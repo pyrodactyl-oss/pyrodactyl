@@ -19,6 +19,7 @@ export interface Server {
     node: string;
     isNodeUnderMaintenance: boolean;
     status: ServerStatus;
+    customDomain: string | null;
     sftpDetails: {
         ip: string;
         port: number;
@@ -55,6 +56,7 @@ export const rawDataToServerObject = ({ attributes: data }: FractalResponseData)
     node: data.node,
     isNodeUnderMaintenance: data.is_node_under_maintenance,
     status: data.status,
+    customDomain: data.custom_domain ?? null,
     invocation: data.invocation,
     dockerImage: data.docker_image,
     sftpDetails: {
