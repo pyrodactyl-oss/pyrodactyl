@@ -31,7 +31,10 @@ class ClientController extends ClientApiController
 
         // Start the query builder and ensure we eager load any requested relationships from the request.
         $builder = QueryBuilder::for(
-            Server::query()->with($this->getIncludesForTransformer($transformer, ['node']))
+            Server::query()->with(array_merge(
+                $this->getIncludesForTransformer($transformer, ['node']),
+                ['activeSubdomain.domain']
+            ))
         )->allowedFilters([
             'uuid',
             'name',
