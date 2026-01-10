@@ -53,6 +53,7 @@ class ServerTransformer extends BaseClientTransformer
         'port' => $server->node->SFTPAliasPort
       ],
       'description' => $server->description,
+      'custom_domain' => $server->activeSubdomain?->full_domain,
       'limits' => [
         'memory' => $server->memory,
         'overhead_memory' => $server->overhead_memory,

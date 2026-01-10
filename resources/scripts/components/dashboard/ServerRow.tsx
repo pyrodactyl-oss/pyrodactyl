@@ -110,11 +110,14 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     <p className={`text-sm text-[#ffffff66]`}>
                         {server.allocations
                             .filter((alloc) => alloc.isDefault)
-                            .map((allocation) => (
-                                <Fragment key={allocation.ip + allocation.port.toString()}>
-                                    {allocation.alias || ip(allocation.ip)}:{allocation.port}
-                                </Fragment>
-                            ))}
+                            .map((allocation) => {
+                                const host = server.customDomain || allocation.alias || ip(allocation.ip);
+                                return (
+                                    <Fragment key={allocation.ip + allocation.port.toString()}>
+                                        {host}:{allocation.port}
+                                    </Fragment>
+                                );
+                            })}
                     </p>
                     {/* I don't think servers will ever have descriptions normall so I'll vaporize it */}
                     {/* {!!server.description && <p className={`text-sm text-zinc-300 break-words `}>{server.description}</p>} */}
