@@ -418,12 +418,12 @@ class Server extends Model
 
     public function hasAllocationLimit(): bool
     {
-        return !is_null($this->allocation_limit) && $this->allocation_limit > 0;
+        return !is_null($this->allocation_limit) && $this->allocation_limit > 0 && $this->allocation_limit !== -1;
     }
 
     public function allowsAllocations(): bool
     {
-        return is_null($this->allocation_limit) || $this->allocation_limit > 0;
+        return is_null($this->allocation_limit) || $this->allocation_limit === -1 || $this->allocation_limit > 0;
     }
 
     /**
