@@ -119,9 +119,9 @@
                     <div class="form-group col-xs-6">
                         <label for="pAllocationLimit" class="control-label">Allocation Limit</label>
                         <div>
-                            <input type="text" id="pAllocationLimit" name="allocation_limit" class="form-control" value="{{ old('allocation_limit') }}" placeholder="Leave blank for unlimited"/>
+                        <input type="text" id="pAllocationLimit" name="allocation_limit" class="form-control" value="{{ old('allocation_limit', 0) }}" placeholder="Leave blank for unlimited"/>
                         </div>
-                        <p class="text-muted small">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                        <p class="text-muted small">The total number of additional allocations a user is allowed to create for this server. Set to -1 for unlimited, set to 0 for primary allocation only.</p>
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="pBackupLimit" class="control-label">Backup Limit</label>

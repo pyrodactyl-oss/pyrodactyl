@@ -20,9 +20,97 @@ class ServerTransformer extends BaseClientTransformer
 
     protected array $availableIncludes = ['egg', 'subusers'];
 
+<<<<<<< HEAD
+  public function getResourceName(): string
+  {
+    return Server::RESOURCE_NAME;
+  }
+
+  /**
+   * Transform a server model into a representation that can be returned
+   * to a client.
+   */
+  public function transform(Server $server): array
+  {
+    /** @var StartupCommandService $service */
+    $service = Container::getInstance()->make(StartupCommandService::class);
+
+    $user = $this->request->user();
+
+    return [
+      'server_owner' => $user->id === $server->owner_id,
+      'identifier' => $server->uuidShort,
+      'internal_id' => $server->id,
+      'uuid' => $server->uuid,
+      'name' => $server->name,
+      'node' => $server->node->name,
+      'is_node_under_maintenance' => $server->node->isUnderMaintenance(),
+      'sftp_details' => [
+        'ip' => $server->node->fqdn,
+        'port' => $server->node->daemonSFTP,
+      ],
+      'sftp_alias' => [
+        'ip' => $server->node->SFTPAliasAddress,
+        'port' => $server->node->SFTPAliasPort
+      ],
+      'description' => $server->description,
+      'custom_domain' => $server->activeSubdomain?->full_domain,
+      'limits' => [
+        'memory' => $server->memory,
+        'overhead_memory' => $server->overhead_memory,
+        'swap' => $server->swap,
+        'disk' => $server->disk,
+        'io' => $server->io,
+        'cpu' => $server->cpu,
+        'threads' => $server->threads,
+        'oom_disabled' => $server->oom_disabled,
+      ],
+      'invocation' => $service->handle($server, !$user->can(Permission::ACTION_STARTUP_READ, $server)),
+      'docker_image' => $server->image,
+      'egg_features' => $server->egg->inherit_features,
+      'egg' => $server->egg->uuid,
+      'feature_limits' => [
+        'databases' => $server->database_limit,
+        'allocations' => $server->allocation_limit,
+        'backups' => $server->backup_limit,
+        'backupStorageMb' => $server->backup_storage_limit,
+      ],
+      'status' => $server->status,
+      // This field is deprecated, please use "status".
+      'is_suspended' => $server->isSuspended(),
+      // This field is deprecated, please use "status".
+      'is_installing' => !$server->isInstalled(),
+      'is_transferring' => !is_null($server->transfer),
+    ];
+  }
+
+  /**
+   * Returns the allocations associated with this server.
+   *
+   * @throws \Pterodactyl\Exceptions\Transformer\InvalidTransformerLevelException
+   */
+  public function includeAllocations(Server $server): Collection
+  {
+    $transformer = $this->makeTransformer(AllocationTransformer::class);
+
+    $user = $this->request->user();
+    // While we include this permission, we do need to actually handle it slightly different here
+    // for the purpose of keeping things functionally working. If the user doesn't have read permissions
+    // for the allocations we'll only return the primary server allocation, and any notes associated
+    // with it will be hidden.
+    //
+    // This allows us to avoid too much permission regression, without also hiding information that
+    // is generally needed for the frontend to make sense when browsing or searching results.
+    if (!$user->can(Permission::ACTION_ALLOCATION_READ, $server)) {
+      $primary = clone $server->allocation;
+      $primary->notes = null;
+
+      return $this->collection([$primary], $transformer, Allocation::RESOURCE_NAME);
+=======
     public function getResourceName(): string
     {
         return Server::RESOURCE_NAME;
+>>>>>>> origin/upstream
     }
 
     /**
