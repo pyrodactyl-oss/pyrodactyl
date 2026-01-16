@@ -1,6 +1,5 @@
 import { encodePathSegments } from '@/helpers';
 import type { LanguageDescription } from '@codemirror/language';
-import { languages } from '@codemirror/language-data';
 import { For } from 'million/react';
 import { dirname } from 'pathe';
 import { lazy } from 'react';
@@ -19,6 +18,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import PageContentBlock from '@/components/elements/PageContentBlock';
+import { availableLanguages } from '@/components/elements/editor/languages';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import FileNameModal from '@/components/server/files/FileNameModal';
 
@@ -216,12 +216,12 @@ const FileEditContainer = () => {
                         </svg>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='max-h-50 overflow-auto z-99999' sideOffset={8}>
-                        <For each={languages.sort((a, b) => a.name.localeCompare(b.name))} memo>
+                        <For each={availableLanguages.sort((a, b) => a.name.localeCompare(b.name))} memo>
                             {(language) => (
                                 <DropdownMenuItem
                                     key={language.name}
                                     onSelect={() => {
-                                        setLanguage(languages.find((l) => l.name === language.name));
+                                        setLanguage(availableLanguages.find((l) => l.name === language.name));
                                     }}
                                 >
                                     {language.name}
