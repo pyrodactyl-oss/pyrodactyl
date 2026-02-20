@@ -5,6 +5,7 @@ namespace Pterodactyl\Enums\Subdomain;
 use Pterodactyl\Services\Dns\Providers\CloudflareProvider;
 use Pterodactyl\Services\Dns\Providers\HetznerProvider;
 use Pterodactyl\Services\Dns\Providers\Route53Provider;
+use Pterodactyl\Services\Dns\Providers\DNSimpleProvider;
 
 enum Providers: string
 {
@@ -12,17 +13,20 @@ enum Providers: string
     case CLOUDFLARE = 'cloudflare';
     case HETZNER = 'hetzner';
     case ROUTE53 = 'route53';
+    case DNSIMPLE = 'dnsimple';
 
     private const CLASS_MAP = [
         self::CLOUDFLARE->value => CloudflareProvider::class,
         self::HETZNER->value => HetznerProvider::class,
         self::ROUTE53->value => Route53Provider::class,
+        self::DNSIMPLE->value => DNSimpleProvider::class,
     ];
 
     private const DESCRIPTION_MAP = [
         self::CLOUDFLARE->value => 'Cloudflare DNS service',
         self::HETZNER->value => 'Hetzner DNS Console',
-        self::ROUTE53->value => 'AWS Route53 Dns Service',
+        self::ROUTE53->value => 'AWS Route53 DNS Service',
+        self::DNSIMPLE->value => 'DNSimple Service',
     ];
 
 

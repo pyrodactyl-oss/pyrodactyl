@@ -20,6 +20,7 @@ class EggSeeder extends Seeder
      */
     public static array $import = [
         'Minecraft',
+        'Hytale',
         'Source Engine',
         'Voice Servers',
         'Rust',
