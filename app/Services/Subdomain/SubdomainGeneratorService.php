@@ -327,7 +327,7 @@ class SubdomainGeneratorService
         // Str::random(5) → [a-z0-9], i.e. 36^5 = 60,466,176 suffix possibilities.
         // With ~200 adjectives × ~250 animals, fallback space is:
         // 200 × 250 × 60,466,176 = 3,023,308,800,000 (~3 trillion).
-        
+
         // So basically, if we ever hit this fallback, we are almost certainly
         // filthy rich or extremely unlucky. Either way, we win. - ellie
         return Str::slug(
