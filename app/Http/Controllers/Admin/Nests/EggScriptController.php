@@ -28,13 +28,13 @@ class EggScriptController extends Controller
     /**
      * Handle requests to render installation script for an Egg.
      */
-    public function index(int $egg): View
+    public function index(int $eggId): View
     {
-        $egg = $this->repository->getWithCopyAttributes($egg);
+        $egg = $this->repository->getWithCopyAttributes($eggId);
         $copy = $this->repository->findWhere([
             ['copy_script_from', '=', null],
             ['nest_id', '=', $egg->nest_id],
-            ['id', '!=', $egg],
+            ['id', '!=', $egg->id],
         ]);
 
         $rely = $this->repository->findWhere([
