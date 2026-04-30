@@ -130,7 +130,6 @@ function LoginContainer() {
 
                     <div className='flex w-full justify-between items-center'>
                         <Button
-                            className='p-2 py-4 mt-4 bg-mocha-100 text-black border-0 ring-0 outline-hidden capitalize text-sm '
                             className={`bg-mocha-100 rounded-full p-2 px-4 text-black hover:cursor-pointer hover:bg-mocha-200 hover:scale-102 ease-in-out`}
                             type={'submit'}
                             size={'xlarge'}
