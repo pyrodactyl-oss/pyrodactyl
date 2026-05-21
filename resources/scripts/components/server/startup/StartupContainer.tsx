@@ -345,16 +345,25 @@ const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
                                 runtime. Egg-defined variables (listed in <em>Environment Variables</em> below) work the
                                 same way — wrap the name in <code className='font-mono text-zinc-400'>{'{{...}}'}</code>.
                             </p>
+                            {/*
+                                Values shown here are the literal substitution
+                                strings StartupCommandService::handle() will
+                                splice into the command at runtime — no units,
+                                formatting, or sentinels added on top. Hints
+                                explain what the raw number actually means
+                                (MiB / percent / etc.) without polluting the
+                                value cell.
+                            */}
                             <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
                                 <BuiltinVariableChip
                                     placeholder='{{SERVER_MEMORY}}'
-                                    value={`${serverLimits.memory} MiB`}
+                                    value={String(serverLimits.memory)}
                                     hint='Memory limit allocated to the container, in MiB.'
                                 />
                                 <BuiltinVariableChip
                                     placeholder='{{SERVER_CPU}}'
-                                    value={serverLimits.cpu === 0 ? 'Unlimited' : `${serverLimits.cpu}%`}
-                                    hint='CPU limit as a percentage of a single core (0 = unlimited).'
+                                    value={String(serverLimits.cpu)}
+                                    hint='CPU limit as a percentage of a single core. 0 means unlimited.'
                                 />
                                 <BuiltinVariableChip
                                     placeholder='{{SERVER_IP}}'
