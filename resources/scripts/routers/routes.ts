@@ -3,10 +3,12 @@ import {
     BranchesDown,
     ClockArrowRotateLeft,
     CloudArrowUpIn,
+    Cubes3,
     Database,
     FolderOpen,
     Gear,
     House,
+    Magnifier,
     PencilToLine,
     Persons,
     Terminal,
@@ -23,7 +25,9 @@ import BackupContainer from '@/components/server/backups/BackupContainer';
 import ServerConsoleContainer from '@/components/server/console/ServerConsoleContainer';
 import DatabasesContainer from '@/components/server/databases/DatabasesContainer';
 import FileManagerContainer from '@/components/server/files/FileManagerContainer';
-import ModrinthContainer from '@/components/server/modrinth/ModrinthContainer';
+import DiscoverContainer from '@/components/server/mods/DiscoverContainer';
+import ModsContainer from '@/components/server/mods/ModsContainer';
+import LegacyModsRedirect from '@/components/server/mods/LegacyModsRedirect';
 import NetworkContainer from '@/components/server/network/NetworkContainer';
 import ScheduleContainer from '@/components/server/schedules/ScheduleContainer';
 import SettingsContainer from '@/components/server/settings/SettingsContainer';
@@ -148,6 +152,61 @@ const routes: Routes = {
             component: FileEditContainer,
             isSubRoute: true,
         },
+        // Mods — installed content lives at the bare /mods URL now.
+        // Sidebar label is "Mods" so users without prior context read it as
+        // "the mods on my server" rather than the Modrinth-jargon "library".
+        // The project-detail sub-route (/mods/project/:id) is mounted under
+        // the same container so deep-linking from anywhere works.
+        {
+            route: 'mods/*',
+            path: 'mods',
+            permission: 'mod.download',
+            name: 'Mods',
+            component: ModsContainer,
+            icon: Cubes3,
+            // /mods and /mods/project/:id both light up the Mods nav entry.
+            // /discover/project/:id is also acceptable here because clicking
+            // a card from Discover navigates to the project detail under
+            // /discover — we light up Discover for those paths instead, see
+            // the Discover route below.
+            highlightPatterns: [/\/server\/[^/]+\/mods(\/.*)?$/],
+        },
+        // Discover — Modrinth-driven content discovery . Lives
+        // at the top-level /discover URL so the path itself reads as the
+        // navigation verb, matching the sidebar label.
+        {
+            route: 'discover/*',
+            path: 'discover',
+            permission: 'mod.download',
+            name: 'Discover',
+            component: DiscoverContainer,
+            icon: Magnifier,
+            highlightPatterns: [/\/server\/[^/]+\/discover(\/.*)?$/],
+        },
+        // Legacy URL redirects. Anything still pointing at the old paths
+        // (/mods/installed, /mods/browse, /browse, /mods/project/:id) gets
+        // sent to the new URLs by LegacyModsRedirect's redirector.
+        {
+            route: 'mods/installed/*',
+            permission: 'mod.download',
+            name: undefined,
+            component: LegacyModsRedirect,
+            isSubRoute: true,
+        },
+        {
+            route: 'mods/browse/*',
+            permission: 'mod.download',
+            name: undefined,
+            component: LegacyModsRedirect,
+            isSubRoute: true,
+        },
+        {
+            route: 'browse/*',
+            permission: 'mod.download',
+            name: undefined,
+            component: LegacyModsRedirect,
+            isSubRoute: true,
+        },
         {
             route: 'databases/*',
             path: 'databases',
@@ -252,14 +311,6 @@ const routes: Routes = {
             component: ShellContainer,
             icon: Box,
             end: true,
-        },
-        {
-            route: 'mods/*',
-            path: 'mods',
-            permission: ['modrinth.download', 'settings.modrinth'],
-            name: 'Modrinth',
-            component: ModrinthContainer,
-            isSubRoute: true, // Hidden until modrinth support is complete
         },
     ],
 };
