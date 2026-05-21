@@ -1,93 +1,99 @@
-import { useStoreState } from 'easy-peasy';
-import isEqual from 'react-fast-compare';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
-import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
-import CopyOnClick from '@/components/elements/CopyOnClick';
-import Label from '@/components/elements/Label';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
+import StartupContainer from '@/components/server/startup/StartupContainer';
 
-import { ip } from '@/lib/formatters';
-
-import { ServerContext } from '@/state/server';
-
+import ShellContainer from '../shell/ShellContainer';
+import ReinstallServerBox from './ReinstallServerBox';
 import RenameServerBox from './RenameServerBox';
+import ServerConnectionCard from './ServerConnectionCard';
+import ServerResourcesCard from './ServerResourcesCard';
 
+/**
+ * Consolidated Settings page.
+ *
+ * Single unified page that replaces the previous three sidebar entries —
+ * Startup, Settings, Software. Drops section labels and rebuilds around
+ * the questions a user actually asks when they open Settings:
+ *
+ *   1. "What software am I running, and how do I change it?"        → Software card (top)
+ *   2. "What's this server called?" + "What's its UUID?"             → Identity card (UUID inline)
+ *   3. "How do I (or my players) connect to it?"                     → Connection card
+ *   4. "What resources does it have?" + "What node am I on?"          → Resources card (Node inline)
+ *   5. "How does it start up, and what env vars drive it?"           → Startup section
+ *   6. "What if I need to wipe + reinstall?"                         → Danger zone
+ *
+ * Software wizard behaviour: the Change Software flow is a popout
+ * modal layered on top of this page (handled inside ShellContainer
+ * itself, see its render). The previous draft tried to swap between two
+ * separate ShellContainer subtrees ("inline overview" vs. "full-page
+ * wizard") which unmounted + re-mounted ShellContainer when the user
+ * clicked Change Software — and re-mounting reset its internal
+ * `currentStep` state, trapping the user on the overview.
+ *
+ * Legacy URLs (/startup, /shell) redirect to the corresponding section
+ * anchor here; see routes.ts + LegacyRedirects.tsx for the wiring.
+ */
 const SettingsContainer = () => {
-    const username = useStoreState((state) => state.user.data!.username);
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const node = ServerContext.useStoreState((state) => state.server.data!.node);
-    const sftp = ServerContext.useStoreState((state) => state.server.data!.sftpDetails, isEqual);
+    const location = useLocation();
+
+    // On mount, if the user arrived via a deep-link anchor (e.g.
+    // /settings#startup from a legacy redirect or a toast action),
+    // scroll the matching section into view. Tiny setTimeout so refs
+    // are in the DOM before we call scrollIntoView.
+    useEffect(() => {
+        if (!location.hash) return;
+        const t = setTimeout(() => {
+            const id = location.hash.replace(/^#/, '');
+            document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 50);
+        return () => clearTimeout(t);
+    }, [location.hash]);
 
     return (
-        <ServerContentBlock title={'Settings'}>
-            <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader direction='column' title={'Settings'}>
+        <ServerContentBlock title='Settings'>
+            <FlashMessageRender byKey='settings' />
+
+            <MainPageHeader direction='column' title='Settings'>
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure your server settings, manage SFTP access, and access debug information. Make changes to
-                    server name and reinstall when needed.
+                    Everything that controls how this server runs and what software it runs — in one place.
                 </p>
             </MainPageHeader>
-            <Can action={'settings.rename'}>
-                <div className={`mb-6 md:mb-10`}>
-                    <RenameServerBox />
-                </div>
-            </Can>
 
-            <div className='w-full h-full flex flex-col gap-8'>
-                <Can action={'settings.reinstall'}>
-                    <ReinstallServerBox />
+            <div className='flex flex-col gap-5'>
+                {/* Software hero card — top of page because "what am I
+                    running" is the single most-asked question on Settings.
+                    The Change Software flow opens as a modal layered over
+                    the rest of the Settings page. */}
+                <div id='software'>
+                    <ShellContainer embedded />
+                </div>
+
+                {/* Identity */}
+                <Can action='settings.rename'>
+                    <RenameServerBox />
                 </Can>
-                <TitledGreyBox title={'Debug Information'}>
-                    <div className={`flex items-center justify-between text-sm`}>
-                        <p>Node</p>
-                        <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>{node}</code>
-                    </div>
-                    <CopyOnClick text={uuid}>
-                        <div className={`flex items-center justify-between mt-2 text-sm`}>
-                            <p>Server ID</p>
-                            <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>{uuid}</code>
-                        </div>
-                    </CopyOnClick>
-                </TitledGreyBox>
-                <Can action={'file.sftp'}>
-                    <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
-                        <div className={`flex items-center justify-between text-sm`}>
-                            <Label>Server Address</Label>
-                            <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
-                                <code
-                                    className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}
-                                >{`sftp://${ip(sftp.ip)}:${sftp.port}`}</code>
-                            </CopyOnClick>
-                        </div>
-                        <div className={`mt-2 flex items-center justify-between text-sm`}>
-                            <Label>Username</Label>
-                            <CopyOnClick text={`${username}.${id}`}>
-                                <code
-                                    className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}
-                                >{`${username}.${id}`}</code>
-                            </CopyOnClick>
-                        </div>
-                        <div className={`mt-6 flex items-center`}>
-                            <div className={`flex-1`}>
-                                <div className={`border-l-4 border-brand p-3`}>
-                                    <p className={`text-xs text-zinc-200`}>
-                                        Your SFTP password is the same as the password you use to access this panel.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className={`ml-4`}>
-                                <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <ActionButton variant='secondary'>Launch SFTP</ActionButton>
-                                </a>
-                            </div>
-                        </div>
-                    </TitledGreyBox>
+
+                {/* Connection — game address + SFTP + Launch button */}
+                <Can action='file.sftp'>
+                    <ServerConnectionCard />
+                </Can>
+
+                {/* Resources — memory / CPU / disk tiles */}
+                <ServerResourcesCard />
+
+                {/* Startup command + docker image + env vars */}
+                <div id='startup'>
+                    <StartupContainer embedded />
+                </div>
+
+                {/* Danger zone */}
+                <Can action='settings.reinstall'>
+                    <ReinstallServerBox />
                 </Can>
             </div>
         </ServerContentBlock>
