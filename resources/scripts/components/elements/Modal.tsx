@@ -1,7 +1,7 @@
 import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -49,6 +49,13 @@ export interface ModalProps extends RequiredModalProps {
     closeOnEscape?: boolean;
     closeOnBackground?: boolean;
     showSpinnerOverlay?: boolean;
+    /**
+     * Extra Tailwind utility classes appended to the panel. Mainly used to
+     * override the default `max-w-xl` width cap for modals whose content
+     * needs more room (e.g. the Change Software wizard, which has 3-col
+     * grids of nest/egg cards that look cramped at 576px).
+     */
+    panelClassName?: string;
 }
 
 export const ModalMask = styled.div`
@@ -66,9 +73,12 @@ const Modal: React.FC<ModalProps> = ({
     visible,
     closeButton,
     dismissable = true,
+    closeOnEscape = true,
+    closeOnBackground = true,
     showSpinnerOverlay,
     onDismissed,
     children,
+    panelClassName,
 }) => {
     const isDismissable = useMemo(() => {
         return dismissable && !showSpinnerOverlay;
@@ -86,11 +96,52 @@ const Modal: React.FC<ModalProps> = ({
         }
     };
 
+    /**
+     * HeadlessUI Dialog's `onClose` fires for both Escape and clicks
+     * outside the Panel without telling us which one. The default
+     * behaviour (treat both as a dismiss) is fine for simple confirm
+     * dialogs but actively breaks multi-step flows like the change-
+     * software wizard: when a click handler inside the modal runs
+     * setState (advancing to the next step), React reconciles and
+     * the click's original DOM target can be detached by the time
+     * HeadlessUI's outside-click detector walks the ancestor chain.
+     * The detector then concludes the target wasn't inside the Panel
+     * and fires onClose — closing the modal even though the user
+     * clicked a button INSIDE it. The visible symptom is a flicker-
+     * close on every action button.
+     *
+     * Fix: when `closeOnBackground={false}`, we no-op the entire
+     * HDialog.onClose channel (since we can't distinguish Escape from
+     * outside-click) and run our own Escape listener in the effect
+     * below, gated by `closeOnEscape`.
+     */
     const onDialogClose = (): void => {
-        if (isDismissable) {
-            return onDismissed();
-        }
+        if (!isDismissable) return;
+        // Background close is the only path that funnels through here
+        // when we trust HDialog. When the caller has opted out via
+        // closeOnBackground={false}, suppress it entirely. Escape is
+        // handled separately in the effect below.
+        if (!closeOnBackground) return;
+        return onDismissed();
     };
+
+    // Manual Escape handler — runs whenever the modal is visible AND
+    // the caller wants Escape to dismiss. Used in tandem with
+    // closeOnBackground={false} to keep "Escape closes / clicks-inside
+    // don't" semantics that HeadlessUI's single onClose channel can't
+    // express on its own.
+    useEffect(() => {
+        if (!visible || !closeOnEscape || !isDismissable) return;
+        // Skip when we're already delegating Escape to HDialog (i.e.
+        // outside-click is also allowed) — otherwise Escape would fire
+        // both handlers and we'd risk a double-dismiss flicker.
+        if (closeOnBackground) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onDismissed();
+        };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [visible, closeOnEscape, closeOnBackground, isDismissable, onDismissed]);
 
     return (
         <>
@@ -135,7 +186,12 @@ const Modal: React.FC<ModalProps> = ({
                                         animate={down ? 'bounce' : 'open'}
                                         exit={'closed'}
                                         variants={variants}
-                                        className={styles.panel}
+                                        // panelClassName is appended after
+                                        // styles.panel so Tailwind utilities
+                                        // (e.g. max-w-5xl) take precedence
+                                        // over the default max-w-xl baked
+                                        // into the CSS module.
+                                        className={`${styles.panel} ${panelClassName ?? ''}`}
                                     >
                                         <div className='place-content-between flex items-center m-6'>
                                             {title && <h2 className={`text-2xl text-zinc-100`}>{title}</h2>}
