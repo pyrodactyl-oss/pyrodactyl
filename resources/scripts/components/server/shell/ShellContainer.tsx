@@ -1,5 +1,6 @@
-import { Box, TriangleExclamation } from '@gravity-ui/icons';
-import { useEffect, useMemo, useState } from 'react';
+import { Box, TriangleExclamation, Xmark } from '@gravity-ui/icons';
+import { Dialog as HDialog } from '@headlessui/react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
@@ -249,7 +250,74 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
     return errors;
 };
 
-const SoftwareContainer = () => {
+interface SoftwareContainerProps {
+    /**
+     * When true, render WITHOUT the outer ServerContentBlock / MainPageHeader
+     * chrome. The consolidated Settings page owns the page chrome and uses
+     * this prop so the Software section just renders its body inline.
+     */
+    embedded?: boolean;
+    /**
+     * Fires whenever the wizard's currentStep changes. The consolidated
+     * Settings page uses this to hide its other sections (General, Startup)
+     * once the wizard moves past the overview, so the wizard takes the full
+     * page just like the user expected.
+     */
+    onActiveStepChange?: (step: FlowStep) => void;
+}
+
+interface SoftwareWizardDialogProps {
+    visible: boolean;
+    onDismissed: () => void;
+    children: ReactNode;
+}
+
+const SoftwareWizardDialog = ({ visible, onDismissed, children }: SoftwareWizardDialogProps) => {
+    useEffect(() => {
+        if (!visible) return;
+
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') onDismissed();
+        };
+
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [visible, onDismissed]);
+
+    if (!visible) return null;
+
+    return (
+        <HDialog static open={visible} onClose={() => {}} className='relative z-9998'>
+            <div aria-hidden='true' className='fixed inset-0 z-9997 bg-black/85 backdrop-blur-xs' />
+            <div className='fixed inset-0 z-9998 overflow-y-auto'>
+                <div className='flex min-h-full items-start justify-center px-4 py-8 sm:px-6'>
+                    <HDialog.Panel className='relative w-full max-w-[88rem] rounded-2xl border border-[#ffffff07] bg-[#151515]/95 text-left shadow-2xl backdrop-blur-3xl'>
+                        <button
+                            type='button'
+                            onClick={onDismissed}
+                            className='absolute left-6 top-6 z-10 inline-flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-[#ffffff10] hover:text-white'
+                            title='Close'
+                        >
+                            <Xmark width={18} height={18} fill='currentColor' />
+                        </button>
+                        <div className='max-h-[82vh] overflow-y-auto px-6 pb-6 pt-20'>{children}</div>
+                    </HDialog.Panel>
+                </div>
+            </div>
+        </HDialog>
+    );
+};
+
+// million-ignore
+// Million.js auto-mode rewrites this component's virtual DOM and that
+// causes the wizard <Modal> to unmount + remount on every state change
+// inside the wizard — even unrelated ones like flipping the "Create
+// Backup" toggle. Visible symptom: the headlessui-portal-root briefly
+// disappears and reappears, the modal animation re-plays, and any
+// open inner dropdowns slam shut. Opting this component out of
+// Million keeps React's normal reconciler (which preserves the modal
+// instance across re-renders) in charge.
+const SoftwareContainer = ({ embedded = false, onActiveStepChange }: SoftwareContainerProps = {}) => {
     const serverData = ServerContext.useStoreState((state) => state.server.data);
     const daemonType = getGlobalDaemonType();
     const uuid = serverData?.uuid;
@@ -280,6 +348,12 @@ const SoftwareContainer = () => {
 
     // Flow state
     const [currentStep, setCurrentStep] = useState<FlowStep>('overview');
+    // Notify the parent (consolidated Settings page) whenever the wizard
+    // moves between overview and active steps. Parent uses this to swap
+    // between sectioned layout (overview) and full-page wizard takeover.
+    useEffect(() => {
+        onActiveStepChange?.(currentStep);
+    }, [currentStep, onActiveStepChange]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedNest, setSelectedNest] = useState<Nest | null>(null);
     const [selectedEgg, setSelectedEgg] = useState<Egg | null>(null);
@@ -512,8 +586,8 @@ const SoftwareContainer = () => {
                 selectedDockerImage && eggPreview.docker_images
                     ? eggPreview.docker_images[selectedDockerImage]
                     : eggPreview.default_docker_image && eggPreview.docker_images
-                        ? eggPreview.docker_images[eggPreview.default_docker_image]
-                        : '';
+                      ? eggPreview.docker_images[eggPreview.default_docker_image]
+                      : '';
 
             // Filter out empty environment variables to prevent validation issues
             const filteredEnvironment: Record<string, string> = {};
@@ -724,35 +798,41 @@ const SoftwareContainer = () => {
             <div className='space-y-4'>
                 <p className='text-sm text-neutral-400'>Choose the specific software version for your server</p>
 
-                {isLoading ? (
-                    <div className='flex items-center justify-center py-16'>
-                        <div className='flex flex-col items-center text-center'>
-                            <Spinner size='large' />
-                            <p className='text-neutral-400 mt-4'>Loading software options...</p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
-                        {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => (
+                {/* Keep the cards rendered while the egg-preview fetch
+                    is in flight — earlier versions swapped the entire
+                    grid out for a big centered Spinner, which produced
+                    a jarring "everything vanishes then a different
+                    page appears" jump between steps. Now the grid
+                    stays visible, the picked card shows an inline
+                    spinner + brand border so the user can see exactly
+                    which option is loading, and the other cards just
+                    grey out via the disabled state. */}
+                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
+                    {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => {
+                        const isPicked = selectedEgg?.attributes?.uuid === egg?.attributes?.uuid;
+                        const isPickedAndLoading = isLoading && isPicked;
+                        return (
                             <button
                                 key={egg.attributes.uuid}
                                 onClick={() => handleEggSelection(egg)}
                                 disabled={isLoading}
-                                className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
+                                className={`p-4 bg-[#ffffff08] border rounded-lg transition-all text-left touch-manipulation disabled:cursor-not-allowed ${
+                                    isPicked
+                                        ? 'border-brand/60 bg-brand/10'
+                                        : 'border-[#ffffff12] hover:border-[#ffffff20] disabled:opacity-40'
+                                }`}
                             >
                                 <div className='flex items-center gap-2 mb-2'>
-                                    {isLoading && selectedEgg?.attributes?.uuid === egg?.attributes?.uuid && (
-                                        <Spinner size='small' />
-                                    )}
+                                    {isPickedAndLoading && <Spinner size='small' />}
                                     <h3 className='font-semibold text-neutral-200 text-sm sm:text-base'>
                                         {egg?.attributes?.name}
                                     </h3>
                                 </div>
                                 {renderDescription(egg?.attributes?.description || '', `egg-${egg?.attributes?.uuid}`)}
                             </button>
-                        ))}
-                    </div>
-                )}
+                        );
+                    })}
+                </div>
 
                 <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
                     <ActionButton
@@ -829,7 +909,16 @@ const SoftwareContainer = () => {
                                                     </svg>
                                                 </button>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent className='w-full min-w-[300px]'>
+                                            {/* z-99999 lifts the menu above the Modal
+                                                (z-9998) — without this override the
+                                                dropdown opens behind the wizard's
+                                                backdrop, invisible and unclickable.
+                                                Same z-index StartupContainer uses for
+                                                its docker-image dropdown. */}
+                                            <DropdownMenuContent
+                                                className='w-full min-w-[300px] z-99999'
+                                                sideOffset={8}
+                                            >
                                                 <DropdownMenuRadioGroup
                                                     value={selectedDockerImage}
                                                     onValueChange={setSelectedDockerImage}
@@ -903,10 +992,11 @@ const SoftwareContainer = () => {
                                                             handleVariableChange(variable.env_variable, e.target.value)
                                                         }
                                                         placeholder={variable.default_value || 'Enter value...'}
-                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${variableErrors[variable.env_variable]
-                                                            ? 'border-red-500 focus:border-red-500'
-                                                            : 'border-[#ffffff12] focus:border-brand'
-                                                            }`}
+                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${
+                                                            variableErrors[variable.env_variable]
+                                                                ? 'border-red-500 focus:border-red-500'
+                                                                : 'border-[#ffffff12] focus:border-brand'
+                                                        }`}
                                                     />
                                                     {variableErrors[variable.env_variable] && (
                                                         <p className='text-xs text-red-400 mt-1'>
@@ -947,11 +1037,11 @@ const SoftwareContainer = () => {
                                         </label>
                                         <p className='text-xs text-neutral-400 leading-relaxed'>
                                             {backupLimit !== 0 &&
-                                                (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
+                                            (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
                                                 ? 'Automatically create a backup before applying changes'
                                                 : backupLimit === 0
-                                                    ? 'Backups are disabled for this server'
-                                                    : 'Backup limit reached'}
+                                                  ? 'Backups are disabled for this server'
+                                                  : 'Backup limit reached'}
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
@@ -1011,153 +1101,187 @@ const SoftwareContainer = () => {
             <TitledGreyBox title='Review Changes'>
                 {selectedEgg && eggPreview && (
                     <div className='space-y-6'>
-                        {/* Summary */}
+                        {/* Top-row summary spans the full width since the
+                            From → To diff reads better as a single
+                            horizontal band. 4-col grid on wide
+                            viewports fills the modal's ~1408px without
+                            looking sparse. */}
                         <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
                             <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Change Summary</h3>
-                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
+                            <div className='grid grid-cols-1 gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4'>
                                 <div>
                                     <span className='text-neutral-400'>From:</span>
-                                    <div className='text-neutral-200 font-medium'>
+                                    <div className='text-neutral-200 font-medium break-words'>
                                         {currentEggName || 'No software'}
                                     </div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>To:</span>
-                                    <div className='text-brand font-medium'>{selectedEgg.attributes.name}</div>
+                                    <div className='text-brand font-medium break-words'>
+                                        {selectedEgg.attributes.name}
+                                    </div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>Category:</span>
-                                    <div className='text-neutral-200 font-medium'>{selectedNest?.attributes.name}</div>
+                                    <div className='text-neutral-200 font-medium break-words'>
+                                        {selectedNest?.attributes.name}
+                                    </div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>Docker Image:</span>
-                                    <div className='text-neutral-200 font-medium'>
+                                    <div className='text-neutral-200 font-medium break-words'>
                                         {selectedDockerImage || 'Default'}
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Startup Command Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Startup Configuration</h3>
-                            <div className='space-y-3'>
-                                <div>
-                                    <span className='text-neutral-400 text-sm'>Startup Command:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg font-mono text-sm text-neutral-200 whitespace-pre-wrap'>
-                                        {customStartup || eggPreview.egg.startup}
-                                    </div>
-                                </div>
-                                <div>
-                                    <span className='text-neutral-400 text-sm'>Docker Image:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
-                                        {selectedDockerImage || 'Default Image'}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Configuration Review */}
-                        {eggPreview.variables.length > 0 && (
-                            <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                                <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Variable Configuration</h3>
-                                <div className='space-y-2'>
-                                    {eggPreview.variables.map((variable) => (
-                                        <div
-                                            key={variable.env_variable}
-                                            className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'
-                                        >
-                                            <div>
-                                                <span className='text-neutral-200 font-medium'>{variable.name}</span>
-                                                <span className='text-neutral-500 text-sm ml-2 font-mono'>
-                                                    ({variable.env_variable})
-                                                </span>
-                                            </div>
-                                            <div className='text-brand font-mono text-sm'>
-                                                {pendingVariables[variable.env_variable] ||
-                                                    variable.default_value ||
-                                                    'Not set'}
+                        {/* Two-column layout fills the wide modal —
+                            left rail holds Startup config + Safety
+                            options (smaller, scan-once data), right
+                            rail holds the Variables list which is the
+                            tallest block and benefits from the bigger
+                            half. Stacks back to a single column on lg-
+                            and-below so narrow viewports stay readable. */}
+                        <div className='grid grid-cols-1 gap-6 lg:grid-cols-2'>
+                            <div className='space-y-6'>
+                                {/* Startup Command Review */}
+                                <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                                    <h3 className='text-lg font-semibold text-neutral-200 mb-4'>
+                                        Startup Configuration
+                                    </h3>
+                                    <div className='space-y-3'>
+                                        <div>
+                                            <span className='text-neutral-400 text-sm'>Startup Command:</span>
+                                            <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg font-mono text-sm text-neutral-200 whitespace-pre-wrap break-all'>
+                                                {customStartup || eggPreview.egg.startup}
                                             </div>
                                         </div>
-                                    ))}
+                                        <div>
+                                            <span className='text-neutral-400 text-sm'>Docker Image:</span>
+                                            <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 break-all'>
+                                                {selectedDockerImage || 'Default Image'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Safety Options Review */}
+                                <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                                    <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Safety Options</h3>
+                                    <div className='space-y-2'>
+                                        <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                            <span className='text-neutral-200'>Create Backup</span>
+                                            <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
+                                                {shouldBackup ? 'Yes' : 'No'}
+                                            </span>
+                                        </div>
+                                        <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                            <span className='text-neutral-200'>Wipe Files</span>
+                                            <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
+                                                {shouldWipe ? 'Yes' : 'No'}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        )}
 
-                        {/* Safety Options Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Safety Options</h3>
-                            <div className='space-y-2'>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Create Backup</span>
-                                    <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
-                                        {shouldBackup ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
-                                    <span className='text-neutral-200'>Wipe Files</span>
-                                    <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
-                                        {shouldWipe ? 'Yes' : 'No'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Subdomain Warnings */}
-                        {eggPreview.warnings && eggPreview.warnings.length > 0 && (
-                            <div className='space-y-3'>
-                                {eggPreview.warnings.map((warning, index) => (
-                                    <div
-                                        key={index}
-                                        className={`p-4 border rounded-lg ${warning.severity === 'error'
-                                            ? 'bg-red-500/10 border-red-500/20'
-                                            : 'bg-amber-500/10 border-amber-500/20'
-                                            }`}
-                                    >
-                                        <div className='flex items-start gap-3'>
-                                            <TriangleExclamation
-                                                width={22}
-                                                height={22}
-                                                fill='currentColor'
-                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                    }`}
-                                            />
-                                            <div>
-                                                <h4
-                                                    className={`font-semibold mb-2 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                        }`}
+                            {/* Right rail — variables (potentially long
+                                list, gets its own scroll cap), warnings,
+                                and the final general "this will…" notice. */}
+                            <div className='space-y-6'>
+                                {eggPreview.variables.length > 0 && (
+                                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                                        <h3 className='text-lg font-semibold text-neutral-200 mb-4'>
+                                            Variable Configuration
+                                        </h3>
+                                        <div className='space-y-2 max-h-72 overflow-y-auto pr-1'>
+                                            {eggPreview.variables.map((variable) => (
+                                                <div
+                                                    key={variable.env_variable}
+                                                    className='flex justify-between items-center gap-3 py-2 px-3 bg-[#ffffff08] rounded-lg'
                                                 >
-                                                    {warning.type === 'subdomain_incompatible'
-                                                        ? 'Subdomain Will Be Deleted'
-                                                        : 'Warning'}
-                                                </h4>
-                                                <p className='text-sm text-neutral-300'>{warning.message}</p>
-                                            </div>
+                                                    <div className='min-w-0'>
+                                                        <span className='text-neutral-200 font-medium block truncate'>
+                                                            {variable.name}
+                                                        </span>
+                                                        <span className='text-neutral-500 text-xs font-mono block truncate'>
+                                                            {variable.env_variable}
+                                                        </span>
+                                                    </div>
+                                                    <div className='text-brand font-mono text-sm truncate max-w-[40%] text-right'>
+                                                        {pendingVariables[variable.env_variable] ||
+                                                            variable.default_value ||
+                                                            'Not set'}
+                                                    </div>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                )}
 
-                        {/* General Warning */}
-                        <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
-                            <div className='flex items-start gap-3'>
-                                <TriangleExclamation
-                                    width={22}
-                                    height={22}
-                                    fill='currentColor'
-                                    className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
-                                />
-                                <div>
-                                    <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
-                                    <ul className='text-sm text-neutral-300'>
-                                        <li>• Stop and reinstall your server</li>
-                                        <li>• Take several minutes to complete</li>
-                                        <li>• Modify and remove some files</li>
-                                    </ul>
-                                    <span className='text-sm font-bold mt-4'>
-                                        Please ensure you have backups of important data before proceeding.
-                                    </span>
+                                {eggPreview.warnings && eggPreview.warnings.length > 0 && (
+                                    <div className='space-y-3'>
+                                        {eggPreview.warnings.map((warning, index) => (
+                                            <div
+                                                key={index}
+                                                className={`p-4 border rounded-lg ${
+                                                    warning.severity === 'error'
+                                                        ? 'bg-red-500/10 border-red-500/20'
+                                                        : 'bg-amber-500/10 border-amber-500/20'
+                                                }`}
+                                            >
+                                                <div className='flex items-start gap-3'>
+                                                    <TriangleExclamation
+                                                        width={22}
+                                                        height={22}
+                                                        fill='currentColor'
+                                                        className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                                                            warning.severity === 'error'
+                                                                ? 'text-red-400'
+                                                                : 'text-amber-400'
+                                                        }`}
+                                                    />
+                                                    <div>
+                                                        <h4
+                                                            className={`font-semibold mb-2 ${
+                                                                warning.severity === 'error'
+                                                                    ? 'text-red-400'
+                                                                    : 'text-amber-400'
+                                                            }`}
+                                                        >
+                                                            {warning.type === 'subdomain_incompatible'
+                                                                ? 'Subdomain Will Be Deleted'
+                                                                : 'Warning'}
+                                                        </h4>
+                                                        <p className='text-sm text-neutral-300'>{warning.message}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
+                                    <div className='flex items-start gap-3'>
+                                        <TriangleExclamation
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
+                                        />
+                                        <div>
+                                            <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
+                                            <ul className='text-sm text-neutral-300'>
+                                                <li>• Stop and reinstall your server</li>
+                                                <li>• Take several minutes to complete</li>
+                                                <li>• Modify and remove some files</li>
+                                            </ul>
+                                            <span className='text-sm font-bold mt-4'>
+                                                Please ensure you have backups of important data before proceeding.
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1186,17 +1310,25 @@ const SoftwareContainer = () => {
         </div>
     );
 
+    // When embedded the parent owns the outer ServerContentBlock — we
+    // render with a fragment instead so the page chrome isn't duplicated.
+    const ContentChrome = embedded
+        ? ({ children }: { children: React.ReactNode }) => <>{children}</>
+        : ({ children }: { children: React.ReactNode }) => (
+              <ServerContentBlock title='Software Management'>{children}</ServerContentBlock>
+          );
+
     // Show loading state if server data is not available
     if (!serverData) {
         return (
-            <ServerContentBlock title='Software Management'>
+            <ContentChrome>
                 <div className='flex items-center justify-center h-64'>
                     <div className='flex flex-col items-center text-center'>
                         <Spinner size='large' />
                         <p className='text-neutral-400 mt-4'>Loading server information...</p>
                     </div>
                 </div>
-            </ServerContentBlock>
+            </ContentChrome>
         );
     }
     function RenderOperationModal() {
@@ -1227,47 +1359,70 @@ const SoftwareContainer = () => {
         return <div>Could not find Operation Modal for this daemon: Using ${daemonType}</div>;
     }
     return (
-        <ServerContentBlock title='Software Management'>
+        <ContentChrome>
             <div className='space-y-6'>
-                <MainPageHeader direction='column' title='Software Management'>
-                    <p className='text-neutral-400 leading-relaxed'>
-                        Change your server&apos;s game or software with our guided configuration wizard
-                    </p>
-                </MainPageHeader>
-
-                {/* Progress indicator */}
-                {currentStep !== 'overview' && (
-                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                        <div className='flex items-center justify-between mb-2'>
-                            <span className='text-sm font-medium text-neutral-200 capitalize'>
-                                {currentStep.replace('-', ' ')}
-                            </span>
-                            <span className='text-sm text-neutral-400'>
-                                Step{' '}
-                                {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
-                                    currentStep,
-                                )}{' '}
-                                of 4
-                            </span>
-                        </div>
-                        <div className='w-full bg-[#ffffff12] rounded-full h-2'>
-                            <div
-                                className='bg-brand h-2 rounded-full transition-all duration-300'
-                                style={{
-                                    width: `${(['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(currentStep) / 4) * 100}%`,
-                                }}
-                            ></div>
-                        </div>
-                    </div>
+                {!embedded && (
+                    <MainPageHeader direction='column' title='Software Management'>
+                        <p className='text-neutral-400 leading-relaxed'>
+                            Change your server&apos;s game or software with our guided configuration wizard
+                        </p>
+                    </MainPageHeader>
                 )}
 
-                {/* Step Content */}
-                {currentStep === 'overview' && renderOverview()}
-                {currentStep === 'select-game' && renderGameSelection()}
-                {currentStep === 'select-software' && renderSoftwareSelection()}
-                {currentStep === 'configure' && renderConfiguration()}
-                {currentStep === 'review' && renderReview()}
+                {/* Overview is always rendered as the in-page card. The
+                    wizard steps (select-game → review) used to swap into
+                    this slot, which forced the embedded-inside-Settings
+                    layout to unmount ShellContainer + re-mount it in a
+                    separate "wizard takeover" subtree — and that lost
+                    the internal `currentStep` on the re-mount, trapping
+                    the user on the overview. Moving the wizard into a
+                    fixed-position modal (below) keeps ShellContainer
+                    mounted once + lets the wizard layer on top, the
+                    same shape as VersionSwitcherModal on the mods page. */}
+                {renderOverview()}
             </div>
+
+            {/* Dedicated wizard dialog. This intentionally does not use
+                the shared animated Modal wrapper: the wizard changes
+                substantial content on every step, and the shared wrapper's
+                motion lifecycle can make those normal state updates look
+                like the modal closed and reopened. This dialog stays
+                mounted as one stable panel while only its inner content
+                changes. */}
+            <SoftwareWizardDialog visible={currentStep !== 'overview'} onDismissed={() => setCurrentStep('overview')}>
+                <div className='space-y-6'>
+                    {/* Progress indicator */}
+                    {currentStep !== 'overview' && (
+                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
+                            <div className='flex items-center justify-between mb-2'>
+                                <span className='text-sm font-medium text-neutral-200 capitalize'>
+                                    {currentStep.replace('-', ' ')}
+                                </span>
+                                <span className='text-sm text-neutral-400'>
+                                    Step{' '}
+                                    {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
+                                        currentStep,
+                                    )}{' '}
+                                    of 4
+                                </span>
+                            </div>
+                            <div className='w-full bg-[#ffffff12] rounded-full h-2'>
+                                <div
+                                    className='bg-brand h-2 rounded-full transition-all duration-300'
+                                    style={{
+                                        width: `${(['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(currentStep) / 4) * 100}%`,
+                                    }}
+                                ></div>
+                            </div>
+                        </div>
+                    )}
+
+                    {currentStep === 'select-game' && renderGameSelection()}
+                    {currentStep === 'select-software' && renderSoftwareSelection()}
+                    {currentStep === 'configure' && renderConfiguration()}
+                    {currentStep === 'review' && renderReview()}
+                </div>
+            </SoftwareWizardDialog>
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
@@ -1315,7 +1470,7 @@ const SoftwareContainer = () => {
 
             {/* Operation Progress Modal */}
             {RenderOperationModal()}
-        </ServerContentBlock>
+        </ContentChrome>
     );
 };
 
