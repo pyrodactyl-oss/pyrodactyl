@@ -1,3 +1,4 @@
+import { Copy } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -28,6 +29,8 @@ import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import updateStartupCommand from '@/api/server/updateStartupCommand';
 import getServerStartup from '@/api/swr/getServerStartup';
 
+import { ip as ipFormatter } from '@/lib/formatters';
+
 import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
@@ -44,6 +47,48 @@ interface StartupContainerProps {
      */
     embedded?: boolean;
 }
+
+/**
+ * Single click-to-copy chip for one of the six built-in `{{SERVER_*}}`
+ * placeholders. Renders the placeholder syntax (so users learn the
+ * `{{VAR}}` form they'd type into the editor) alongside the current
+ * resolved value for this server, so it doubles as an at-a-glance
+ * reference.
+ *
+ * Defined as a top-level component (rather than inlined inside
+ * StartupContainer) so each chip's hover state is a clean
+ * Tailwind transition rather than re-rendering through the parent's
+ * state on every keystroke in the command editor above it.
+ */
+interface BuiltinVariableChipProps {
+    placeholder: string;
+    value: string;
+    hint: string;
+}
+const BuiltinVariableChip = ({ placeholder, value, hint }: BuiltinVariableChipProps) => (
+    <CopyOnClick text={placeholder}>
+        <div
+            // group + per-item border so the hover state is visibly
+            // scoped to the chip you're pointing at (otherwise it
+            // visually merges with the neighbour). Same spotlight idiom
+            // the rest of the Settings page uses.
+            className='group flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-[#ffffff10] bg-[#ffffff06] px-3 py-2 transition hover:duration-0 hover:border-[#ffffff22] hover:bg-[#ffffff0c]'
+            title={hint}
+        >
+            <div className='flex min-w-0 flex-col leading-tight'>
+                <span className='truncate font-mono text-xs text-zinc-100'>{placeholder}</span>
+                <span className='truncate text-[11px] text-zinc-500' title={value}>
+                    {value}
+                </span>
+            </div>
+            <Copy
+                width={12}
+                height={12}
+                className='shrink-0 text-zinc-500 transition group-hover:text-zinc-200'
+            />
+        </div>
+    </CopyOnClick>
+);
 
 const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
     const [loading, setLoading] = useState(false);
@@ -65,6 +110,15 @@ const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
         }),
         isEqual,
     );
+    // Pulled separately (and shallow-compared) so the keystroke-level
+    // re-renders of the command editor don't drag the full server
+    // object through Easy-Peasy's selector pipeline on every keystroke.
+    // These feed the "Built-in variables" reference chips below the
+    // command editor.
+    const serverName = ServerContext.useStoreState((state) => state.server.data!.name);
+    const serverLimits = ServerContext.useStoreState((state) => state.server.data!.limits, isEqual);
+    const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations, isEqual);
+    const primaryAllocation = serverAllocations.find((a) => a.isDefault) ?? serverAllocations[0];
 
     const { data, error, isValidating, mutate } = getServerStartup(uuid, {
         ...variables,
@@ -264,6 +318,67 @@ const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
                                 processed version with variables resolved.
                             </p>
                         </div>
+
+                        {/*
+                            Built-in variables panel. Always visible inside
+                            the Startup Command card (in both view and edit
+                            modes) because the most useful time to know
+                            what placeholders exist is also the most likely
+                            time to need them — staring at the command
+                            field. The six SERVER_* names listed here are
+                            the ones StartupCommandService::handle()
+                            substitutes server-side (app/Services/Servers/
+                            StartupCommandService.php) before any egg
+                            variables; click any chip to copy the
+                            `{{...}}` form into your clipboard so you can
+                            paste it straight into the editor.
+                        */}
+                        <div className='mb-6 rounded-xl border border-[#ffffff10] bg-[#ffffff04] p-4'>
+                            <div className='mb-3 flex items-baseline justify-between gap-2'>
+                                <h4 className='text-[11px] font-bold uppercase tracking-wide text-zinc-400'>
+                                    Built-in variables
+                                </h4>
+                                <span className='text-[11px] text-zinc-500'>Click to copy placeholder</span>
+                            </div>
+                            <p className='mb-3 text-xs leading-relaxed text-neutral-500'>
+                                These placeholders are always available in the startup command and are substituted at
+                                runtime. Egg-defined variables (listed in <em>Environment Variables</em> below) work the
+                                same way — wrap the name in <code className='font-mono text-zinc-400'>{'{{...}}'}</code>.
+                            </p>
+                            <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_MEMORY}}'
+                                    value={`${serverLimits.memory} MiB`}
+                                    hint='Memory limit allocated to the container, in MiB.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_CPU}}'
+                                    value={serverLimits.cpu === 0 ? 'Unlimited' : `${serverLimits.cpu}%`}
+                                    hint='CPU limit as a percentage of a single core (0 = unlimited).'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_IP}}'
+                                    value={primaryAllocation ? ipFormatter(primaryAllocation.ip) : '—'}
+                                    hint='IP of the primary allocation bound to this server.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_PORT}}'
+                                    value={primaryAllocation ? String(primaryAllocation.port) : '—'}
+                                    hint='Port of the primary allocation.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_UUID}}'
+                                    value={uuid}
+                                    hint='Unique identifier for this server. Stable across restarts and renames.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_NAME}}'
+                                    value={serverName || '—'}
+                                    hint='Current display name of the server.'
+                                />
+                            </div>
+                        </div>
+
                         {editingCommand ? (
                             <div className='space-y-4'>
                                 <div className='grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6'>
