@@ -2,6 +2,8 @@ import { ChevronDown, ChevronUp, Lock } from '@gravity-ui/icons';
 import debounce from 'debounce';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import {
@@ -17,6 +19,35 @@ import { Input } from '@/components/elements/TextInput';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
+
+/**
+ * Env-variable names that drive the installer (and therefore won't take
+ * effect just by being saved as an env var — the user has to reinstall
+ * for the change to land on disk). When the user saves one of these from
+ * the Startup section we fire a friendly toast nudging them to the
+ * Software section, which is the path that actually triggers a reinstall.
+ *
+ * Kept as a set for O(1) lookup. The names are union'd across egg
+ * families: Modrinth uses MINECRAFT_VERSION, some older eggs use
+ * VANILLA_VERSION / MC_VERSION / GAME_VERSION, Paper/Velocity/Bungee
+ * advertise their own *_VERSION variants.
+ */
+const INSTALLER_DRIVEN_VARS = new Set<string>([
+    'MINECRAFT_VERSION',
+    'MC_VERSION',
+    'VANILLA_VERSION',
+    'GAME_VERSION',
+    'PAPER_VERSION',
+    'PURPUR_VERSION',
+    'FORGE_VERSION',
+    'FABRIC_VERSION',
+    'NEOFORGE_VERSION',
+    'QUILT_VERSION',
+    'BUILD_NUMBER',
+    'BUILD_TYPE',
+    'DL_PATH',
+    'SERVER_JARFILE',
+]);
 import getServerStartup from '@/api/swr/getServerStartup';
 
 import { ServerContext } from '@/state/server';
@@ -32,18 +63,29 @@ const VariableBox = ({ variable }: Props) => {
     const FLASH_KEY = `server:startup:${variable.envVariable}`;
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const [loading, setLoading] = useState(false);
     const [canEdit] = usePermissions(['startup.update']);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { mutate } = getServerStartup(uuid);
     const [dropDownOpen, setDropDownOpen] = useState(false);
+    const navigate = useNavigate();
+
+    /**
+     * Track the value we last successfully saved so we only toast when the
+     * variable actually changed value. Without this, an idle blur (e.g.
+     * the user opens the dropdown, picks the same value, and the debounce
+     * fires anyway) would surface the reinstall reminder every time.
+     */
+    const [lastSavedValue, setLastSavedValue] = useState<string>(variable.serverValue ?? '');
 
     const setVariableValue = debounce((value: string) => {
         setLoading(true);
         clearFlashes(FLASH_KEY);
 
+        const previous = lastSavedValue;
         updateStartupVariable(uuid, variable.envVariable, value)
-            .then(([response, invocation]) =>
+            .then(([response, invocation]) => {
                 mutate(
                     (data) => ({
                         ...data!,
@@ -53,8 +95,26 @@ const VariableBox = ({ variable }: Props) => {
                         ),
                     }),
                     false,
-                ),
-            )
+                );
+                setLastSavedValue(value);
+                // Installer-driven variables (MINECRAFT_VERSION etc.) only
+                // really take effect after a reinstall — saving them as an
+                // env var doesn't swap out the jar on disk. Nudge the user
+                // toward the Software section, which IS the path that
+                // reinstalls. We deliberately gate on "value actually
+                // changed" so a no-op save doesn't toast.
+                if (INSTALLER_DRIVEN_VARS.has(variable.envVariable) && previous !== value) {
+                    toast.warning(`${variable.envVariable} changed`, {
+                        description:
+                            'The server will still launch with the existing files until you reinstall. Use the Software section to apply the change.',
+                        duration: 12000,
+                        action: {
+                            label: 'Go to Software',
+                            onClick: () => navigate(`/server/${serverId}/settings#software`),
+                        },
+                    });
+                }
+            })
             .catch((error) => {
                 console.error(error);
                 clearAndAddHttpError({ key: FLASH_KEY, error });
