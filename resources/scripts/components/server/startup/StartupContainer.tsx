@@ -340,11 +340,6 @@ const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
                                 </h4>
                                 <span className='text-[11px] text-zinc-500'>Click to copy placeholder</span>
                             </div>
-                            <p className='mb-3 text-xs leading-relaxed text-neutral-500'>
-                                These placeholders are always available in the startup command and are substituted at
-                                runtime. Egg-defined variables (listed in <em>Environment Variables</em> below) work the
-                                same way — wrap the name in <code className='font-mono text-zinc-400'>{'{{...}}'}</code>.
-                            </p>
                             {/*
                                 Values shown here are the literal substitution
                                 strings StartupCommandService::handle() will
