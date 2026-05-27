@@ -334,12 +334,6 @@ const ServerActivityLogContainer = () => {
                             <Spinner centered />
                         ) : !filteredData?.items?.length ? (
                             <div className='text-center py-12'>
-                                <ClockArrowRotateLeft
-                                    width={22}
-                                    height={22}
-                                    className=' text-zinc-600 mb-4'
-                                    fill='currentColor'
-                                />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
                                     {hasActiveFilters ? 'No Matching Activity' : 'No Server Activity Yet'}
                                 </h3>
