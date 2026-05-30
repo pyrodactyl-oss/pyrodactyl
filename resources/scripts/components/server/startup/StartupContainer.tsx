@@ -1,3 +1,4 @@
+import { Copy } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
@@ -28,13 +29,68 @@ import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import updateStartupCommand from '@/api/server/updateStartupCommand';
 import getServerStartup from '@/api/swr/getServerStartup';
 
+import { ip as ipFormatter } from '@/lib/formatters';
+
 import { ServerContext } from '@/state/server';
 
 import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import useFlash from '@/plugins/useFlash';
 import { usePermissions } from '@/plugins/usePermissions';
 
-const StartupContainer = () => {
+interface StartupContainerProps {
+    /**
+     * When true, render WITHOUT the outer ServerContentBlock / MainPageHeader
+     * chrome — used by the consolidated Settings page (which renders its own
+     * outer chrome and stacks this container as one of several sections).
+     * Defaults to false so any direct mount (legacy redirects, deep-link
+     * fallbacks) still gets a complete page.
+     */
+    embedded?: boolean;
+}
+
+/**
+ * Single click-to-copy chip for one of the six built-in `{{SERVER_*}}`
+ * placeholders. Renders the placeholder syntax (so users learn the
+ * `{{VAR}}` form they'd type into the editor) alongside the current
+ * resolved value for this server, so it doubles as an at-a-glance
+ * reference.
+ *
+ * Defined as a top-level component (rather than inlined inside
+ * StartupContainer) so each chip's hover state is a clean
+ * Tailwind transition rather than re-rendering through the parent's
+ * state on every keystroke in the command editor above it.
+ */
+interface BuiltinVariableChipProps {
+    placeholder: string;
+    value: string;
+    hint: string;
+}
+const BuiltinVariableChip = ({ placeholder, value, hint }: BuiltinVariableChipProps) => (
+    <CopyOnClick text={placeholder}>
+        <div
+            // group + per-item border so the hover state is visibly
+            // scoped to the chip you're pointing at (otherwise it
+            // visually merges with the neighbour). Same spotlight idiom
+            // the rest of the Settings page uses.
+            className='group flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-[#ffffff10] bg-[#ffffff06] px-3 py-2 transition hover:duration-0 hover:border-[#ffffff22] hover:bg-[#ffffff0c]'
+            title={hint}
+        >
+            <div className='flex min-w-0 flex-col leading-tight'>
+                <span className='truncate font-mono text-xs text-zinc-100'>{placeholder}</span>
+                <span className='truncate text-[11px] text-zinc-500' title={value}>
+                    {value}
+                </span>
+            </div>
+            <Copy
+                width={12}
+                height={12}
+                className='shrink-0 text-zinc-500 transition group-hover:text-zinc-200'
+            />
+        </div>
+    </CopyOnClick>
+);
+
+const StartupContainer = ({ embedded = false }: StartupContainerProps = {}) => {
     const [loading, setLoading] = useState(false);
     const [commandLoading, setCommandLoading] = useState(false);
     const [editingCommand, setEditingCommand] = useState(false);
@@ -46,7 +102,6 @@ const StartupContainer = () => {
     const [canEditDockerImage] = usePermissions(['startup.docker-image']);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const server = ServerContext.useStoreState((state) => state.server.data!, isEqual);
     const variables = ServerContext.useStoreState(
         ({ server }) => ({
             variables: server.data!.variables,
@@ -55,6 +110,15 @@ const StartupContainer = () => {
         }),
         isEqual,
     );
+    // Pulled separately (and shallow-compared) so the keystroke-level
+    // re-renders of the command editor don't drag the full server
+    // object through Easy-Peasy's selector pipeline on every keystroke.
+    // These feed the "Built-in variables" reference chips below the
+    // command editor.
+    const serverName = ServerContext.useStoreState((state) => state.server.data!.name);
+    const serverLimits = ServerContext.useStoreState((state) => state.server.data!.limits, isEqual);
+    const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations, isEqual);
+    const primaryAllocation = serverAllocations.find((a) => a.isDefault) ?? serverAllocations[0];
 
     const { data, error, isValidating, mutate } = getServerStartup(uuid, {
         ...variables,
@@ -62,7 +126,10 @@ const StartupContainer = () => {
         rawStartupCommand: '',
     });
 
-    const ITEMS_PER_PAGE = 6;
+    // 8 per page rather than 6 so the 4-column xl grid below always
+    // breaks cleanly into two full rows on a page (8 = 2 × 4) instead
+    // of leaving a half-empty row at the bottom.
+    const ITEMS_PER_PAGE = 8;
     const [currentPage, setCurrentPage] = useState(1);
 
     const paginatedVariables = data
@@ -184,6 +251,17 @@ const StartupContainer = () => {
         setLiveProcessedCommand(processed);
     };
 
+    // When embedded, ContentChrome is a passthrough fragment — the parent
+    // SettingsContainer is already providing the outer ServerContentBlock
+    // and a page-level header, so we don't want to render duplicates.
+    const ContentChrome = embedded
+        ? ({ children }: { children: React.ReactNode }) => <>{children}</>
+        : ({ children }: { children: React.ReactNode }) => (
+              <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
+                  {children}
+              </ServerContentBlock>
+          );
+
     return !data ? (
         !error || (error && isValidating) ? (
             <div className='flex items-center justify-center min-h-[60vh]'>
@@ -196,7 +274,7 @@ const StartupContainer = () => {
             <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
+        <ContentChrome>
             <Dialog.Confirm
                 open={revertModalVisible}
                 title={'Revert Docker Image'}
@@ -219,16 +297,18 @@ const StartupContainer = () => {
                 </div>
             </Dialog.Confirm>
             <div className='space-y-6'>
-                <MainPageHeader direction='column' title='Startup Settings'>
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Configure how your server starts up. These settings control the startup command and environment
-                        variables.
-                        <span className='text-amber-400 font-medium'>
-                            {' '}
-                            Exercise caution when modifying these settings.
-                        </span>
-                    </p>
-                </MainPageHeader>
+                {!embedded && (
+                    <MainPageHeader direction='column' title='Startup Settings'>
+                        <p className='text-sm text-neutral-400 leading-relaxed'>
+                            Configure how your server starts up. These settings control the startup command and
+                            environment variables.
+                            <span className='text-amber-400 font-medium'>
+                                {' '}
+                                Exercise caution when modifying these settings.
+                            </span>
+                        </p>
+                    </MainPageHeader>
+                )}
 
                 <div className='space-y-6'>
                     <TitledGreyBox title={'Startup Command'} className='p-6'>
@@ -238,6 +318,71 @@ const StartupContainer = () => {
                                 processed version with variables resolved.
                             </p>
                         </div>
+
+                        {/*
+                            Built-in variables panel. Always visible inside
+                            the Startup Command card (in both view and edit
+                            modes) because the most useful time to know
+                            what placeholders exist is also the most likely
+                            time to need them — staring at the command
+                            field. The six SERVER_* names listed here are
+                            the ones StartupCommandService::handle()
+                            substitutes server-side (app/Services/Servers/
+                            StartupCommandService.php) before any egg
+                            variables; click any chip to copy the
+                            `{{...}}` form into your clipboard so you can
+                            paste it straight into the editor.
+                        */}
+                        <div className='mb-6 rounded-xl border border-[#ffffff10] bg-[#ffffff04] p-4'>
+                            <div className='mb-3 flex items-baseline justify-between gap-2'>
+                                <h4 className='text-[11px] font-bold uppercase tracking-wide text-zinc-400'>
+                                    Built-in variables
+                                </h4>
+                                <span className='text-[11px] text-zinc-500'>Click to copy placeholder</span>
+                            </div>
+                            {/*
+                                Values shown here are the literal substitution
+                                strings StartupCommandService::handle() will
+                                splice into the command at runtime — no units,
+                                formatting, or sentinels added on top. Hints
+                                explain what the raw number actually means
+                                (MiB / percent / etc.) without polluting the
+                                value cell.
+                            */}
+                            <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_MEMORY}}'
+                                    value={String(serverLimits.memory)}
+                                    hint='Memory limit allocated to the container, in MiB.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_CPU}}'
+                                    value={String(serverLimits.cpu)}
+                                    hint='CPU limit as a percentage of a single core. 0 means unlimited.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_IP}}'
+                                    value={primaryAllocation ? ipFormatter(primaryAllocation.ip) : '—'}
+                                    hint='IP of the primary allocation bound to this server.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_PORT}}'
+                                    value={primaryAllocation ? String(primaryAllocation.port) : '—'}
+                                    hint='Port of the primary allocation.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_UUID}}'
+                                    value={uuid}
+                                    hint='Unique identifier for this server. Stable across restarts and renames.'
+                                />
+                                <BuiltinVariableChip
+                                    placeholder='{{SERVER_NAME}}'
+                                    value={serverName || '—'}
+                                    hint='Current display name of the server.'
+                                />
+                            </div>
+                        </div>
+
                         {editingCommand ? (
                             <div className='space-y-4'>
                                 <div className='grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6'>
@@ -496,92 +641,61 @@ const StartupContainer = () => {
                             </p>
                         </div>
 
-                        <div className='bg-linear-to-b from-[#ffffff04] to-[#ffffff02] border border-[#ffffff08] rounded-xl p-4'>
-                            <div className='space-y-3'>
-                                <h4 className='text-sm font-medium text-neutral-300'>Global Server Variables</h4>
-                                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs'>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_MEMORY'}</span>
-                                        <CopyOnClick text={server?.limits?.memory || 'null'}>
-                                            <span className='text-neutral-300 font-mono'>
-                                                {server?.limits?.memory || 'null'}
-                                            </span>
-                                        </CopyOnClick>
-                                    </div>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_IP'}</span>
-                                        <CopyOnClick text={server?.allocations?.find((a) => a.isDefault)?.ip || 'null'}>
-                                            <span className='text-neutral-300 font-mono'>
-                                                {server?.allocations?.find((a) => a.isDefault)?.ip || 'null'}
-                                            </span>
-                                        </CopyOnClick>
-                                    </div>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_PORT'}</span>
-                                        <CopyOnClick
-                                            text={server?.allocations?.find((a) => a.isDefault)?.port || 'null'}
-                                        >
-                                            <span className='text-neutral-300 font-mono'>
-                                                {server?.allocations?.find((a) => a.isDefault)?.port || 'null'}
-                                            </span>
-                                        </CopyOnClick>
-                                    </div>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_UUID'}</span>
-                                        <CopyOnClick text={uuid}>
-                                            <span className='text-neutral-300 font-mono text-xs truncate'>{uuid}</span>
-                                        </CopyOnClick>
-                                    </div>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_NAME'}</span>
-                                        <CopyOnClick text={server?.name || 'null'}>
-                                            <span className='text-neutral-300 font-mono truncate'>
-                                                {server?.name || 'null'}
-                                            </span>
-                                        </CopyOnClick>
-                                    </div>
-                                    <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
-                                        <span className='font-mono text-neutral-400'>{'SERVER_CPU'}</span>
-                                        <CopyOnClick text={server?.limits?.cpu || 'null'}>
-                                            <span className='text-neutral-300 font-mono'>
-                                                {server?.limits?.cpu || 'null'}
-                                            </span>
-                                        </CopyOnClick>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {/*
+                            The old "Global Server Variables" tile grid
+                            (SERVER_MEMORY, SERVER_IP, SERVER_PORT,
+                            SERVER_UUID, SERVER_NAME, SERVER_CPU) used to
+                            live here. Every entry is now surfaced
+                            elsewhere on the Settings page in a more
+                            meaningful presentation:
+                              - SERVER_IP / SERVER_PORT → Connection card
+                              - SERVER_MEMORY / SERVER_CPU → Resources card
+                              - SERVER_UUID → Diagnostics footer
+                              - SERVER_NAME → Server Identity card
+                            Repeating them as a flat key/value grid here
+                            was duplicate noise.
+                        */}
 
-                        <div className='min-h-[40svh] flex flex-col justify-between'>
-                            <div className='grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3'>
-                                {paginatedVariables.map((variable) => (
-                                    <VariableBox key={variable.envVariable} variable={variable} />
-                                ))}
-                            </div>
-                            {data.variables.length > ITEMS_PER_PAGE && (
-                                <div className='mt-6 pt-4 border-t border-[#ffffff10]'>
-                                    <Pagination
-                                        data={{
-                                            items: paginatedVariables,
-                                            pagination: {
-                                                currentPage,
-                                                totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE),
-                                                total: data.variables.length,
-                                                count: data.variables.length,
-                                                perPage: ITEMS_PER_PAGE,
-                                            },
-                                        }}
-                                        onPageSelect={setCurrentPage}
-                                    >
-                                        {() => <></>}
-                                    </Pagination>
-                                </div>
-                            )}
+                        {/* No `min-h-[40svh]` here on purpose — that
+                            reserved viewport height to pin the
+                            pagination to the bottom even when only one
+                            page of variables existed, but it left a big
+                            awkward gap below the variables on most
+                            servers (which have ≤ 8 variables and so
+                            never paginate). Content now flows naturally. */}
+                        {/* Skip the lg:grid-cols-3 step on the way down
+                            from xl:grid-cols-4: a 3-col grid with 4 vars
+                            lays out as 3+1, which looks unbalanced with
+                            the lone tile on row 2. Going 4 → 2 → 1
+                            keeps every breakpoint cleanly divisible. */}
+                        <div className='grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4'>
+                            {paginatedVariables.map((variable) => (
+                                <VariableBox key={variable.envVariable} variable={variable} />
+                            ))}
                         </div>
+                        {data.variables.length > ITEMS_PER_PAGE && (
+                            <div className='mt-6 pt-4 border-t border-[#ffffff10]'>
+                                <Pagination
+                                    data={{
+                                        items: paginatedVariables,
+                                        pagination: {
+                                            currentPage,
+                                            totalPages: Math.ceil(data.variables.length / ITEMS_PER_PAGE),
+                                            total: data.variables.length,
+                                            count: data.variables.length,
+                                            perPage: ITEMS_PER_PAGE,
+                                        },
+                                    }}
+                                    onPageSelect={setCurrentPage}
+                                >
+                                    {() => <></>}
+                                </Pagination>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
-        </ServerContentBlock>
+        </ContentChrome>
     );
 };
 
