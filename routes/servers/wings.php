@@ -39,6 +39,8 @@ Route::group([
     Route::post('/command', [Wings\CommandController::class, 'index']);
     Route::post('/power', [Wings\PowerController::class, 'index']);
 
+    Route::get('/mods/scan', Wings\ModScanController::class)->middleware(['throttle:20,1']);
+
     Route::group(['prefix' => '/databases'], function () {
         Route::get('/', [Wings\DatabaseController::class, 'index']);
         Route::post('/', [Wings\DatabaseController::class, 'store']);
