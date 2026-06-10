@@ -67,7 +67,7 @@
         "sonner": "^2.0.7",
         "styled-components": "^6.1.19",
         "swr": "^2.3.4",
-        "tailwind-merge": "^3.3.1",
+        "tailwind-merge": "^3.4.0",
         "tailwindcss": "^4.1.11",
         "turbo": "^2.6.1",
         "typescript-eslint": "^8.39.0",
