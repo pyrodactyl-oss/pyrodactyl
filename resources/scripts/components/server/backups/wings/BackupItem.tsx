@@ -7,11 +7,10 @@ import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
-import { bytesToString } from '@/lib/formatters';
-
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
 
+import useFormatBytes from '@/plugins/useFormatBytes';
 // import Can from '@/components/elements/Can';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
@@ -23,6 +22,7 @@ interface Props {
 
 const BackupItem = ({ backup }: Props) => {
     const { mutate } = getServerBackups();
+    const formatBytes = useFormatBytes();
 
     useWebsocketEvent(`${SocketEvent.BACKUP_COMPLETED}:${backup.uuid}` as SocketEvent, async (data) => {
         try {
@@ -100,7 +100,7 @@ const BackupItem = ({ backup }: Props) => {
                         {backup.completedAt && backup.bytes ? (
                             <>
                                 <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
-                                <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                                <p className='text-sm text-zinc-300 font-medium'>{formatBytes(backup.bytes)}</p>
                             </>
                         ) : (
                             <>

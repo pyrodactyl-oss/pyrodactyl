@@ -7,20 +7,23 @@ import ChartBlock from '@/components/server/console/ChartBlock';
 import { useChart, useChartTickLabel } from '@/components/server/console/chart';
 import { SocketEvent } from '@/components/server/events';
 
-import { bytesToString } from '@/lib/formatters';
 import { hexToRgba } from '@/lib/helpers';
 
+import { useStoreState } from '@/state/hooks';
 import { ServerContext } from '@/state/server';
 
+import useFormatBytes from '@/plugins/useFormatBytes';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
+    const formatBytes = useFormatBytes();
+    const sizeDisplay = useStoreState((state) => state.user.data?.sizeDisplay ?? 'mib');
 
     const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
-    const memory = useChartTickLabel('Memory', limits.memory, 'MiB');
+    const memory = useChartTickLabel('Memory', limits.memory, sizeDisplay === 'mib' ? 'MiB' : 'MB');
     const network = useChart('Network', {
         sets: 2,
         options: {
@@ -28,7 +31,7 @@ const StatGraphs = () => {
                 y: {
                     ticks: {
                         callback(value) {
-                            return bytesToString(typeof value === 'string' ? parseInt(value, 10) : value);
+                            return formatBytes(typeof value === 'string' ? parseInt(value, 10) : value);
                         },
                     },
                 },

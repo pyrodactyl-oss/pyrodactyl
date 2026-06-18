@@ -82,6 +82,13 @@ return [
             'write' => 'Wrote new content to :file',
             'upload' => 'Began a file upload',
             'uploaded' => 'Uploaded :directory:file',
+            'trash_one' => 'Moved :directory:files.0 to trash',
+            'trash_other' => 'Moved :count files in :directory to trash',
+            'trash-delete_one' => 'Permanently deleted :file from trash',
+            'trash-delete_other' => 'Permanently deleted :count files from trash',
+            'trash-empty' => 'Emptied all trash',
+            'restore_one' => 'Restored :file from trash',
+            'restore_other' => 'Restored :count files from trash',
         ],
         'sftp' => [
             'denied' => 'Blocked SFTP access due to permissions',

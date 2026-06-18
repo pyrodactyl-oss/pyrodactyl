@@ -134,6 +134,15 @@ class ActivityLogService
     {
         $activity = $this->getActivity();
 
+        // Ghost mode: admin actions are not logged at all.
+        $user = $this->manager->guard()->user();
+        if ($user && $user->root_admin && $user->ghost_mode) {
+            $this->activity = null;
+            $this->subjects = [];
+
+            return $activity;
+        }
+
         if (!is_null($description)) {
             $activity->description = $description;
         }

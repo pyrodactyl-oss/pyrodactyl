@@ -6,9 +6,8 @@ import { Checkbox } from '@/components/elements/CheckboxNew';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
-import { bytesToString } from '@/lib/formatters';
-
 import useFlash from '@/plugins/useFlash';
+import useFormatBytes from '@/plugins/useFormatBytes';
 
 import BackupContextMenu from './BackupContextMenu';
 
@@ -43,6 +42,7 @@ interface Props {
 
 const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable = false, retryBackup }: Props) => {
     const { addFlash, clearFlashes } = useFlash();
+    const formatBytes = useFormatBytes();
 
     const handleRetry = async () => {
         if (!backup.canRetry) return;
@@ -191,7 +191,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     {backup.completedAt && backup.isSuccessful && backup.bytes ? (
                         <>
                             <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
-                            <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                            <p className='text-sm text-zinc-300 font-medium'>{formatBytes(backup.bytes)}</p>
                         </>
                     ) : (
                         <>

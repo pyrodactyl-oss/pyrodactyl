@@ -81,6 +81,23 @@
         </div>
       </div>
       </div>
+      <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">File Trash</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+        <div class="form-group col-md-6">
+          <label class="control-label">Trash Retention (Days)</label>
+          <div>
+          <input type="number" required class="form-control" name="pterodactyl:trash:retention_days"
+            value="{{ old('pterodactyl:trash:retention_days', config('pterodactyl.trash.retention_days', 30)) }}" min="1" max="365">
+          <p class="text-muted small">Number of days to keep files in the trash before permanent deletion. Default: 30 days.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+      </div>
       <div class="box box-primary">
       <div class="box-footer">
         {{ csrf_field() }}

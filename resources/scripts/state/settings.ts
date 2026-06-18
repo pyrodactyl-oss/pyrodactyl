@@ -4,6 +4,7 @@ export interface SiteSettings {
     name: string;
     locale: string;
     timezone: string;
+    trash_retention_days: number;
 }
 
 export interface SettingsStore {

@@ -1,4 +1,4 @@
-import { ArrowDownToLine, ClockArrowRotateLeft, Funnel, Magnifier, Xmark } from '@gravity-ui/icons';
+import { ArrowDownToLine, ClockArrowRotateLeft, Funnel, Magnifier, TrashBin, Xmark } from '@gravity-ui/icons';
 import { useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -6,13 +6,17 @@ import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Select from '@/components/elements/Select';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
+import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
 import { Input } from '@/components/elements/inputs';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
 
 import { ActivityLogFilters } from '@/api/account/activity';
-import { useActivityLogs } from '@/api/server/activity';
+import { clearActivityLogs, deleteActivityLog, useActivityLogs } from '@/api/server/activity';
+
+import { store } from '@/state';
+import { ServerContext } from '@/state/server';
 
 import { useFlashKey } from '@/plugins/useFlash';
 import useLocationHash from '@/plugins/useLocationHash';
@@ -25,11 +29,41 @@ const ServerActivityLogContainer = () => {
     const [selectedEventType, setSelectedEventType] = useState('');
     const [showFilters, setShowFilters] = useState(false);
     const [dateRange, setDateRange] = useState('all');
+    const [showClearConfirm, setShowClearConfirm] = useState(false);
 
-    const { data, isValidating, error } = useActivityLogs(filters, {
+    const { data, mutate, isValidating, error } = useActivityLogs(filters, {
         revalidateOnMount: true,
         revalidateOnFocus: false,
     });
+
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    const rootAdmin = store.getState().user.data?.rootAdmin;
+
+    const handleClearAll = async () => {
+        try {
+            await clearActivityLogs(uuid!);
+            mutate({ items: [], pagination: { total: 0, count: 0, perPage: 25, currentPage: 1, totalPages: 1 } }, { revalidate: false });
+        } catch {
+            mutate();
+        }
+        setShowClearConfirm(false);
+    };
+
+    const handleDeleteActivity = async (id: string) => {
+        try {
+            await deleteActivityLog(uuid!, id);
+            mutate(
+                (prev) => {
+                    if (!prev) return prev;
+                    return { ...prev, items: prev.items.filter((item) => item.id !== id) };
+                },
+                { revalidate: false },
+            );
+        } catch (error) {
+            // Revalidate to restore item
+            mutate();
+        }
+    };
 
     // Extract unique event types for filter dropdown
     const eventTypes = useMemo(() => {
@@ -151,6 +185,7 @@ const ServerActivityLogContainer = () => {
     }, [error]);
 
     return (
+        <>
         <ServerContentBlock title={'Activity Log'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'server:activity'} />
@@ -188,6 +223,18 @@ const ServerActivityLogContainer = () => {
                                     <ArrowDownToLine width={22} height={22} className='w-4 h-4' fill='currentColor' />
                                     Export
                                 </ActionButton>
+                                {rootAdmin && (
+                                    <ActionButton
+                                        variant='secondary'
+                                        onClick={() => setShowClearConfirm(true)}
+                                        disabled={!filteredData?.items?.length}
+                                        className='flex items-center gap-2 !text-red-400 hover:!text-red-300'
+                                        title='Clear all activity'
+                                    >
+                                        <TrashBin width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                        Clear
+                                    </ActionButton>
+                                )}
                             </div>
                         }
                     >
@@ -356,8 +403,11 @@ const ServerActivityLogContainer = () => {
                         ) : (
                             <div className='divide-y divide-zinc-800/30'>
                                 {filteredData.items.map((activity) => (
-                                    <ActivityLogEntry key={activity.id} activity={activity}>
-                                        <span />
+                                    <ActivityLogEntry
+                                        key={activity.id}
+                                        activity={activity}
+                                        onDelete={rootAdmin ? handleDeleteActivity : undefined}
+                                    >
                                     </ActivityLogEntry>
                                 ))}
                             </div>
@@ -375,6 +425,16 @@ const ServerActivityLogContainer = () => {
                 </div>
             </div>
         </ServerContentBlock>
+        <ConfirmationDialog
+            open={showClearConfirm}
+            onClose={() => setShowClearConfirm(false)}
+            onConfirmed={handleClearAll}
+            title='Clear activity logs'
+            confirm='Clear all'
+        >
+            Are you sure you want to permanently delete all activity events for this server? This action cannot be undone.
+        </ConfirmationDialog>
+        </>
     );
 };
 

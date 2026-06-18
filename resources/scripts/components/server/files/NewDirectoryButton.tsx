@@ -1,3 +1,4 @@
+import { FolderPlus } from '@gravity-ui/icons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { useContext, useEffect, useState } from 'react';
@@ -108,8 +109,8 @@ const NewDirectoryButton = () => {
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
-            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)}>
-                New Folder
+            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)} title='New Folder'>
+                <FolderPlus className='h-4 w-4' />
             </ActionButton>
         </>
     );

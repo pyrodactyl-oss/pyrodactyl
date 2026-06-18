@@ -10,6 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Spatie\QueryBuilder\AllowedFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Http\Response;
 use Pterodactyl\Http\Requests\Api\Client\ClientApiRequest;
 use Pterodactyl\Transformers\Api\Client\ActivityLogTransformer;
 use Pterodactyl\Http\Controllers\Api\Client\ClientApiController;
@@ -50,5 +51,31 @@ class ActivityLogController extends ClientApiController
         return $this->fractal->collection($activity)
             ->transformWith($this->getTransformer(ActivityLogTransformer::class))
             ->toArray();
+    }
+
+    public function delete(ClientApiRequest $request, Server $server, string $hashedId): Response
+    {
+        $this->authorize(Permission::ACTION_ACTIVITY_DELETE, $server);
+
+        $activity = $server->activity()->get()->first(function (ActivityLog $log) use ($hashedId) {
+            return sha1($log->id) === $hashedId;
+        });
+
+        if (!$activity) {
+            abort(404);
+        }
+
+        $activity->delete();
+
+        return response()->noContent();
+    }
+
+    public function clear(ClientApiRequest $request, Server $server): Response
+    {
+        $this->authorize(Permission::ACTION_ACTIVITY_DELETE, $server);
+
+        $server->activity()->delete();
+
+        return response()->noContent();
     }
 }

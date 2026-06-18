@@ -7,6 +7,8 @@ import { bytesToString, ip } from '@/lib/formatters';
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
 
+import useFormatBytes from '@/plugins/useFormatBytes';
+
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
 const isAlarmState = (current: number, limit: number): boolean => limit > 0 && current / (limit * 1024 * 1024) >= 0.9;
@@ -73,6 +75,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
     const [isInstalling, setIsInstalling] = useState(server.status === 'installing');
     const [stats, setStats] = useState<ServerStats | null>(null);
+    const formatBytes = useFormatBytes();
 
     const getStats = () =>
         getServerResourceUsage(server.uuid)
@@ -174,7 +177,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>RAM</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.memoryUsageInBytes, 0)}
+                                    {formatBytes(stats.memoryUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>
@@ -182,7 +185,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                             <div className={`flex justify-center gap-2 w-fit`}>
                                 <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Storage</p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.diskUsageInBytes, 0)}
+                                    {formatBytes(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>

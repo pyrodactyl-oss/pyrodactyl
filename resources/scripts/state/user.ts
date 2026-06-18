@@ -8,6 +8,8 @@ export interface UserData {
     email: string;
     language: string;
     rootAdmin: boolean;
+    ghostMode: boolean;
+    sizeDisplay: 'mib' | 'mb';
     useTotp: boolean;
     createdAt: Date;
     updatedAt: Date;

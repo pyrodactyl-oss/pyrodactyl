@@ -135,6 +135,7 @@ class User extends Model implements
      */
     protected $casts = [
         'root_admin' => 'boolean',
+        'ghost_mode' => 'boolean',
         'use_totp' => 'boolean',
         'gravatar' => 'boolean',
         'totp_authenticated_at' => 'datetime',
