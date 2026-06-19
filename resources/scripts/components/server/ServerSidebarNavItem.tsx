@@ -1,4 +1,5 @@
 import { forwardRef, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
@@ -23,6 +24,7 @@ interface ServerSidebarNavItemProps {
  */
 const ServerSidebarNavItem = forwardRef<HTMLAnchorElement, ServerSidebarNavItemProps>(
     ({ route, serverId, onClick }, ref) => {
+        const { t } = useTranslation('strings');
         const { icon: Icon, name, path, permission, featureLimit, end } = route;
 
         // Feature limits from server state
@@ -80,7 +82,7 @@ const ServerSidebarNavItem = forwardRef<HTMLAnchorElement, ServerSidebarNavItemP
                 className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
             >
                 {Icon && <Icon className='ml-3' width={22} height={22} fill='currentColor' />}
-                <p>{name}</p>
+                <p>{name ? t(name) : ''}</p>
             </NavLink>
         );
 

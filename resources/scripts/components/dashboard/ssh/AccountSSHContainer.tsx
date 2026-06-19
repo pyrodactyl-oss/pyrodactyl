@@ -1,5 +1,6 @@
 import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
 import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useEffect, useState } from 'react';
@@ -17,6 +18,8 @@ import { Dialog } from '@/components/elements/dialog';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
+
+import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 
@@ -84,7 +87,7 @@ const AccountSSHContainer = () => {
     };
 
     return (
-        <PageContentBlock title={'SSH Keys'}>
+        <PageContentBlock title={i18n.t('dashboard:ssh_keys.title')}>
             <FlashMessageRender byKey='account:ssh-keys' />
 
             {/* Create SSH Key Modal */}
@@ -92,8 +95,8 @@ const AccountSSHContainer = () => {
                 <Dialog.Confirm
                     open={showCreateModal}
                     onClose={() => setShowCreateModal(false)}
-                    title='Add SSH Key'
-                    confirm='Add Key'
+                    title={i18n.t('dashboard:ssh_keys.add_title')}
+                    confirm={i18n.t('dashboard:ssh_keys.add_confirm')}
                     onConfirmed={() => {
                         const form = document.getElementById('create-ssh-form') as HTMLFormElement;
                         if (form) {
@@ -106,8 +109,8 @@ const AccountSSHContainer = () => {
                         onSubmit={submitCreate}
                         initialValues={{ name: '', publicKey: '' }}
                         validationSchema={object().shape({
-                            name: string().required('SSH Key Name is required'),
-                            publicKey: string().required('Public Key is required'),
+                            name: string().required(i18n.t('dashboard:ssh_keys.name_required')),
+                            publicKey: string().required(i18n.t('dashboard:ssh_keys.public_key_required')),
                         })}
                     >
                         {({ isSubmitting }) => (
@@ -115,17 +118,17 @@ const AccountSSHContainer = () => {
                                 <SpinnerOverlay visible={isSubmitting} />
 
                                 <FormikFieldWrapper
-                                    label='SSH Key Name'
+                                    label={i18n.t('dashboard:ssh_keys.name_label')}
                                     name='name'
-                                    description='A name to identify this SSH key.'
+                                    description={i18n.t('dashboard:ssh_keys.name_help')}
                                 >
                                     <Field name='name' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
 
                                 <FormikFieldWrapper
-                                    label='Public Key'
+                                    label={i18n.t('dashboard:ssh_keys.public_key_label')}
                                     name='publicKey'
-                                    description='Enter your public SSH key.'
+                                    description={i18n.t('dashboard:ssh_keys.public_key_help')}
                                 >
                                     <Field name='publicKey' as={Input} className='w-full' />
                                 </FormikFieldWrapper>
@@ -147,7 +150,7 @@ const AccountSSHContainer = () => {
                     }}
                 >
                     <MainPageHeader
-                        title='SSH Keys'
+                        title={i18n.t('dashboard:ssh_keys.title')}
                         titleChildren={
                             <ActionButton
                                 variant='primary'
@@ -155,7 +158,7 @@ const AccountSSHContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <Plus width={22} height={22} fill='currentColor' />
-                                Add SSH Key
+                                {i18n.t('dashboard:ssh_keys.add_button')}
                             </ActionButton>
                         }
                     />
@@ -172,14 +175,13 @@ const AccountSSHContainer = () => {
                     <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 sm:p-6 shadow-sm'>
                         <SpinnerOverlay visible={!data && isValidating} />
                         <Dialog.Confirm
-                            title={'Delete SSH Key'}
-                            confirm={'Delete Key'}
+                            title={i18n.t('dashboard:ssh_keys.delete_title')}
+                            confirm={i18n.t('dashboard:ssh_keys.delete_confirm')}
                             open={!!deleteKey}
                             onClose={() => setDeleteKey(null)}
                             onConfirmed={doDeletion}
                         >
-                            Removing the <Code>{deleteKey?.name}</Code> SSH key will invalidate its usage across the
-                            Panel.
+                            {i18n.t('dashboard:ssh_keys.delete_warning', { name: deleteKey?.name || '' })}
                         </Dialog.Confirm>
 
                         {!data || data.length === 0 ? (
@@ -187,11 +189,11 @@ const AccountSSHContainer = () => {
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                                     <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No SSH Keys</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('dashboard:ssh_keys.empty_title')}</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
-                                    {!data
-                                        ? 'Loading your SSH keys...'
-                                        : "You haven't added any SSH keys yet. Add one to securely access your servers."}
+                                    {isValidating
+                                        ? i18n.t('dashboard:ssh_keys.loading')
+                                        : i18n.t('dashboard:ssh_keys.empty_description')}
                                 </p>
                             </div>
                         ) : (
@@ -215,9 +217,9 @@ const AccountSSHContainer = () => {
                                                         </h4>
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
-                                                        <span>Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
+                                                        <span>{i18n.t('dashboard:ssh_keys.added_label')} {format(key.createdAt, 'MMM d, yyyy HH:mm', { locale: i18n.language === 'es' ? es : undefined })}</span>
                                                         <div className='flex items-center gap-2'>
-                                                            <span>Fingerprint:</span>
+                                                            <span>{i18n.t('dashboard:ssh_keys.fingerprint_label')}</span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
                                                                 {showKeys[key.fingerprint]
                                                                     ? `SHA256:${key.fingerprint}`

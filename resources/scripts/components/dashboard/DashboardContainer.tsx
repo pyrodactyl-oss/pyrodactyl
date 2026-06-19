@@ -1,5 +1,6 @@
 import { Bars, ChevronDown, Ghost, House, LayoutCellsLarge, SlidersVertical } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
@@ -28,10 +29,12 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 import { MainPageHeader } from '../elements/MainPageHeader';
 
 const DashboardContainer = () => {
+    const { t } = useTranslation('dashboard');
+
     const getTitle = () => {
-        if (serverViewMode === 'admin-all') return 'All Servers (Admin)';
-        if (serverViewMode === 'all') return 'All Accessible Servers';
-        return 'Your Servers';
+        if (serverViewMode === 'admin-all') return t('dashboard.all_servers_admin');
+        if (serverViewMode === 'all') return t('dashboard.all_servers');
+        return t('dashboard.your_servers');
     };
 
     const { search } = useLocation();
@@ -122,7 +125,7 @@ const DashboardContainer = () => {
                                                 onSelect={() => setServerViewMode('owner')}
                                                 className={serverViewMode === 'owner' ? 'bg-accent/20' : ''}
                                             >
-                                                Your Servers Only
+                                                {t('dashboard.your_servers_only')}
                                             </DropdownMenuItem>
 
                                             {rootAdmin && (
@@ -131,7 +134,7 @@ const DashboardContainer = () => {
                                                         onSelect={() => setServerViewMode('admin-all')}
                                                         className={serverViewMode === 'admin-all' ? 'bg-accent/20' : ''}
                                                     >
-                                                        All Servers (Admin)
+                                                        {t('dashboard.all_servers_admin')}
                                                     </DropdownMenuItem>
                                                 </>
                                             )}
@@ -139,7 +142,7 @@ const DashboardContainer = () => {
                                                 onSelect={() => setServerViewMode('all')}
                                                 className={serverViewMode === 'all' ? 'bg-accent/20' : ''}
                                             >
-                                                All Servers
+                                                {t('dashboard.all_servers')}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -194,8 +197,8 @@ const DashboardContainer = () => {
                                             }
                                             title={
                                                 ghostMode
-                                                    ? 'Ghost mode active - actions not logged'
-                                                    : 'Enable ghost mode'
+                                                    ? t('dashboard.ghost_mode_active')
+                                                    : t('dashboard.enable_ghost_mode')
                                             }
                                         >
                                             <Ghost width={18} height={18} />

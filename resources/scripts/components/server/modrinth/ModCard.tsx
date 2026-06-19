@@ -10,6 +10,8 @@ import Button from '@/components/elements/ButtonV2';
 
 import { Mod } from './config';
 
+import i18n from '@/lib/i18n';
+
 interface ModCardProps {
     mod: Mod;
 }
@@ -40,7 +42,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                         </div>
                     ) : (
                         <div className='w-20 h-20 bg-gradient-to-br from-[#131313] to-[#1a1a1a] rounded-xl flex items-center justify-center shadow-inner border border-gray-700/30'>
-                            <span className='text-gray-400 text-sm font-medium'>No Icon</span>
+                            <span className='text-gray-400 text-sm font-medium'>{i18n.t('server:modrinth.no_icon')}</span>
                         </div>
                     )}
                 </div>

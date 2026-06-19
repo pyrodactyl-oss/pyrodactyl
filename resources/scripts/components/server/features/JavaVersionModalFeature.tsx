@@ -23,6 +23,8 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
+import i18n from '@/lib/i18n';
+
 // FIXME: use regex
 const MATCH_ERRORS = [
     'minecraft 1.17 requires running the server with java 16 or above',
@@ -87,13 +89,12 @@ const JavaVersionModalFeature = () => {
             onDismissed={() => setVisible(false)}
             closeOnBackground={false}
             showSpinnerOverlay={loading}
-            title='Unsupported Java Version'
+            title={i18n.t('server:features.java.title')}
         >
             <div className='flex flex-col gap-4 w-full h-full'>
                 {/*<FlashMessageRender key={'feature:javaVersion'} />*/}
                 <p>
-                    This server is currently running an unsupported version of Java and cannot be started. Please select
-                    a supported version from the list below to continue starting the server.
+                    {i18n.t('server:features.java.description')}
                 </p>
                 <div className={`mt-6 flex flex-row justify-end items-center gap-3 my-4`}>
                     <Can action={'startup.docker-image'}>
@@ -109,7 +110,7 @@ const JavaVersionModalFeature = () => {
                                         .pop()
                                         ?.split('_')
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                                        .join(' ') || 'Select a version'}
+                                        .join(' ') || i18n.t('server:features.java.select_version')}
                                     {dropDownOpen ? (
                                         <ChevronUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     ) : (
@@ -134,7 +135,7 @@ const JavaVersionModalFeature = () => {
                     </Button> */}
                     <Can action={'startup.docker-image'}>
                         <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
-                            Update
+                            {i18n.t('server:features.java.update')}
                         </ActionButton>
                     </Can>
                 </div>

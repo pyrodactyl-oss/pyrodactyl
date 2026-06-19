@@ -1,6 +1,8 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Dialog } from '@/components/elements/dialog';
@@ -25,7 +27,7 @@ const ReinstallServerBox = () => {
                 addFlash({
                     key: 'settings',
                     type: 'success',
-                    message: 'Your server has begun the reinstallation process.',
+                    message: i18n.t('server:settings.reinstalled'),
                 });
             })
             .catch((error) => {
@@ -44,29 +46,23 @@ const ReinstallServerBox = () => {
     }, []);
 
     return (
-        <TitledGreyBox title={'Reinstall Server'}>
+        <TitledGreyBox title={i18n.t('server:settings.reinstall_title')}>
             <Dialog.Confirm
                 open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
+                title={i18n.t('server:settings.reinstall_confirm_title')}
+                confirm={i18n.t('server:settings.reinstall_confirm_button')}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
                 loading={loading}
             >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
+                {i18n.t('server:settings.reinstall_message')}
             </Dialog.Confirm>
             <p className={`text-sm`}>
-                Reinstalling your server will stop it, and then re-run the installation script that initially set it
-                up.&nbsp;
-                <strong className={`font-medium`}>
-                    Some files may be deleted or modified during this process, please back up your data before
-                    continuing.
-                </strong>
+                {i18n.t('server:settings.reinstall_description')}
             </p>
             <div className={`mt-6 text-right`}>
                 <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
-                    Reinstall Server
+                    {i18n.t('server:settings.reinstall_button')}
                 </ActionButton>
             </div>
         </TitledGreyBox>

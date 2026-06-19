@@ -2,6 +2,8 @@ import { TrashBin } from '@gravity-ui/icons';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 
@@ -39,24 +41,24 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     return (
         <>
             <ConfirmationModal
-                title={`Remove ${subuser.username}?`}
-                buttonText={`Remove ${subuser.username}`}
+                title={i18n.t('server:users.remove_user', { username: subuser.username })}
+                buttonText={i18n.t('server:users.remove_user_text', { username: subuser.username })}
                 visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
-                All access to the server will be removed immediately.
+                {i18n.t('server:users.remove_message')}
             </ConfirmationModal>
             <ActionButton
                 variant='danger'
                 size='sm'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label='Delete subuser'
+                aria-label={i18n.t('server:users.delete_subuser')}
             >
                 <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
-                Delete
+                {i18n.t('server:users.delete')}
             </ActionButton>
         </>
     );

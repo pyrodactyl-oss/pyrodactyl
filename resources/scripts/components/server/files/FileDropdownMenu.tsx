@@ -4,6 +4,8 @@ import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
+import i18n from '@/lib/i18n';
+
 import Can from '@/components/elements/Can';
 import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
 import { Dialog } from '@/components/elements/dialog';
@@ -50,11 +52,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doCopy = () => {
         clearFlashes('files');
-        toast.info('Duplicating...');
+        toast.info(i18n.t('server:files.duplicating'));
 
         copyFile(uuid, join(directory, file.name))
             .then(() => mutate())
-            .then(() => toast.success('File successfully duplicated.'))
+            .then(() => toast.success(i18n.t('server:files.duplicated')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -71,21 +73,21 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
 
     const doArchive = () => {
         clearFlashes('files');
-        toast.info('Archiving files...');
+        toast.info(i18n.t('server:files.archiving'));
 
         compressFiles(uuid, directory, [file.name])
             .then(() => mutate())
-            .then(() => toast.success('Files successfully archived.'))
+            .then(() => toast.success(i18n.t('server:files.archived')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
     const doUnarchive = () => {
         clearFlashes('files');
-        toast.info('Unarchiving files...');
+        toast.info(i18n.t('server:files.unarchiving'));
 
         decompressFiles(uuid, directory, file.name)
             .then(() => mutate())
-            .then(() => toast.success('Files successfully unarchived.'))
+            .then(() => toast.success(i18n.t('server:files.unarchived')))
             .catch((error) => clearAndAddHttpError({ key: 'files', error }));
     };
 
@@ -94,13 +96,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             <Dialog.Confirm
                 open={showConfirmation}
                 onClose={() => setShowConfirmation(false)}
-                title={`Delete ${file.isFile ? 'File' : 'Directory'}`}
-                confirm={'Delete'}
+                title={i18n.t('server:files.delete_item', { type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type') })}
+                confirm={i18n.t('server:files.delete_confirm')}
                 onConfirmed={doDeletion}
             >
-                You will not be able to recover the contents of
-                <span className={'font-semibold text-zinc-50'}> {file.name}</span> after the trash retention period
-                expires ({retentionDays} days).
+                {i18n.t('server:files.delete_body', { type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type'), days: retentionDays })}
             </Dialog.Confirm>
             {modal ? (
                 modal === 'chmod' ? (
@@ -124,50 +124,50 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 <Can action={'file.update'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('rename')}>
                         <PencilToLine className='h-4! w-4!' fill='currentColor' />
-                        <span>Rename</span>
+                        <span>{i18n.t('server:files.rename')}</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('move')}>
                         <BarsPlay className='h-4! w-4!' fill='currentColor' />
-                        <span>Move</span>
+                        <span>{i18n.t('server:files.move')}</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setModal('chmod')}>
                         <Shield className='h-4! w-4!' fill='currentColor' />
-                        <span>Permissions</span>
+                        <span>{i18n.t('server:files.configure_permissions')}</span>
                     </ContextMenuItem>
                 </Can>
                 {file.isFile && (
                     <Can action={'file.create'}>
                         <ContextMenuItem className='flex gap-2' onClick={doCopy}>
                             <Copy className='h-4! w-4!' fill='currentColor' />
-                            <span>Duplicate</span>
+                            <span>{i18n.t('server:files.duplicate')}</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={'Unarchive'}>
+                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={i18n.t('server:files.unarchive')}>
                             <FileZipper className='h-4! w-4!' fill='currentColor' />
-                            <span>Unarchive</span>
+                            <span>{i18n.t('server:files.unarchive')}</span>
                         </ContextMenuItem>
                     </Can>
                 ) : (
                     <Can action={'file.archive'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doArchive}>
                             <FileZipper className='h-4! w-4!' fill='currentColor' />
-                            <span>Archive</span>
+                            <span>{i18n.t('server:files.archive')}</span>
                         </ContextMenuItem>
                     </Can>
                 )}
                 {file.isFile && (
                     <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                         <FileArrowDown className='h-4! w-4!' fill='currentColor' />
-                        <span>Download</span>
+                        <span>{i18n.t('server:files.download')}</span>
                     </ContextMenuItem>
                 )}
                 <Can action={'file.delete'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
                         <TrashBin className='h-4! w-4!' fill='currentColor' />
-                        <span>Move to Trash</span>
+                        <span>{i18n.t('server:files.move_to_trash')}</span>
                     </ContextMenuItem>
                 </Can>
             </ContextMenuContent>

@@ -2,6 +2,8 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { object, string } from 'yup';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
@@ -38,7 +40,7 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                         resetForm();
                         onDismissed();
                     }}
-                    title='New file'
+                    title={i18n.t('server:files.new_file')}
                     {...props}
                 >
                     <Form className='m-0 w-full flex flex-col gap-4'>
@@ -50,7 +52,7 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>
-                            <ActionButton variant='primary'>Create File</ActionButton>
+                            <ActionButton variant='primary'>{i18n.t('server:files.create_file')}</ActionButton>
                         </div>
                     </Form>
                 </Modal>

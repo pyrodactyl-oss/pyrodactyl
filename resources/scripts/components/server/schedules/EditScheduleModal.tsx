@@ -7,6 +7,8 @@ import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useContext, useEffect, useMemo } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
@@ -241,7 +243,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                         className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
                                     />
                                     <div className={'text-sm'}>
-                                        <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
+                                        <p className={'text-blue-100 font-medium mb-1'}>{i18n.t('server:schedules.timezone_info')}</p>
                                         <p className={'text-blue-200/80 text-xs mb-2'}>
                                             Times shown here are configured for the server timezone.
                                             {timezoneInfo.difference !== 'same time' && (

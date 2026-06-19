@@ -1,14 +1,15 @@
+{{-- Translated: server list page (title, breadcrumbs, table headers, status labels, buttons) --}}
 @extends('layouts.admin')
 
 @section('title')
-    List Servers
+    {{ trans('admin/general.server_list') }}
 @endsection
 
 @section('content-header')
-    <h1>Servers<small>All servers available on the system.</small></h1>
+    <h1>{{ trans('strings.servers') }}<small>{{ trans('admin/general.all_servers_available') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li class="active">Servers</li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li class="active">{{ trans('strings.servers') }}</li>
     </ol>
 @endsection
 
@@ -17,14 +18,14 @@
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Server List</h3>
+                <h3 class="box-title">{{ trans('admin/general.server_list') }}</h3>
                 <div class="box-tools search01">
                     <form action="{{ route('admin.servers') }}" method="GET">
                         <div class="input-group input-group-sm">
-                            <input type="text" name="filter[*]" class="form-control pull-right" value="{{ request()->input()['filter']['*'] ?? '' }}" placeholder="Search Servers">
+                            <input type="text" name="filter[*]" class="form-control pull-right" value="{{ request()->input()['filter']['*'] ?? '' }}" placeholder="{{ trans('admin/general.search_servers') }}">
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                <a href="{{ route('admin.servers.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">Create New</button></a>
+                                <a href="{{ route('admin.servers.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">{{ trans('admin/general.create_new') }}</button></a>
                             </div>
                         </div>
                     </form>
@@ -34,11 +35,11 @@
                 <table class="table table-hover">
                     <tbody>
                         <tr>
-                            <th>Server Name</th>
-                            <th>UUID</th>
-                            <th>Owner</th>
-                            <th>Node</th>
-                            <th>Connection</th>
+                            <th>{{ trans('admin/general.server_name') }}</th>
+                            <th>{{ trans('admin/general.uuid') }}</th>
+                            <th>{{ trans('admin/general.owner') }}</th>
+                            <th>{{ trans('strings.node') }}</th>
+                            <th>{{ trans('admin/general.connection') }}</th>
                             <!-- <th>Domain</th> -->
                             <th></th>
                             <th></th>
@@ -55,15 +56,15 @@
                                 <!-- <td>{{ $server->domain }}</td> -->
                                 <td class="text-center">
                                     @if($server->isSuspended())
-                                        <span class="label bg-maroon">Suspended</span>
+                                        <span class="label bg-maroon">{{ trans('admin/general.suspended') }}</span>
                                     @elseif(! $server->isInstalled())
-                                        <span class="label label-warning">Installing</span>
+                                        <span class="label label-warning">{{ trans('admin/general.installing') }}</span>
                                     @else
-                                        <span class="label label-success">Active</span>
+                                        <span class="label label-success">{{ trans('admin/general.active') }}</span>
                                     @endif
 
                                     @if($server->exclude_from_resource_calculation)
-                                        <br><small><span class="label label-info" title="Excluded from resource calculations">Excluded</span></small>
+                                        <br><small><span class="label label-info" title="{{ trans('admin/general.excluded_from_calculations') }}">{{ trans('admin/general.excluded') }}</span></small>
                                     @endif
                                 </td>
                                 <td class="text-center">

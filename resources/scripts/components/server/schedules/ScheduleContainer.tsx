@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import i18n from '@/lib/i18n';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -39,22 +41,21 @@ function ScheduleContainer() {
     }, []);
 
     return (
-        <ServerContentBlock title={'Schedules'}>
+        <ServerContentBlock title={i18n.t('server:schedules.title')}>
             <FlashMessageRender byKey={'schedules'} />
             <MainPageHeader
                 direction='column'
-                title={'Schedules'}
+                title={i18n.t('server:schedules.header')}
                 titleChildren={
                     <Can action={'schedule.create'}>
                         <ActionButton variant='primary' onClick={() => setVisible(true)}>
-                            New Schedule
+                            {i18n.t('server:schedules.new_button')}
                         </ActionButton>
                     </Can>
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Automate server tasks with scheduled commands. Create recurring tasks to manage your server, run
-                    backups, or execute custom commands.
+                    {i18n.t('server:schedules.description')}
                 </p>
             </MainPageHeader>
             <Can action={'schedule.create'}>
@@ -74,10 +75,9 @@ function ScheduleContainer() {
                                         />
                                     </svg>
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No schedules found</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('server:schedules.empty')}</h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
-                                    Your server does not have any scheduled tasks. Create one to automate server
-                                    management.
+                                    {i18n.t('server:schedules.empty_description')}
                                 </p>
                             </div>
                         </div>

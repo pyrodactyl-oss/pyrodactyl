@@ -5,6 +5,8 @@ import Input from '@/components/elements/Input';
 
 import { useGlobalStateContext } from './config';
 
+import i18n from '@/lib/i18n';
+
 export const VersionSelector = () => {
     const { gameVersions, selectedVersions, setSelectedVersions } = useGlobalStateContext();
     const [showSnapshots, setShowSnapshots] = useState(false);
@@ -64,7 +66,7 @@ export const VersionSelector = () => {
             </div>
 
             {gameVersions.length === 0 ? (
-                <p className='text-sm text-gray-500'>No versions available</p>
+                <p className='text-sm text-gray-500'>{i18n.t('server:modrinth.no_versions')}</p>
             ) : !hasSearchResults ? (
                 <p className='text-sm text-gray-500 text-center py-2'>
                     No versions found matching &quot;{searchQuery}&quot;

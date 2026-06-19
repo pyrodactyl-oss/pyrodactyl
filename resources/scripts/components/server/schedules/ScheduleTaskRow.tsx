@@ -1,6 +1,8 @@
 import { CircleQuestion, CloudArrowUpIn, PencilToLine, Power, Terminal, TrashBin } from '@gravity-ui/icons';
 import { useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';

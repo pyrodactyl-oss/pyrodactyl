@@ -1,6 +1,7 @@
 import { Ellipsis, Gear, House, Key, Lock } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { Fragment, Suspense, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 
 import routes from '@/routers/routes';
@@ -24,6 +25,7 @@ import http from '@/api/http';
 
 const DashboardRouter = () => {
     const location = useLocation();
+    const { t } = useTranslation('strings');
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
 
     // Mobile menu state
@@ -133,14 +135,14 @@ const DashboardRouter = () => {
                             <DropdownMenuContent className='z-99999' sideOffset={8}>
                                 {rootAdmin && (
                                     <DropdownMenuItem onSelect={onSelectAdminPanel}>
-                                        Admin Panel
+                                        {t('nav.admin_panel')}
                                         <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
-                                            Staff
+                                            {t('nav.staff')}
                                         </span>
                                     </DropdownMenuItem>
                                 )}
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={onTriggerLogout}>{t('nav.log_out')}</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -148,19 +150,19 @@ const DashboardRouter = () => {
                     <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                         <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                             <House width={22} height={22} fill='currentColor' />
-                            <p>Servers</p>
+                            <p>{t('nav.servers')}</p>
                         </NavLink>
                         <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                             <Lock width={22} height={22} fill='currentColor' />
-                            <p>API Keys</p>
+                            <p>{t('nav.api_keys')}</p>
                         </NavLink>
                         <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
                             <Key width={22} height={22} fill='currentColor' />
-                            <p>SSH Keys</p>
+                            <p>{t('nav.ssh_keys')}</p>
                         </NavLink>
                         <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                             <Gear width={22} height={22} fill='currentColor' />
-                            <p>Settings</p>
+                            <p>{t('nav.settings')}</p>
                         </NavLink>
                     </ul>
                 </MainSidebar>

@@ -1,5 +1,3 @@
-// FIXME: replace with radix tooltip
-// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { useContext, useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -10,6 +8,8 @@ import { Input } from '@/components/elements/inputs';
 import asDialog from '@/hoc/asDialog';
 
 import disableAccountTwoFactor from '@/api/account/disableAccountTwoFactor';
+
+import i18n from '@/lib/i18n';
 
 import { useStoreActions } from '@/state/hooks';
 
@@ -47,7 +47,7 @@ const DisableTOTPDialog = () => {
         <form id={'disable-totp-form'} className={'mt-6'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
             <label className={'block pb-1'} htmlFor={'totp-password'}>
-                Password
+                {i18n.t('dashboard:totp_disable.password_label')}
             </label>
             <Input.Text
                 id={'totp-password'}
@@ -58,28 +58,22 @@ const DisableTOTPDialog = () => {
             />
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={close}>
-                    Cancel
+                    {i18n.t('strings:cancel')}
                 </ActionButton>
-                {/* <Tooltip
-                    delay={100}
-                    disabled={password.length > 0}
-                    content={'You must enter your account password to continue.'}
-                > */}
                 <ActionButton
                     variant='danger'
                     type={'submit'}
                     form={'disable-totp-form'}
                     disabled={submitting || !password.length}
                 >
-                    Disable
+                    {i18n.t('dashboard:totp_disable.disable_button')}
                 </ActionButton>
-                {/* </Tooltip> */}
             </Dialog.Footer>
         </form>
     );
 };
 
 export default asDialog({
-    title: 'Remove Authenticator App',
-    description: 'Removing your authenticator app will make your account less secure.',
+    title: i18n.t('dashboard:totp_disable.title'),
+    description: i18n.t('dashboard:totp_disable.description'),
 })(DisableTOTPDialog);

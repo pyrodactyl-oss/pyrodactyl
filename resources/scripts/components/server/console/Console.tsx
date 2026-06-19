@@ -10,6 +10,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useEventListener from '@/plugins/useEventListener';
@@ -89,7 +91,7 @@ const Console = () => {
         );
 
     const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+        terminal.writeln(TERMINAL_PRELUDE + i18n.t('server:console.server_marked', { state }) + '\u001b[0m');
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -215,8 +217,8 @@ const Console = () => {
                         <input
                             className='w-full bg-transparent px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-xs sm:text-sm text-zinc-100 placeholder-zinc-500 border-0 outline-none focus:ring-0 focus:outline-none focus:bg-[#1a1a1a] transition-colors duration-150'
                             type='text'
-                            placeholder='Enter a command...'
-                            aria-label='Console command input.'
+                            placeholder={i18n.t('server:console.command_placeholder')}
+                            aria-label={i18n.t('server:console.command_aria')}
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}
                             autoCorrect='off'

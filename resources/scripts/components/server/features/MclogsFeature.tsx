@@ -17,6 +17,8 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
+import i18n from '@/lib/i18n';
+
 const CRASH_DETECTION_DEBOUNCE = 1500; // 1.5 seconds
 const MANUAL_ANALYZE_DEBOUNCE = 1000; // 1 second for manual clicks
 const LOG_FILE_PATH = '/logs/latest.log';
@@ -69,15 +71,15 @@ const useLogAnalysis = () => {
                 // Show toast notifications for manual analysis
                 if (showToast) {
                     if (result.analysis?.problems?.length > 0) {
-                        toast.success(`Analysis complete - ${result.analysis.problems.length} issue(s) found`);
+                        toast.success(i18n.t('server:features.mclogs.analysis_complete', { count: result.analysis.problems.length }));
                     } else {
-                        toast.info('Analysis complete - no specific issues detected');
+                        toast.info(i18n.t('server:features.mclogs.analysis_no_issues'));
                     }
                 }
             } catch (err) {
                 if (!mountedRef.current) return;
 
-                const errorMessage = err instanceof Error ? err.message : 'Failed to analyze server logs';
+                const errorMessage = err instanceof Error ? err.message : i18n.t('server:features.mclogs.analysis_failed');
                 setError(errorMessage);
                 console.error('Mclogs analysis failed:', err);
 
@@ -91,7 +93,7 @@ const useLogAnalysis = () => {
                     /no log content/i.test(errorMessage);
 
                 if (!looksLikeMissingLog && showToast) {
-                    toast.error('Failed to analyze server logs');
+                    toast.error(i18n.t('server:features.mclogs.analysis_failed'));
                 }
             } finally {
                 if (mountedRef.current) setAnalyzing(false);
@@ -175,7 +177,7 @@ export const CrashAnalysisCard = () => {
 
     const getCardMessage = () => {
         if (analyzing) {
-            return 'Analyzing server crash logs...';
+            return i18n.t('server:features.mclogs.analyzing_crash');
         }
 
         if (error) {
@@ -183,21 +185,21 @@ export const CrashAnalysisCard = () => {
                 /latest\.log/i.test(error) || /not found/i.test(error) || /no log content/i.test(error);
 
             if (looksLikeMissingLog) {
-                return 'Server crashed but no log file was found. Try running the server to generate logs.';
+                return i18n.t('server:features.mclogs.crash_no_log');
             }
-            return 'Server crashed but analysis failed. Check the logs manually.';
+            return i18n.t('server:features.mclogs.crash_failed');
         }
 
         if (!analysis) {
-            return 'Server crashed. Analysis in progress...';
+            return i18n.t('server:features.mclogs.crash_analyzing');
         }
 
         const problems = analysis.analysis?.problems ?? [];
         if (problems.length > 0) {
-            return `We analyzed your server and found ${problems.length} issue${problems.length === 1 ? '' : 's'}.`;
+            return i18n.t('server:features.mclogs.issues_found', { count: problems.length });
         }
 
-        return 'We analyzed your server crash but found no specific issues. This may be due to configuration or resource limitations.';
+        return i18n.t('server:features.mclogs.no_issues_found');
     };
 
     const getCardType = (): 'warning' | 'danger' => {
@@ -216,17 +218,17 @@ export const CrashAnalysisCard = () => {
                 <Alert type={getCardType()}>
                     <div className='flex items-center justify-between gap-3'>
                         <div className='flex-1'>
-                            <p className='font-medium text-sm'>Crash Analysis</p>
+                            <p className='font-medium text-sm'>{i18n.t('server:features.mclogs.crash_analysis')}</p>
                             <p className='text-sm mt-1'>{getCardMessage()}</p>
                         </div>
                         <div className='flex items-center gap-2 flex-shrink-0'>
                             {canViewAnalysis && (
                                 <ActionButton variant='secondary' onClick={() => setModalVisible(true)} size='sm'>
-                                    View Details
+                                    {i18n.t('server:features.mclogs.view_details')}
                                 </ActionButton>
                             )}
                             <ActionButton variant='secondary' onClick={dismissCard} size='sm'>
-                                Dismiss
+                                {i18n.t('server:features.mclogs.dismiss')}
                             </ActionButton>
                         </div>
                     </div>
@@ -272,9 +274,9 @@ const AnalysisModal = ({
     const renderLoadingState = () => (
         <div className='flex flex-col items-center justify-center py-12' aria-busy='true'>
             <Spinner size='large' />
-            <h3 className='text-lg font-medium text-neutral-200 mt-4'>Analyzing Server Logs</h3>
+            <h3 className='text-lg font-medium text-neutral-200 mt-4'>{i18n.t('server:features.mclogs.analyzing_title')}</h3>
             <p className='text-neutral-400 mt-2 text-center max-w-md'>
-                We&apos;re analyzing your server logs with mclo.gs to identify potential issues and provide solutions.
+                {i18n.t('server:features.mclogs.analyzing_description')}
             </p>
         </div>
     );
@@ -291,12 +293,11 @@ const AnalysisModal = ({
                         fill='currentColor'
                     />
                     <div className='flex-1'>
-                        <h3 className='font-semibold text-red-400 text-lg'>Analysis Failed</h3>
+                        <h3 className='font-semibold text-red-400 text-lg'>{i18n.t('server:features.mclogs.failed_title')}</h3>
                         <p className='text-neutral-300 mt-2'>{error}</p>
                         {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
                             <p className='text-neutral-400 mt-3 text-sm'>
-                                This usually means the log file doesn&apos;t exist yet. Try starting your server to
-                                generate logs first.
+                                {i18n.t('server:features.mclogs.failed_description')}
                             </p>
                         )}
                     </div>
@@ -316,7 +317,7 @@ const AnalysisModal = ({
         return (
             <div className='bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6'>
                 <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-lg font-semibold text-blue-400'>Server Information</h3>
+                    <h3 className='text-lg font-semibold text-blue-400'>{i18n.t('server:features.mclogs.server_info')}</h3>
                     <a
                         href='https://mclo.gs'
                         target='_blank'
@@ -324,13 +325,13 @@ const AnalysisModal = ({
                         className='text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors'
                     >
                         <Link width={22} height={22} className='w-4 h-4' />
-                        Powered by mclo.gs
+                        {i18n.t('server:features.mclogs.powered_by')}
                     </a>
                 </div>
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                     <div className='bg-blue-500/5 rounded-lg p-3'>
-                        <p className='text-blue-400 font-medium text-sm mb-1'>Server Type</p>
+                        <p className='text-blue-400 font-medium text-sm mb-1'>{i18n.t('server:features.mclogs.server_type')}</p>
                         <p className='text-neutral-200'>
                             {serverType} {serverVersion}
                         </p>
@@ -347,7 +348,7 @@ const AnalysisModal = ({
                 {information.length > 3 && (
                     <details className='mt-3'>
                         <summary className='text-blue-400 text-sm cursor-pointer hover:text-blue-300 transition-colors'>
-                            Show {information.length - 3} more details
+                            {i18n.t('server:features.mclogs.show_more', { count: information.length - 3 })}
                         </summary>
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mt-3'>
                             {information.slice(3).map((info, idx) => (
@@ -380,10 +381,9 @@ const AnalysisModal = ({
                             fill='currentColor'
                         />
                         <div>
-                            <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
+                            <h3 className='font-semibold text-green-400 text-lg'>{i18n.t('server:features.mclogs.no_issues_title')}</h3>
                             <p className='text-neutral-300 mt-2'>
-                                No specific issues were found in your server logs. The crash may be due to configuration
-                                problems or resource limitations.
+                                {i18n.t('server:features.mclogs.no_issues_description')}
                             </p>
                         </div>
                     </div>
@@ -393,7 +393,7 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4 mb-6'>
-                <h3 className='text-lg font-semibold text-red-400'>Issues Found ({problems.length})</h3>
+                <h3 className='text-lg font-semibold text-red-400'>{i18n.t('server:features.mclogs.issues_header', { count: problems.length })}</h3>
 
                 <div className='space-y-3'>
                     {problems.map((problem, idx) => (
@@ -411,7 +411,7 @@ const AnalysisModal = ({
 
                                         {!!problem.entry?.lines?.length && (
                                             <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
-                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>Error Log:</p>
+                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>{i18n.t('server:features.mclogs.error_log')}</p>
                                                 <div className='max-h-40 overflow-y-auto font-mono text-sm space-y-1'>
                                                     {problem.entry.lines.map((line, lineIdx) => (
                                                         <div key={lineIdx} className='flex'>
@@ -447,7 +447,7 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-green-400'>Recommended Solutions ({allSolutions.length})</h3>
+                <h3 className='text-lg font-semibold text-green-400'>{i18n.t('server:features.mclogs.solutions_header', { count: allSolutions.length })}</h3>
 
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
                     <div className='space-y-3'>
@@ -479,7 +479,7 @@ const AnalysisModal = ({
         if (!analysis) {
             return (
                 <div className='text-center py-12'>
-                    <p className='text-neutral-400'>No analysis data available</p>
+                    <p className='text-neutral-400'>{i18n.t('server:features.mclogs.no_data')}</p>
                 </div>
             );
         }
@@ -498,7 +498,7 @@ const AnalysisModal = ({
             visible={visible}
             onDismissed={closeModal}
             closeOnBackground={!analyzing}
-            title='Server Log Analysis'
+            title={i18n.t('server:features.mclogs.modal_title')}
             showSpinnerOverlay={false}
         >
             <div className='w-full max-w-4xl'>
@@ -506,7 +506,7 @@ const AnalysisModal = ({
 
                 <div className='flex justify-center gap-3 mt-8 pt-4 border-t border-neutral-700'>
                     <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
-                        {analyzing ? 'Analyzing...' : 'Analyze Again'}
+                        {analyzing ? i18n.t('server:features.mclogs.analyzing_button') : i18n.t('server:features.mclogs.analyze_again')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
                         Close

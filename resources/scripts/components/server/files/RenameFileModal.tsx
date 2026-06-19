@@ -1,6 +1,8 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
@@ -65,14 +67,14 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                     {...props}
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
-                    title={useMoveTerminology ? 'Moving files/folders' : 'Renaming file/folder'}
+                    title={useMoveTerminology ? i18n.t('server:files.move_title') : i18n.t('server:files.rename_title')}
                 >
                     <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
+                            <Field type={'string'} id={'file_name'} name={'name'} label={i18n.t('server:files.file_name')} autoFocus />
                             {useMoveTerminology && (
                                 <p className={`mt-2 text-xs! break-all`}>
-                                    <strong className={`text-sm text-zinc-200`}>New location: </strong>
+                                    <strong className={`text-sm text-zinc-200`}>{i18n.t('server:files.new_location')} </strong>
                                     <Code>
                                         /root/
                                         <span className={`text-blue-200`}>
@@ -83,7 +85,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                             )}
                             <div className={`flex justify-end w-full my-6`}>
                                 <ActionButton variant='primary' type='submit'>
-                                    {useMoveTerminology ? 'Move' : 'Rename'}
+                                    {useMoveTerminology ? i18n.t('server:files.move') : i18n.t('server:files.rename')}
                                 </ActionButton>
                             </div>
                         </div>

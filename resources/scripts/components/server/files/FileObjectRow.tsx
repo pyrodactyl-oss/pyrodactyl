@@ -1,6 +1,7 @@
 import { encodePathSegments } from '@/helpers';
 import { File, FolderOpenFill } from '@gravity-ui/icons';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { join } from 'pathe';
 import { ReactNode, memo } from 'react';
 import isEqual from 'react-fast-compare';
@@ -10,6 +11,8 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMe
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 
 import { FileObject } from '@/api/server/files/loadDirectory';
+
+import i18n from '@/lib/i18n';
 
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
@@ -71,8 +74,8 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
                             title={file.modifiedAt.toString()}
                         >
                             {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
-                                ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
-                                : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}
+                                ? format(file.modifiedAt, 'MMM do, yyyy h:mma', { locale: i18n.language === 'es' ? es : undefined })
+                                : formatDistanceToNow(file.modifiedAt, { addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}
                         </div>
                     </MemoizedClickable>
                 </div>

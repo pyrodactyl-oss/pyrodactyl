@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -38,7 +40,7 @@ const MassActionsBar = () => {
     const onClickCompress = () => {
         setLoading(true);
         clearFlashes('files');
-        setLoadingMessage('Archiving files...');
+        setLoadingMessage(i18n.t('server:files.archiving'));
 
         compressFiles(uuid, directory, selectedFiles)
             .then(() => mutate())
@@ -51,7 +53,7 @@ const MassActionsBar = () => {
         setLoading(true);
         setShowConfirm(false);
         clearFlashes('files');
-        setLoadingMessage('Moving files to trash...');
+        setLoadingMessage(i18n.t('server:files.trashing'));
 
         const filesToTrash = selectedFiles.map((name) => {
             const obj = fileObjects?.find((f) => f.name === name);
@@ -77,23 +79,21 @@ const MassActionsBar = () => {
                     {loadingMessage}
                 </SpinnerOverlay>
                 <Dialog.Confirm
-                    title={'Move to Trash'}
+                    title={i18n.t('server:files.move_to_trash_title')}
                     open={showConfirm}
-                    confirm={'Move to Trash'}
+                    confirm={i18n.t('server:files.move_to_trash')}
                     onClose={() => setShowConfirm(false)}
                     onConfirmed={onClickConfirmDeletion}
                     loading={loading}
                 >
                     <p className={'mb-2'}>
-                        Are you sure you want to move&nbsp;
-                        <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} files</span> to the trash?
-                        Files will be recoverable until the retention period expires ({retentionDays} days).
+                        {i18n.t('server:files.move_to_trash_message', { count: selectedFiles.length, days: retentionDays })}
                     </p>
                     <ul className={'list-disc pl-5 text-sm text-zinc-400 space-y-0.5'}>
                         {selectedFiles.slice(0, 15).map((file) => (
                             <li key={file}>{file}</li>
                         ))}
-                        {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
+                        {selectedFiles.length > 15 && <li>{i18n.t('server:files.and_others', { count: selectedFiles.length - 15 })}</li>}
                     </ul>
                 </Dialog.Confirm>
                 {showMove && (
@@ -116,15 +116,15 @@ const MassActionsBar = () => {
                         >
                             <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
-                                Move
+                                {i18n.t('server:files.move')}
                             </ActionButton>
                             <ActionButton onClick={onClickCompress} disabled={loading}>
                                 {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
-                                Archive
+                                {i18n.t('server:files.archive')}
                             </ActionButton>
                             <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
-                                Move to Trash
+                                {i18n.t('server:files.move_to_trash')}
                             </ActionButton>
                         </div>
                     </div>

@@ -10,6 +10,7 @@ use Pterodactyl\Facades\Activity;
 use Pterodactyl\Services\Users\UserUpdateService;
 use Pterodactyl\Transformers\Api\Client\AccountTransformer;
 use Pterodactyl\Http\Requests\Api\Client\Account\UpdateEmailRequest;
+use Pterodactyl\Http\Requests\Api\Client\Account\UpdateLanguageRequest;
 use Pterodactyl\Http\Requests\Api\Client\Account\UpdatePasswordRequest;
 
 class AccountController extends ClientApiController
@@ -69,6 +70,13 @@ class AccountController extends ClientApiController
         }
 
         Activity::event('user:account.password-changed')->log();
+
+        return new JsonResponse([], Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateLanguage(UpdateLanguageRequest $request): JsonResponse
+    {
+        $this->updateService->handle($request->user(), $request->validated());
 
         return new JsonResponse([], Response::HTTP_NO_CONTENT);
     }

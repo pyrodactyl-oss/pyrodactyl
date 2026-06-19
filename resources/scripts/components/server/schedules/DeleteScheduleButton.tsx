@@ -1,6 +1,8 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';

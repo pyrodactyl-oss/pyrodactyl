@@ -12,6 +12,8 @@ import { ModList } from './ModList';
 import GameVersionSelector from './VersionSelector';
 import { GlobalStateProvider, ModrinthService, appVersion, useGlobalStateContext } from './config';
 
+import i18n from '@/lib/i18n';
+
 const ModrinthContainerInner = () => {
     const {
         mods,
@@ -109,18 +111,18 @@ const ModrinthContainerInner = () => {
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-1/6'
-                    title='Settings'
+                    title={i18n.t('server:modrinth.settings')}
                 >
                     <Can action={'modrinth.loader'}>
                         <ModBox>
-                            <ContentBox title='Loader' className=''>
+                            <ContentBox title={i18n.t('server:modrinth.loader')} className=''>
                                 {isLoadingLoader ? <p>Loading loaders...</p> : <LoaderSelector />}
                             </ContentBox>
                         </ModBox>
                     </Can>
                     <Can action={'modrinth.version'}>
                         <ModBox>
-                            <ContentBox title='Version' className='scrollbar-thumb-red-700'>
+                            <ContentBox title={i18n.t('server:modrinth.version')} className='scrollbar-thumb-red-700'>
                                 {isLoadingVersion ? <p>Loading versions...</p> : <GameVersionSelector />}
                             </ContentBox>
                         </ModBox>
@@ -129,7 +131,7 @@ const ModrinthContainerInner = () => {
 
                 <ContentBox
                     className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-4/5'
-                    title='Downloader'
+                    title={i18n.t('server:modrinth.downloader')}
                 >
                     <div className='relative w-full h-full mb-4'>
                         <svg
@@ -149,7 +151,7 @@ const ModrinthContainerInner = () => {
                         <input
                             className='pl-14 pr-4 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
                             type='text'
-                            placeholder='Search'
+                            placeholder={i18n.t('server:modrinth.search')}
                             value={searchTerm}
                             onChange={handleInputChange}
                         />

@@ -2,6 +2,8 @@ import { CircleCheck, Xmark } from '@gravity-ui/icons';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useContext, useEffect, useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';

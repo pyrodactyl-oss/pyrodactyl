@@ -1,4 +1,5 @@
 import { hashToPath } from '@/helpers';
+import i18n from '@/lib/i18n';
 import { ArrowUturnCcwLeft, TrashBin } from '@gravity-ui/icons';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import debounce from 'debounce';
@@ -163,23 +164,23 @@ const FileManagerContainer = () => {
     });
 
     if (error && !trashMode) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+        return <ServerError title={i18n.t('server:files.error')} message={httpErrorToHuman(error)} />;
     }
 
     return (
-        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
+        <ServerContentBlock className='p-0!' title={i18n.t('server:files.title')} showFlashKey={'files'}>
             <div className='px-2 sm:px-14 pt-2 h-full sm:pt-14'>
                 {!trashMode && (
                     <ErrorBoundary>
                         <MainPageHeader
                             direction='column'
-                            title={'Files'}
+                            title={i18n.t('server:files.header')}
                             titleChildren={
                                 <Can action={'file.create'}>
                                     <div className='flex flex-row gap-1'>
                                         <FileManagerStatus />
                                         <Can action={'file.delete'}>
-                                            <ActionButton variant='secondary' onClick={enterTrash} title='Trash'>
+                                             <ActionButton variant='secondary' onClick={enterTrash} title={i18n.t('server:files.trash_button')}>
                                                 <TrashBin className='h-4 w-4 text-red-400' />
                                             </ActionButton>
                                             <div className='w-2' />
@@ -193,8 +194,7 @@ const FileManagerContainer = () => {
                             }
                         >
                             <p className='text-sm text-neutral-400 leading-relaxed'>
-                                Manage your server files and directories. Upload, download, edit, and organize your
-                                server&apos;s file system with our integrated file manager.
+                                {i18n.t('server:files.description')}
                             </p>
                         </MainPageHeader>
                         <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
@@ -220,12 +220,12 @@ const FileManagerContainer = () => {
                     <ErrorBoundary>
                         <MainPageHeader
                             direction='column'
-                            title={'Trash'}
+                            title={i18n.t('server:files.trash_header')}
                             titleChildren={
                                 <div className='flex flex-row gap-1 items-center'>
                                     <ActionButton variant='secondary' onClick={exitTrash}>
                                         <ArrowUturnCcwLeft className='h-4 w-4 mr-1' />
-                                        Back to Files
+                                        {i18n.t('server:files.back_to_files')}
                                     </ActionButton>
                                     {filteredTrash.length > 0 && (
                                         <Checkbox
@@ -238,8 +238,7 @@ const FileManagerContainer = () => {
                             }
                         >
                             <p className='text-sm text-neutral-400 leading-relaxed'>
-                                View and recover deleted files. Files will be permanently deleted after {retentionDays}{' '}
-                                days.
+                                {i18n.t('server:files.trash_description', { days: retentionDays })}
                             </p>
                         </MainPageHeader>
                     </ErrorBoundary>
@@ -267,7 +266,7 @@ const FileManagerContainer = () => {
                         ref={searchInputRef}
                         className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold outline-none'
                         type='text'
-                        placeholder='Search...'
+                        placeholder={i18n.t('server:files.search_placeholder')}
                         onChange={(event) => debouncedSearchTerm(event.target.value)}
                     />
                 </div>
@@ -308,7 +307,7 @@ const FileManagerContainer = () => {
                 <>
                     {((trashMode && filteredTrash.length === 0) || (!trashMode && filesArray.length === 0)) && (
                         <p className='text-sm text-zinc-400 text-center py-8'>
-                            {trashMode ? 'Trash is empty for this directory.' : 'This folder is empty.'}
+                            {trashMode ? i18n.t('server:files.empty_trash') : i18n.t('server:files.empty_folder')}
                         </p>
                     )}
                     {(trashMode ? filteredTrash.length > 0 : filesArray.length > 0) && (
@@ -380,10 +379,10 @@ const FileManagerContainer = () => {
                                     <div className='pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'>
                                         <div className='flex items-center space-x-4 pointer-events-auto rounded-lg p-4 bg-black/50 backdrop-blur-sm border border-[#ffffff12]'>
                                             <ActionButton onClick={() => setShowBulkRestore(true)}>
-                                                Restore Selected ({selectedTrash.length})
+                                                {i18n.t('server:files.restore_selected', { count: selectedTrash.length })}
                                             </ActionButton>
                                             <ActionButton variant='danger' onClick={() => setShowBulkDelete(true)}>
-                                                Delete Selected ({selectedTrash.length})
+                                                {i18n.t('server:files.delete_selected', { count: selectedTrash.length })}
                                             </ActionButton>
                                         </div>
                                     </div>
@@ -396,26 +395,26 @@ const FileManagerContainer = () => {
             <Dialog.Confirm
                 open={showBulkRestore}
                 onClose={() => setShowBulkRestore(false)}
-                title={'Restore Files'}
-                confirm={'Restore'}
+                title={i18n.t('server:files.restore_title')}
+                confirm={i18n.t('server:files.restore_confirm')}
                 onConfirmed={() => {
                     setShowBulkRestore(false);
                     handleBulkRestore();
                 }}
             >
-                Restore {selectedTrash.length} selected item(s) to their original locations?
+                {i18n.t('server:files.restore_message', { count: selectedTrash.length })}
             </Dialog.Confirm>
             <Dialog.Confirm
                 open={showBulkDelete}
                 onClose={() => setShowBulkDelete(false)}
-                title={'Delete Permanently'}
-                confirm={'Delete'}
+                title={i18n.t('server:files.delete_title')}
+                confirm={i18n.t('server:files.delete_confirm')}
                 onConfirmed={() => {
                     setShowBulkDelete(false);
                     handleBulkDelete();
                 }}
             >
-                Permanently delete {selectedTrash.length} selected item(s)? This action cannot be undone.
+                {i18n.t('server:files.delete_message', { count: selectedTrash.length })}
             </Dialog.Confirm>
         </ServerContentBlock>
     );

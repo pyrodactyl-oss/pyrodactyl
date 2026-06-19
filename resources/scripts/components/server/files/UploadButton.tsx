@@ -2,6 +2,8 @@ import { FileArrowUp, FolderArrowUp } from '@gravity-ui/icons';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import { Dialog } from '@/components/elements/dialog';
@@ -221,7 +223,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-            return addError('Failed to create folder structure.', 'Error');
+                return addError(i18n.t('server:files.upload_failed'), 'Error');
         }
 
         const uploads = filePaths.map(
@@ -303,7 +305,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories(dirsNeeded);
         } catch {
-            return addError('Failed to create folder structure.', 'Error');
+                return addError(i18n.t('server:files.upload_failed'), 'Error');
         }
 
         const uploads = files.map(
@@ -371,7 +373,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-            return addError('Failed to create folder structure.', 'Error');
+                return addError(i18n.t('server:files.upload_failed'), 'Error');
         }
 
         const uploads = uploadItems.map(
@@ -430,7 +432,7 @@ const UploadButton = () => {
                                     'flex-1 text-lg font-bold tracking-tight text-center truncate w-full relative px-4'
                                 }
                             >
-                                Upload to {name}
+                                {i18n.t('server:files.upload_to', { name })}
                             </h1>
                         </div>
                     </div>
@@ -467,14 +469,14 @@ const UploadButton = () => {
                 <ActionButton
                     variant='secondary'
                     onClick={() => folderUploadInput.current && folderUploadInput.current.click()}
-                    title='Upload Folder'
+                    title={i18n.t('server:files.upload_folder')}
                 >
                     <FolderArrowUp className='h-4 w-4' />
                 </ActionButton>
                 <ActionButton
                     variant='secondary'
                     onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
-                    title='Upload File'
+                    title={i18n.t('server:files.upload_file')}
                 >
                     <FileArrowUp className='h-4 w-4' />
                 </ActionButton>
@@ -517,7 +519,7 @@ const UploadButton = () => {
                         Cancel
                     </ActionButton>
                     <ActionButton variant='primary' onClick={confirmRenameAll}>
-                        Rename
+                        {i18n.t('server:files.rename')}
                     </ActionButton>
                     <ActionButton variant='danger' onClick={confirmReplaceAll}>
                         Replace

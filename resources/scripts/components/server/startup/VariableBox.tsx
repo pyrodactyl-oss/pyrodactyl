@@ -3,6 +3,8 @@ import debounce from 'debounce';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
+import i18n from '@/lib/i18n';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import {
     DropdownMenu,
@@ -98,11 +100,11 @@ const VariableBox = ({ variable }: Props) => {
                         <span className='text-sm font-medium text-neutral-300'>
                             {isStringSwitch
                                 ? variable.serverValue === 'true'
-                                    ? 'Enabled'
-                                    : 'Disabled'
+                                    ? i18n.t('server:startup.enabled')
+                                    : i18n.t('server:startup.disabled')
                                 : variable.serverValue === '1'
-                                  ? 'On'
-                                  : 'Off'}
+                                  ? i18n.t('server:startup.on')
+                                  : i18n.t('server:startup.off')}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
@@ -177,7 +179,7 @@ const VariableBox = ({ variable }: Props) => {
                                 readOnly={!canEdit || !variable.isEditable}
                                 name={variable.envVariable}
                                 defaultValue={variable.serverValue ?? ''}
-                                placeholder={variable.defaultValue || 'Enter value...'}
+                                placeholder={variable.defaultValue || i18n.t('server:startup.enter_value')}
                                 disabled={!canEdit || !variable.isEditable}
                             />
                         )}

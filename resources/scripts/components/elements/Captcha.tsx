@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CaptchaManager from '@/lib/captcha';
 
@@ -19,6 +20,7 @@ export default function Captcha({
     theme = 'dark',
     size = 'flexible',
 }: CaptchaProps) {
+    const { t } = useTranslation('strings');
     const containerRef = useRef<HTMLDivElement>(null);
     const [widgetId, setWidgetId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -147,7 +149,7 @@ export default function Captcha({
     return (
         <div className={className}>
             <div ref={containerRef} />
-            {isLoading && <div className='text-sm text-gray-500 mt-2'>Loading captcha...</div>}
+            {isLoading && <div className='text-sm text-gray-500 mt-2'>{t('loading')}</div>}
             {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
         </div>
     );

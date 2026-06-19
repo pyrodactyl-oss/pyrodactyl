@@ -1,4 +1,5 @@
 import { encodePathSegments } from '@/helpers';
+import i18n from '@/lib/i18n';
 import type { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
 import { For } from 'million/react';
@@ -108,7 +109,7 @@ const FileEditContainer = () => {
             if (instance) {
                 // they'll stack immediately, so this'll ease that
                 setTimeout(() => {
-                    toast.success('Your server is restarting.');
+                    toast.success(i18n.t('server:power.restarting_toast'));
                 }, 500);
                 instance.send('set state', 'restart');
             }
@@ -122,7 +123,7 @@ const FileEditContainer = () => {
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : `New File`} className='p-0! h-full'>
+        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : i18n.t('server:files.new_file')} className='p-0! h-full'>
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -240,7 +241,7 @@ const FileEditContainer = () => {
                                 className='rounded-l-full rounded-r-none pl-8 pr-6'
                                 onClick={() => save()}
                             >
-                                Save{' '}
+                                {i18n.t('server:settings.save')}{' '}
                                 <span className='ml-2 font-mono text-xs font-bold uppercase lg:inline-block hidden'>
                                     CTRL + S
                                 </span>
@@ -282,7 +283,7 @@ const FileEditContainer = () => {
                 ) : (
                     <Can action={'file.create'}>
                         <ActionButton variant='secondary' size='lg' onClick={() => setModalVisible(true)}>
-                            Create File
+                            {i18n.t('server:files.create_file')}
                         </ActionButton>
                     </Can>
                 )}

@@ -3,6 +3,8 @@ import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
@@ -193,8 +195,8 @@ const AllocationRow = ({ allocation }: Props) => {
                             }
                         >
                             <CrownDiamond width={22} height={22} fill='currentColor' className='mr-1' />
-                            <span className='hidden sm:inline'>Make Primary</span>
-                            <span className='sm:hidden'>Primary</span>
+                            <span className='hidden sm:inline'>{i18n.t('server:network.make_primary')}</span>
+                            <span className='sm:hidden'>{i18n.t('server:network.make_primary')}</span>
                         </ActionButton>
                     </Can>
                     <Can action={'allocation.delete'}>

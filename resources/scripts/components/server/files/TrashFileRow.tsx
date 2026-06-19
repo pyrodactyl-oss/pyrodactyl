@@ -1,6 +1,9 @@
 import { File, FolderOpenFill } from '@gravity-ui/icons';
-import { differenceInHours, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 import { memo, useCallback, useMemo, useState } from 'react';
+
+import i18n from '@/lib/i18n';
 
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import {
@@ -69,7 +72,7 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
                 open={showRestore}
                 onClose={() => setShowRestore(false)}
                 title={`Restore ${file.original_name}`}
-                confirm={'Restore'}
+                confirm={i18n.t('server:files.restore_confirm')}
                 onConfirmed={handleRestore}
             >
                 Restore <span className='font-semibold text-zinc-50'>{file.original_name}</span> to its original
@@ -79,7 +82,7 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
                 open={showDelete}
                 onClose={() => setShowDelete(false)}
                 title={`Delete ${file.original_name}`}
-                confirm={'Delete Permanently'}
+                confirm={i18n.t('server:files.delete_title')}
                 onConfirmed={handleDelete}
             >
                 This will permanently delete <span className='font-semibold text-zinc-50'>{file.original_name}</span>.
@@ -109,10 +112,10 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
                 </ContextMenuTrigger>
                 <ContextMenuContent className='flex flex-col gap-1'>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowRestore(true)}>
-                        <span>Restore</span>
+                        <span>{i18n.t('server:files.restore_confirm')}</span>
                     </ContextMenuItem>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowDelete(true)}>
-                        <span>Delete Permanently</span>
+                        <span>{i18n.t('server:files.delete_title')}</span>
                     </ContextMenuItem>
                 </ContextMenuContent>
             </ContextMenu>

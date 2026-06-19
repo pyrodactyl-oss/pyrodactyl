@@ -1,5 +1,7 @@
 import ScreenBlock from '@/components/elements/ScreenBlock';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import Spinner from '../elements/Spinner';
@@ -15,26 +17,26 @@ const ConflictStateRenderer = () => {
         <div className={'flex flex-col items-center justify-center h-full'}>
             <Spinner size={'large'} />
             <div className='flex flex-col mt-4 text-center'>
-                <label className='text-neutral-100 text-lg font-bold'>Server is Installing</label>
+                <label className='text-neutral-100 text-lg font-bold'>{i18n.t('server:conflict.installing')}</label>
                 <label className='text-neutral-500 text-md font-semibold mt-1'>
-                    Your server should be ready soon, for more details visit the home page.
+                    {i18n.t('server:conflict.installing_description')}
                 </label>
             </div>
         </div>
     ) : status === 'suspended' ? (
-        <ScreenBlock title={'Server Suspended'} message={'This server is suspended and cannot be accessed.'} />
+        <ScreenBlock title={i18n.t('server:conflict.suspended')} message={i18n.t('server:conflict.suspended_message')} />
     ) : isNodeUnderMaintenance ? (
         <ScreenBlock
-            title={'Node under Maintenance'}
-            message={'The node of this server is currently under maintenance.'}
+            title={i18n.t('server:conflict.maintenance')}
+            message={i18n.t('server:conflict.maintenance_message')}
         />
     ) : (
         <ScreenBlock
-            title={isTransferring ? 'Transferring' : 'Restoring from Backup'}
+            title={isTransferring ? i18n.t('server:conflict.transferring') : i18n.t('server:conflict.restoring')}
             message={
                 isTransferring
-                    ? 'Your server is being transferred to a new node, please check back later.'
-                    : 'Your server is currently being restored from a backup, please check back in a few minutes.'
+                    ? i18n.t('server:conflict.transferring_message')
+                    : i18n.t('server:conflict.restoring_message')
             }
         />
     );

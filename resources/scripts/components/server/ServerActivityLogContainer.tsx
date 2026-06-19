@@ -21,6 +21,8 @@ import { ServerContext } from '@/state/server';
 import { useFlashKey } from '@/plugins/useFlash';
 import useLocationHash from '@/plugins/useLocationHash';
 
+import i18n from '@/lib/i18n';
+
 const ServerActivityLogContainer = () => {
     const { hash } = useLocationHash();
     const { clearAndAddHttpError } = useFlashKey('server:activity');
@@ -186,7 +188,7 @@ const ServerActivityLogContainer = () => {
 
     return (
         <>
-        <ServerContentBlock title={'Activity Log'}>
+        <ServerContentBlock title={i18n.t('server:activity.title')}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'server:activity'} />
 
@@ -200,7 +202,7 @@ const ServerActivityLogContainer = () => {
                 >
                     <MainPageHeader
                         direction='column'
-                        title={'Activity Log'}
+                        title={i18n.t('server:activity.header')}
                         titleChildren={
                             <div className='flex gap-2 items-center flex-wrap'>
                                 <ActionButton
@@ -239,8 +241,7 @@ const ServerActivityLogContainer = () => {
                         }
                     >
                         <p className='text-sm text-neutral-400 leading-relaxed'>
-                            Monitor all server activity and track user actions. Filter events, search for specific
-                            activities, and export logs for audit purposes.
+                            {i18n.t('server:activity.description')}
                         </p>
                     </MainPageHeader>
                 </div>
@@ -369,7 +370,7 @@ const ServerActivityLogContainer = () => {
                                     fill='currentColor'
                                 />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Events</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('server:activity.events_header')}</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
                                     ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
@@ -382,12 +383,12 @@ const ServerActivityLogContainer = () => {
                         ) : !filteredData?.items?.length ? (
                             <div className='text-center py-12'>
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? 'No Matching Activity' : 'No Server Activity Yet'}
+                                    {hasActiveFilters ? i18n.t('server:activity.no_matching') : i18n.t('server:activity.no_activity')}
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
-                                        : 'Server activity logs will appear here as you manage your server. Start your server or perform actions to see them here.'}
+                                        ? i18n.t('server:activity.no_matching_description')
+                                        : i18n.t('server:activity.no_activity_description')}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>

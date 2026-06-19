@@ -61,8 +61,12 @@ export default defineConfig({
                 // @ts-expect-error It won't fail lol
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
-                        // @ts-expect-error It won't fail lol
-                        return id.toString().split('node_modules/')[1].split('/')[0].toString();
+                        const parts = id.toString().split('node_modules/');
+                        const pkgName = parts[parts.length - 1].split('/')[0];
+                        if (pkgName === 'i18next' || pkgName === 'react-i18next' || pkgName === 'i18next-http-backend') {
+                            return;
+                        }
+                        return parts[1].split('/')[0].toString();
                     }
                 },
             },

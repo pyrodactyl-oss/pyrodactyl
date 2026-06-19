@@ -11,6 +11,8 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 
+import i18n from '@/lib/i18n';
+
 const EulaModalFeature = () => {
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -66,7 +68,7 @@ const EulaModalFeature = () => {
             onDismissed={() => setVisible(false)}
             closeOnBackground={false}
             showSpinnerOverlay={loading}
-            title='Accept Minecraft EULA'
+            title={i18n.t('server:features.eula.title')}
         >
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />

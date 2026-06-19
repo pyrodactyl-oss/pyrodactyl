@@ -1,5 +1,6 @@
 import { Cloud, CloudArrowUpIn, File, Lock } from '@gravity-ui/icons';
 import { format, formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 import Can from '@/components/elements/Can';
 import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
@@ -15,6 +16,8 @@ import useFormatBytes from '@/plugins/useFormatBytes';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import BackupContextMenu from './BackupContextMenu';
+
+import i18n from '@/lib/i18n';
 
 interface Props {
     backup: ServerBackup;
@@ -85,7 +88,7 @@ const BackupItem = ({ backup }: Props) => {
                                     )}
                                     {backup.isLocked && (
                                         <span className='text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded'>
-                                            Locked
+                                            {i18n.t('server:backups.locked_label')}
                                         </span>
                                     )}
                                 </div>
@@ -114,9 +117,9 @@ const BackupItem = ({ backup }: Props) => {
                         <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
                         <p
                             className='text-sm text-zinc-300 font-medium'
-                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
+                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', { locale: i18n.language === 'es' ? es : undefined })}
                         >
-                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true })}
+                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}
                         </p>
                     </div>
 

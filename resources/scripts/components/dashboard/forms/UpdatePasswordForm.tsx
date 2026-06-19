@@ -1,6 +1,7 @@
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -19,25 +20,26 @@ interface Values {
     confirmPassword: string;
 }
 
-const schema = Yup.object().shape({
-    current: Yup.string().min(1).required('You must provide your current account password.'),
-    password: Yup.string().min(8).required(),
-    confirmPassword: Yup.string().test(
-        'password',
-        'Password confirmation does not match the password you entered.',
-        function (value) {
-            return value === this.parent.password;
-        },
-    ),
-});
-
 const UpdatePasswordForm = () => {
+    const { t } = useTranslation('dashboard');
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
     if (!user) {
         return null;
     }
+
+    const schema = Yup.object().shape({
+        current: Yup.string().min(1).required(t('password_form.current_required')),
+        password: Yup.string().min(8).required(t('password_form.password_required')),
+        confirmPassword: Yup.string().test(
+            'password',
+            t('password_form.confirm_mismatch'),
+            function (value) {
+                return value === this.parent.password;
+            },
+        ),
+    });
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('account:password');
@@ -72,17 +74,15 @@ const UpdatePasswordForm = () => {
                                 id={'current_password'}
                                 type={'password'}
                                 name={'current'}
-                                label={'Current Password'}
+                                label={t('password_form.current_label')}
                             />
                             <div className={`mt-6`}>
                                 <Field
                                     id={'new_password'}
                                     type={'password'}
                                     name={'password'}
-                                    label={'New Password'}
-                                    description={
-                                        'Your new password should be at least 8 characters in length and unique to this website.'
-                                    }
+                                    label={t('password_form.new_label')}
+                                    description={t('password_form.new_description')}
                                 />
                             </div>
                             <div className={`mt-6`}>
@@ -90,13 +90,13 @@ const UpdatePasswordForm = () => {
                                     id={'confirm_new_password'}
                                     type={'password'}
                                     name={'confirmPassword'}
-                                    label={'Confirm New Password'}
+                                    label={t('password_form.confirm_label')}
                                 />
                             </div>
                             <div className={`mt-6`}>
                                 <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
                                     {isSubmitting && <Spinner size='small' />}
-                                    {isSubmitting ? 'Updating...' : 'Update Password'}
+                                    {isSubmitting ? t('password_form.updating') : t('password_form.update_button')}
                                 </ActionButton>
                             </div>
                         </Form>

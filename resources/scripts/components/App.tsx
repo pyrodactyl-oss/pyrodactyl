@@ -6,13 +6,17 @@ import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
-import { lazy } from 'react';
+import i18n from 'i18next';
+import { lazy, useEffect, useState } from 'react';
+import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
 import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
+
+import { loadTranslations } from '@/lib/i18n';
 
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';
@@ -42,6 +46,8 @@ interface ExtendedWindow extends Window {
 
 const App = () => {
     const { PterodactylUser, SiteConfiguration } = window as ExtendedWindow;
+    const [i18nReady, setI18nReady] = useState(false);
+
     if (PterodactylUser && !store.getState().user.data) {
         store.getActions().user.setUserData({
             uuid: PterodactylUser.uuid,
@@ -61,64 +67,82 @@ const App = () => {
         store.getActions().settings.setSettings(SiteConfiguration!);
     }
 
+    useEffect(() => {
+        const userLang = PterodactylUser?.language || SiteConfiguration?.locale || 'en';
+        loadTranslations(userLang).then(() => {
+            i18n.changeLanguage(userLang);
+            setI18nReady(true);
+        });
+    }, []);
+
+    if (!i18nReady) {
+        return (
+            <div className='flex items-center justify-center w-screen h-screen bg-neutral-900'>
+                <Spinner />
+            </div>
+        );
+    }
+
     return (
         <>
             <GlobalStylesheet />
             <StoreProvider store={store}>
-                <PyrodactylProvider>
-                    <div
-                        data-pyro-routerwrap=''
-                        className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
-                    >
-                        <Toaster
-                            theme='dark'
-                            toastOptions={{
-                                unstyled: true,
-                                classNames: {
-                                    toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
-                                },
-                            }}
-                        />
-                        <BrowserRouter>
-                            <Routes>
-                                <Route
-                                    path='/auth/*'
-                                    element={
-                                        <Spinner.Suspense>
-                                            <AuthenticationRouter />
-                                        </Spinner.Suspense>
-                                    }
-                                />
-
-                                <Route
-                                    path='/server/:id/*'
-                                    element={
-                                        <AuthenticatedRoute>
+                <I18nextProvider i18n={i18n}>
+                    <PyrodactylProvider>
+                        <div
+                            data-pyro-routerwrap=''
+                            className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
+                        >
+                            <Toaster
+                                theme='dark'
+                                toastOptions={{
+                                    unstyled: true,
+                                    classNames: {
+                                        toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
+                                    },
+                                }}
+                            />
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route
+                                        path='/auth/*'
+                                        element={
                                             <Spinner.Suspense>
-                                                <ServerContext.Provider>
-                                                    <ServerRouter />
-                                                </ServerContext.Provider>
+                                                <AuthenticationRouter />
                                             </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
+                                        }
+                                    />
 
-                                <Route
-                                    path='/*'
-                                    element={
-                                        <AuthenticatedRoute>
-                                            <Spinner.Suspense>
-                                                <DashboardRouter />
-                                            </Spinner.Suspense>
-                                        </AuthenticatedRoute>
-                                    }
-                                />
+                                    <Route
+                                        path='/server/:id/*'
+                                        element={
+                                            <AuthenticatedRoute>
+                                                <Spinner.Suspense>
+                                                    <ServerContext.Provider>
+                                                        <ServerRouter />
+                                                    </ServerContext.Provider>
+                                                </Spinner.Suspense>
+                                            </AuthenticatedRoute>
+                                        }
+                                    />
 
-                                <Route path='*' element={<NotFound />} />
-                            </Routes>
-                        </BrowserRouter>
-                    </div>
-                </PyrodactylProvider>
+                                    <Route
+                                        path='/*'
+                                        element={
+                                            <AuthenticatedRoute>
+                                                <Spinner.Suspense>
+                                                    <DashboardRouter />
+                                                </Spinner.Suspense>
+                                            </AuthenticatedRoute>
+                                        }
+                                    />
+
+                                    <Route path='*' element={<NotFound />} />
+                                </Routes>
+                            </BrowserRouter>
+                        </div>
+                    </PyrodactylProvider>
+                </I18nextProvider>
             </StoreProvider>
         </>
     );

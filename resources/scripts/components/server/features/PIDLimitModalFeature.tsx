@@ -9,6 +9,8 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 
+import i18n from '@/lib/i18n';
+
 const PIDLimitModalFeature = () => {
     const [visible, setVisible] = useState(false);
     const [loading] = useState(false);
@@ -55,27 +57,23 @@ const PIDLimitModalFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title={isAdmin ? 'Memory or process limit reached' : 'Possible resource limit reached'}
+            title={isAdmin ? i18n.t('server:features.pid_limit.title') : i18n.t('server:features.pid_limit.possible_title')}
         >
             <FlashMessageRender key={'feature:pidLimit'} />
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
                         <p>
-                            This server has reached the maximum process, thread, or memory limit. Increasing{' '}
-                            <code className={`font-mono bg-zinc-900`}>container_pid_limit</code> in the Wings
-                            configuration, <code className={`font-mono bg-zinc-900`}>config.yml</code>, might help
-                            resolve this issue.
+                            {i18n.t('server:features.pid_limit.admin_description')}
                         </p>
                         <p className='mt-3'>
-                            <b>Note: Wings must be restarted for the configuration file changes to take effect</b>
+                            <b>{i18n.t('server:features.pid_limit.admin_note')}</b>
                         </p>
                     </>
                 ) : (
                     <>
                         <p>
-                            This server is attempting to use more resources than allocated. Please contact the
-                            administrator and give them the error below.
+                            {i18n.t('server:features.pid_limit.user_description')}
                         </p>
                         <p className='mt-3'>
                             <code className={`font-mono bg-zinc-900`}>

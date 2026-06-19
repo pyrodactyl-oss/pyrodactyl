@@ -1,4 +1,5 @@
 import { BarsPlay } from '@gravity-ui/icons';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import {
@@ -18,6 +19,8 @@ interface MobileTopBarProps {
 }
 
 const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootAdmin }: MobileTopBarProps) => {
+    const { t } = useTranslation('strings');
+
     const handleMenuToggle = () => {
         try {
             if (onMenuToggle && typeof onMenuToggle === 'function') {
@@ -75,14 +78,14 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                     <DropdownMenuContent className='z-99999' sideOffset={8}>
                         {rootAdmin && onSelectAdminPanel && (
                             <DropdownMenuItem onSelect={handleAdminPanel}>
-                                Admin Panel
+                                {t('nav.admin_panel')}
                                 <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
-                                    Staff
+                                    {t('nav.staff')}
                                 </span>
                             </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onSelect={handleLogout}>Log Out</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={handleLogout}>{t('nav.log_out')}</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
 

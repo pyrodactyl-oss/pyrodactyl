@@ -14,6 +14,7 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 
+import i18n from '@/lib/i18n';
 import { httpErrorToHuman } from '@/api/http';
 import createServerDatabase from '@/api/server/databases/createServerDatabase';
 import getServerDatabases from '@/api/server/databases/getServerDatabases';
@@ -30,14 +31,11 @@ interface DatabaseValues {
 
 const databaseSchema = object().shape({
     databaseName: string()
-        .required('A database name must be provided.')
-        .min(3, 'Database name must be at least 3 characters.')
-        .max(48, 'Database name must not exceed 48 characters.')
-        .matches(
-            /^[\w\-.]{3,48}$/,
-            'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.',
-        ),
-    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'A valid host address must be provided.'),
+        .required(i18n.t('server:databases.name_required'))
+        .min(3, i18n.t('server:databases.name_min'))
+        .max(48, i18n.t('server:databases.name_max'))
+        .matches(/^[\w\-.]{3,48}$/, i18n.t('server:databases.name_regex')),
+    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, i18n.t('server:databases.host_required')),
 });
 
 const DatabasesContainer = () => {
@@ -84,30 +82,30 @@ const DatabasesContainer = () => {
     }, []);
 
     return (
-        <ServerContentBlock title={'Databases'}>
+        <ServerContentBlock title={i18n.t('server:databases.title')}>
             <FlashMessageRender byKey={'databases'} />
             <MainPageHeader
                 direction='column'
-                title={'Databases'}
+                title={i18n.t('server:databases.header')}
                 titleChildren={
                     <Can action={'database.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             {databaseLimit === null && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {databases.length} databases (unlimited)
+                                    {i18n.t('server:databases.count', { count: databases.length })}
                                 </p>
                             )}
                             {databaseLimit > 0 && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {databases.length} of {databaseLimit} databases
+                                    {i18n.t('server:databases.count_limited', { count: databases.length, limit: databaseLimit })}
                                 </p>
                             )}
                             {databaseLimit === 0 && (
-                                <p className='text-sm text-red-400 text-center sm:text-right'>Databases disabled</p>
+                                <p className='text-sm text-red-400 text-center sm:text-right'>{i18n.t('server:databases.disabled')}</p>
                             )}
                             {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
-                                    New Database
+                                    {i18n.t('server:databases.new_button')}
                                 </ActionButton>
                             )}
                         </div>
@@ -115,8 +113,7 @@ const DatabasesContainer = () => {
                 }
             >
                 <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Create and manage MySQL databases for your server. Configure database access, manage users, and view
-                    connection details.
+                    {i18n.t('server:databases.description')}
                 </p>
             </MainPageHeader>
 
@@ -134,7 +131,7 @@ const DatabasesContainer = () => {
                             resetForm();
                             setCreateModalVisible(false);
                         }}
-                        title='Create new database'
+                        title={i18n.t('server:databases.create_title')}
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
@@ -143,23 +140,21 @@ const DatabasesContainer = () => {
                                     type={'string'}
                                     id={'database_name'}
                                     name={'databaseName'}
-                                    label={'Database Name'}
-                                    description={'A descriptive name for your database instance.'}
+                                    label={i18n.t('server:databases.name_label')}
+                                    description={i18n.t('server:databases.name_help')}
                                 />
                                 <div className={`mt-6`}>
                                     <Field
                                         type={'string'}
                                         id={'connections_from'}
                                         name={'connectionsFrom'}
-                                        label={'Connections From'}
-                                        description={
-                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
-                                        }
+                                        label={i18n.t('server:databases.connections_label')}
+                                        description={i18n.t('server:databases.connections_help')}
                                     />
                                 </div>
                                 <div className={`flex gap-3 justify-end my-6`}>
                                     <ActionButton variant='primary' type={'submit'}>
-                                        Create Database
+                                        {i18n.t('server:databases.create_button')}
                                     </ActionButton>
                                 </div>
                             </Form>
@@ -185,12 +180,12 @@ const DatabasesContainer = () => {
                             <Database className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                            {databaseLimit === 0 ? 'Databases unavailable' : 'No databases found'}
+                            {databaseLimit === 0 ? i18n.t('server:databases.unavailable') : i18n.t('server:databases.empty')}
                         </h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
                             {databaseLimit === 0
-                                ? 'Databases cannot be created for this server.'
-                                : 'Your server does not have any databases. Create one to get started.'}
+                                ? i18n.t('server:databases.unavailable_description')
+                                : i18n.t('server:databases.empty_description')}
                         </p>
                     </div>
                 </div>

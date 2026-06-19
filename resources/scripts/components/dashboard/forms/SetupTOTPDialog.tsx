@@ -1,5 +1,3 @@
-// FIXME: replace with radix tooltip
-// import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { QRCodeSVG } from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
@@ -15,6 +13,8 @@ import asDialog from '@/hoc/asDialog';
 
 import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
 import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';
+
+import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 
@@ -75,12 +75,11 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             </div>
             <CopyOnClick text={token?.secret}>
                 <p className={'font-mono text-sm text-zinc-100 text-center mt-2'}>
-                    {token?.secret.match(/.{1,4}/g)!.join(' ') || 'Loading...'}
+                    {token?.secret.match(/.{1,4}/g)!.join(' ') || i18n.t('dashboard:totp_setup.loading')}
                 </p>
             </CopyOnClick>
             <p id={'totp-code-description'} className={'mt-6'}>
-                Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
-                6-digit code it generates below.
+                {i18n.t('dashboard:totp_setup.scan_instructions')}
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
@@ -95,7 +94,7 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 pattern={'\\d{6}'}
             />
             <label htmlFor={'totp-password'} className={'block mt-3'}>
-                Account Password
+                {i18n.t('dashboard:totp_setup.password_label')}
             </label>
             <Input.Text
                 variant={Input.Text.Variants.Loose}
@@ -106,32 +105,22 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
             />
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={close}>
-                    Cancel
+                    {i18n.t('strings:cancel')}
                 </ActionButton>
-                {/* <Tooltip
-                    disabled={password.length > 0 && value.length === 6}
-                    content={
-                        !token
-                            ? 'Waiting for QR code to load...'
-                            : 'You must enter the 6-digit code and your password to continue.'
-                    }
-                    delay={100}
-                > */}
                 <ActionButton
                     variant='primary'
                     disabled={!token || value.length !== 6 || !password.length}
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
-                    Enable
+                    {i18n.t('dashboard:totp_setup.enable_button')}
                 </ActionButton>
-                {/* </Tooltip> */}
             </Dialog.Footer>
         </form>
     );
 };
 
 export default asDialog({
-    title: 'Enable Authenticator App',
-    description: "You'll be required to enter a verification code each time you sign in.",
+    title: i18n.t('dashboard:totp_setup.title'),
+    description: i18n.t('dashboard:totp_setup.description'),
 })(ConfigureTwoFactorForm);

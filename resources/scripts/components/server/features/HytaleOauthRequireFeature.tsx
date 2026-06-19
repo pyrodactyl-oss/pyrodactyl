@@ -10,6 +10,8 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 
+import i18n from '@/lib/i18n';
+
 const HytaleOauthRequireFeature = () => {
     const [visible, setVisible] = useState(false);
     const [userCode, setUserCode] = useState('');
@@ -62,7 +64,7 @@ const HytaleOauthRequireFeature = () => {
             }}
             closeOnBackground={false}
             showSpinnerOverlay={false}
-            title='Hytale Authentication'
+            title={i18n.t('server:features.hytale.title')}
         >
             <FlashMessageRender key='feature:hytaleOauth' />
             <div>
@@ -103,7 +105,7 @@ const HytaleOauthRequireFeature = () => {
                     )}
                 </div>
 
-                <p className='text-zinc-500 text-xs text-center mt-4'>Only required once per server</p>
+                <p className='text-zinc-500 text-xs text-center mt-4'>{i18n.t('server:features.hytale.description')}</p>
             </div>
         </Modal>
     );

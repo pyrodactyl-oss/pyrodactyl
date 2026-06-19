@@ -7,6 +7,8 @@ import ContentBox from '@/components/elements/ContentBox';
 import { ModCard } from './ModCard';
 import { ModrinthService, useGlobalStateContext } from './config';
 
+import i18n from '@/lib/i18n';
+
 interface ModListProps {
     showInstalled?: boolean;
     showDependencies?: boolean;
@@ -69,9 +71,9 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
             }
             setHasMore(data.length >= 20);
         } catch (err) {
-            setError('Failed to load mods. Please try again later.');
+            setError(i18n.t('server:modrinth.failed_load', { defaultValue: 'Failed to load mods. Please try again later.' }));
             console.error('Mod fetch error:', err);
-            toast.error(err instanceof Error ? err.message : 'Failed to fetch mods');
+            toast.error(err instanceof Error ? err.message : i18n.t('server:modrinth.failed_fetch', { defaultValue: 'Failed to fetch mods' }));
         } finally {
             setIsLoading(false);
         }
@@ -179,6 +181,6 @@ const ErrorDisplay = ({ message }: { message: string }) => (
 
 const EmptyState = () => (
     <ContentBox>
-        <div className='text-gray-400 p-4 text-center'>No mods found matching your criteria</div>
+        <div className='text-gray-400 p-4 text-center'>{i18n.t('server:modrinth.no_mods')}</div>
     </ContentBox>
 );

@@ -4,6 +4,8 @@ import { join } from 'pathe';
 import { useContext, useEffect, useState } from 'react';
 import { object, string } from 'yup';
 
+import i18n from '@/lib/i18n';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
@@ -46,7 +48,7 @@ const schema = object().shape({
 // });
 
 const NewDirectoryDialog = asDialog({
-    title: 'New Folder',
+    title: i18n.t('server:files.new_folder'),
 })(() => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -109,7 +111,7 @@ const NewDirectoryButton = () => {
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
-            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)} title='New Folder'>
+            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)} title={i18n.t('server:files.new_folder')}>
                 <FolderPlus className='h-4 w-4' />
             </ActionButton>
         </>

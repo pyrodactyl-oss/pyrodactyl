@@ -81,11 +81,11 @@
             </li>
             <li>
             <li><a href="{{ route('index') }}" data-toggle="tooltip" data-placement="bottom"
-                title="Exit Admin Control"><i class="fa fa-server"></i></a></li>
+                title="@lang('admin/general.exit_admin')"><i class="fa fa-server"></i></a></li>
             </li>
             <li>
             <li><a href="{{ route('auth.logout') }}" id="logoutButton" data-toggle="tooltip" data-placement="bottom"
-                title="Logout"><i class="fa fa-sign-out"></i></a></li>
+                title="@lang('strings.logout')"><i class="fa fa-sign-out"></i></a></li>
             </li>
           </ul>
         </div>
@@ -94,57 +94,57 @@
     <aside class="main-sidebar">
       <section class="sidebar">
         <ul class="sidebar-menu">
-          <li class="header">BASIC ADMINISTRATION</li>
+          <li class="header">@lang('admin/general.basic_administration')</li>
           <li class="{{ Route::currentRouteName() !== 'admin.index' ?: 'active' }}">
             <a href="{{ route('admin.index') }}">
-              <i class="bi bi-house-fill"></i> <span>Overview</span>
+              <i class="bi bi-house-fill"></i> <span>@lang('admin/general.overview')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.settings') ?: 'active' }}">
             <a href="{{ route('admin.settings')}}">
-              <i class="bi bi-gear-fill"></i> <span>Settings</span>
+              <i class="bi bi-gear-fill"></i> <span>@lang('strings.settings')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.api') ?: 'active' }}">
             <a href="{{ route('admin.api.index')}}">
-              <i class="bi bi-globe"></i> <span>Application API</span>
+              <i class="bi bi-globe"></i> <span>@lang('admin/general.applications_api')</span>
             </a>
           </li>
-          <li class="header">MANAGEMENT</li>
+          <li class="header">@lang('admin/general.management')</li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.databases') ?: 'active' }}">
             <a href="{{ route('admin.databases') }}">
-              <i class="bi bi-database-fill"></i> <span>Databases</span>
+              <i class="bi bi-database-fill"></i> <span>@lang('strings.databases')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.locations') ?: 'active' }}">
             <a href="{{ route('admin.locations') }}">
-              <i class="bi bi-globe-americas"></i> <span>Locations</span>
+              <i class="bi bi-globe-americas"></i> <span>@lang('admin/general.locations')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.nodes') ?: 'active' }}">
             <a href="{{ route('admin.nodes') }}">
-              <i class="bi bi-hdd-fill"></i> <span>Nodes</span>
+              <i class="bi bi-hdd-fill"></i> <span>@lang('admin/general.nodes')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.servers') ?: 'active' }}">
             <a href="{{ route('admin.servers') }}">
-              <i class="bi bi-hdd-stack-fill"></i> <span>Servers</span>
+              <i class="bi bi-hdd-stack-fill"></i> <span>@lang('strings.servers')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.users') ?: 'active' }}">
             <a href="{{ route('admin.users') }}">
-              <i class="bi bi-people-fill"></i> <span>Users</span>
+              <i class="bi bi-people-fill"></i> <span>@lang('admin/general.users')</span>
             </a>
           </li>
-          <li class="header">SERVICE MANAGEMENT</li>
+          <li class="header">@lang('admin/general.service_management')</li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.mounts') ?: 'active' }}">
             <a href="{{ route('admin.mounts') }}">
-              <i class="bi bi-magic"></i> <span>Mounts</span>
+              <i class="bi bi-magic"></i> <span>@lang('admin/general.mounts')</span>
             </a>
           </li>
           <li class="{{ !starts_with(Route::currentRouteName(), 'admin.nests') ?: 'active' }}">
             <a href="{{ route('admin.nests') }}">
-              <i class="bi bi-egg-fill"></i> <span>Nests</span>
+              <i class="bi bi-egg-fill"></i> <span>@lang('admin/general.nests')</span>
             </a>
           </li>
         </ul>
@@ -159,7 +159,7 @@
           <div class="col-xs-12">
             @if (count($errors) > 0)
               <div class="alert alert-danger">
-                There was an error validating the data provided.<br><br>
+                @lang('admin/general.validation_error')<br><br>
                 <ul>
                   @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -210,12 +210,12 @@
 
         var that = this;
         swal({
-          title: 'Do you want to log out?',
+          title: '@lang('admin/general.logout_confirm')',
           type: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#d9534f',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Log out'
+          confirmButtonText: '@lang('strings.logout')'
         }, function () {
           $.ajax({
             type: 'POST',

@@ -43,6 +43,7 @@ Route::prefix('/account')->middleware(AccountSubject::class)->group(function () 
 
     Route::put('/email', [Client\AccountController::class, 'updateEmail'])->name('api:client.account.update-email');
     Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
+    Route::put('/language', [Client\AccountController::class, 'updateLanguage'])->name('api:client.account.update-language');
 
     Route::get('/activity', Client\ActivityLogController::class)->name('api:client.account.activity');
 

@@ -15,6 +15,7 @@ import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RotatePasswordButton from '@/components/server/databases/RotatePasswordButton';
 
+import i18n from '@/lib/i18n';
 import { httpErrorToHuman } from '@/api/http';
 import deleteServerDatabase from '@/api/server/databases/deleteServerDatabase';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
@@ -130,7 +131,7 @@ const DatabaseRow = ({ database }: Props) => {
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
-                            <Label>Connections from</Label>
+                            <Label>{i18n.t('server:databases.connections_label')}</Label>
                             <CopyOnClick text={database.allowConnectionsFrom}>
                                 <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
                             </CopyOnClick>

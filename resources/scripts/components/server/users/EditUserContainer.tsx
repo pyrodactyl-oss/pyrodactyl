@@ -2,6 +2,8 @@ import { ChevronLeft, Person } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
@@ -39,15 +41,15 @@ const EditUserContainer = () => {
     // Show loading state while we're waiting for subusers to load
     if (!subuser && subusers.length === 0) {
         return (
-            <ServerContentBlock title={'Edit User'}>
-                <MainPageHeader title={'Edit User'}>
+            <ServerContentBlock title={i18n.t('server:users.edit_user')}>
+                <MainPageHeader title={i18n.t('server:users.edit_user')}>
                     <ActionButton
                         variant='secondary'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
                         <ChevronLeft width={22} height={22} fill='currentColor' />
-                        Back to Users
+                        {i18n.t('server:users.back_to_users')}
                     </ActionButton>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
@@ -60,15 +62,15 @@ const EditUserContainer = () => {
     // If subuser not found after loading, show not found message
     if (!subuser) {
         return (
-            <ServerContentBlock title={'Edit User'}>
-                <MainPageHeader title={'Edit User'}>
+            <ServerContentBlock title={i18n.t('server:users.edit_user')}>
+                <MainPageHeader title={i18n.t('server:users.edit_user')}>
                     <ActionButton
                         variant='secondary'
                         onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
                     >
                         <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                        Back to Users
+                        {i18n.t('server:users.back_to_users')}
                     </ActionButton>
                 </MainPageHeader>
                 <div className='flex flex-col items-center justify-center py-12 px-4'>
@@ -76,9 +78,9 @@ const EditUserContainer = () => {
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>User not found</h3>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('server:users.user_not_found')}</h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
-                            The user you&apos;re trying to edit could not be found.
+                            {i18n.t('server:users.edit_not_found_message')}
                         </p>
                     </div>
                 </div>
@@ -87,8 +89,8 @@ const EditUserContainer = () => {
     }
 
     return (
-        <ServerContentBlock title={'Edit User'}>
-            <MainPageHeader title={`Edit User: ${subuser.email}`}>
+        <ServerContentBlock title={i18n.t('server:users.edit_user')}>
+            <MainPageHeader title={i18n.t('server:users.edit_title', { email: subuser.email })}>
                 <ActionButton
                     variant='secondary'
                     onClick={() => navigate(`/server/${serverId}/users`)}
@@ -96,7 +98,7 @@ const EditUserContainer = () => {
                     disabled={isSubmitting}
                 >
                     <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                    Back to Users
+                    {i18n.t('server:users.back_to_users')}
                 </ActionButton>
             </MainPageHeader>
 

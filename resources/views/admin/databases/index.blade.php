@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('title')
-    Database Hosts
+    {{ trans('admin/general.database_hosts') }}
 @endsection
 
 @section('content-header')
-    <h1>Database Hosts<small>Database hosts that servers can have databases created on.</small></h1>
+    <h1>{{ trans('admin/general.database_hosts') }}<small>{{ trans('admin/general.database_hosts_desc') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li class="active">Database Hosts</li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li class="active">{{ trans('admin/general.database_hosts') }}</li>
     </ol>
 @endsection
 
@@ -17,22 +17,22 @@
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Host List</h3>
+                <h3 class="box-title">{{ trans('admin/general.host_list') }}</h3>
                 <div class="box-tools">
-                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newHostModal">Create New</button>
+                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newHostModal">{{ trans('admin/general.create_new') }}</button>
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tbody>
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Host</th>
-                            <th>Port</th>
-                            <th>Username</th>
-                            <th class="text-center">Databases</th>
-                            <th class="text-center">Node</th>
+                            <th>{{ trans('strings.id') }}</th>
+                            <th>{{ trans('strings.name') }}</th>
+                            <th>{{ trans('admin/general.host') }}</th>
+                            <th>{{ trans('strings.port') }}</th>
+                            <th>{{ trans('strings.username') }}</th>
+                            <th class="text-center">{{ trans('admin/general.databases') }}</th>
+                            <th class="text-center">{{ trans('strings.node') }}</th>
                         </tr>
                         @foreach ($hosts as $host)
                             <tr>
@@ -46,7 +46,7 @@
                                     @if(! is_null($host->node))
                                         <a href="{{ route('admin.nodes.view', $host->node->id) }}">{{ $host->node->name }}</a>
                                     @else
-                                        <span class="label label-default">None</span>
+                                        <span class="label label-default">{{ trans('strings.none') }}</span>
                                     @endif
                                 </td>
                             </tr>
@@ -63,45 +63,45 @@
         <div class="modal-content">
             <form action="{{ route('admin.databases') }}" method="POST" id="databaseHostForm">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Create New Database Host</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ trans('strings.close') }}"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{ trans('admin/general.create_new_database_host') }}</h4>
                 </div>
                 <div class="modal-body">
                     <div id="testResult" style="display: none;"></div>
 
                     <div class="form-group">
-                        <label for="pName" class="form-label">Name</label>
+                        <label for="pName" class="form-label">{{ trans('strings.name') }}</label>
                         <input type="text" name="name" id="pName" class="form-control" value="{{ old('name') }}" />
-                        <p class="text-muted small">A short identifier used to distinguish this location from others. Must be between 1 and 60 characters, for example, <code>us.nyc.lvl3</code>.</p>
+                        <p class="text-muted small">{{ trans('admin/general.database_host_name_desc') }}</p>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="pHost" class="form-label">Host</label>
+                            <label for="pHost" class="form-label">{{ trans('admin/general.host') }}</label>
                             <input type="text" name="host" id="pHost" class="form-control" value="{{ old('host') }}" />
-                            <p class="text-muted small">The IP address or FQDN that should be used when attempting to connect to this MySQL host <em>from the panel</em> to add new databases.</p>
+                            <p class="text-muted small">{!! trans('admin/general.mysql_connect_desc') !!}</p>
                         </div>
                         <div class="col-md-6">
-                            <label for="pPort" class="form-label">Port</label>
+                            <label for="pPort" class="form-label">{{ trans('strings.port') }}</label>
                             <input type="text" name="port" id="pPort" class="form-control" value="{{ old('port', '3306') }}"/>
-                            <p class="text-muted small">The port that MySQL is running on for this host.</p>
+                            <p class="text-muted small">{{ trans('admin/general.mysql_port_desc') }}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="pUsername" class="form-label">Username</label>
+                            <label for="pUsername" class="form-label">{{ trans('strings.username') }}</label>
                             <input type="text" name="username" id="pUsername" class="form-control" value="{{ old('username') }}" />
-                            <p class="text-muted small">The username of an account that has enough permissions to create new users and databases on the system.</p>
+                            <p class="text-muted small">{{ trans('admin/general.mysql_username_desc') }}</p>
                         </div>
                         <div class="col-md-6">
-                            <label for="pPassword" class="form-label">Password</label>
+                            <label for="pPassword" class="form-label">{{ trans('strings.password') }}</label>
                             <input type="password" name="password" id="pPassword" class="form-control" />
-                            <p class="text-muted small">The password to the account defined.</p>
+                            <p class="text-muted small">{{ trans('admin/general.mysql_password_desc') }}</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="pNodeId" class="form-label">Linked Node</label>
+                        <label for="pNodeId" class="form-label">{{ trans('admin/general.linked_node') }}</label>
                         <select name="node_id" id="pNodeId" class="form-control">
-                            <option value="">None</option>
+                            <option value="">{{ trans('strings.none') }}</option>
                             @foreach($locations as $location)
                                 <optgroup label="{{ $location->short }}">
                                     @foreach($location->nodes as $node)
@@ -110,15 +110,15 @@
                                 </optgroup>
                             @endforeach
                         </select>
-                        <p class="text-muted small">This setting does nothing other than default to this database host when adding a database to a server on the selected node.</p>
+                        <p class="text-muted small">{{ trans('admin/general.linked_node_desc') }}</p>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <p class="text-danger small text-left">The account defined for this database host <strong>must</strong> have the <code>WITH GRANT OPTION</code> permission. If the defined account does not have this permission requests to create databases <em>will</em> fail. <strong>Do not use the same account details for MySQL that you have defined for this panel.</strong></p>
+                    <p class="text-danger small text-left">{!! trans('admin/general.mysql_grant_warning') !!}</p>
                     {!! csrf_field() !!}
-                    <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">Cancel</button>
-                    <button type="button" id="testDatabaseBtn" class="btn btn-primary btn-sm">Test Database</button>
-                    <button type="submit" class="btn btn-success btn-sm">Create</button>
+                    <button type="button" class="btn btn-default btn-sm pull-left" data-dismiss="modal">{{ trans('strings.cancel') }}</button>
+                    <button type="button" id="testDatabaseBtn" class="btn btn-primary btn-sm">{{ trans('admin/general.test_database') }}</button>
+                    <button type="submit" class="btn btn-success btn-sm">{{ trans('strings.create') }}</button>
                 </div>
             </form>
         </div>
@@ -138,7 +138,7 @@
             const resultDiv = $('#testResult');
 
             // Show loading state
-            button.prop('disabled', true).text('Testing...');
+            button.prop('disabled', true).text('{{ trans('admin/general.testing') }}');
             resultDiv.hide().removeClass('alert alert-danger alert-success').html('');
 
             // Get form data
@@ -152,7 +152,7 @@
 
             // Validate required fields
             if (!formData.host || !formData.port || !formData.username || !formData.password) {
-                resultDiv.html('<strong>Error:</strong> Please fill in all required database connection fields.').addClass('alert alert-danger').show();
+                resultDiv.html('<strong>' + '{{ trans('strings.error') }}' + ':</strong> {{ trans('admin/general.fill_required_db_fields') }}').addClass('alert alert-danger').show();
                 button.prop('disabled', false).text(originalText);
                 return;
             }
@@ -164,9 +164,9 @@
                 data: formData,
                 success: function(response) {
                     if (response.success) {
-                        resultDiv.html('<strong>Success:</strong> ' + response.message).addClass('alert alert-success').show();
+                        resultDiv.html('<strong>' + '{{ trans('strings.success') }}' + ':</strong> ' + response.message).addClass('alert alert-success').show();
                     } else {
-                        resultDiv.html('<strong>Error:</strong> ' + response.message).addClass('alert alert-danger').show();
+                        resultDiv.html('<strong>' + '{{ trans('strings.error') }}' + ':</strong> ' + response.message).addClass('alert alert-danger').show();
                     }
                 },
                 error: function(xhr) {
@@ -176,7 +176,7 @@
                     } else if (xhr.statusText) {
                         message = xhr.statusText;
                     }
-                    resultDiv.html('<strong>Error:</strong> ' + message).addClass('alert alert-danger').show();
+                    resultDiv.html('<strong>' + '{{ trans('strings.error') }}' + ':</strong> ' + message).addClass('alert alert-danger').show();
                 },
                 complete: function() {
                     button.prop('disabled', false).text(originalText);

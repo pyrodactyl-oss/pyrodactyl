@@ -1,5 +1,6 @@
 import { AbbrApi, Gear, House, Key, Xmark } from '@gravity-ui/icons';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
@@ -104,6 +105,7 @@ interface ServerMobileNavItemProps {
  * Mobile navigation item that handles permission and feature limit checks.
  */
 const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemProps) => {
+    const { t } = useTranslation('strings');
     const { icon: Icon, name, path, permission, featureLimit, end } = route;
 
     // Feature limits from server state
@@ -148,7 +150,7 @@ const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemPr
 
     const NavContent = (
         <NavigationItem to={to} icon={Icon} end={end} onClick={onClose}>
-            {name}
+            {t(name)}
         </NavigationItem>
     );
 

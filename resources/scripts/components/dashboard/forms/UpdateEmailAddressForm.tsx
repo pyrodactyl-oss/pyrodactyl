@@ -1,6 +1,7 @@
 import { Actions, State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
 import ActionButton from '@/components/elements/ActionButton';
@@ -16,16 +17,17 @@ interface Values {
     password: string;
 }
 
-const schema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().required('You must provide your current account password.'),
-});
-
 const UpdateEmailAddressForm = () => {
+    const { t } = useTranslation('dashboard');
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
+
+    const schema = Yup.object().shape({
+        email: Yup.string().email().required(),
+        password: Yup.string().required(t('email.password_required')),
+    });
 
     const submit = (values: Values, { resetForm, setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('account:email');
@@ -35,7 +37,7 @@ const UpdateEmailAddressForm = () => {
                 addFlash({
                     type: 'success',
                     key: 'account:email',
-                    message: 'Your primary email has been updated.',
+                    message: t('email.updated'),
                 }),
             )
             .catch((error) =>
@@ -58,13 +60,13 @@ const UpdateEmailAddressForm = () => {
                 <Fragment>
                     <SpinnerOverlay size={'large'} visible={isSubmitting} />
                     <Form className={`m-0`}>
-                        <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
+                        <Field id={'current_email'} type={'email'} name={'email'} label={t('email.label')} />
                         <div className={`mt-6`}>
-                            <Field id={'confirm_password'} type={'password'} name={'password'} label={'Password'} />
+                            <Field id={'confirm_password'} type={'password'} name={'password'} label={t('email.password_label')} />
                         </div>
                         <div className={`mt-6`}>
                             <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
-                                Update Email
+                                {t('email.update_button')}
                             </ActionButton>
                         </div>
                     </Form>

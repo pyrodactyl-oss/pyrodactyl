@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    List Nodes
+    {{ trans('admin/general.node_list') }}
 @endsection
 
 @section('scripts')
@@ -10,10 +10,10 @@
 @endsection
 
 @section('content-header')
-    <h1>Nodes<small>All nodes available on the system.</small></h1>
+    <h1>{{ trans('admin/general.nodes') }}<small>{{ trans('admin/general.all_nodes_available') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li class="active">Nodes</li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li class="active">{{ trans('admin/general.nodes') }}</li>
     </ol>
 @endsection
 
@@ -23,14 +23,14 @@
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Node List</h3>
+                <h3 class="box-title">{{ trans('admin/general.node_list') }}</h3>
                 <div class="box-tools search01">
                     <form action="{{ route('admin.nodes') }}" method="GET">
                         <div class="input-group input-group-sm">
-                            <input type="text" name="filter[name]" class="form-control pull-right" value="{{ request()->input('filter.name') }}" placeholder="Search Nodes">
+                            <input type="text" name="filter[name]" class="form-control pull-right" value="{{ request()->input('filter.name') }}" placeholder="{{ trans('admin/general.search_nodes') }}">
                             <div class="input-group-btn">
                                 <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">Create New</button></a>
+                                <a href="{{ route('admin.nodes.new') }}"><button type="button" class="btn btn-sm btn-primary" style="border-radius: 0 3px 3px 0;margin-left:-1px;">{{ trans('admin/general.create_new') }}</button></a>
                             </div>
                         </div>
                     </form>
@@ -41,17 +41,17 @@
                     <tbody>
                         <tr>
                             <th></th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Memory%</th>
-                            <th>Allocated Memory</th>
-                            <th>Total Memory</th>
-                            <th>Disk%</th>
-                            <th>Allocated Disk</th>
-                            <th>Total Disk</th>
-                            <th class="text-center">Servers</th>
-                            <th class="text-center">Daemon Type</th>
-                            <th class="text-center">Public</th>
+                            <th>{{ trans('strings.name') }}</th>
+                            <th>{{ trans('admin/general.location') }}</th>
+                            <th>{{ trans('admin/general.memory_percent') }}</th>
+                            <th>{{ trans('admin/general.allocated_memory') }}</th>
+                            <th>{{ trans('admin/general.total_memory') }}</th>
+                            <th>{{ trans('admin/general.disk_percent') }}</th>
+                            <th>{{ trans('admin/general.allocated_disk') }}</th>
+                            <th>{{ trans('admin/general.total_disk') }}</th>
+                            <th class="text-center">{{ trans('strings.servers') }}</th>
+                            <th class="text-center">{{ trans('admin/general.daemon_type') }}</th>
+                            <th class="text-center">{{ trans('admin/general.public') }}</th>
                         </tr>
                         @foreach ($nodes as $node)
                             <tr>
@@ -100,7 +100,7 @@
                 });
                 $(element).removeClass('text-muted').find('i').removeClass().addClass('fa fa-fw fa-heartbeat faa-pulse animated').css('color', '#50af51');
             }).fail(function (error) {
-                var errorText = 'Error connecting to node! Check browser console for details.';
+                var errorText = '{{ trans('admin/general.error_connecting_to_node') }}';
                 try {
                     errorText = error.responseJSON.errors[0].detail || errorText;
                 } catch (ex) {}

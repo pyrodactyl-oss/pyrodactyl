@@ -4,6 +4,7 @@ import { Ellipsis } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import type { RefObject } from 'react';
 import { Fragment, Suspense, createRef, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation, useParams } from 'react-router-dom';
 
 import routes, { type ServerRouteDefinition, getServerNavRoutes } from '@/routers/routes';
@@ -40,6 +41,7 @@ import { ServerContext } from '@/state/server';
 const ServerRouter = () => {
     const params = useParams<'id'>();
     const location = useLocation();
+    const { t } = useTranslation('strings');
 
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
     const [error, setError] = useState('');
@@ -252,7 +254,7 @@ const ServerRouter = () => {
         <Fragment key={'server-router'}>
             {!uuid || !id ? (
                 error ? (
-                    <ServerError title='Something went wrong' message={error} />
+                    <ServerError title={t('errors.something_went_wrong')} message={error} />
                 ) : null
             ) : (
                 <>
@@ -291,14 +293,14 @@ const ServerRouter = () => {
                                     <DropdownMenuContent className='z-99999 select-none relative' sideOffset={8}>
                                         {rootAdmin && (
                                             <DropdownMenuItem onSelect={onSelectManageServer}>
-                                                Manage Server
+                                                {t('nav.manage_server')}
                                                 <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs select-none'>
-                                                    Staff
+                                                    {t('nav.staff')}
                                                 </span>
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem onSelect={onTriggerLogout}>Log Out</DropdownMenuItem>
+                                        <DropdownMenuItem onSelect={onTriggerLogout}>{t('nav.log_out')}</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
@@ -342,7 +344,7 @@ const ServerRouter = () => {
                             <div className='shrink-0'>
                                 <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-full'></div>
                                 <StatBlock
-                                    title='server'
+                                    title={t('nav.servers')}
                                     className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-default'
                                 >
                                     {serverName}

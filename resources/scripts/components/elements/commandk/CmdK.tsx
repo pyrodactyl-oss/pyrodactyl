@@ -19,6 +19,8 @@ import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import ModrinthLogo from '../ModrinthLogo';
@@ -34,11 +36,11 @@ const CommandMenu = () => {
     const cmdkPowerAction = (action: string) => {
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success(i18n.t('server:power.starting_toast'));
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success(i18n.t('server:power.restarting_toast'));
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success(i18n.t('server:power.stopping_toast'));
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);

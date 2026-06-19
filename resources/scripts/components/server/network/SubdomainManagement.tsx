@@ -3,6 +3,8 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
+import i18n from '@/lib/i18n';
+
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
@@ -223,7 +225,7 @@ const SubdomainManagement = () => {
         return (
             <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
                 <div className='flex items-center justify-between mb-6'>
-                    <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
+                    <h3 className='text-xl font-extrabold tracking-tight'>{i18n.t('server:network.subdomain_management')}</h3>
                 </div>
                 <div className='flex flex-col items-center justify-center py-12'>
                     <div className='text-center'>
@@ -236,7 +238,7 @@ const SubdomainManagement = () => {
                                 />
                             </svg>
                         </div>
-                        <h4 className='text-md font-medium text-zinc-200 mb-1'>No domains configured</h4>
+                        <h4 className='text-md font-medium text-zinc-200 mb-1'>{i18n.t('server:network.no_domains')}</h4>
                         <p className='text-sm text-zinc-400 max-w-sm'>
                             Contact your administrator to configure subdomain support for this server.
                         </p>
@@ -250,7 +252,7 @@ const SubdomainManagement = () => {
         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
             <div className='flex items-center gap-3 mb-6'>
                 <Link className='w-6 h-6 text-zinc-400' fill='currentColor' />
-                <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
+                <h3 className='text-xl font-extrabold tracking-tight'>{i18n.t('server:network.subdomain_management')}</h3>
                 {subdomainInfo?.current_subdomain && (
                     <div className='flex items-center gap-2 text-sm ml-auto'>
                         <div
@@ -275,7 +277,7 @@ const SubdomainManagement = () => {
                     <div className='bg-[#ffffff08] border border-[#ffffff15] rounded-lg p-4'>
                         <div className='flex items-center justify-between'>
                             <div>
-                                <p className='text-sm text-zinc-400 mb-2'>Current Subdomain</p>
+                                <p className='text-sm text-zinc-400 mb-2'>{i18n.t('server:network.current_subdomain')}</p>
                                 <p className='text-lg font-medium text-white font-mono'>
                                     {subdomainInfo?.current_subdomain?.attributes?.full_domain}
                                 </p>

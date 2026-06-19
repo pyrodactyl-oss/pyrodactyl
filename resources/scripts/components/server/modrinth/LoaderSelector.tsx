@@ -8,6 +8,8 @@ import { ServerContext } from '@/state/server';
 import { useGlobalStateContext } from './config';
 import { getAvailableLoaders, getLoaderType } from './eggfeatures';
 
+import i18n from '@/lib/i18n';
+
 const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt', 'bungeecord'];
 
 interface LoaderSelectorProps {
@@ -85,7 +87,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
     const showCollapseButton = hasMoreLoaders && showAll;
 
     if (loaders.length === 0) {
-        return <p className='text-sm text-gray-500'>No loaders available</p>;
+        return <p className='text-sm text-gray-500'>{i18n.t('server:modrinth.no_loaders')}</p>;
     }
 
     return (
