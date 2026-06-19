@@ -148,6 +148,7 @@ return [
         'csv_ip' => 'IP Address',
         'csv_properties' => 'Properties',
         'system' => 'System',
+        'delete_activity_event' => 'Delete activity event',
     ],
 
     'dashboard' => [

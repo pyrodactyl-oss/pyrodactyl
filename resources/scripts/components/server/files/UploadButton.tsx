@@ -165,8 +165,8 @@ const UploadButton = () => {
 
         if (validFiles.length > maxFiles) {
             return addError(
-                `You can only upload up to ${maxFiles} files at once. You selected ${validFiles.length}. Consider uploading a compressed archive instead.`,
-                'Too many files',
+                i18n.t('server:files.too_many_files_message', { max: maxFiles, count: validFiles.length }),
+                i18n.t('server:files.too_many_files_title'),
             );
         }
 
@@ -223,7 +223,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), 'Error');
+                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = filePaths.map(
@@ -305,7 +305,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories(dirsNeeded);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), 'Error');
+                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = files.map(
@@ -373,7 +373,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), 'Error');
+                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = uploadItems.map(
@@ -485,29 +485,29 @@ const UploadButton = () => {
                 open={pendingFolder !== null}
                 onClose={() => setPendingFolder(null)}
                 onConfirmed={confirmFolderUpload}
-                title='Large folder upload'
-                confirm={`Upload ${pendingFolder?.files.length ?? 0} files`}
+                title={i18n.t('server:files.large_folder_upload')}
+                confirm={i18n.t('server:files.large_folder_upload_confirm', { count: pendingFolder?.files.length ?? 0 })}
             >
                 <p>
-                    You are about to upload <strong>{pendingFolder?.files.length ?? 0} files</strong>
+                    {i18n.t('server:files.large_folder_upload_body', { count: pendingFolder?.files.length ?? 0 })}
                     {pendingFolder?.files[0]?.webkitRelativePath && (
-                        <> from <strong>{pendingFolder.files[0].webkitRelativePath.split('/')[0]}</strong></>
+                        <> {i18n.t('server:files.large_folder_upload_from', { source: pendingFolder.files[0].webkitRelativePath.split('/')[0] })}</>
                     )}.
                     {pendingFolder && pendingFolder.dirsNeeded.length > 0 && (
-                        <> This will recreate {pendingFolder.dirsNeeded.length} subfolder(s).</>
+                        <> {i18n.t('server:files.large_folder_upload_subfolders', { count: pendingFolder.dirsNeeded.length })}</>
                     )}
                 </p>
                 <p className='mt-2 text-sm text-zinc-400'>
-                    If you plan to upload many files at once, consider uploading a compressed archive (.zip) instead for a faster and smoother experience.
+                    {i18n.t('server:files.large_folder_upload_hint')}
                 </p>
             </ConfirmationDialog>
             <Dialog
                 open={pendingConflicts !== null}
                 onClose={() => setPendingConflicts(null)}
-                title='File already exists'
+                title={i18n.t('server:files.file_already_exists')}
             >
                 <p>
-                    The following {pendingConflicts?.existing.length ?? 0} file(s) already exist:
+                    {i18n.t('server:files.file_exists_body', { count: pendingConflicts?.existing.length ?? 0 })}
                 </p>
                 <ul className='mt-2 text-sm text-zinc-400 list-disc pl-4 max-h-32 overflow-y-auto'>
                     {pendingConflicts?.existing.map((name) => (
@@ -516,13 +516,13 @@ const UploadButton = () => {
                 </ul>
                 <Dialog.Footer>
                     <ActionButton variant='secondary' onClick={() => setPendingConflicts(null)}>
-                        Cancel
+                        {i18n.t('strings:cancel')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={confirmRenameAll}>
                         {i18n.t('server:files.rename')}
                     </ActionButton>
                     <ActionButton variant='danger' onClick={confirmReplaceAll}>
-                        Replace
+                        {i18n.t('server:files.replace')}
                     </ActionButton>
                 </Dialog.Footer>
             </Dialog>

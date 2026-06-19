@@ -185,7 +185,7 @@ const SubdomainManagement = () => {
     const handleDeleteSubdomain = async () => {
         if (
             !confirm(
-                'Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.',
+                i18n.t('server:network.delete_subdomain_message'),
             )
         ) {
             return;
@@ -327,8 +327,8 @@ const SubdomainManagement = () => {
                             <div className='space-y-4'>
                                 <FormikFieldWrapper
                                     name='subdomain'
-                                    label='Subdomain'
-                                    description='Choose a unique name for your subdomain. Only lowercase letters, numbers, and hyphens are allowed.'
+                                    label={i18n.t('server:network.subdomain_label')}
+                                    description={i18n.t('server:network.subdomain_description')}
                                 >
                                     <div className='flex items-center border border-[#ffffff15] overflow-hidden hover:border-[#ffffff25] transition-colors'>
                                         <Field

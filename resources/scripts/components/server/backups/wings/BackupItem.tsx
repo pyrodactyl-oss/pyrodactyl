@@ -114,7 +114,7 @@ const BackupItem = ({ backup }: Props) => {
                     </div>
 
                     <div className='hidden sm:block flex-shrink-0 text-right min-w-[130px] mr-5'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>{i18n.t('strings:created')}</p>
                         <p
                             className='text-sm text-zinc-300 font-medium'
                             title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', { locale: i18n.language === 'es' ? es : undefined })}

@@ -19,6 +19,8 @@ interface MobileFullScreenMenuProps {
 }
 
 const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreenMenuProps) => {
+    const { t } = useTranslation('strings');
+
     if (!isVisible) return null;
 
     return (
@@ -27,7 +29,7 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
             <button
                 onClick={onClose}
                 className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
-                aria-label='Close menu'
+                aria-label={t('ui.close_menu')}
             >
                 <Xmark width={22} height={22} fill='currentColor' />
             </button>

@@ -84,6 +84,7 @@ return [
     'cpu_pinning' => 'CPU Pinning',
     'overhead_memory' => 'Overhead Memory',
     'swap' => 'Swap',
+    'swap_space' => 'Swap Space',
     'block_io_weight' => 'Block IO Weight',
     'enable_oom_killer' => 'Enable OOM Killer',
     'exclude_from_resource_calculation' => 'Exclude from Resource Calculation',
@@ -704,6 +705,7 @@ return [
     'inactive_label' => 'Inactive',
     'default_label' => 'Default',
     'update_domain_config' => 'Update DNS domain configuration.',
+    'add_domain_desc' => 'Add a new DNS domain for subdomain management.',
 
     // Misc
     'test' => 'Test',

@@ -120,6 +120,7 @@ return [
     'description' => 'Descripción',
     'language' => 'Idioma',
     'why' => '¿Por qué?',
+    'global_command_menu' => 'Menú de comandos global',
 
     'nav' => [
         'account' => 'Cuenta',
@@ -152,7 +153,6 @@ return [
         'access_denied' => 'Acceso denegado',
         'access_denied_description' => 'No tienes permiso para acceder a esta página.',
         'something_went_wrong' => 'Algo salió mal',
-        'error_boundary' => 'Se encontró un error en la aplicación al renderizar esta vista. Intenta actualizar la página.',
     ],
 
     'ui' => [
@@ -160,11 +160,11 @@ return [
         'raw_json' => 'JSON sin formato',
         'close_menu' => 'Cerrar menú',
         'toggle_navigation' => 'Alternar menú de navegación',
+        'view_event_metadata' => 'Ver metadatos adicionales del evento',
     ],
 
     'validation' => [
         'required' => 'Este campo es obligatorio.',
-        'min_length' => 'Debe tener al menos {{count}} caracteres.',
     ],
 
     'ssh' => [

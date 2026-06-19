@@ -120,6 +120,7 @@ return [
     'description' => 'Description',
     'language' => 'Language',
     'why' => 'Why?',
+    'global_command_menu' => 'Global Command Menu',
 
     'nav' => [
         'account' => 'Account',
@@ -152,7 +153,6 @@ return [
         'access_denied' => 'Access Denied',
         'access_denied_description' => 'You do not have permission to access this page.',
         'something_went_wrong' => 'Something went wrong',
-        'error_boundary' => 'An error was encountered by the application while rendering this view. Try refreshing the page.',
     ],
 
     'ui' => [
@@ -160,11 +160,11 @@ return [
         'raw_json' => 'Raw JSON',
         'close_menu' => 'Close menu',
         'toggle_navigation' => 'Toggle navigation menu',
+        'view_event_metadata' => 'View additional event metadata',
     ],
 
     'validation' => [
         'required' => 'This field is required.',
-        'min_length' => 'Must be at least {{count}} characters.',
     ],
 
     'ssh' => [

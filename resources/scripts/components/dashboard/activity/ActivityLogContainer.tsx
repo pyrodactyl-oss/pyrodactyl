@@ -176,7 +176,7 @@ const ActivityLogContainer = () => {
                                 variant='secondary'
                                 onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
-                                title='Toggle Filters (Ctrl+F)'
+                                title={i18n.t('dashboard:activity.filters_toggle')}
                             >
                                 <Funnel width={22} height={22} fill='currentColor' />
                                 Filters
@@ -186,7 +186,7 @@ const ActivityLogContainer = () => {
                                 variant={autoRefresh ? 'primary' : 'secondary'}
                                 onClick={() => setAutoRefresh(!autoRefresh)}
                                 className='flex items-center gap-2'
-                                title='Auto Refresh (Ctrl+R)'
+                                title={i18n.t('dashboard:activity.auto_refresh')}
                             >
                                 {autoRefresh ? (
                                     <Xmark width={22} height={22} fill='currentColor' />
@@ -200,7 +200,7 @@ const ActivityLogContainer = () => {
                                 onClick={exportLogs}
                                 disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
-                                title='Export CSV (Ctrl+E)'
+                                title={i18n.t('dashboard:activity.export_csv')}
                             >
                                 <ArrowDownToLine width={22} height={22} fill='currentColor' />
                                 Export
@@ -238,7 +238,7 @@ const ActivityLogContainer = () => {
                                         />
                                         <Input.Text
                                             type='text'
-                                            placeholder='Search events, IPs, users...'
+                                            placeholder={i18n.t('dashboard:activity.search_placeholder')}
                                             value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
                                             style={{ paddingLeft: '2.5rem' }}

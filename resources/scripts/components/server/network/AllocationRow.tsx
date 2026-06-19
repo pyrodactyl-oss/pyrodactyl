@@ -147,7 +147,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     <Textarea
                                         ref={textareaRef}
                                         className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-3 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
-                                        placeholder='Add notes for this allocation...'
+                                        placeholder={i18n.t('server:network.add_notes_placeholder')}
                                         value={notesValue}
                                         onChange={(e) => setNotesValue(e.currentTarget.value)}
                                         rows={3}
@@ -222,11 +222,11 @@ const AllocationRow = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={showDeleteDialog}
                 onClose={() => setShowDeleteDialog(false)}
-                title={'Delete Allocation'}
-                confirm={'Delete'}
+                title={i18n.t('server:network.delete_allocation_title')}
+                confirm={i18n.t('strings:delete')}
                 onConfirmed={deleteAllocation}
             >
-                Are you sure you want to delete this allocation? This action cannot be undone.
+                {i18n.t('server:network.delete_allocation_message')}
             </Dialog.Confirm>
         </PageListItem>
     );

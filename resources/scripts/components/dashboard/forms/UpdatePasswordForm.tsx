@@ -4,6 +4,8 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Spinner from '@/components/elements/Spinner';
@@ -52,7 +54,7 @@ const UpdatePasswordForm = () => {
                 addFlash({
                     key: 'account:password',
                     type: 'error',
-                    title: 'Error',
+                    title: i18n.t('strings:error'),
                     message: httpErrorToHuman(error),
                 }),
             )

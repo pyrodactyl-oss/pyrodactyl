@@ -209,7 +209,7 @@ const ServerActivityLogContainer = () => {
                                     variant='secondary'
                                     onClick={() => setShowFilters(!showFilters)}
                                     className='flex items-center gap-2'
-                                    title='Toggle Filters (Ctrl+F)'
+                                    title={i18n.t('server:activity.filters_toggle')}
                                 >
                                     <Funnel width={22} height={22} className='w-4 h-4' fill='currentColor' />
                                     Filters
@@ -220,7 +220,7 @@ const ServerActivityLogContainer = () => {
                                     onClick={exportLogs}
                                     disabled={!filteredData?.items?.length}
                                     className='flex items-center gap-2'
-                                    title='Export CSV (Ctrl+E)'
+                                    title={i18n.t('server:activity.export_csv')}
                                 >
                                     <ArrowDownToLine width={22} height={22} className='w-4 h-4' fill='currentColor' />
                                     Export
@@ -231,7 +231,7 @@ const ServerActivityLogContainer = () => {
                                         onClick={() => setShowClearConfirm(true)}
                                         disabled={!filteredData?.items?.length}
                                         className='flex items-center gap-2 !text-red-400 hover:!text-red-300'
-                                        title='Clear all activity'
+                                        title={i18n.t('server:activity.clear_title')}
                                     >
                                         <TrashBin width={22} height={22} className='w-4 h-4' fill='currentColor' />
                                         Clear
@@ -393,10 +393,10 @@ const ServerActivityLogContainer = () => {
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
                                         <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            Clear All Filters
+                                            {i18n.t('server:activity.clear_all_filters')}
                                         </ActionButton>
                                         <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
-                                            Adjust Filters
+                                            {i18n.t('server:activity.adjust_filters')}
                                         </ActionButton>
                                     </div>
                                 )}
@@ -430,10 +430,10 @@ const ServerActivityLogContainer = () => {
             open={showClearConfirm}
             onClose={() => setShowClearConfirm(false)}
             onConfirmed={handleClearAll}
-            title='Clear activity logs'
-            confirm='Clear all'
+            title={i18n.t('server:activity.clear_title')}
+            confirm={i18n.t('server:activity.clear_all_button')}
         >
-            Are you sure you want to permanently delete all activity events for this server? This action cannot be undone.
+            {i18n.t('server:activity.clear_all_message')}
         </ConfirmationDialog>
         </>
     );

@@ -65,7 +65,7 @@ const CommandMenu = () => {
     }, []);
 
     return (
-        <Command.Dialog open={open} onOpenChange={setOpen} label='Global Command Menu'>
+        <Command.Dialog open={open} onOpenChange={setOpen} label={i18n.t('strings:global_command_menu')}>
             <Command.Input />
             <Command.List>
                 <Command.Empty>No results found.</Command.Empty>

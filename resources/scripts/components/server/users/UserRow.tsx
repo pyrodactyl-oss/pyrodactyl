@@ -7,6 +7,8 @@ import Can from '@/components/elements/Can';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
@@ -51,7 +53,7 @@ const UserRow = ({ subuser }: Props) => {
                                     size='sm'
                                     className='flex items-center gap-2'
                                     onClick={handleEditClick}
-                                    aria-label='Edit subuser'
+                                    aria-label={i18n.t('server:users.edit_subuser')}
                                 >
                                     <Pencil width={22} height={22} fill='currentColor' />
                                     Edit

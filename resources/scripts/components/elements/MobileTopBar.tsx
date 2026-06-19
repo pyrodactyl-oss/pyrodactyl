@@ -93,7 +93,7 @@ const MobileTopBar = ({ onMenuToggle, onTriggerLogout, onSelectAdminPanel, rootA
                 <button
                     onClick={handleMenuToggle}
                     className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 cursor-pointer'
-                    aria-label='Toggle navigation menu'
+                    aria-label={t('ui.toggle_navigation')}
                 >
                     <BarsPlay width={22} height={22} fill='currentColor' />
                 </button>

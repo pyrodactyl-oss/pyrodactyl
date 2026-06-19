@@ -50,7 +50,7 @@ export const VersionSelector = () => {
             <div className='relative'>
                 <Input
                     type='text'
-                    placeholder='Search versions...'
+                    placeholder={i18n.t('server:modrinth.search_versions')}
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     className='w-full pl-3 pr-8 py-1 text-sm'

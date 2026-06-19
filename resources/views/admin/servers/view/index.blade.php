@@ -83,11 +83,11 @@
                                     @endif
                                     /
                                     @if($server->swap === 0)
-                                        <code data-toggle="tooltip" data-placement="top" title="Swap Space">{{ trans('admin/general.not_set') }}</code>
+                                        <code data-toggle="tooltip" data-placement="top" title="{{ trans('admin/general.swap_space') }}">{{ trans('admin/general.not_set') }}</code>
                                     @elseif($server->swap === -1)
-                                        <code data-toggle="tooltip" data-placement="top" title="Swap Space">{{ trans('admin/general.unlimited') }}</code>
+                                        <code data-toggle="tooltip" data-placement="top" title="{{ trans('admin/general.swap_space') }}">{{ trans('admin/general.unlimited') }}</code>
                                     @else
-                                        <code data-toggle="tooltip" data-placement="top" title="Swap Space"> {{ $server->swap }}MiB</code>
+                                        <code data-toggle="tooltip" data-placement="top" title="{{ trans('admin/general.swap_space') }}"> {{ $server->swap }}MiB</code>
                                     @endif
                                 </td>
                             </tr>

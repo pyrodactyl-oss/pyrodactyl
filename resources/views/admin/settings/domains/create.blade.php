@@ -6,7 +6,7 @@
 @endsection
 
 @section('content-header')
-  <h1>{{ trans('admin/general.create_domain') }}<small>Add a new DNS domain for subdomain management.</small></h1>
+  <h1>{{ trans('admin/general.create_domain') }}<small>{{ trans('admin/general.add_domain_desc') }}</small></h1>
   <ol class="breadcrumb">
     <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
     <li><a href="{{ route('admin.settings') }}">{{ trans('strings.settings') }}</a></li>

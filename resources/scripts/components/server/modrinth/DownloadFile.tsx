@@ -2,6 +2,8 @@ import axios from 'axios';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import i18n from '@/lib/i18n';
+
 interface DownloadProps {
     url: string;
     serverUuid: string;
@@ -70,7 +72,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
                 disabled={loading}
                 className='px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'
             >
-                {loading ? 'Processing...' : 'Download & Upload'}
+                {loading ? i18n.t('server:operations.processing') : i18n.t('server:modrinth.download_and_upload')}
             </button>
             {progress > 0 && <p className='mt-2 text-sm'>Upload Progress: {progress}%</p>}
         </div>

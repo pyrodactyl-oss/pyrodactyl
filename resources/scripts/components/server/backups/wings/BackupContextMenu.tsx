@@ -222,7 +222,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                             value={newName}
                             onChange={(e) => setNewName(e.target.value)}
                             className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 placeholder-zinc-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
-                            placeholder='Enter backup name...'
+                            placeholder={i18n.t('server:backups.backup_name_placeholder')}
                             maxLength={191}
                         />
                     </div>

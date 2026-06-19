@@ -148,17 +148,17 @@ const DashboardContainer = () => {
                                     </DropdownMenu>
 
                                     <TabsList>
-                                        <TabsTrigger aria-label='View servers in a list layout.' value='list'>
+                                        <TabsTrigger aria-label={t('dashboard.list_layout')} value='list'>
                                             <Bars width={18} height={20} color='white' />
                                         </TabsTrigger>
-                                        <TabsTrigger aria-label='View servers in a grid layout.' value='grid'>
+                                        <TabsTrigger aria-label={t('dashboard.grid_layout')} value='grid'>
                                             <LayoutCellsLarge width={20} height={20} color='white' />
                                         </TabsTrigger>
                                     </TabsList>
                                     <div className='inline-flex h-9 items-center justify-center rounded-lg bg-[#ffffff11] p-1 text-[#ffffff88]'>
                                         <button
                                             type='button'
-                                            aria-label='Display sizes in MiB (binary)'
+                                            aria-label={t('dashboard.mib_display')}
                                             className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
                                                 sizeDisplay === 'mib' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
                                             }`}
@@ -171,7 +171,7 @@ const DashboardContainer = () => {
                                         </button>
                                         <button
                                             type='button'
-                                            aria-label='Display sizes in MB (decimal)'
+                                            aria-label={t('dashboard.mb_display')}
                                             className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
                                                 sizeDisplay === 'mb' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
                                             }`}

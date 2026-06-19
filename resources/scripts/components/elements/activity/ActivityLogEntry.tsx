@@ -102,7 +102,7 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
                     }}
                     disabled={deleting}
                     className='flex-shrink-0 ml-2 p-1.5 rounded-md text-zinc-500 hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-all cursor-pointer'
-                    title='Delete activity event'
+                    title={i18n.t('dashboard:activity.delete_activity_event')}
                 >
                     <TrashBin width={14} height={14} />
                 </button>

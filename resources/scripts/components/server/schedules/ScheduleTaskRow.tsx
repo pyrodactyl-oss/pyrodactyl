@@ -82,13 +82,13 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 onModalDismissed={() => setIsEditing(false)}
             />
             <ConfirmationModal
-                title={'Confirm task deletion'}
-                buttonText={'Delete Task'}
+                title={i18n.t('server:schedules.delete_task_title')}
+                buttonText={i18n.t('server:schedules.delete_task_button')}
                 onConfirmed={onConfirmDeletion}
                 visible={visible}
                 onModalDismissed={() => setVisible(false)}
             >
-                Are you sure you want to delete this task? This action cannot be undone.
+                {i18n.t('server:schedules.delete_task_message')}
             </ConfirmationModal>
             {/* <FontAwesomeIcon icon={icon} className={`text-lg text-white hidden md:block`} /> */}
             {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
@@ -112,11 +112,11 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
-                            Continues on Failure
+                            {i18n.t('server:schedules.continues_on_failure')}
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
-                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{task.timeOffset}s later</div>
+                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{i18n.t('server:schedules.seconds_later', { seconds: task.timeOffset })}</div>
                     )}
                 </div>
                 <Can action={'schedule.update'}>
@@ -125,10 +125,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
-                        aria-label='Edit scheduled task'
+                        aria-label={i18n.t('server:schedules.edit_task')}
                     >
                         <PencilToLine width={22} height={22} fill='currentColor' />
-                        Edit
+                        {i18n.t('strings:edit')}
                     </ActionButton>
                 </Can>
                 <Can action={'schedule.update'}>
@@ -137,10 +137,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         onClick={() => setVisible(true)}
                         className='flex items-center gap-2'
-                        aria-label='Delete scheduled task'
+                        aria-label={i18n.t('server:schedules.delete_task')}
                     >
                         <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
-                        <span className='hidden sm:inline'>Delete</span>
+                        <span className='hidden sm:inline'>{i18n.t('strings:delete')}</span>
                     </ActionButton>
                 </Can>
             </div>

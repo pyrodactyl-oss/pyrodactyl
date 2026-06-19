@@ -11,6 +11,10 @@ return [
         'command_aria' => 'Entrada de comando de consola.',
         'transfer_failed' => 'La transferencia ha fallado.',
         'server_marked' => 'Servidor marcado como :state...',
+        'days_short' => 'd',
+        'hours_short' => 'h',
+        'minutes_short' => 'm',
+        'seconds_short' => 's',
     ],
 
     'power' => [
@@ -77,6 +81,8 @@ return [
         'upload_file' => 'Subir archivo',
         'upload_to' => 'Subir a :name',
         'upload_failed' => 'Error al crear la estructura de carpetas.',
+        'large_folder_upload' => 'Subida de carpeta grande',
+        'file_already_exists' => 'El archivo ya existe',
         'new_folder' => 'Nueva carpeta',
         'new_file' => 'Nuevo archivo',
         'create_file' => 'Crear archivo',
@@ -110,6 +116,17 @@ return [
         'unarchive' => 'Desarchivar',
         'download' => 'Descargar',
         'root' => 'raíz',
+        'too_many_files_title' => 'Demasiados archivos',
+        'too_many_files_message' => 'Solo puedes subir hasta {max} archivos a la vez. Seleccionaste {count}. Considera subir un archivo comprimido en su lugar.',
+        'large_folder_upload' => 'Carga de carpeta grande',
+        'large_folder_upload_confirm' => 'Subir {count} archivos',
+        'large_folder_upload_body' => 'Estás a punto de subir {count} archivos',
+        'large_folder_upload_from' => 'desde {source}',
+        'large_folder_upload_subfolders' => 'Esto recreará {count} subcarpeta(s).',
+        'large_folder_upload_hint' => 'Si planeas subir muchos archivos a la vez, considera subir un archivo comprimido (.zip) para una experiencia más rápida y fluida.',
+        'file_already_exists' => 'El archivo ya existe',
+        'file_exists_body' => 'Los siguientes {count} archivo(s) ya existen:',
+        'replace' => 'Reemplazar',
     ],
 
     'databases' => [
@@ -135,6 +152,8 @@ return [
         'name_max' => 'El nombre de la base de datos no debe exceder los 48 caracteres.',
         'name_regex' => 'El nombre de la base de datos solo debe contener caracteres alfanuméricos, guiones bajos, guiones y/o puntos.',
         'host_required' => 'Se debe proporcionar una dirección de host válida.',
+        'confirm_deletion_title' => 'Confirmar eliminación de base de datos',
+        'connection_details_title' => 'Detalles de conexión de la base de datos',
     ],
 
     'backups' => [
@@ -202,6 +221,10 @@ return [
         'delete_restore_countdown' => 'Eliminar todo y restaurar (:counts)',
         'delete_restore' => 'Eliminar todo y restaurar copia',
         'delete_warning_permanent' => 'El archivo de copia de seguridad y su instantánea se eliminarán permanentemente.',
+        'retry_backup' => 'Reintentar copia de seguridad',
+        'backup_name_placeholder' => 'Introduce el nombre de la copia de seguridad...',
+        'retrying' => 'Reintentando copia de seguridad.',
+        'retry_failed' => 'Error al reintentar copia de seguridad.',
     ],
 
     'network' => [
@@ -222,6 +245,12 @@ return [
         'subdomain_management' => 'Gestión de subdominios',
         'no_domains' => 'Sin dominios configurados',
         'current_subdomain' => 'Subdominio actual',
+        'subdomain_label' => 'Subdominio',
+        'subdomain_description' => 'Elige un nombre único para tu subdominio. Solo se permiten letras minúsculas, números y guiones.',
+        'add_notes_placeholder' => 'Añadir notas para esta asignación...',
+        'delete_subdomain_message' => '¿Estás seguro de que quieres eliminar este subdominio? Esto eliminará todos los registros DNS asociados y no se puede deshacer.',
+        'delete_allocation_title' => 'Eliminar asignación',
+        'delete_allocation_message' => '¿Estás seguro de que quieres eliminar esta asignación? Esta acción no se puede deshacer.',
     ],
 
     'users' => [
@@ -237,6 +266,7 @@ return [
         'permissions' => 'Permisos detallados',
         'permission_restriction' => 'Restricción de permisos',
         'user_not_found' => 'Usuario no encontrado',
+        'edit_subuser' => 'Editar subusuario',
     ],
 
     'schedules' => [
@@ -254,6 +284,13 @@ return [
         'last_run' => 'Última ejecución:',
         'next_run' => 'Próxima ejecución:',
         'not_applicable' => 'N/D',
+        'edit_task' => 'Editar tarea programada',
+        'delete_task' => 'Eliminar tarea programada',
+        'delete_task_title' => 'Confirmar eliminación de tarea',
+        'delete_task_button' => 'Eliminar tarea',
+        'delete_task_message' => '¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer.',
+        'continues_on_failure' => 'Continúa en caso de fallo',
+        'seconds_later' => ':seconds s después',
     ],
 
     'startup' => [
@@ -408,6 +445,13 @@ return [
         'no_activity' => 'Sin actividad del servidor aún',
         'no_matching_description' => 'Intenta ajustar tus filtros o términos de búsqueda para encontrar la actividad que buscas.',
         'no_activity_description' => 'Los registros de actividad del servidor aparecerán aquí a medida que gestiones tu servidor. Inicia tu servidor o realiza acciones para verlos aquí.',
+        'filters_toggle' => 'Alternar filtros (Ctrl+F)',
+        'export_csv' => 'Exportar CSV (Ctrl+E)',
+        'clear_all_filters' => 'Limpiar todos los filtros',
+        'adjust_filters' => 'Ajustar filtros',
+        'clear_title' => 'Limpiar registros de actividad',
+        'clear_all_button' => 'Limpiar todo',
+        'clear_all_message' => '¿Estás seguro de que quieres eliminar permanentemente todos los eventos de actividad de este servidor? Esta acción no se puede deshacer.',
     ],
 
     'features' => [
@@ -490,6 +534,9 @@ return [
         'no_loaders' => 'No hay cargadores disponibles',
         'failed_fetch' => 'Error al obtener mods',
         'failed_load' => 'Error al cargar mods. Inténtalo de nuevo más tarde.',
+        'search_versions' => 'Buscar versiones...',
+        'search_loaders' => 'Buscar cargadores...',
+        'download_and_upload' => 'Descargar y subir',
     ],
 
     'operations' => [

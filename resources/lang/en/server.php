@@ -11,6 +11,10 @@ return [
         'command_aria' => 'Console command input.',
         'transfer_failed' => 'Transfer has failed.',
         'server_marked' => 'Server marked as :state...',
+        'days_short' => 'd',
+        'hours_short' => 'h',
+        'minutes_short' => 'm',
+        'seconds_short' => 's',
     ],
 
     'power' => [
@@ -77,6 +81,8 @@ return [
         'upload_file' => 'Upload File',
         'upload_to' => 'Upload to :name',
         'upload_failed' => 'Failed to create folder structure.',
+        'large_folder_upload' => 'Large folder upload',
+        'file_already_exists' => 'File already exists',
         'new_folder' => 'New Folder',
         'new_file' => 'New File',
         'create_file' => 'Create File',
@@ -110,6 +116,17 @@ return [
         'unarchive' => 'Unarchive',
         'download' => 'Download',
         'root' => 'root',
+        'too_many_files_title' => 'Too many files',
+        'too_many_files_message' => 'You can only upload up to {max} files at once. You selected {count}. Consider uploading a compressed archive instead.',
+        'large_folder_upload' => 'Large folder upload',
+        'large_folder_upload_confirm' => 'Upload {count} files',
+        'large_folder_upload_body' => 'You are about to upload {count} files',
+        'large_folder_upload_from' => 'from {source}',
+        'large_folder_upload_subfolders' => 'This will recreate {count} subfolder(s).',
+        'large_folder_upload_hint' => 'If you plan to upload many files at once, consider uploading a compressed archive (.zip) instead for a faster and smoother experience.',
+        'file_already_exists' => 'File already exists',
+        'file_exists_body' => 'The following {count} file(s) already exist:',
+        'replace' => 'Replace',
     ],
 
     'databases' => [
@@ -135,6 +152,8 @@ return [
         'name_max' => 'Database name must not exceed 48 characters.',
         'name_regex' => 'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.',
         'host_required' => 'A valid host address must be provided.',
+        'confirm_deletion_title' => 'Confirm database deletion',
+        'connection_details_title' => 'Database connection details',
     ],
 
     'backups' => [
@@ -202,6 +221,10 @@ return [
         'delete_restore_countdown' => 'Delete All & Restore (:counts)',
         'delete_restore' => 'Delete All & Restore Backup',
         'delete_warning_permanent' => 'The backup file and its snapshot will be permanently deleted.',
+        'retry_backup' => 'Retry backup',
+        'backup_name_placeholder' => 'Enter backup name...',
+        'retrying' => 'Backup is being retried.',
+        'retry_failed' => 'Failed to retry backup.',
     ],
 
     'network' => [
@@ -222,6 +245,12 @@ return [
         'subdomain_management' => 'Subdomain Management',
         'no_domains' => 'No domains configured',
         'current_subdomain' => 'Current Subdomain',
+        'subdomain_label' => 'Subdomain',
+        'subdomain_description' => 'Choose a unique name for your subdomain. Only lowercase letters, numbers, and hyphens are allowed.',
+        'add_notes_placeholder' => 'Add notes for this allocation...',
+        'delete_subdomain_message' => 'Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.',
+        'delete_allocation_title' => 'Delete Allocation',
+        'delete_allocation_message' => 'Are you sure you want to delete this allocation? This action cannot be undone.',
     ],
 
     'users' => [
@@ -237,6 +266,7 @@ return [
         'permissions' => 'Detailed Permissions',
         'permission_restriction' => 'Permission Restriction',
         'user_not_found' => 'User not found',
+        'edit_subuser' => 'Edit subuser',
     ],
 
     'schedules' => [
@@ -254,6 +284,13 @@ return [
         'last_run' => 'Last run at:',
         'next_run' => 'Next run at:',
         'not_applicable' => 'N/A',
+        'edit_task' => 'Edit scheduled task',
+        'delete_task' => 'Delete scheduled task',
+        'delete_task_title' => 'Confirm task deletion',
+        'delete_task_button' => 'Delete Task',
+        'delete_task_message' => 'Are you sure you want to delete this task? This action cannot be undone.',
+        'continues_on_failure' => 'Continues on Failure',
+        'seconds_later' => ':seconds s later',
     ],
 
     'startup' => [
@@ -408,6 +445,13 @@ return [
         'no_activity' => 'No Server Activity Yet',
         'no_matching_description' => "Try adjusting your filters or search terms to find the activity you're looking for.",
         'no_activity_description' => 'Server activity logs will appear here as you manage your server. Start your server or perform actions to see them here.',
+        'filters_toggle' => 'Toggle Filters (Ctrl+F)',
+        'export_csv' => 'Export CSV (Ctrl+E)',
+        'clear_all_filters' => 'Clear All Filters',
+        'adjust_filters' => 'Adjust Filters',
+        'clear_title' => 'Clear activity logs',
+        'clear_all_button' => 'Clear all',
+        'clear_all_message' => 'Are you sure you want to permanently delete all activity events for this server? This action cannot be undone.',
     ],
 
     'features' => [
@@ -490,6 +534,9 @@ return [
         'no_loaders' => 'No loaders available',
         'failed_fetch' => 'Failed to fetch mods',
         'failed_load' => 'Failed to load mods. Please try again later.',
+        'search_versions' => 'Search versions...',
+        'search_loaders' => 'Search loaders...',
+        'download_and_upload' => 'Download & Upload',
     ],
 
     'operations' => [

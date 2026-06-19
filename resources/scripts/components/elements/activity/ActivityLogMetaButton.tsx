@@ -65,7 +65,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
             </Dialog>
 
             <button
-                aria-label='View additional event metadata'
+                aria-label={t('ui.view_event_metadata')}
                 className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
                 onClick={() => setOpen(true)}
             >

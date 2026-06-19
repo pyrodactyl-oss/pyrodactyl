@@ -38,7 +38,7 @@ const RotatePasswordButton = ({
                 console.error(error);
                 addFlash({
                     type: 'error',
-                    title: 'Error',
+                    title: i18n.t('strings:error'),
                     message: httpErrorToHuman(error),
                     key: 'database-connection-modal',
                 });

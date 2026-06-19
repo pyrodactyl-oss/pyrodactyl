@@ -84,7 +84,7 @@ const DatabaseRow = ({ database }: Props) => {
                             setVisible(false);
                             resetForm();
                         }}
-                        title='Confirm database deletion'
+                        title={i18n.t('server:databases.confirm_deletion_title')}
                     >
                         <FlashMessageRender byKey={'database:delete'} />
                         <div className='flex flex-col'>
@@ -117,7 +117,7 @@ const DatabaseRow = ({ database }: Props) => {
 
             <Modal
                 visible={connectionVisible}
-                title='Database connection details'
+                title={i18n.t('server:databases.connection_details_title')}
                 closeButton={true}
                 onDismissed={() => setConnectionVisible(false)}
             >

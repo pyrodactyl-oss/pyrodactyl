@@ -96,7 +96,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             <div className='relative'>
                 <Input
                     type='text'
-                    placeholder='Search loaders...'
+                    placeholder={i18n.t('server:modrinth.search_loaders')}
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     className='w-full pl-3 pr-8 py-2 text-sm'

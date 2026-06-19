@@ -4,6 +4,8 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
@@ -44,7 +46,7 @@ const UpdateEmailAddressForm = () => {
                 addFlash({
                     type: 'error',
                     key: 'account:email',
-                    title: 'Error',
+                    title: i18n.t('strings:error'),
                     message: httpErrorToHuman(error),
                 }),
             )

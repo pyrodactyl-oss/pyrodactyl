@@ -84,6 +84,7 @@ return [
     'cpu_pinning' => 'Asignación de CPU',
     'overhead_memory' => 'Memoria adicional',
     'swap' => 'Swap',
+    'swap_space' => 'Espacio Swap',
     'block_io_weight' => 'Peso de IO de bloque',
     'enable_oom_killer' => 'Habilitar OOM Killer',
     'exclude_from_resource_calculation' => 'Excluir del cálculo de recursos',
@@ -708,6 +709,7 @@ return [
     'inactive_label' => 'Inactivo',
     'default_label' => 'Predeterminado',
     'update_domain_config' => 'Actualizar configuración del dominio DNS.',
+    'add_domain_desc' => 'Añadir un nuevo dominio DNS para la gestión de subdominios.',
 
     // Cifrado
     'encryption' => 'Cifrado',

@@ -55,16 +55,16 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
             await retryBackup(backup.uuid);
             addFlash({
                 type: 'success',
-                title: 'Success',
+                title: i18n.t('strings:success'),
                 key: 'backup',
-                message: 'Backup is being retried.',
+                message: i18n.t('server:backups.retrying'),
             });
         } catch (error) {
             addFlash({
                 type: 'error',
-                title: 'Error',
+                title: i18n.t('strings:error'),
                 key: 'backup',
-                message: error instanceof Error ? error.message : 'Failed to retry backup.',
+                message: error instanceof Error ? error.message : i18n.t('server:backups.retry_failed'),
             });
         }
     };
@@ -167,7 +167,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     {showProgressBar && (
                         <div className='mb-2'>
                             <div className='flex justify-between text-xs text-zinc-400 mb-1.5'>
-                                <span>{backup.message || 'Processing...'}</span>
+                                <span>{backup.message || i18n.t('server:operations.processing')}</span>
                                 <span>{backup.progress}%</span>
                             </div>
                             <div className='w-full bg-zinc-700 rounded-full h-2'>
@@ -223,7 +223,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                             <button
                                 onClick={handleRetry}
                                 className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
-                                title='Retry backup'
+                                title={i18n.t('server:backups.retry_backup')}
                             >
                                 <CloudArrowUpIn width={22} height={22} />
                             </button>
