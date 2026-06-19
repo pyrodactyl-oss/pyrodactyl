@@ -46,7 +46,7 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
                 open={confirm}
                 onClose={() => setConfirm(false)}
                 title={'Remove Allocation'}
-                confirm={'Delete'}
+                confirm={i18n.t('strings:delete')}
                 onConfirmed={deleteAllocation}
             >
                 This allocation will be immediately removed from your server.

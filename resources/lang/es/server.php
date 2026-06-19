@@ -251,6 +251,8 @@ return [
         'delete_subdomain_message' => '¿Estás seguro de que quieres eliminar este subdominio? Esto eliminará todos los registros DNS asociados y no se puede deshacer.',
         'delete_allocation_title' => 'Eliminar asignación',
         'delete_allocation_message' => '¿Estás seguro de que quieres eliminar esta asignación? Esta acción no se puede deshacer.',
+        'notes' => 'Notas',
+        'click_to_add_notes' => 'Haz clic para añadir notas...',
     ],
 
     'users' => [

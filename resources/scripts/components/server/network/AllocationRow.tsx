@@ -139,7 +139,7 @@ const AllocationRow = ({ allocation }: Props) => {
 
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notes</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>{i18n.t('server:network.notes')}</p>
 
                         {isEditingNotes ? (
                             <div className='space-y-2'>
@@ -160,11 +160,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                         ) : (
                                             <Check fill='currentColor' className='w-3 h-3 mr-1' />
                                         )}
-                                        Save
+                                        {i18n.t('strings:save')}
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
                                         <Xmark width={22} height={22} fill='currentColor' className='mr-1' />
-                                        Cancel
+                                        {i18n.t('strings:cancel')}
                                     </ActionButton>
                                 </div>
                             </div>
@@ -174,7 +174,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'}`}
                                     onClick={startEdit}
                                 >
-                                    {allocation.notes || 'Click to add notes...'}
+                                    {allocation.notes || i18n.t('server:network.click_to_add_notes')}
                                 </div>
                             </Can>
                         )}

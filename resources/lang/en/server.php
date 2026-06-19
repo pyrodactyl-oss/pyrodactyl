@@ -251,6 +251,8 @@ return [
         'delete_subdomain_message' => 'Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.',
         'delete_allocation_title' => 'Delete Allocation',
         'delete_allocation_message' => 'Are you sure you want to delete this allocation? This action cannot be undone.',
+        'notes' => 'Notes',
+        'click_to_add_notes' => 'Click to add notes...',
     ],
 
     'users' => [
