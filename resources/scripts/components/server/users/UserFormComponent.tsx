@@ -234,10 +234,10 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                     })()}
                                                     <div className='flex-1 min-w-0'>
                                                         <h4 className='font-medium text-zinc-200 capitalize'>
-                                                            {t(`users.permissions.${key}.title`, { defaultValue: key })}
+                                                            {t(`users.permissions_list.${key}.title`, { defaultValue: key })}
                                                         </h4>
                                                         <p className='text-xs text-zinc-400 mt-1 break-words'>
-                                                            {t(`users.permissions.${key}.desc`, {
+                                                            {t(`users.permissions_list.${key}.desc`, {
                                                                 defaultValue: permissions[key]?.description || '',
                                                             })}
                                                         </p>

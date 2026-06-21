@@ -658,7 +658,6 @@ return [
     'recaptcha_config_note' => 'reCAPTCHA v3 se ejecuta de forma invisible en segundo plano y devuelve una puntuación (0.0-1.0) basada en las interacciones del usuario. Se usa un umbral de 0.5 por defecto.',
     'recaptcha_setup_title' => 'Instrucciones de configuración de reCAPTCHA v3',
     'note' => 'Nota',
-    'setup_instructions' => 'Instrucciones de configuración',
     'turnstile_setup_1' => 'Ve al panel de Cloudflare y navega a Turnstile.',
     'turnstile_setup_2' => 'Crea un nuevo sitio y añade tu dominio.',
     'turnstile_setup_3' => 'Copia la clave de sitio y la clave secreta.',

@@ -179,7 +179,7 @@ const ActivityLogContainer = () => {
                                 title={i18n.t('dashboard:activity.filters_toggle')}
                             >
                                 <Funnel width={22} height={22} fill='currentColor' />
-                                Filters
+                                {i18n.t('dashboard:activity.filters_button')}
                                 {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
                             </ActionButton>
                             <ActionButton
@@ -193,7 +193,7 @@ const ActivityLogContainer = () => {
                                 ) : (
                                     <Magnifier width={22} height={22} fill='currentColor' />
                                 )}
-                                {autoRefresh ? 'Live' : 'Refresh'}
+                                {autoRefresh ? i18n.t('dashboard:activity.live_button') : i18n.t('dashboard:activity.refresh_button')}
                             </ActionButton>
                             <ActionButton
                                 variant='secondary'
@@ -203,7 +203,7 @@ const ActivityLogContainer = () => {
                                 title={i18n.t('dashboard:activity.export_csv')}
                             >
                                 <ArrowDownToLine width={22} height={22} fill='currentColor' />
-                                Export
+                                {i18n.t('dashboard:activity.export_button')}
                             </ActionButton>
                         </div>
                     </MainPageHeader>

@@ -14,7 +14,7 @@ const PermissionRow = ({ permission, disabled }: Props) => {
     const permissions = useStoreState((state) => state.permissions.data);
     const { t } = useTranslation('server');
 
-    const label = t(`users.permissions.${key}.${pkey}.label`, { defaultValue: pkey });
+    const label = t(`users.permissions_list.${key}.${pkey}.label`, { defaultValue: pkey });
     const apiDesc = permissions[key]?.keys?.[pkey] ?? '';
 
     return (
@@ -35,7 +35,7 @@ const PermissionRow = ({ permission, disabled }: Props) => {
                 <div className={`flex-1`}>
                     {(permissions[key]?.keys?.[pkey]?.length ?? 0) > 0 && (
                         <p className={`text-xs text-neutral-400 mt-1`}>
-                            {t(`users.permissions.${key}.${pkey}.desc`, { defaultValue: apiDesc })}
+                            {t(`users.permissions_list.${key}.${pkey}.desc`, { defaultValue: apiDesc })}
                         </p>
                     )}
                 </div>

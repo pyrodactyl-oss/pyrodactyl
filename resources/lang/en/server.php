@@ -343,7 +343,7 @@ return [
         'validation_email_max' => 'Email addresses must not exceed 191 characters.',
         'validation_email_valid' => 'A valid email address must be provided.',
         'validation_email_required' => 'A valid email address must be provided.',
-        'permissions' => [
+        'permissions_list' => [
             'websocket' => ['title' => 'Websocket', 'desc' => 'Allows the user to connect to the server websocket, giving them access to view console output and realtime server stats.', 'connect' => ['label' => 'connect', 'desc' => 'Allows a user to connect to the websocket instance for a server to stream the console.']],
             'control' => ['title' => 'Control', 'desc' => 'Permissions that control a user\'s ability to control the power state of a server, or send commands.', 'console' => ['label' => 'console', 'desc' => 'Allows a user to send commands to the server instance via the console.'], 'start' => ['label' => 'start', 'desc' => 'Allows a user to start the server if it is stopped.'], 'stop' => ['label' => 'stop', 'desc' => 'Allows a user to stop a server if it is running.'], 'restart' => ['label' => 'restart', 'desc' => 'Allows a user to perform a server restart. This allows them to start the server if it is offline, but not put the server in a completely stopped state.']],
             'user' => ['title' => 'User', 'desc' => 'Permissions that allow a user to manage other subusers on a server. They will never be able to edit their own account, or assign permissions they do not have themselves.', 'create' => ['label' => 'create', 'desc' => 'Allows a user to create new subusers for the server.'], 'read' => ['label' => 'read', 'desc' => 'Allows the user to view subusers and their permissions for the server.'], 'update' => ['label' => 'update', 'desc' => 'Allows a user to modify other subusers.'], 'delete' => ['label' => 'delete', 'desc' => 'Allows a user to delete a subuser from the server.']],
@@ -355,7 +355,7 @@ return [
             'schedule' => ['title' => 'Schedule', 'desc' => 'Permissions that control a user\'s access to the schedule management for this server.', 'create' => ['label' => 'create', 'desc' => 'Allows a user to create new schedules for this server.'], 'read' => ['label' => 'read', 'desc' => 'Allows a user to view schedules and the tasks associated with them for this server.'], 'update' => ['label' => 'update', 'desc' => 'Allows a user to update schedules and schedule tasks for this server.'], 'delete' => ['label' => 'delete', 'desc' => 'Allows a user to delete schedules for this server.']],
             'settings' => ['title' => 'Settings', 'desc' => 'Permissions that control a user\'s access to the settings for this server.', 'rename' => ['label' => 'rename', 'desc' => 'Allows a user to rename this server and change the description of it.'], 'reinstall' => ['label' => 'reinstall', 'desc' => 'Allows a user to trigger a reinstall of this server.']],
             'activity' => ['title' => 'Activity', 'desc' => 'Permissions that control a user\'s access to the server activity logs.', 'read' => ['label' => 'read', 'desc' => 'Allows a user to view the activity logs for the server.'], 'delete' => ['label' => 'delete', 'desc' => 'Allows a user to delete activity logs for the server.']],
-            'mod' => ['title' => 'Mod', 'desc' => 'Permissions that control a user\'s access to downloading and updating mods.', 'version' => ['label' => 'version', 'desc' => 'Allows a user to change what version to download for'], 'loader' => ['label' => 'loader', 'desc' => 'Allows a user to change what loader to download for'], 'download' => ['label' => 'download', 'desc' => 'Allows a user to download mods to the server'], 'resolver' => ['label' => 'resolver', 'desc' => 'Allows a user to access the Dependency Resolver'], 'update' => ['label' => 'update', 'desc' => 'Allows a user to update Currently installed mods']],
+            'mod' => ['title' => 'Mod', 'desc' => 'Permissions that control a user\'s access to downloading and updating mods.', 'version' => ['label' => 'version', 'desc' => 'Allows a user to change what version to download for'], 'loader' => ['label' => 'loader', 'desc' => 'Allows a user to change what loader to download for'], 'download' => ['label' => 'download', 'desc' => 'Allows a user to download mods to the server'], 'resolver' => ['label' => 'resolver', 'desc' => 'Allows a user to access the Dependency Resolver'], 'update' => ['label' => 'update',                 'desc' => 'Allows a user to update currently installed mods']],
         ],
     ],
 
@@ -374,7 +374,6 @@ return [
         'last_run' => 'Last run at:',
         'next_run' => 'Next run at:',
         'not_applicable' => 'N/A',
-        'edit_task' => 'Edit scheduled task',
         'delete_task' => 'Delete scheduled task',
         'delete_task_title' => 'Confirm task deletion',
         'delete_task_button' => 'Delete Task',

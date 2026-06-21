@@ -654,7 +654,6 @@ return [
     'recaptcha_config_note' => 'reCAPTCHA v3 runs invisibly in the background and returns a score (0.0-1.0) based on user interactions. A threshold of 0.5 is used by default.',
     'recaptcha_setup_title' => 'reCAPTCHA v3 Setup Instructions',
     'note' => 'Note',
-    'setup_instructions' => 'Setup Instructions',
     'turnstile_setup_1' => 'Go to the Cloudflare Dashboard and navigate to Turnstile.',
     'turnstile_setup_2' => 'Create a new site and add your domain.',
     'turnstile_setup_3' => 'Copy the Site Key and Secret Key.',
