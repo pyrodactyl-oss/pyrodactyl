@@ -33,7 +33,10 @@ class AccountCreated extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
         $message = (new MailMessage())
+            ->subject(__('auth.email_account_created.subject'))
             ->greeting(__('auth.email_account_created.greeting', ['name' => $this->user->name]))
             ->line(__('auth.email_account_created.line', ['app' => config('app.name', 'Pyrodactyl')]))
             ->line(__('auth.email_account_created.username') . ': ' . $this->user->username)

@@ -90,7 +90,7 @@ $style = [
                                                 @if ($level == 'error')
                                                     @lang('strings:error')
                                                 @else
-                                                    @lang('strings:email_address')
+                                                    {{ __('Hello!') }}
                                                 @endif
                                             @endif
                                         </h1>

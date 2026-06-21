@@ -3,7 +3,7 @@
 if (! empty($greeting)) {
     echo $greeting, "\n\n";
 } else {
-    echo $level == 'error' ? __('strings:error') : __('strings:email_address'), "\n\n";
+    echo __('Hello!'), "\n\n";
 }
 
 if (! empty($introLines)) {

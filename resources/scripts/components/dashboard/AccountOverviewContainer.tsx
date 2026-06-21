@@ -123,11 +123,10 @@ const AccountOverviewContainer = () => {
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-99999' sideOffset={8}>
-                                    {supportedLanguages.map((lang) => (
+                                    {supportedLanguages.filter((l) => l !== language).map((lang) => (
                                         <DropdownMenuItem
                                             key={lang}
                                             onSelect={() => handleLanguageChange(lang)}
-                                            className={language === lang ? 'bg-accent/20' : ''}
                                         >
                                             {LANGUAGE_NAMES[lang]}
                                         </DropdownMenuItem>

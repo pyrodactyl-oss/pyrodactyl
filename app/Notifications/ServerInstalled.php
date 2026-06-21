@@ -22,6 +22,11 @@ class ServerInstalled extends Notification implements ShouldQueue, ReceivesEvent
 
     public User $user;
 
+    public function __construct()
+    {
+        $this->locale = config('app.locale', 'en');
+    }
+
     /**
      * Handle a direct call to this notification from the server installed event. This is configured
      * in the event service provider.
@@ -38,6 +43,13 @@ class ServerInstalled extends Notification implements ShouldQueue, ReceivesEvent
         Container::getInstance()->make(Dispatcher::class)->sendNow($this->user, $this);
     }
 
+    public function locale(mixed $locale): static
+    {
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
+    }
+
     /**
      * Get the notification's delivery channels.
      */
@@ -51,10 +63,13 @@ class ServerInstalled extends Notification implements ShouldQueue, ReceivesEvent
      */
     public function toMail(): MailMessage
     {
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
         return (new MailMessage())
-            ->greeting('Hello ' . $this->user->username . '.')
-            ->line('Your server has finished installing and is now ready for you to use.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Login and Begin Using', route('index'));
+            ->subject(__('auth.email_server_installed.subject'))
+            ->greeting(__('auth.email_server_installed.greeting', ['name' => $this->user->username]))
+            ->line(__('auth.email_server_installed.line'))
+            ->line(__('auth.email_server_installed.server_name') . ': ' . $this->server->name)
+            ->action(__('auth.email_server_installed.action'), route('index'));
     }
 }

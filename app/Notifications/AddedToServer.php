@@ -35,7 +35,10 @@ class AddedToServer extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
         return (new MailMessage())
+            ->subject(__('auth.email_subuser_added.subject'))
             ->greeting(__('auth.email_subuser_added.greeting', ['name' => $this->server->user]))
             ->line(__('auth.email_subuser_added.line'))
             ->line(__('auth.email_subuser_added.server_name') . ': ' . $this->server->name)

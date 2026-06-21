@@ -80,4 +80,5 @@ return [
         'variable_value' => 'variable :env',
         'invalid_password' => 'La contraseña proporcionada es inválida para esta cuenta.',
     ],
+    'subuser_permissions_required' => 'Debes seleccionar al menos un permiso para este subusuario.',
 ];

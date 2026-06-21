@@ -46,6 +46,7 @@ return [
     ],
     'failed' => 'Las credenciales no coinciden con nuestros registros.',
     'email_account_created' => [
+        'subject' => 'Cuenta creada',
         'greeting' => '¡Hola :name!',
         'line' => 'Recibes este correo porque se ha creado una cuenta para ti en :app.',
         'username' => 'Usuario',
@@ -62,15 +63,28 @@ return [
     'all_rights_reserved' => 'Todos los derechos reservados.',
     'trouble_clicking' => 'Si tienes problemas para hacer clic en el botón ":actionText", copia y pega la siguiente URL en tu navegador:',
     'email_subuser_added' => [
+        'subject' => 'Añadido al servidor',
         'greeting' => '¡Hola :name!',
         'line' => 'Has sido añadido como subusuario al siguiente servidor, lo que te permite cierto control sobre el servidor.',
         'server_name' => 'Nombre del servidor',
         'visit' => 'Visitar servidor',
     ],
     'email_subuser_removed' => [
+        'subject' => 'Eliminado del servidor',
         'greeting' => 'Hola :name.',
         'line' => 'Has sido eliminado como subusuario del siguiente servidor.',
         'server_name' => 'Nombre del servidor',
         'visit' => 'Visitar Panel',
+    ],
+    'email_server_installed' => [
+        'subject' => 'Servidor instalado',        'greeting' => 'Hola :name.',
+        'line' => 'Tu servidor ha terminado de instalarse y ya está listo para que lo uses.',
+        'server_name' => 'Nombre del servidor',
+        'action' => 'Iniciar sesión y comenzar',
+    ],
+    'email_mail_tested' => [
+        'subject' => 'Mensaje de prueba de Pyrodactyl',
+        'greeting' => '¡Hola :name!',
+        'line' => 'Esto es una prueba del sistema de correo de Pyrodactyl. ¡Todo funciona correctamente!',
     ],
 ];

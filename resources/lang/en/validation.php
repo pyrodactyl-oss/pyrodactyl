@@ -103,4 +103,5 @@ return [
         'variable_value' => ':env variable',
         'invalid_password' => 'The password provided was invalid for this account.',
     ],
+    'subuser_permissions_required' => 'You must select at least one permission for this subuser.',
 ];

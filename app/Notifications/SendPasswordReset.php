@@ -32,6 +32,8 @@ class SendPasswordReset extends Notification implements ShouldQueue
      */
     public function toMail(mixed $notifiable): MailMessage
     {
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
         return (new MailMessage())
             ->subject(__('auth.email_password_reset.subject'))
             ->line(__('auth.email_password_reset.line'))

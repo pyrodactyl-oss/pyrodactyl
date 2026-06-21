@@ -46,6 +46,7 @@ return [
     ],
     'failed' => 'These credentials do not match our records.',
     'email_account_created' => [
+        'subject' => 'Account Created',
         'greeting' => 'Hello :name!',
         'line' => 'You are receiving this email because an account has been created for you on :app.',
         'username' => 'Username',
@@ -62,15 +63,28 @@ return [
     'all_rights_reserved' => 'All rights reserved.',
     'trouble_clicking' => 'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
     'email_subuser_added' => [
+        'subject' => 'Added to Server',
         'greeting' => 'Hello :name!',
         'line' => 'You have been added as a subuser for the following server, allowing you certain control over the server.',
         'server_name' => 'Server Name',
         'visit' => 'Visit Server',
     ],
     'email_subuser_removed' => [
+        'subject' => 'Removed from Server',
         'greeting' => 'Hello :name.',
         'line' => 'You have been removed as a subuser for the following server.',
         'server_name' => 'Server Name',
         'visit' => 'Visit Panel',
+    ],
+    'email_server_installed' => [
+        'subject' => 'Server Installed',        'greeting' => 'Hello :name.',
+        'line' => 'Your server has finished installing and is now ready for you to use.',
+        'server_name' => 'Server Name',
+        'action' => 'Login and Begin Using',
+    ],
+    'email_mail_tested' => [
+        'subject' => 'Pyrodactyl Test Message',
+        'greeting' => 'Hello :name!',
+        'line' => 'This is a test of the Pyrodactyl mail system. You\'re good to go!',
     ],
 ];

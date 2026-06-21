@@ -622,7 +622,7 @@ return [
     'mail_from_name_desc' => 'El nombre que los correos electrónicos deben mostrar como remitente.',
     'mail_disabled_warning' => 'Esta interfaz está limitada a instancias que usan SMTP como controlador de correo. Usa el comando <code>php artisan p:environment:mail</code> para actualizar tu configuración de correo, o establece <code>MAIL_DRIVER=smtp</code> en tu archivo de entorno.',
     'test_mail_settings' => 'Probar configuración de correo',
-    'test_mail_begin' => 'Haz clic en "Probar" para comenzar la prueba.',
+    'test_mail_begin' => 'Haz clic en «Probar» para comenzar la prueba.',
     'test_message_sent' => 'El mensaje de prueba se envió correctamente.',
     'mail_settings_updated' => 'La configuración de correo se ha actualizado correctamente y el trabajador de cola se reinició para aplicar estos cambios.',
 

@@ -15,8 +15,16 @@ class StoreSubuserRequest extends SubuserRequest
     {
         return [
             'email' => 'required|email|between:1,191',
-            'permissions' => 'required|array',
+            'permissions' => 'required|array|min:1',
             'permissions.*' => 'string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'permissions.required' => trans('validation.subuser_permissions_required'),
+            'permissions.min' => trans('validation.subuser_permissions_required'),
         ];
     }
 }
