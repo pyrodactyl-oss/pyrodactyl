@@ -1,3 +1,5 @@
+import i18n from '@/lib/i18n';
+
 export interface MclogsInsight {
     id: string;
     name: string;
@@ -69,7 +71,7 @@ export const analyzeLogs = async (logContent: string): Promise<MclogsInsight> =>
     const data = await response.json();
 
     if ('success' in data && data.success === false) {
-        throw new Error(data.error || 'Failed to analyze logs');
+        throw new Error(data.error || i18n.t('server:features.mclogs.failed_analyze_logs'));
     }
 
     return data as MclogsInsight;

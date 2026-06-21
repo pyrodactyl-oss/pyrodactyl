@@ -530,7 +530,7 @@ const AnalysisModal = ({
                             : i18n.t('server:features.mclogs.analyze_again')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
-                        Close
+                        {i18n.t('strings:close')}
                     </ActionButton>
                 </div>
             </div>

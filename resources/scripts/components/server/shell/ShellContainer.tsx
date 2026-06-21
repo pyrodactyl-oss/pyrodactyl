@@ -1224,13 +1224,13 @@ const SoftwareContainer = () => {
     if (!serverData) {
         return (
             <ServerContentBlock
-                title={i18n.t('server:shell.software_management', { defaultValue: 'Software Management' })}
+                title={i18n.t('server:shell.software_management')}
             >
                 <div className='flex items-center justify-center h-64'>
                     <div className='flex flex-col items-center text-center'>
                         <Spinner size='large' />
                         <p className='text-neutral-400 mt-4'>
-                            {i18n.t('server:shell.loading_server', { defaultValue: 'Loading server information...' })}
+                            {i18n.t('server:shell.loading_server', )}
                         </p>
                     </div>
                 </div>
@@ -1243,7 +1243,7 @@ const SoftwareContainer = () => {
                 <OperationProgressModal
                     visible={showOperationModal}
                     operationId={currentOperationId}
-                    operationType={i18n.t('server:shell.operation_type', { defaultValue: 'Software Change' })}
+                    operationType={i18n.t('server:shell.operation_type', )}
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
@@ -1255,7 +1255,7 @@ const SoftwareContainer = () => {
                 <WingsOperationProgressModal
                     visible={showOperationModal}
                     operationId={currentOperationId}
-                    operationType={i18n.t('server:shell.operation_type', { defaultValue: 'Software Change' })}
+                    operationType={i18n.t('server:shell.operation_type', )}
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
@@ -1265,16 +1265,14 @@ const SoftwareContainer = () => {
         return <div>{i18n.t('server:shell.could_not_find_operation_modal', { daemonType })}</div>;
     }
     return (
-        <ServerContentBlock title={i18n.t('server:shell.software_management', { defaultValue: 'Software Management' })}>
+        <ServerContentBlock title={i18n.t('server:shell.software_management')}>
             <div className='space-y-6'>
                 <MainPageHeader
                     direction='column'
-                    title={i18n.t('server:shell.software_management', { defaultValue: 'Software Management' })}
+                    title={i18n.t('server:shell.software_management')}
                 >
                     <p className='text-neutral-400 leading-relaxed'>
-                        {i18n.t('server:shell.software_management_description', {
-                            defaultValue: "Change your server's game or software with our guided configuration wizard",
-                        })}
+                        {i18n.t('server:shell.software_management_description')}
                     </p>
                 </MainPageHeader>
 
@@ -1314,13 +1312,13 @@ const SoftwareContainer = () => {
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
-                title={i18n.t('server:shell.wipe_confirm_title', { defaultValue: 'Wipe All Files Without Backup?' })}
+                title={i18n.t('server:shell.wipe_confirm_title', )}
                 buttonText={
                     wipeCountdown > 0
                         ? i18n.t('server:shell.wipe_confirm_countdown', {
                               n: wipeCountdown,
                           })
-                        : i18n.t('server:shell.wipe_confirm_button', { defaultValue: 'Yes, Wipe Files' })
+                        : i18n.t('server:shell.wipe_confirm_button', )
                 }
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
@@ -1338,51 +1336,36 @@ const SoftwareContainer = () => {
                         />
                         <div>
                             <h4 className='text-red-400 font-semibold mb-2'>
-                                {i18n.t('server:shell.wipe_danger_title', {
-                                    defaultValue: 'DANGER: No Backup Selected',
-                                })}
+                                {i18n.t('server:shell.wipe_danger_title')}
                             </h4>
                             <p className='text-sm text-neutral-300'>
-                                {i18n.t('server:shell.wipe_danger_description', {
-                                    defaultValue:
-                                        'You have chosen to wipe all files <strong>without creating a backup</strong>. This action will <strong>permanently delete ALL files</strong> on your server and cannot be undone.',
-                                })}
+                                {i18n.t('server:shell.wipe_danger_description')}
                             </p>
                         </div>
                     </div>
                     <div className='text-sm text-neutral-300 space-y-2'>
                         <p>
                             <strong>
-                                {i18n.t('server:shell.wipe_what_happens', { defaultValue: 'What will happen:' })}
+                                {i18n.t('server:shell.wipe_what_happens')}
                             </strong>
                         </p>
                         <ul className='list-disc list-inside space-y-1 ml-4'>
                             <li>
-                                {i18n.t('server:shell.wipe_bullet_1', {
-                                    defaultValue: 'All server files will be permanently deleted',
-                                })}
+                                {i18n.t('server:shell.wipe_bullet_1')}
                             </li>
                             <li>
-                                {i18n.t('server:shell.wipe_bullet_2', {
-                                    defaultValue: 'Your server will be stopped and reinstalled',
-                                })}
+                                {i18n.t('server:shell.wipe_bullet_2')}
                             </li>
                             <li>
-                                {i18n.t('server:shell.wipe_bullet_3', {
-                                    defaultValue: 'Any custom configurations or data will be lost',
-                                })}
+                                {i18n.t('server:shell.wipe_bullet_3')}
                             </li>
                             <li>
-                                {i18n.t('server:shell.wipe_bullet_4', {
-                                    defaultValue: 'This action cannot be reversed',
-                                })}
+                                {i18n.t('server:shell.wipe_bullet_4')}
                             </li>
                         </ul>
                     </div>
                     <p className='text-sm text-neutral-300'>
-                        {i18n.t('server:shell.wipe_confirm_question', {
-                            defaultValue: 'Are you absolutely sure you want to proceed without a backup?',
-                        })}
+                        {i18n.t('server:shell.wipe_confirm_question')}
                     </p>
                 </div>
             </ConfirmationModal>

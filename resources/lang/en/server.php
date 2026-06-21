@@ -662,6 +662,7 @@ return [
             'analyzing_button' => 'Analyzing...',
             'analyze_again' => 'Analyze Again',
             'no_log_content' => 'No log content found in latest.log',
+            'failed_analyze_logs' => 'Failed to analyze logs',
         ],
         'java' => [
             'title' => 'Unsupported Java Version',
@@ -689,6 +690,7 @@ return [
             'admin_description' => 'This server has reached the maximum process, thread, or memory limit. Increasing container_pid_limit in the Wings configuration, config.yml, might help resolve this issue.',
             'admin_note' => 'Note: Wings must be restarted for the configuration file changes to take effect',
             'user_description' => 'This server is attempting to use more resources than allocated. Please contact the administrator and give them the error below.',
+            'error_message' => 'pthread_create failed, Possibly out of memory or process/resource limits reached',
         ],
         'eula' => [
             'title' => 'Accept Minecraft EULA',
@@ -747,6 +749,13 @@ return [
         'hide_snapshots' => 'Hide Snapshots',
         'show_snapshots' => 'Show Snapshots',
         'select_version' => 'Select a version',
+        'type_label' => 'Type',
+        'size_label' => 'Size',
+        'game_label' => 'Game',
+        'failed_fetch_loaders' => 'Failed to fetch loaders',
+        'failed_fetch_game_versions' => 'Failed to fetch game versions',
+        'failed_search_mods' => 'Failed to search mods',
+        'failed_get_mod_details' => 'Failed to get mod details',
     ],
 
     'operations' => [

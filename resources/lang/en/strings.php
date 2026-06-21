@@ -182,6 +182,8 @@ return [
 
     'validation' => [
         'required' => 'This field is required.',
+        'email' => 'A valid email address must be provided.',
+        'min' => 'Must be at least {{min}} characters.',
     ],
 
     'ssh' => [
@@ -208,4 +210,5 @@ return [
     'no_results_found' => 'No results found.',
     'pages' => 'Pages',
     'server' => 'Server',
+    'invalid_server_response' => 'Invalid server response format',
 ];

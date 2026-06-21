@@ -662,6 +662,7 @@ return [
             'analyzing_button' => 'Analizando...',
             'analyze_again' => 'Analizar de nuevo',
             'no_log_content' => 'No se encontró contenido de registro en latest.log',
+            'failed_analyze_logs' => 'Error al analizar los registros',
         ],
         'java' => [
             'title' => 'Versión de Java no soportada',
@@ -689,6 +690,7 @@ return [
             'admin_description' => 'Este servidor ha alcanzado el límite máximo de procesos, hilos o memoria. Aumentar container_pid_limit en la configuración de Wings, config.yml, podría ayudar a resolver este problema.',
             'admin_note' => 'Nota: Wings debe reiniciarse para que los cambios en el archivo de configuración surtan efecto',
             'user_description' => 'Este servidor está intentando usar más recursos de los asignados. Contacta al administrador y proporciónele el error a continuación.',
+            'error_message' => 'pthread_create failed, Posiblemente sin memoria o límites de procesos/recursos alcanzados',
         ],
         'eula' => [
             'title' => 'Aceptar EULA de Minecraft',
@@ -734,8 +736,8 @@ return [
         'no_response_from_server' => 'Sin respuesta del servidor.',
         'error_with_message' => 'Error: {{message}}',
         'upload_progress' => 'Progreso de subida: {{progress}}%',
-        'mods_plugins' => 'Mods/Plugins',
-        'plugins' => 'plugins',
+        'mods_plugins' => 'Mods/Complementos',
+        'plugins' => 'complementos',
         'mods' => 'mods',
         'with_filters' => ' con filtros',
         'showing_count' => 'Mostrando {{count}} {{type}}',
@@ -747,6 +749,13 @@ return [
         'hide_snapshots' => 'Ocultar instantáneas',
         'show_snapshots' => 'Mostrar instantáneas',
         'select_version' => 'Seleccionar una versión',
+        'type_label' => 'Tipo',
+        'size_label' => 'Tamaño',
+        'game_label' => 'Juego',
+        'failed_fetch_loaders' => 'Error al obtener cargadores',
+        'failed_fetch_game_versions' => 'Error al obtener versiones de juego',
+        'failed_search_mods' => 'Error al buscar mods',
+        'failed_get_mod_details' => 'Error al obtener detalles del mod',
     ],
 
     'operations' => [

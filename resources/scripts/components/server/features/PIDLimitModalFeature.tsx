@@ -75,7 +75,7 @@ const PIDLimitModalFeature = () => {
                         <p>{i18n.t('server:features.pid_limit.user_description')}</p>
                         <p className='mt-3'>
                             <code className={`font-mono bg-zinc-900`}>
-                                pthread_create failed, Possibly out of memory or process/resource limits reached
+                                {i18n.t('server:features.pid_limit.error_message')}
                             </code>
                         </p>
                     </>

@@ -182,6 +182,8 @@ return [
 
     'validation' => [
         'required' => 'Este campo es obligatorio.',
+        'email' => 'Se debe proporcionar una dirección de correo válida.',
+        'min' => 'Debe tener al menos {{min}} caracteres.',
     ],
 
     'ssh' => [
@@ -208,4 +210,5 @@ return [
     'no_results_found' => 'Sin resultados.',
     'pages' => 'Páginas',
     'server' => 'Servidor',
+    'invalid_server_response' => 'Formato de respuesta del servidor inválido',
 ];

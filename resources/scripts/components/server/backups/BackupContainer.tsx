@@ -784,7 +784,7 @@ const BackupContainerWrapper = () => {
                 const currentState = prevProgress[backup_uuid];
                 const newProgress = progress || 0;
                 const isCompleted = status === 'completed' && newProgress === 100;
-                const displayMessage = errorMsg ? `${message || 'Operation failed'}: ${errorMsg}` : message || '';
+                const displayMessage = errorMsg ? `${message || i18n.t('server:operations.failed')}: ${errorMsg}` : message || '';
 
                 if (currentState?.completed && !isCompleted) {
                     return prevProgress;

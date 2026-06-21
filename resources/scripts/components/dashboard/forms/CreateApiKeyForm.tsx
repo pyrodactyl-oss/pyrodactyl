@@ -62,7 +62,7 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
                     initialValues={{ description: '', allowedIps: '' }}
                     validationSchema={object().shape({
                         allowedIps: string(),
-                        description: string().required().min(4),
+                        description: string().required(i18n.t('strings:validation.required')).min(4, i18n.t('strings:validation.min', { min: 4 })),
                     })}
                 >
                     {({ isSubmitting }) => (

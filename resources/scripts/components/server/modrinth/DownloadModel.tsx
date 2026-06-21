@@ -169,13 +169,13 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                                     )}
                                     <div className='flex gap-2 mt-1 text-xs text-gray-400'>
                                         {version.files?.[0]?.file_type && (
-                                            <span>Type: {version.files[0].file_type}</span>
+                                            <span>{i18n.t('server:modrinth.type_label')}: {version.files[0].file_type}</span>
                                         )}
                                         {version.files?.[0]?.size && (
-                                            <span>Size: {formatFileSize(version.files[0].size)}</span>
+                                            <span>{i18n.t('server:modrinth.size_label')}: {formatFileSize(version.files[0].size)}</span>
                                         )}
                                         {version.game_versions?.length > 0 && (
-                                            <span>Game: {version.game_versions[0]}</span>
+                                            <span>{i18n.t('server:modrinth.game_label')}: {version.game_versions[0]}</span>
                                         )}
                                     </div>
                                 </div>

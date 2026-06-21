@@ -186,7 +186,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
                             <p className='text-sm text-zinc-300 text-center'>
                                 {operation.message ||
-                                    i18n.t('server:operations.processing', { defaultValue: 'Processing...' })}
+                                    i18n.t('server:operations.processing')}
                             </p>
                         </div>
 
@@ -200,9 +200,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                                     />
                                 </div>
                                 <p className='text-xs text-zinc-500 text-center'>
-                                    {i18n.t('server:operations.auto_close', {
-                                        defaultValue: 'This window will close automatically when complete',
-                                    })}
+                                    {i18n.t('server:operations.auto_close')}
                                 </p>
                             </div>
                         )}
@@ -215,9 +213,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                                         <div className='w-2 h-2 rounded-full bg-white' />
                                     </div>
                                     <p className='text-sm text-green-300 font-medium'>
-                                        {i18n.t('server:operations.completed', {
-                                            defaultValue: 'Operation completed successfully',
-                                        })}
+                                        {i18n.t('server:operations.completed')}
                                     </p>
                                 </div>
                                 {autoCloseTimer && (
@@ -255,7 +251,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                     <div className='flex items-center justify-center space-x-3 py-4'>
                         <Spinner size={'small'} />
                         <span className='text-zinc-400 font-medium'>
-                            {i18n.t('server:operations.initializing', { defaultValue: 'Initializing...' })}
+                            {i18n.t('server:operations.initializing')}
                         </span>
                     </div>
                 )}

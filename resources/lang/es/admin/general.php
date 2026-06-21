@@ -468,8 +468,8 @@ return [
     'something_went_wrong' => 'Algo salió mal',
 
     // Ubicaciones extendido
-    'memory_alloc_percent' => 'Memoria Alloc%',
-    'disk_alloc_percent' => 'Disco Alloc%',
+    'memory_alloc_percent' => 'Memoria Asig%',
+    'disk_alloc_percent' => 'Disco Asig%',
     'location_short_desc' => 'Un identificador corto usado para distinguir esta ubicación de otras. Debe tener entre 1 y 60 caracteres, por ejemplo, <code>us.nyc.lvl3</code>.',
     'location_long_desc' => 'Una descripción más larga de esta ubicación. Debe tener menos de 191 caracteres.',
 
@@ -742,7 +742,7 @@ return [
     'swal_error_text' => 'Ocurrió un error al procesar esta solicitud.',
     'swal_success' => '¡Éxito!',
 
-    'new_nest' => 'Nuevo Nest',
+    'new_nest' => 'Nuevo Nido',
     'domain_placeholder' => 'ejemplo.com',
     'env_only_notice' => 'Tu Panel está configurado actualmente para leer la configuración solo desde el entorno. Deberás establecer <code>APP_ENVIRONMENT_ONLY=false</code> en tu archivo de entorno para cargar la configuración dinámicamente.',
     'others' => 'otro(s)',
