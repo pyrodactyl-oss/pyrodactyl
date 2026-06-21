@@ -209,6 +209,7 @@ return [
     'generated_password' => 'Generated Password:',
     'no_results_found' => 'No results found.',
     'pages' => 'Pages',
+    'pagination_showing' => 'Showing {{start}} to {{end}} of {{total}} results',
     'server' => 'Server',
     'invalid_server_response' => 'Invalid server response format',
 ];

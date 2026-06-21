@@ -322,7 +322,7 @@ return [
         'user_not_found' => 'Usuario no encontrado',
         'edit_subuser' => 'Editar subusuario',
         'edit_user' => 'Editar usuario',
-        'edit_title' => 'Editar subusuario',
+        'edit_title' => 'Editar subusuario: {{email}}',
         'edit_not_found_message' => 'El usuario que intentas editar no fue encontrado.',
         'back_to_users' => 'Volver a usuarios',
         'create_user' => 'Crear usuario',

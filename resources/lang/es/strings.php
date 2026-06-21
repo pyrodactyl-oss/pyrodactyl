@@ -209,6 +209,7 @@ return [
     'generated_password' => 'Contraseña generada:',
     'no_results_found' => 'Sin resultados.',
     'pages' => 'Páginas',
+    'pagination_showing' => 'Mostrando {{start}} a {{end}} de {{total}} resultados',
     'server' => 'Servidor',
     'invalid_server_response' => 'Formato de respuesta del servidor inválido',
 ];

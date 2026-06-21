@@ -322,7 +322,7 @@ return [
         'user_not_found' => 'User not found',
         'edit_subuser' => 'Edit subuser',
         'edit_user' => 'Edit user',
-        'edit_title' => 'Edit subuser',
+        'edit_title' => 'Edit subuser: {{email}}',
         'edit_not_found_message' => 'The user you are trying to edit was not found.',
         'back_to_users' => 'Back to users',
         'create_user' => 'Create user',

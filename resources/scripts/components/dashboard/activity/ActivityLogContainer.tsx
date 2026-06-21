@@ -1,5 +1,5 @@
 import { ArrowDownToLine, ArrowRotateLeft, Funnel, Magnifier, Xmark } from '@gravity-ui/icons';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
@@ -87,7 +87,7 @@ const ActivityLogContainer = () => {
         return { ...data, items: filtered };
     }, [data, searchTerm, selectedEventType, dateRange]);
 
-    const exportLogs = () => {
+    const exportLogs = useCallback(() => {
         if (!filteredData?.items) return;
 
         const csvContent = [
@@ -112,7 +112,7 @@ const ActivityLogContainer = () => {
         a.download = `activity-log-${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
         window.URL.revokeObjectURL(url);
-    };
+    }, [filteredData]);
 
     const clearAllFilters = () => {
         setFilters((value) => ({ ...value, filters: {} }));
