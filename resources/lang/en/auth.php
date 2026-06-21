@@ -44,4 +44,5 @@ return [
         'password_mismatch' => 'Your new password does not match.',
         'return_to_login' => 'Return to Login',
     ],
+    'failed' => 'These credentials do not match our records.',
 ];

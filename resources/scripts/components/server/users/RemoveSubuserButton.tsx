@@ -42,12 +42,14 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
         <>
             <ConfirmationModal
                 title={i18n.t('server:users.remove_user')}
-                buttonText={i18n.t('server:users.remove_user_text')}
+                buttonText={i18n.t('server:users.remove_user')}
                 visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
+                {i18n.t('server:users.remove_user_text')}
+                <br /><br />
                 {i18n.t('server:users.remove_message')}
             </ConfirmationModal>
             <ActionButton

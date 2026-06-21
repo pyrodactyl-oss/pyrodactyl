@@ -44,4 +44,5 @@ return [
         'password_mismatch' => 'Las contraseñas nuevas no coinciden.',
         'return_to_login' => 'Volver al inicio de sesión',
     ],
+    'failed' => 'Las credenciales no coinciden con nuestros registros.',
 ];
