@@ -147,7 +147,7 @@ const ActivityLogContainer = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showFilters, autoRefresh]);
+    }, [showFilters, autoRefresh, exportLogs]);
 
     useEffect(() => {
         setFilters((value) => ({ ...value, filters: { ip: hash.ip, event: hash.event } }));

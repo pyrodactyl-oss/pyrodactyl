@@ -2,7 +2,7 @@
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: {{ trans('admin/general.delete') }}
+    {{ trans('admin/general.server_title_prefix') }} — {{ $server->name }}: {{ trans('admin/general.delete') }}
 @endsection
 
 @section('content-header')

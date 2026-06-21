@@ -22,7 +22,7 @@ class LanguageMiddleware
         if ($request->is('admin', 'admin/*')) {
             $this->app->setLocale(config('app.locale', 'en'));
         } else {
-            $this->app->setLocale($request->user()->language ?? config('app.locale', 'en'));
+            $this->app->setLocale($request->user()?->language ?? config('app.locale', 'en'));
         }
 
         return $next($request);
