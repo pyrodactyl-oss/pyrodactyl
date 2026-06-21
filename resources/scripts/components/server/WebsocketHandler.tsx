@@ -5,6 +5,8 @@ import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
 import getWebsocketToken from '@/api/server/getWebsocketToken';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import { Websocket } from '@/plugins/Websocket';
@@ -57,9 +59,7 @@ function WebsocketHandler() {
             if (reconnectErrors.find((v) => error.toLowerCase().indexOf(v) >= 0)) {
                 updateToken(uuid, socket);
             } else {
-                setError(
-                    'There was an error validating the credentials provided for the websocket. Please refresh the page.',
-                );
+                setError(i18n.t('server:console.websocket_auth_error'));
             }
         });
 
@@ -117,7 +117,7 @@ function WebsocketHandler() {
                     <>
                         <Spinner size={'small'} />
                         <p className={`ml-2 text-sm text-red-100`}>
-                            We&apos;re having some trouble connecting to your server, please wait...
+                            {i18n.t('server:console.connecting_message')}
                         </p>
                     </>
                 ) : (

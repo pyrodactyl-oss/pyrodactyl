@@ -18,6 +18,13 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
+class NoLogContentError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'NoLogContentError';
+    }
+}
+
 const CRASH_DETECTION_DEBOUNCE = 1500; // 1.5 seconds
 const MANUAL_ANALYZE_DEBOUNCE = 1000; // 1 second for manual clicks
 const LOG_FILE_PATH = '/logs/latest.log';
@@ -27,7 +34,7 @@ const MAX_CONSOLE_BUFFER = 300;
 const useLogAnalysis = () => {
     const [analyzing, setAnalyzing] = useState(false);
     const [analysis, setAnalysis] = useState<MclogsInsight | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<Error | null>(null);
     const [showCard, setShowCard] = useState(false);
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -58,7 +65,7 @@ const useLogAnalysis = () => {
                 const logContent = await getFileContents(uuid, LOG_FILE_PATH);
 
                 if (!logContent || logContent.trim().length === 0) {
-                    throw new Error(i18n.t('server:features.mclogs.no_log_content'));
+                    throw new NoLogContentError(i18n.t('server:features.mclogs.no_log_content'));
                 }
 
                 const result = await analyzeLogs(logContent);
@@ -82,19 +89,12 @@ const useLogAnalysis = () => {
             } catch (err) {
                 if (!mountedRef.current) return;
 
-                const errorMessage =
-                    err instanceof Error ? err.message : i18n.t('server:features.mclogs.analysis_failed');
-                setError(errorMessage);
+                setError(err instanceof Error ? err : new Error(i18n.t('server:features.mclogs.analysis_failed')));
                 console.error('Mclogs analysis failed:', err);
 
-                // Show card even on error for auto-analysis
                 setShowCard(true);
 
-                // Only show error toast for manual analysis and unexpected errors
-                const looksLikeMissingLog =
-                    /latest\.log/i.test(errorMessage) ||
-                    /not found/i.test(errorMessage) ||
-                    /no log content/i.test(errorMessage);
+                const looksLikeMissingLog = err instanceof NoLogContentError;
 
                 if (!looksLikeMissingLog && showToast) {
                     toast.error(i18n.t('server:features.mclogs.analysis_failed'));
@@ -185,8 +185,7 @@ export const CrashAnalysisCard = () => {
         }
 
         if (error) {
-            const looksLikeMissingLog =
-                /latest\.log/i.test(error) || /not found/i.test(error) || /no log content/i.test(error);
+            const looksLikeMissingLog = error instanceof NoLogContentError;
 
             if (looksLikeMissingLog) {
                 return i18n.t('server:features.mclogs.crash_no_log');
@@ -264,7 +263,7 @@ const AnalysisModal = ({
     visible: boolean;
     onClose: () => void;
     analysis: MclogsInsight | null;
-    error: string | null;
+    error: Error | null;
     analyzing: boolean;
 }) => {
     const { manualAnalyze } = useLogAnalysis();
@@ -302,8 +301,8 @@ const AnalysisModal = ({
                         <h3 className='font-semibold text-red-400 text-lg'>
                             {i18n.t('server:features.mclogs.failed_title')}
                         </h3>
-                        <p className='text-neutral-300 mt-2'>{error}</p>
-                        {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
+                        <p className='text-neutral-300 mt-2'>{error?.message}</p>
+                        {error instanceof NoLogContentError && (
                             <p className='text-neutral-400 mt-3 text-sm'>
                                 {i18n.t('server:features.mclogs.failed_description')}
                             </p>

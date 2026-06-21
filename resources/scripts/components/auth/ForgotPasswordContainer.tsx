@@ -77,7 +77,7 @@ const ForgotPasswordContainer = () => {
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                         <h2 className='text-xl font-extrabold mb-2'>{t('forgot.title')}</h2>
                         <div className='text-sm mb-6'>{t('forgot.description')}</div>
-                        <Field id='email' label={t('email_label') || 'Email'} name={'email'} type={'email'} />
+                        <Field id='email' label={t('email_label')} name={'email'} type={'email'} />
                         <Captcha
                             className='mt-6'
                             onError={() => {

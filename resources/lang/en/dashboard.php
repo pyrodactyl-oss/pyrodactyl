@@ -149,6 +149,7 @@ return [
         'csv_properties' => 'Properties',
         'system' => 'System',
         'delete_activity_event' => 'Delete activity event',
+        'system_user' => 'System',
     ],
 
     'dashboard' => [

@@ -155,7 +155,7 @@ export const VersionSelector = () => {
                                 className='w-full text-xs text-white-600 hover:text-gray-300 font-medium py-1 flex items-center justify-center gap-1'
                             >
                                 <span>{showSnapshots ? '-' : '+'}</span>
-                                {showSnapshots ? 'Hide Snapshots' : 'Show Snapshots'}
+                                {showSnapshots ? i18n.t('server:modrinth.hide_snapshots') : i18n.t('server:modrinth.show_snapshots')}
                             </button>
                         </div>
                     )}

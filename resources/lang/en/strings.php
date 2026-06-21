@@ -90,7 +90,8 @@ return [
     'enable' => 'Enable',
     'disable' => 'Disable',
     'save' => 'Save',
-    'copyright' => '&copy; 2015 - :year Pterodactyl Software',
+    'save_changes' => 'Save changes',
+    'copyright' => '&copy; 2015 - :year Pyrodactyl Software',
 
     'error' => 'Error',
     'success' => 'Success',

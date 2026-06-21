@@ -132,7 +132,7 @@ const ServerActivityLogContainer = () => {
                 [
                     new Date(item.timestamp).toISOString(),
                     item.event,
-                    item.relationships.actor?.username || 'System',
+                    item.relationships.actor?.username || i18n.t('server:activity.system_user'),
                     item.ip || '',
                     JSON.stringify(item.properties).replace(/"/g, '""'),
                 ]
@@ -215,7 +215,7 @@ const ServerActivityLogContainer = () => {
                                         title={i18n.t('server:activity.filters_toggle')}
                                     >
                                         <Funnel width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                        Filters
+                                        {i18n.t('server:activity.filters_title')}
                                         {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
                                     </ActionButton>
                                     <ActionButton
@@ -231,7 +231,7 @@ const ServerActivityLogContainer = () => {
                                             className='w-4 h-4'
                                             fill='currentColor'
                                         />
-                                        Export
+                                        {i18n.t('server:activity.export_button')}
                                     </ActionButton>
                                     {rootAdmin && (
                                         <ActionButton
@@ -242,7 +242,7 @@ const ServerActivityLogContainer = () => {
                                             title={i18n.t('server:activity.clear_title')}
                                         >
                                             <TrashBin width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                            Clear
+                                            {i18n.t('server:activity.clear_all_filters')}
                                         </ActionButton>
                                     )}
                                 </div>

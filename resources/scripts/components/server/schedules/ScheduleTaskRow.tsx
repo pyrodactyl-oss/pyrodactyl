@@ -26,13 +26,13 @@ interface Props {
 const getActionDetails = (action: string): [string, any, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command', Terminal, true];
+            return [i18n.t('server:schedules.send_command'), Terminal, true];
         case 'power':
-            return ['Send Power Action', Power];
+            return [i18n.t('server:schedules.send_power_action'), Power];
         case 'backup':
-            return ['Create Backup', CloudArrowUpIn];
+            return [i18n.t('server:schedules.create_backup'), CloudArrowUpIn];
         default:
-            return ['Unknown Action', CircleQuestion];
+            return [i18n.t('server:schedules.unknown_action'), CircleQuestion];
     }
 };
 

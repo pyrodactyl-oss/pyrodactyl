@@ -96,7 +96,7 @@ const ActivityLogContainer = () => {
                 [
                     new Date(item.timestamp).toISOString(),
                     item.event,
-                    item.relationships.actor?.username || 'System',
+                    item.relationships.actor?.username || i18n.t('dashboard:activity.system_user'),
                     item.ip || '',
                     JSON.stringify(item.properties).replace(/"/g, '""'),
                 ]

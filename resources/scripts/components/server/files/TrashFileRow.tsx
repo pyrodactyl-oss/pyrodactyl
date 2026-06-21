@@ -45,11 +45,11 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
         const expiresAt = new Date(trashedAt.getTime() + retentionDays * 24 * 60 * 60 * 1000);
         const now = new Date();
         const diffMs = expiresAt.getTime() - now.getTime();
-        if (diffMs <= 0) return 'Expired';
+        if (diffMs <= 0) return i18n.t('server:files.trash_expired');
         const diffHours = Math.ceil(diffMs / (1000 * 60 * 60));
-        if (diffHours < 24) return `${diffHours}h remaining`;
+        if (diffHours < 24) return i18n.t('server:files.hours_remaining', { hours: diffHours });
         const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-        return `${diffDays}d remaining`;
+        return i18n.t('server:files.days_remaining', { days: diffDays });
     }, [file.trashed_at, retentionDays]);
 
     const handleRestore = useCallback(() => {

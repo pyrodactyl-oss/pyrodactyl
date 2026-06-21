@@ -112,7 +112,7 @@ const StatGraphs = () => {
                 }}
             >
                 <ChartBlock
-                    title={i18n.t('server:stats.network_activity') || 'Network Activity'}
+                    title={i18n.t('server:stats.network_activity')}
                     legend={
                         <div className='flex gap-2'>
                             <Tooltip.Root delayDuration={200}>

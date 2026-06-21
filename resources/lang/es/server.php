@@ -15,6 +15,8 @@ return [
         'hours_short' => 'h',
         'minutes_short' => 'm',
         'seconds_short' => 's',
+        'websocket_auth_error' => 'Hubo un error al validar las credenciales del websocket. Actualiza la página.',
+        'connecting_message' => 'Estamos teniendo problemas para conectar con tu servidor, por favor espera...',
     ],
 
     'power' => [
@@ -118,15 +120,13 @@ return [
         'download' => 'Descargar',
         'root' => 'raíz',
         'too_many_files_title' => 'Demasiados archivos',
-        'too_many_files_message' => 'Solo puedes subir hasta {max} archivos a la vez. Seleccionaste {count}. Considera subir un archivo comprimido en su lugar.',
-        'large_folder_upload' => 'Carga de carpeta grande',
-        'large_folder_upload_confirm' => 'Subir {count} archivos',
-        'large_folder_upload_body' => 'Estás a punto de subir {count} archivos',
-        'large_folder_upload_from' => 'desde {source}',
-        'large_folder_upload_subfolders' => 'Esto recreará {count} subcarpeta(s).',
+        'too_many_files_message' => 'Solo puedes subir hasta {{max}} archivos a la vez. Seleccionaste {{count}}. Considera subir un archivo comprimido en su lugar.',
+        'large_folder_upload_confirm' => 'Subir {{count}} archivos',
+        'large_folder_upload_body' => 'Estás a punto de subir {{count}} archivos',
+        'large_folder_upload_from' => 'desde {{source}}',
+        'large_folder_upload_subfolders' => 'Esto recreará {{count}} subcarpeta(s).',
         'large_folder_upload_hint' => 'Si planeas subir muchos archivos a la vez, considera subir un archivo comprimido (.zip) para una experiencia más rápida y fluida.',
-        'file_already_exists' => 'El archivo ya existe',
-        'file_exists_body' => 'Los siguientes {count} archivo(s) ya existen:',
+        'file_exists_body' => 'Los siguientes {{count}} archivo(s) ya existen:',
         'replace' => 'Reemplazar',
         'saving' => 'Guardando {{name}}...',
         'saved' => '¡{{name}} guardado!',
@@ -144,7 +144,11 @@ return [
         'new_folder_hint' => 'Esta carpeta se creará como',
         'file_save_as_description' => 'Introduce el nombre con el que se debe guardar este archivo.',
         'folder_name_required' => 'Se debe proporcionar un nombre de directorio válido.',
+        'delete_permanent_description' => 'Esto eliminará permanentemente {{name}}. Esta acción no se puede deshacer.',
         'delete_item_title' => 'Eliminar {{name}}',
+        'trash_expired' => 'Expirado',
+        'hours_remaining' => '{{hours}}h restantes',
+        'days_remaining' => '{{days}}d restantes',
     ],
 
     'databases' => [
@@ -256,6 +260,9 @@ return [
         'restore_warning_description' => 'Todos los archivos actuales y la configuración del servidor se eliminarán y se reemplazarán con los datos de la copia de seguridad. Esta acción no se puede deshacer.',
         'delete_backup_name' => 'Eliminar "{{name}}"',
         'size_label' => 'Tamaño',
+        'status_completed' => 'Completado',
+        'status_failed' => 'Fallido',
+        'status_processing' => 'Procesando...',
     ],
 
     'network' => [
@@ -427,6 +434,8 @@ return [
         'validation_offset_required' => 'Se debe proporcionar un valor de desfase de tiempo.',
         'validation_offset_min' => 'El desfase de tiempo debe ser al menos 0 segundos.',
         'validation_offset_max' => 'El desfase de tiempo debe ser menor de 900 segundos.',
+        'send_power_action' => 'Enviar acción de energía',
+        'unknown_action' => 'Acción desconocida',
     ],
 
     'startup' => [
@@ -515,7 +524,7 @@ return [
         'startup_placeholder' => 'Introduce un comando de inicio personalizado...',
         'docker_image_label' => 'Imagen Docker',
         'docker_placeholder' => 'Seleccionar imagen...',
-        'default_image' => 'Imagen predeterminada',
+        'default_image' => 'Predeterminada',
         'docker_description' => 'Entorno de ejecución del contenedor para tu servidor',
         'environment_variables' => 'Variables de entorno',
         'required' => 'Obligatorio',
@@ -617,6 +626,8 @@ return [
         'last_30_days' => 'Últimos 30 días',
         'event_singular' => 'evento',
         'event_plural' => 'eventos',
+        'export_button' => 'Exportar',
+        'system_user' => 'Sistema',
     ],
 
     'features' => [
@@ -660,7 +671,7 @@ return [
         ],
         'gsl' => [
             'title' => '¡Token GSL inválido!',
-            'description' => 'Parece que tu Gameserver Login Token (token GSL) es inválido o ha expirado.',
+            'description' => 'Parece que tu Token de inicio de sesión del servidor de juegos (token GSL) es inválido o ha expirado.',
             'instructions' => 'Puedes generar uno nuevo e introducirlo a continuación o dejar el campo en blanco para eliminarlo completamente.',
             'token_label' => 'Token GSL',
             'token_help' => 'Visita https://steamcommunity.com/dev/managegameservers para generar un token.',
@@ -733,6 +744,9 @@ return [
         'snapshots' => 'Instantáneas',
         'betas' => 'Betas',
         'no_loaders_found_query' => 'No se encontraron cargadores que coincidan con "{{searchQuery}}"',
+        'hide_snapshots' => 'Ocultar instantáneas',
+        'show_snapshots' => 'Mostrar instantáneas',
+        'select_version' => 'Seleccionar una versión',
     ],
 
     'operations' => [

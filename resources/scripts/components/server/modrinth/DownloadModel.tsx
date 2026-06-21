@@ -122,7 +122,7 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                 >
                     <div className='flex flex-col'>
                         <span className='font-medium truncate'>
-                            Version: {selectedVersion?.version_number || 'Select a version'}
+                            Version: {selectedVersion?.version_number || i18n.t('server:modrinth.select_version')}
                         </span>
                         {selectedVersion?.files?.[0]?.size && (
                             <span className='text-xs text-gray-400'>

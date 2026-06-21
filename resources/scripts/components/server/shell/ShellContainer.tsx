@@ -1051,7 +1051,7 @@ const SoftwareContainer = () => {
                                         {i18n.t('server:shell.docker_image_summary')}
                                     </span>
                                     <div className='text-neutral-200 font-medium'>
-                                        {selectedDockerImage || 'Default'}
+                                        {selectedDockerImage || i18n.t('server:shell.default_image')}
                                     </div>
                                 </div>
                             </div>
