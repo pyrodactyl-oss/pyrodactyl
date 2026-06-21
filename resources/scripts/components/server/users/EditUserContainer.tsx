@@ -1,6 +1,7 @@
 import { ChevronLeft, Person } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Actions, useStoreActions } from 'easy-peasy';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -9,6 +10,7 @@ import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import i18n from '@/lib/i18n';
 
+import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
@@ -19,6 +21,11 @@ const EditUserContainer = () => {
 
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
     const subusers = ServerContext.useStoreState((state) => state.subusers.data);
+    const getPermissions = useStoreActions((actions: Actions<ApplicationStore>) => actions.permissions.getPermissions);
+
+    useEffect(() => {
+        getPermissions().catch(() => {});
+    }, []);
 
     // Find the subuser by UUID
     const subuser = subusers.find((s: Subuser) => s.uuid === id);

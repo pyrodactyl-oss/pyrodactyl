@@ -1,6 +1,7 @@
 import { ChevronLeft } from '@gravity-ui/icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Actions, useStoreActions } from 'easy-peasy';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
@@ -9,6 +10,7 @@ import UserFormComponent from '@/components/server/users/UserFormComponent';
 
 import i18n from '@/lib/i18n';
 
+import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 const CreateUserContainer = () => {
@@ -16,6 +18,11 @@ const CreateUserContainer = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const getPermissions = useStoreActions((actions: Actions<ApplicationStore>) => actions.permissions.getPermissions);
+
+    useEffect(() => {
+        getPermissions().catch(() => {});
+    }, []);
 
     const handleSuccess = () => {
         navigate(`/server/${serverId}/users`);
