@@ -13,8 +13,6 @@ class RemovedFromServer extends Notification implements ShouldQueue
 
     public object $server;
 
-    public string $locale;
-
     /**
      * Create a new notification instance.
      */

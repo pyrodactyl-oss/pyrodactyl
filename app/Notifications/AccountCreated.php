@@ -12,8 +12,6 @@ class AccountCreated extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public string $locale;
-
     /**
      * Create a new notification instance.
      */
