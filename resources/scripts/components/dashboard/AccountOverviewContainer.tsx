@@ -18,7 +18,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
-import { LANGUAGE_NAMES, SUPPORTED_LANGUAGES, loadTranslations } from '@/lib/i18n';
+import { LANGUAGE_NAMES, supportedLanguages, loadTranslations } from '@/lib/i18n';
 
 import updateAccountLanguage from '@/api/account/updateAccountLanguage';
 
@@ -118,12 +118,12 @@ const AccountOverviewContainer = () => {
                                         disabled={isSubmitting}
                                     >
                                         <Globe width={20} height={21} color='white' />
-                                        <div>{LANGUAGE_NAMES[language as keyof typeof LANGUAGE_NAMES] || language}</div>
+                                        <div>{LANGUAGE_NAMES[language] || language}</div>
                                         <ChevronDown width={13} height={13} color='white' />
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-99999' sideOffset={8}>
-                                    {SUPPORTED_LANGUAGES.map((lang) => (
+                                    {supportedLanguages.map((lang) => (
                                         <DropdownMenuItem
                                             key={lang}
                                             onSelect={() => handleLanguageChange(lang)}

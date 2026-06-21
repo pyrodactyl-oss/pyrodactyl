@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Copyright (c) 2023-2026 Pyro Inc., parent collaborators, and contributors -->
-<html data-pyro-html lang="en" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
+<html data-pyro-html lang="{{ Auth::user()->language ?? config('app.locale', 'en') }}" style="background-color: #000000; height: 100%; width: 100%; margin: 0; padding: 0;">
     <head>
         <title>{{ config('app.name', 'Panel') }}</title>
 

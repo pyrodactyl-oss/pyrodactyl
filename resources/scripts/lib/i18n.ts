@@ -4,19 +4,43 @@ import { initReactI18next } from 'react-i18next';
 export const SUPPORTED_LANGUAGES = ['en', 'es'] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 
-export const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
+export let LANGUAGE_NAMES: Record<string, string> = {
     en: 'English',
     es: 'Español',
 };
 
+export let supportedLanguages: string[] = [...SUPPORTED_LANGUAGES];
+
+export async function fetchSupportedLanguages(): Promise<void> {
+    try {
+        const res = await fetch('/locales/languages.json');
+        if (!res.ok) {
+            return;
+        }
+        const data: Record<string, string> = await res.json();
+        supportedLanguages = Object.keys(data);
+        LANGUAGE_NAMES = data;
+        i18n.options.supportedLngs = supportedLanguages;
+    } catch {
+        // Fall back to hardcoded defaults
+    }
+}
+
 export const NAMESPACES = ['strings', 'auth', 'dashboard', 'server', 'activity'];
 
 async function fetchNamespace(lng: string, ns: string) {
-    const url = `/locales/locale.json?locale=${lng}&namespace=${ns}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const translations = data[lng]?.[ns] ?? {};
-    i18n.addResourceBundle(lng, ns, translations, true, true);
+    try {
+        const url = `/locales/locale.json?locale=${lng}&namespace=${ns}`;
+        const res = await fetch(url);
+        if (!res.ok) {
+            return;
+        }
+        const data = await res.json();
+        const translations = data[lng]?.[ns] ?? {};
+        i18n.addResourceBundle(lng, ns, translations, true, true);
+    } catch {
+        // Silently fail — translations will fall back to keys or default language
+    }
 }
 
 i18n.use(initReactI18next).init({

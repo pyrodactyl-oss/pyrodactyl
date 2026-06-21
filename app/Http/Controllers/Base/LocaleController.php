@@ -6,15 +6,26 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Translation\Translator;
 use Illuminate\Contracts\Translation\Loader;
 use Pterodactyl\Http\Controllers\Controller;
+use Pterodactyl\Traits\Helpers\AvailableLanguages;
 use Pterodactyl\Http\Requests\Base\LocaleRequest;
 
 class LocaleController extends Controller
 {
+    use AvailableLanguages;
+
     protected Loader $loader;
 
     public function __construct(Translator $translator)
     {
         $this->loader = $translator->getLoader();
+    }
+
+    /**
+     * Returns the list of available languages.
+     */
+    public function languages(): JsonResponse
+    {
+        return new JsonResponse($this->getAvailableLanguages(true));
     }
 
     /**
@@ -52,7 +63,7 @@ class LocaleController extends Controller
                 //
                 // Becomes:
                 // "Hello {{name}}, the {{notifications.0.title}} notification needs {{count}} actions {{foo.0.bar}}."
-                $data[$key] = preg_replace('/:([\w.-]+\w)([^\w:]?|$)/m', '{{$1}}$2', $value);
+                $data[$key] = preg_replace_callback('/:(\w[\w.-]*)/m', fn($m) => '{{' . $m[1] . '}}', $value);
             }
         }
 

@@ -16,7 +16,7 @@ import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
 
-import { loadTranslations } from '@/lib/i18n';
+import { loadTranslations, fetchSupportedLanguages } from '@/lib/i18n';
 
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';
@@ -69,9 +69,11 @@ const App = () => {
 
     useEffect(() => {
         const userLang = PterodactylUser?.language || SiteConfiguration?.locale || 'en';
-        loadTranslations(userLang).then(() => {
-            i18n.changeLanguage(userLang);
-            setI18nReady(true);
+        fetchSupportedLanguages().then(() => {
+            loadTranslations(userLang).then(() => {
+                i18n.changeLanguage(userLang);
+                setI18nReady(true);
+            });
         });
     }, []);
 
