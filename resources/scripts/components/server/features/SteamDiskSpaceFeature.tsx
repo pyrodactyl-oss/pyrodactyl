@@ -5,11 +5,11 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-import i18n from '@/lib/i18n';
 
 const SteamDiskSpaceFeature = () => {
     const [visible, setVisible] = useState(false);
@@ -56,9 +56,7 @@ const SteamDiskSpaceFeature = () => {
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
-                        <p>
-                            {i18n.t('server:features.steam_disk.admin_description')}
-                        </p>
+                        <p>{i18n.t('server:features.steam_disk.admin_description')}</p>
                         <p className='mt-3'>
                             {i18n.t('server:features.steam_disk.admin_instructions', {
                                 // Preserve the original instruction text which references df -h
@@ -68,9 +66,7 @@ const SteamDiskSpaceFeature = () => {
                     </>
                 ) : (
                     <>
-                        <p className={`mt-4`}>
-                            {i18n.t('server:features.steam_disk.user_description')}
-                        </p>
+                        <p className={`mt-4`}>{i18n.t('server:features.steam_disk.user_description')}</p>
                     </>
                 )}
             </div>

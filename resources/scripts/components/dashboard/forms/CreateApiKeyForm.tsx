@@ -13,11 +13,11 @@ import Input from '@/components/elements/Input';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
+import i18n from '@/lib/i18n';
+
 import createApiKey from '@/api/account/createApiKey';
 import { ApiKey } from '@/api/account/getApiKeys';
 import { httpErrorToHuman } from '@/api/http';
-
-import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 
@@ -91,7 +91,9 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
                                 <ActionButton type='submit' disabled={isSubmitting}>
-                                    {isSubmitting ? i18n.t('dashboard:api_keys.creating') : i18n.t('dashboard:api_keys.create_button')}
+                                    {isSubmitting
+                                        ? i18n.t('dashboard:api_keys.creating')
+                                        : i18n.t('dashboard:api_keys.create_button')}
                                 </ActionButton>
                             </div>
                         </Form>

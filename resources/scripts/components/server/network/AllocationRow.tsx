@@ -3,8 +3,6 @@ import debounce from 'debounce';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Code from '@/components/elements/Code';
@@ -16,6 +14,7 @@ import { Dialog } from '@/components/elements/dialog';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { ip } from '@/lib/formatters';
+import i18n from '@/lib/i18n';
 
 import { Allocation } from '@/api/server/getServer';
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
@@ -130,7 +129,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
                                         <CrownDiamond width={22} height={22} fill='currentColor' className='' />
-                                        Primary
+                                        {i18n.t('strings:primary')}
                                     </span>
                                 )}
                             </div>
@@ -139,7 +138,9 @@ const AllocationRow = ({ allocation }: Props) => {
 
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>{i18n.t('server:network.notes')}</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>
+                            {i18n.t('server:network.notes')}
+                        </p>
 
                         {isEditingNotes ? (
                             <div className='space-y-2'>
@@ -190,8 +191,8 @@ const AllocationRow = ({ allocation }: Props) => {
                             disabled={allocation.isDefault}
                             title={
                                 allocation.isDefault
-                                    ? 'This is already the primary allocation'
-                                    : 'Make this the primary allocation'
+                                    ? i18n.t('server:network.already_primary')
+                                    : i18n.t('server:network.make_primary')
                             }
                         >
                             <CrownDiamond width={22} height={22} fill='currentColor' className='mr-1' />
@@ -206,7 +207,9 @@ const AllocationRow = ({ allocation }: Props) => {
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={allocation.isDefault || deleteLoading}
                             title={
-                                allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
+                                allocation.isDefault
+                                    ? i18n.t('server:network.cannot_delete_primary')
+                                    : i18n.t('server:network.delete_allocation_title')
                             }
                         >
                             {deleteLoading ? (
@@ -214,7 +217,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             ) : (
                                 <TrashBin width={22} height={22} fill='currentColor' className='mr-1' />
                             )}
-                            <span className='hidden sm:inline'>Delete</span>
+                            <span className='hidden sm:inline'>{i18n.t('strings:delete')}</span>
                         </ActionButton>
                     </Can>
                 </div>

@@ -6,14 +6,13 @@ import clsx from 'clsx';
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-
-import i18n from '@/lib/i18n';
 
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
 
+import i18n from '@/lib/i18n';
 import { formatObjectToIdentString } from '@/lib/objects';
 
 import useLocationHash from '@/plugins/useLocationHash';
@@ -37,7 +36,11 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
             {/* Compact Avatar */}
             <div className='flex-shrink-0 w-8 h-8 rounded-full bg-zinc-600 overflow-hidden mr-3'>
                 {actor?.image ? (
-                    <img src={actor.image} alt={actor.username || t('activity.system')} className='w-full h-full object-cover' />
+                    <img
+                        src={actor.image}
+                        alt={actor.username || t('activity.system')}
+                        className='w-full h-full object-cover'
+                    />
                 ) : (
                     <div className='w-full h-full flex items-center justify-center text-zinc-300 text-xs font-semibold'>
                         {(actor?.username || t('activity.system')).charAt(0).toUpperCase()}
@@ -48,7 +51,9 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
             {/* Main Content - Compact Layout */}
             <div className='flex-1 min-w-0'>
                 <div className='flex items-center gap-2 text-sm'>
-                    <span className='font-medium text-zinc-100 truncate'>{actor?.username || t('activity.system')}</span>
+                    <span className='font-medium text-zinc-100 truncate'>
+                        {actor?.username || t('activity.system')}
+                    </span>
                     <span className='text-zinc-500'>•</span>
                     <Link
                         to={`#${pathTo({ event: activity.event })}`}
@@ -74,7 +79,12 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
                     {activity.ip && (
                         <span className='font-mono bg-zinc-800/30 px-1.5 py-0.5 rounded'>{activity.ip}</span>
                     )}
-                    <span>{formatDistanceToNowStrict(activity.timestamp, { addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}</span>
+                    <span>
+                        {formatDistanceToNowStrict(activity.timestamp, {
+                            addSuffix: true,
+                            locale: i18n.language === 'es' ? es : undefined,
+                        })}
+                    </span>
 
                     {/* Inline properties for compact view */}
                     {!activity.hasAdditionalMetadata &&

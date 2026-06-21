@@ -66,7 +66,7 @@
       </a>
       <nav class="navbar navbar-static-top">
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-          <span class="sr-only">Toggle navigation</span>
+          <span class="sr-only">{{ trans('strings.ui.toggle_navigation') }}</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -185,8 +185,7 @@
         {{ $appVersion }}<br />
         <strong><i class="fa fa-fw fa-clock-o"></i></strong> {{ round(microtime(true) - LARAVEL_START, 3) }}s
       </div>
-      Copyright &copy; 2015 - {{ date('Y') }} <a href="https://pyro.host">Pyro Inc.</a> and <a
-        href="https://pterodactyl.io/">parent collaborators</a>.
+      {!! trans('strings.copyright', ['year' => date('Y')]) !!}
     </footer>
   </div>
   @section('footer-scripts')

@@ -15,6 +15,8 @@ import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
 import getServerStartup from '@/api/swr/getServerStartup';
 
@@ -22,8 +24,6 @@ import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-
-import i18n from '@/lib/i18n';
 
 // FIXME: use regex
 const MATCH_ERRORS = [
@@ -93,9 +93,7 @@ const JavaVersionModalFeature = () => {
         >
             <div className='flex flex-col gap-4 w-full h-full'>
                 {/*<FlashMessageRender key={'feature:javaVersion'} />*/}
-                <p>
-                    {i18n.t('server:features.java.description')}
-                </p>
+                <p>{i18n.t('server:features.java.description')}</p>
                 <div className={`mt-6 flex flex-row justify-end items-center gap-3 my-4`}>
                     <Can action={'startup.docker-image'}>
                         <Spinner size='small' visible={!data || isValidating} />

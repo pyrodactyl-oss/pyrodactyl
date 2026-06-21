@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import {
@@ -21,6 +19,8 @@ import Spinner from '@/components/elements/Spinner';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Dialog } from '@/components/elements/dialog';
 import VariableBox from '@/components/server/startup/VariableBox';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import processStartupCommand from '@/api/server/processStartupCommand';
@@ -211,7 +211,8 @@ const StartupContainer = () => {
                     <p>{i18n.t('server:startup.revert_message')}</p>
                     <div className='bg-linear-to-b from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-3'>
                         <p className='text-sm text-amber-200'>
-                            <span className='font-medium'>{i18n.t('server:startup.warning')}</span> {i18n.t('server:startup.revert_warning')}
+                            <span className='font-medium'>{i18n.t('server:startup.warning')}</span>{' '}
+                            {i18n.t('server:startup.revert_warning')}
                         </p>
                     </div>
                     <p className='text-sm text-neutral-400'>{i18n.t('server:startup.revert_confirm_message')}</p>
@@ -219,9 +220,7 @@ const StartupContainer = () => {
             </Dialog.Confirm>
             <div className='space-y-6'>
                 <MainPageHeader direction='column' title={i18n.t('server:startup.header')}>
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        {i18n.t('server:startup.description')}
-                    </p>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:startup.description')}</p>
                 </MainPageHeader>
 
                 <div className='space-y-6'>
@@ -283,7 +282,9 @@ const StartupContainer = () => {
                                             className='w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[140px]'
                                         >
                                             {commandLoading && <Spinner size='small' />}
-                                            {commandLoading ? i18n.t('server:startup.saving') : i18n.t('server:startup.save_command')}
+                                            {commandLoading
+                                                ? i18n.t('server:startup.saving')
+                                                : i18n.t('server:startup.save_command')}
                                         </ActionButton>
                                     </InputSpinner>
                                     <ActionButton
@@ -311,7 +312,9 @@ const StartupContainer = () => {
                                 {data.rawStartupCommand && (
                                     <div className='space-y-3'>
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
-                                            <label className='text-sm font-medium text-neutral-300'>{i18n.t('server:startup.raw_command')}</label>
+                                            <label className='text-sm font-medium text-neutral-300'>
+                                                {i18n.t('server:startup.raw_command')}
+                                            </label>
                                             {canEditCommand && (
                                                 <ActionButton
                                                     variant='secondary'
@@ -346,7 +349,9 @@ const StartupContainer = () => {
                                         <label className='text-sm font-medium text-neutral-300'>
                                             {i18n.t('server:startup.processed_command')}
                                         </label>
-                                        <span className='text-xs text-neutral-500 rounded w-fit'>{i18n.t('server:startup.read_only')}</span>
+                                        <span className='text-xs text-neutral-500 rounded w-fit'>
+                                            {i18n.t('server:startup.read_only')}
+                                        </span>
                                     </div>
                                     <CopyOnClick text={data.invocation}>
                                         <div className='cursor-pointer group'>
@@ -443,7 +448,10 @@ const StartupContainer = () => {
                                         <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
                                             <div className='flex-1'>
                                                 <p className='text-sm text-amber-200'>
-                                                    <span className='font-medium'>{i18n.t('server:startup.notice')}</span> {i18n.t('server:startup.docker_admin_notice')}
+                                                    <span className='font-medium'>
+                                                        {i18n.t('server:startup.notice')}
+                                                    </span>{' '}
+                                                    {i18n.t('server:startup.docker_admin_notice')}
                                                 </p>
                                                 {canEditDockerImage && (
                                                     <p className='text-xs text-amber-300/80 mt-2'>
@@ -478,7 +486,9 @@ const StartupContainer = () => {
                 {data && data.variables.length > 0 && (
                     <div className='space-y-6'>
                         <div className='space-y-3'>
-                            <h3 className='text-2xl font-extrabold text-neutral-200'>{i18n.t('server:startup.environment_variables')}</h3>
+                            <h3 className='text-2xl font-extrabold text-neutral-200'>
+                                {i18n.t('server:startup.environment_variables')}
+                            </h3>
                             <p className='text-sm text-neutral-400 leading-relaxed'>
                                 {i18n.t('server:startup.environment_description')}
                             </p>
@@ -486,7 +496,9 @@ const StartupContainer = () => {
 
                         <div className='bg-linear-to-b from-[#ffffff04] to-[#ffffff02] border border-[#ffffff08] rounded-xl p-4'>
                             <div className='space-y-3'>
-                                <h4 className='text-sm font-medium text-neutral-300'>{i18n.t('server:startup.global_variables')}</h4>
+                                <h4 className='text-sm font-medium text-neutral-300'>
+                                    {i18n.t('server:startup.global_variables')}
+                                </h4>
                                 <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs'>
                                     <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
                                         <span className='font-mono text-neutral-400'>{'SERVER_MEMORY'}</span>

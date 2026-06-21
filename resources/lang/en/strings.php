@@ -161,7 +161,23 @@ return [
         'close_menu' => 'Close menu',
         'toggle_navigation' => 'Toggle navigation menu',
         'view_event_metadata' => 'View additional event metadata',
+        'copied_metadata' => 'Copied!',
+        'copy_json' => 'Copy JSON',
     ],
+
+    'toast' => [
+        'copied_to_clipboard' => 'Copied {{text}} to clipboard.',
+    ],
+
+    'done' => 'Done',
+    'okay' => 'Okay',
+    'warning' => 'Warning',
+    'error_occurred' => 'An error occurred.',
+    'saving' => 'Saving...',
+    'deleting' => 'Deleting...',
+    'creating' => 'Creating...',
+    'checking_availability' => 'Checking availability...',
+    'loading_subdomain_config' => 'Loading subdomain configuration...',
 
     'validation' => [
         'required' => 'This field is required.',
@@ -173,4 +189,19 @@ return [
         'rsa_too_short' => 'RSA keys must be at least 2048 bytes in length.',
         'key_exists' => 'The public key provided already exists on your account.',
     ],
+
+    'dashboard' => 'Dashboard',
+    'MiB' => 'MiB',
+    'MB' => 'MB',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'no_servers_found' => 'No servers found',
+    'no_other_servers_found' => 'No other servers found',
+    'no_servers_description' => 'There are no servers associated with your account.',
+    'no_other_servers_description' => 'There are no other servers to display.',
+    'error_boundary_message' => 'An error was encountered by the application while rendering this view. Try refreshing the page.',
+    'captcha_verification_failed' => 'Captcha verification failed',
+    'captcha_expired' => 'Captcha expired',
+    'failed_to_load_captcha' => 'Failed to load captcha',
+    'generated_password' => 'Generated Password:',
 ];

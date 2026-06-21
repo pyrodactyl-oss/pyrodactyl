@@ -3,8 +3,6 @@ import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { memo, useCallback, useMemo, useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import { Checkbox } from '@/components/elements/CheckboxNew';
 import {
     ContextMenu,
@@ -13,6 +11,8 @@ import {
     ContextMenuTrigger,
 } from '@/components/elements/ContextMenu';
 import { Dialog } from '@/components/elements/dialog';
+
+import i18n from '@/lib/i18n';
 
 import emptyTrash from '@/api/server/files/emptyTrash';
 import { TrashedFile } from '@/api/server/files/loadTrash';

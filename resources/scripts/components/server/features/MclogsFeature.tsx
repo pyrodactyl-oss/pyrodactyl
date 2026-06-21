@@ -8,6 +8,7 @@ import Spinner from '@/components/elements/Spinner';
 import { Alert } from '@/components/elements/alert';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
 import { debounce, isCrashLine } from '@/lib/mclogsUtils';
 
 import { MclogsInsight, analyzeLogs } from '@/api/mclo.gs/mclogsApi';
@@ -16,8 +17,6 @@ import getFileContents from '@/api/server/files/getFileContents';
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
-
-import i18n from '@/lib/i18n';
 
 const CRASH_DETECTION_DEBOUNCE = 1500; // 1.5 seconds
 const MANUAL_ANALYZE_DEBOUNCE = 1000; // 1 second for manual clicks
@@ -71,7 +70,11 @@ const useLogAnalysis = () => {
                 // Show toast notifications for manual analysis
                 if (showToast) {
                     if (result.analysis?.problems?.length > 0) {
-                        toast.success(i18n.t('server:features.mclogs.analysis_complete', { count: result.analysis.problems.length }));
+                        toast.success(
+                            i18n.t('server:features.mclogs.analysis_complete', {
+                                count: result.analysis.problems.length,
+                            }),
+                        );
                     } else {
                         toast.info(i18n.t('server:features.mclogs.analysis_no_issues'));
                     }
@@ -79,7 +82,8 @@ const useLogAnalysis = () => {
             } catch (err) {
                 if (!mountedRef.current) return;
 
-                const errorMessage = err instanceof Error ? err.message : i18n.t('server:features.mclogs.analysis_failed');
+                const errorMessage =
+                    err instanceof Error ? err.message : i18n.t('server:features.mclogs.analysis_failed');
                 setError(errorMessage);
                 console.error('Mclogs analysis failed:', err);
 
@@ -274,7 +278,9 @@ const AnalysisModal = ({
     const renderLoadingState = () => (
         <div className='flex flex-col items-center justify-center py-12' aria-busy='true'>
             <Spinner size='large' />
-            <h3 className='text-lg font-medium text-neutral-200 mt-4'>{i18n.t('server:features.mclogs.analyzing_title')}</h3>
+            <h3 className='text-lg font-medium text-neutral-200 mt-4'>
+                {i18n.t('server:features.mclogs.analyzing_title')}
+            </h3>
             <p className='text-neutral-400 mt-2 text-center max-w-md'>
                 {i18n.t('server:features.mclogs.analyzing_description')}
             </p>
@@ -293,7 +299,9 @@ const AnalysisModal = ({
                         fill='currentColor'
                     />
                     <div className='flex-1'>
-                        <h3 className='font-semibold text-red-400 text-lg'>{i18n.t('server:features.mclogs.failed_title')}</h3>
+                        <h3 className='font-semibold text-red-400 text-lg'>
+                            {i18n.t('server:features.mclogs.failed_title')}
+                        </h3>
                         <p className='text-neutral-300 mt-2'>{error}</p>
                         {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
                             <p className='text-neutral-400 mt-3 text-sm'>
@@ -317,7 +325,9 @@ const AnalysisModal = ({
         return (
             <div className='bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6'>
                 <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-lg font-semibold text-blue-400'>{i18n.t('server:features.mclogs.server_info')}</h3>
+                    <h3 className='text-lg font-semibold text-blue-400'>
+                        {i18n.t('server:features.mclogs.server_info')}
+                    </h3>
                     <a
                         href='https://mclo.gs'
                         target='_blank'
@@ -331,7 +341,9 @@ const AnalysisModal = ({
 
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                     <div className='bg-blue-500/5 rounded-lg p-3'>
-                        <p className='text-blue-400 font-medium text-sm mb-1'>{i18n.t('server:features.mclogs.server_type')}</p>
+                        <p className='text-blue-400 font-medium text-sm mb-1'>
+                            {i18n.t('server:features.mclogs.server_type')}
+                        </p>
                         <p className='text-neutral-200'>
                             {serverType} {serverVersion}
                         </p>
@@ -381,7 +393,9 @@ const AnalysisModal = ({
                             fill='currentColor'
                         />
                         <div>
-                            <h3 className='font-semibold text-green-400 text-lg'>{i18n.t('server:features.mclogs.no_issues_title')}</h3>
+                            <h3 className='font-semibold text-green-400 text-lg'>
+                                {i18n.t('server:features.mclogs.no_issues_title')}
+                            </h3>
                             <p className='text-neutral-300 mt-2'>
                                 {i18n.t('server:features.mclogs.no_issues_description')}
                             </p>
@@ -393,7 +407,9 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4 mb-6'>
-                <h3 className='text-lg font-semibold text-red-400'>{i18n.t('server:features.mclogs.issues_header', { count: problems.length })}</h3>
+                <h3 className='text-lg font-semibold text-red-400'>
+                    {i18n.t('server:features.mclogs.issues_header', { count: problems.length })}
+                </h3>
 
                 <div className='space-y-3'>
                     {problems.map((problem, idx) => (
@@ -411,7 +427,9 @@ const AnalysisModal = ({
 
                                         {!!problem.entry?.lines?.length && (
                                             <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
-                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>{i18n.t('server:features.mclogs.error_log')}</p>
+                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>
+                                                    {i18n.t('server:features.mclogs.error_log')}
+                                                </p>
                                                 <div className='max-h-40 overflow-y-auto font-mono text-sm space-y-1'>
                                                     {problem.entry.lines.map((line, lineIdx) => (
                                                         <div key={lineIdx} className='flex'>
@@ -447,7 +465,9 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-green-400'>{i18n.t('server:features.mclogs.solutions_header', { count: allSolutions.length })}</h3>
+                <h3 className='text-lg font-semibold text-green-400'>
+                    {i18n.t('server:features.mclogs.solutions_header', { count: allSolutions.length })}
+                </h3>
 
                 <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
                     <div className='space-y-3'>
@@ -506,7 +526,9 @@ const AnalysisModal = ({
 
                 <div className='flex justify-center gap-3 mt-8 pt-4 border-t border-neutral-700'>
                     <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
-                        {analyzing ? i18n.t('server:features.mclogs.analyzing_button') : i18n.t('server:features.mclogs.analyze_again')}
+                        {analyzing
+                            ? i18n.t('server:features.mclogs.analyzing_button')
+                            : i18n.t('server:features.mclogs.analyze_again')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
                         Close

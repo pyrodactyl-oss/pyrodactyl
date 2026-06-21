@@ -2,8 +2,6 @@ import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -12,6 +10,8 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import SubdomainManagement from '@/components/server/network/SubdomainManagement';
+
+import i18n from '@/lib/i18n';
 
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
@@ -63,9 +63,7 @@ const NetworkContainer = () => {
             <FlashMessageRender byKey={'server:network'} />
 
             <MainPageHeader direction='column' title={i18n.t('server:network.header')}>
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:network.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:network.description')}</p>
             </MainPageHeader>
 
             <div className='space-y-12'>
@@ -73,7 +71,9 @@ const NetworkContainer = () => {
 
                 <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm mt-8'>
                     <div className='flex items-center justify-between mb-6'>
-                        <h3 className='text-xl font-extrabold tracking-tight'>{i18n.t('server:network.port_allocations')}</h3>
+                        <h3 className='text-xl font-extrabold tracking-tight'>
+                            {i18n.t('server:network.port_allocations')}
+                        </h3>
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
@@ -84,7 +84,10 @@ const NetworkContainer = () => {
                                     )}
                                     {allocationLimit > 0 && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {i18n.t('server:network.count_limited', { count: data.length, limit: allocationLimit })}
+                                            {i18n.t('server:network.count_limited', {
+                                                count: data.length,
+                                                limit: allocationLimit,
+                                            })}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
@@ -134,7 +137,9 @@ const NetworkContainer = () => {
                                     </svg>
                                 </div>
                                 <h4 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {allocationLimit === 0 ? i18n.t('server:network.unavailable') : i18n.t('server:network.empty')}
+                                    {allocationLimit === 0
+                                        ? i18n.t('server:network.unavailable')
+                                        : i18n.t('server:network.empty')}
                                 </h4>
                                 <p className='text-sm text-zinc-400 max-w-sm text-center'>
                                     {allocationLimit === 0

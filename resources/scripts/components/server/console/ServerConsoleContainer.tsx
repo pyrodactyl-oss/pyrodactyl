@@ -14,9 +14,9 @@ import StatGraphs from '@/components/server/console/StatGraphs';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
-import { ServerContext } from '@/state/server';
-
 import i18n from '@/lib/i18n';
+
+import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 

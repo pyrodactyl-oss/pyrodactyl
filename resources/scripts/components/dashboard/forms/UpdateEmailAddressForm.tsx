@@ -4,11 +4,11 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -64,7 +64,12 @@ const UpdateEmailAddressForm = () => {
                     <Form className={`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={t('email.label')} />
                         <div className={`mt-6`}>
-                            <Field id={'confirm_password'} type={'password'} name={'password'} label={t('email.password_label')} />
+                            <Field
+                                id={'confirm_password'}
+                                type={'password'}
+                                name={'password'}
+                                label={t('email.password_label')}
+                            />
                         </div>
                         <div className={`mt-6`}>
                             <ActionButton variant='primary' disabled={isSubmitting || !isValid}>

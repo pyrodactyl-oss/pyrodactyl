@@ -147,7 +147,9 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     isSuspended ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? t('server_row.suspended') : t('server_row.connection_error')}
+                                {server.status === 'suspended'
+                                    ? t('server_row.suspended')
+                                    : t('server_row.connection_error')}
                             </span>
                         </div>
                     ) : server.isTransferring || server.status ? (
@@ -169,7 +171,9 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     <Fragment>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>{t('server_row.cpu')}</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.cpu')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {stats.cpuUsagePercent.toFixed(2)}%
                                 </p>
@@ -177,7 +181,9 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>{t('server_row.ram')}</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.ram')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {formatBytes(stats.memoryUsageInBytes, 0)}
                                 </p>
@@ -185,7 +191,9 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>{t('server_row.storage')}</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.storage')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {formatBytes(stats.diskUsageInBytes, 0)}
                                 </p>

@@ -10,11 +10,11 @@ import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
+import i18n from '@/lib/i18n';
+
 import { createSSHKey } from '@/api/account/ssh-keys';
 import { useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
-
-import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 
@@ -88,7 +88,9 @@ const CreateSSHKeyForm = () => {
                             {/* Submit Button below form fields */}
                             <div className='flex justify-end mt-6'>
                                 <ActionButton type='submit' disabled={isSubmitting}>
-                                    {isSubmitting ? i18n.t('dashboard:ssh_keys.creating') : i18n.t('dashboard:ssh_keys.create_button')}
+                                    {isSubmitting
+                                        ? i18n.t('dashboard:ssh_keys.creating')
+                                        : i18n.t('dashboard:ssh_keys.create_button')}
                                 </ActionButton>
                             </div>
                         </Form>

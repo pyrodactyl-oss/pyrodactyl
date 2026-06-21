@@ -7,13 +7,13 @@ import Field from '@/components/elements/Field';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import updateStartupVariable from '@/api/server/updateStartupVariable';
 
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-import i18n from '@/lib/i18n';
 
 interface Values {
     gslToken: string;
@@ -82,9 +82,7 @@ const GSLTokenModalFeature = () => {
                 <FlashMessageRender key={'feature:gslToken'} />
                 <Form>
                     <p>{i18n.t('server:features.gsl.description')}</p>
-                    <p className={`mt-3`}>
-                        {i18n.t('server:features.gsl.instructions')}
-                    </p>
+                    <p className={`mt-3`}>{i18n.t('server:features.gsl.instructions')}</p>
                     <div className={`sm:flex items-center mt-6`}>
                         <Field
                             name={'gslToken'}

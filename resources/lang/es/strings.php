@@ -161,7 +161,23 @@ return [
         'close_menu' => 'Cerrar menú',
         'toggle_navigation' => 'Alternar menú de navegación',
         'view_event_metadata' => 'Ver metadatos adicionales del evento',
+        'copied_metadata' => '¡Copiado!',
+        'copy_json' => 'Copiar JSON',
     ],
+
+    'toast' => [
+        'copied_to_clipboard' => 'Copiado {{text}} al portapapeles.',
+    ],
+
+    'done' => 'Hecho',
+    'okay' => 'De acuerdo',
+    'warning' => 'Advertencia',
+    'error_occurred' => 'Ocurrió un error.',
+    'saving' => 'Guardando...',
+    'deleting' => 'Eliminando...',
+    'creating' => 'Creando...',
+    'checking_availability' => 'Verificando disponibilidad...',
+    'loading_subdomain_config' => 'Cargando configuración de subdominio...',
 
     'validation' => [
         'required' => 'Este campo es obligatorio.',
@@ -173,4 +189,19 @@ return [
         'rsa_too_short' => 'Las claves RSA deben tener al menos 2048 bytes.',
         'key_exists' => 'La clave pública proporcionada ya existe en tu cuenta.',
     ],
+
+    'dashboard' => 'Panel',
+    'MiB' => 'MiB',
+    'MB' => 'MB',
+    'active' => 'Activo',
+    'inactive' => 'Inactivo',
+    'no_servers_found' => 'No se encontraron servidores',
+    'no_other_servers_found' => 'No se encontraron otros servidores',
+    'no_servers_description' => 'No hay servidores asociados a tu cuenta.',
+    'no_other_servers_description' => 'No hay otros servidores para mostrar.',
+    'error_boundary_message' => 'La aplicación encontró un error al renderizar esta vista. Intenta actualizar la página.',
+    'captcha_verification_failed' => 'Verificación de captcha fallida',
+    'captcha_expired' => 'Captcha expirado',
+    'failed_to_load_captcha' => 'Error al cargar el captcha',
+    'generated_password' => 'Contraseña generada:',
 ];

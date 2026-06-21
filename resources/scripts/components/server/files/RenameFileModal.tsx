@@ -1,12 +1,12 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+
+import i18n from '@/lib/i18n';
 
 import renameFiles from '@/api/server/files/renameFiles';
 
@@ -71,10 +71,18 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                 >
                     <Form className={`w-full`}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={i18n.t('server:files.file_name')} autoFocus />
+                            <Field
+                                type={'string'}
+                                id={'file_name'}
+                                name={'name'}
+                                label={i18n.t('server:files.file_name')}
+                                autoFocus
+                            />
                             {useMoveTerminology && (
                                 <p className={`mt-2 text-xs! break-all`}>
-                                    <strong className={`text-sm text-zinc-200`}>{i18n.t('server:files.new_location')} </strong>
+                                    <strong className={`text-sm text-zinc-200`}>
+                                        {i18n.t('server:files.new_location')}{' '}
+                                    </strong>
                                     <Code>
                                         /root/
                                         <span className={`text-blue-200`}>

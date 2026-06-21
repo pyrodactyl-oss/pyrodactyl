@@ -97,10 +97,19 @@ function ResetPasswordContainer() {
                             <Input className='text-center' value={email} disabled />
                         </div>
                         <div className={`mt-6`}>
-                            <Field label={t('reset.new_password')} name={'password'} type={'password'} description={t('reset.password_description')} />
+                            <Field
+                                label={t('reset.new_password')}
+                                name={'password'}
+                                type={'password'}
+                                description={t('reset.password_description')}
+                            />
                         </div>
                         <div className={`mt-6`}>
-                            <Field label={t('reset.confirm_password')} name={'password_confirmation'} type={'password'} />
+                            <Field
+                                label={t('reset.confirm_password')}
+                                name={'password_confirmation'}
+                                type={'password'}
+                            />
                         </div>
                         <Captcha
                             className='mt-6'
@@ -109,13 +118,24 @@ function ResetPasswordContainer() {
                             }}
                         />
                         <div className={`mt-6`}>
-                            <Button className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2' size={'xlarge'} type={'submit'} disabled={isSubmitting} isLoading={isSubmitting}>
+                            <Button
+                                className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
+                                size={'xlarge'}
+                                type={'submit'}
+                                disabled={isSubmitting}
+                                isLoading={isSubmitting}
+                            >
                                 {t('reset.title')}
                             </Button>
                         </div>
                         <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                        <div className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}>
-                            <Link to={'/auth/login'} className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}>
+                        <div
+                            className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
+                        >
+                            <Link
+                                to={'/auth/login'}
+                                className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
+                            >
                                 {t('reset.return_to_login')}
                             </Link>
                         </div>

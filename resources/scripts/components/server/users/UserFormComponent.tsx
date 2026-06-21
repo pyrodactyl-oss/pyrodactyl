@@ -4,13 +4,13 @@ import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { array, object, string } from 'yup';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import PermissionRow from '@/components/server/users/PermissionRow';
+
+import i18n from '@/lib/i18n';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 
@@ -142,7 +142,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             className='w-5 h-5 text-brand'
                                         />
                                     </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>{i18n.t('server:users.user_info')}</h3>
+                                    <h3 className='text-xl font-semibold text-zinc-100'>
+                                        {i18n.t('server:users.user_info')}
+                                    </h3>
                                 </div>
                                 <Field
                                     name={'email'}
@@ -164,7 +166,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             className='w-5 h-5 text-brand'
                                         />
                                     </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>{i18n.t('server:users.permissions')}</h3>
+                                    <h3 className='text-xl font-semibold text-zinc-100'>
+                                        {i18n.t('server:users.permissions')}
+                                    </h3>
                                 </div>
                                 {canEditUser && (
                                     <button
@@ -198,7 +202,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             fill='currentColor'
                                             className='w-5 h-5 text-brand'
                                         />
-                                        <span className='text-sm font-semibold text-brand'>{i18n.t('server:users.permission_restriction')}</span>
+                                        <span className='text-sm font-semibold text-brand'>
+                                            {i18n.t('server:users.permission_restriction')}
+                                        </span>
                                     </div>
                                     <p className='text-sm text-zinc-300 leading-relaxed'>
                                         {i18n.t('server:users.permission_restriction_text')}

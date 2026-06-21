@@ -1,10 +1,11 @@
 import { Code, Copy } from '@gravity-ui/icons';
-import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 
+import i18n from '@/lib/i18n';
 import { formatObjectToIdentString } from '@/lib/objects';
 
 const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
@@ -27,7 +28,12 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
 
     return (
         <>
-            <Dialog open={open} onClose={() => setOpen(false)} hideCloseIcon title={'Event Metadata'}>
+            <Dialog
+                open={open}
+                onClose={() => setOpen(false)}
+                hideCloseIcon
+                title={i18n.t('strings:ui.view_event_metadata')}
+            >
                 <div className='space-y-4'>
                     <div className='flex items-center justify-between'>
                         <h4 className='text-sm font-medium text-zinc-300'>{t('ui.formatted_view')}</h4>
@@ -37,7 +43,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                             className='flex items-center gap-2 text-xs'
                         >
                             <Copy width={22} height={22} />
-                            {copied ? 'Copied!' : 'Copy JSON'}
+                            {copied ? i18n.t('strings:ui.copied_metadata') : i18n.t('strings:ui.copy_json')}
                         </ActionButton>
                     </div>
 

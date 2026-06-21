@@ -1,14 +1,14 @@
 import { CircleQuestion, CloudArrowUpIn, PencilToLine, Power, Terminal, TrashBin } from '@gravity-ui/icons';
 import { useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
@@ -116,7 +116,9 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
-                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{i18n.t('server:schedules.seconds_later', { seconds: task.timeOffset })}</div>
+                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>
+                            {i18n.t('server:schedules.seconds_later', { seconds: task.timeOffset })}
+                        </div>
                     )}
                 </div>
                 <Can action={'schedule.update'}>

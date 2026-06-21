@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -11,6 +9,8 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer, PageListItem } from '@/components/elements/pages/PageList';
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import getServerSchedules from '@/api/server/schedules/getServerSchedules';
@@ -54,9 +54,7 @@ function ScheduleContainer() {
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:schedules.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:schedules.description')}</p>
             </MainPageHeader>
             <Can action={'schedule.create'}>
                 <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
@@ -75,7 +73,9 @@ function ScheduleContainer() {
                                         />
                                     </svg>
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('server:schedules.empty')}</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                                    {i18n.t('server:schedules.empty')}
+                                </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
                                     {i18n.t('server:schedules.empty_description')}
                                 </p>

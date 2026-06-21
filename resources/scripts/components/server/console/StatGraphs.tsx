@@ -24,7 +24,11 @@ const StatGraphs = () => {
     const sizeDisplay = useStoreState((state) => state.user.data?.sizeDisplay ?? 'mib');
 
     const cpu = useChartTickLabel(i18n.t('server:stats.cpu'), limits.cpu, '%', 2);
-    const memory = useChartTickLabel(i18n.t('server:stats.memory'), limits.memory, sizeDisplay === 'mib' ? 'MiB' : 'MB');
+    const memory = useChartTickLabel(
+        i18n.t('server:stats.memory'),
+        limits.memory,
+        sizeDisplay === 'mib' ? 'MiB' : 'MB',
+    );
     const network = useChart(i18n.t('server:stats.network'), {
         sets: 2,
         options: {

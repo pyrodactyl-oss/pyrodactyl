@@ -63,7 +63,11 @@ export default defineConfig({
                     if (id.includes('node_modules')) {
                         const parts = id.toString().split('node_modules/');
                         const pkgName = parts[parts.length - 1].split('/')[0];
-                        if (pkgName === 'i18next' || pkgName === 'react-i18next' || pkgName === 'i18next-http-backend') {
+                        if (
+                            pkgName === 'i18next' ||
+                            pkgName === 'react-i18next' ||
+                            pkgName === 'i18next-http-backend'
+                        ) {
                             return;
                         }
                         return parts[1].split('/')[0].toString();

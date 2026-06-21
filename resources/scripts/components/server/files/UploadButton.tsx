@@ -2,13 +2,13 @@ import { FileArrowUp, FolderArrowUp } from '@gravity-ui/icons';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
-import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
-import { Dialog } from '@/components/elements/dialog';
 import { ModalMask } from '@/components/elements/Modal';
+import { Dialog } from '@/components/elements/dialog';
+import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
+
+import i18n from '@/lib/i18n';
 
 import createDirectory from '@/api/server/files/createDirectory';
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
@@ -88,9 +88,7 @@ const UploadButton = () => {
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const { clearFileUploads, pushFileUpload } = ServerContext.useStoreActions(
-        (actions) => actions.files,
-    );
+    const { clearFileUploads, pushFileUpload } = ServerContext.useStoreActions((actions) => actions.files);
 
     useEventListener(
         'dragenter',
@@ -188,7 +186,10 @@ const UploadButton = () => {
             const conflicts = regularFiles.filter((f) => existing.includes(f.name));
 
             if (conflicts.length > 0) {
-                setPendingConflicts({ files: conflicts.map((f) => ({ file: f, relDir: '' })), existing: conflicts.map((f) => f.name) });
+                setPendingConflicts({
+                    files: conflicts.map((f) => ({ file: f, relDir: '' })),
+                    existing: conflicts.map((f) => f.name),
+                });
                 return;
             }
 
@@ -223,7 +224,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = filePaths.map(
@@ -232,10 +233,10 @@ const UploadButton = () => {
                     uploadFile(file, directory + (relDir ? '/' + relDir : '')),
         );
 
-            Promise.all(uploads.map((fn) => fn()))
-                .then(() => mutate())
-                .catch((error) => {
-                    clearAndAddHttpError(error);
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
             });
     };
 
@@ -244,14 +245,16 @@ const UploadButton = () => {
         const { files } = pendingConflicts;
         setPendingConflicts(null);
 
-        const uploads = files.map(({ file, relDir }) =>
-            () => uploadFile(file, directory + (relDir ? '/' + relDir : '')),
+        const uploads = files.map(
+            ({ file, relDir }) =>
+                () =>
+                    uploadFile(file, directory + (relDir ? '/' + relDir : '')),
         );
 
-            Promise.all(uploads.map((fn) => fn()))
-                .then(() => mutate())
-                .catch((error) => {
-                    clearAndAddHttpError(error);
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
             });
     };
 
@@ -262,7 +265,9 @@ const UploadButton = () => {
         const existing = currentFiles?.map((f) => f.name) ?? [];
 
         let maxIndex = 0;
-        const pattern = new RegExp(`^${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\((\\d+)\\)${ext.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`);
+        const pattern = new RegExp(
+            `^${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\((\\d+)\\)${ext.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+        );
         for (const name of existing) {
             const match = name.match(pattern);
             if (match) {
@@ -290,10 +295,10 @@ const UploadButton = () => {
             return () => uploadFile(renamed, directory + (relDir ? '/' + relDir : ''));
         });
 
-            Promise.all(uploads.map((fn) => fn()))
-                .then(() => mutate())
-                .catch((error) => {
-                    clearAndAddHttpError(error);
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
             });
     };
 
@@ -305,7 +310,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories(dirsNeeded);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = files.map(
@@ -314,10 +319,10 @@ const UploadButton = () => {
                     uploadFile(file, directory + (relDir ? '/' + relDir : '')),
         );
 
-            Promise.all(uploads.map((fn) => fn()))
-                .then(() => mutate())
-                .catch((error) => {
-                    clearAndAddHttpError(error);
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
             });
     };
 
@@ -373,7 +378,7 @@ const UploadButton = () => {
         try {
             await ensureDirectories([...dirsNeeded]);
         } catch {
-                return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
         }
 
         const uploads = uploadItems.map(
@@ -382,10 +387,10 @@ const UploadButton = () => {
                     uploadFile(file, directory + (relDir ? '/' + relDir : '')),
         );
 
-            Promise.all(uploads.map((fn) => fn()))
-                .then(() => mutate())
-                .catch((error) => {
-                    clearAndAddHttpError(error);
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
             });
     };
 
@@ -486,29 +491,38 @@ const UploadButton = () => {
                 onClose={() => setPendingFolder(null)}
                 onConfirmed={confirmFolderUpload}
                 title={i18n.t('server:files.large_folder_upload')}
-                confirm={i18n.t('server:files.large_folder_upload_confirm', { count: pendingFolder?.files.length ?? 0 })}
+                confirm={i18n.t('server:files.large_folder_upload_confirm', {
+                    count: pendingFolder?.files.length ?? 0,
+                })}
             >
                 <p>
                     {i18n.t('server:files.large_folder_upload_body', { count: pendingFolder?.files.length ?? 0 })}
                     {pendingFolder?.files[0]?.webkitRelativePath && (
-                        <> {i18n.t('server:files.large_folder_upload_from', { source: pendingFolder.files[0].webkitRelativePath.split('/')[0] })}</>
-                    )}.
+                        <>
+                            {' '}
+                            {i18n.t('server:files.large_folder_upload_from', {
+                                source: pendingFolder.files[0].webkitRelativePath.split('/')[0],
+                            })}
+                        </>
+                    )}
+                    .
                     {pendingFolder && pendingFolder.dirsNeeded.length > 0 && (
-                        <> {i18n.t('server:files.large_folder_upload_subfolders', { count: pendingFolder.dirsNeeded.length })}</>
+                        <>
+                            {' '}
+                            {i18n.t('server:files.large_folder_upload_subfolders', {
+                                count: pendingFolder.dirsNeeded.length,
+                            })}
+                        </>
                     )}
                 </p>
-                <p className='mt-2 text-sm text-zinc-400'>
-                    {i18n.t('server:files.large_folder_upload_hint')}
-                </p>
+                <p className='mt-2 text-sm text-zinc-400'>{i18n.t('server:files.large_folder_upload_hint')}</p>
             </ConfirmationDialog>
             <Dialog
                 open={pendingConflicts !== null}
                 onClose={() => setPendingConflicts(null)}
                 title={i18n.t('server:files.file_already_exists')}
             >
-                <p>
-                    {i18n.t('server:files.file_exists_body', { count: pendingConflicts?.existing.length ?? 0 })}
-                </p>
+                <p>{i18n.t('server:files.file_exists_body', { count: pendingConflicts?.existing.length ?? 0 })}</p>
                 <ul className='mt-2 text-sm text-zinc-400 list-disc pl-4 max-h-32 overflow-y-auto'>
                     {pendingConflicts?.existing.map((name) => (
                         <li key={name}>{name}</li>

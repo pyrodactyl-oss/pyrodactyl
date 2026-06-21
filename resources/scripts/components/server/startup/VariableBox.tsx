@@ -3,8 +3,6 @@ import debounce from 'debounce';
 import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import {
     DropdownMenu,
@@ -16,6 +14,8 @@ import {
 import InputSpinner from '@/components/elements/InputSpinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import { Input } from '@/components/elements/TextInput';
+
+import i18n from '@/lib/i18n';
 
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';

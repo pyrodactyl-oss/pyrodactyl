@@ -300,7 +300,9 @@ const ServerRouter = () => {
                                             </DropdownMenuItem>
                                         )}
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem onSelect={onTriggerLogout}>{t('nav.log_out')}</DropdownMenuItem>
+                                        <DropdownMenuItem onSelect={onTriggerLogout}>
+                                            {t('nav.log_out')}
+                                        </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>

@@ -88,11 +88,26 @@ function LoginContainer() {
                     <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
                     <h2 className='text-xl font-extrabold mb-2'>{t('login')}</h2>
 
-                    <Field id='user' type={'text'} label={t('username_or_email')} name={'user'} disabled={isSubmitting} />
+                    <Field
+                        id='user'
+                        type={'text'}
+                        label={t('username_or_email')}
+                        name={'user'}
+                        disabled={isSubmitting}
+                    />
 
                     <div className={`relative mt-6`}>
-                        <Field id='password' type={'password'} label={t('password')} name={'password'} disabled={isSubmitting} />
-                        <Link to={'/auth/password'} className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}>
+                        <Field
+                            id='password'
+                            type={'password'}
+                            label={t('password')}
+                            name={'password'}
+                            disabled={isSubmitting}
+                        />
+                        <Link
+                            to={'/auth/password'}
+                            className={`text-xs text-zinc-500 tracking-wide no-underline hover:text-zinc-600 absolute top-1 right-0`}
+                        >
                             {t('forgot_password')}
                         </Link>
                     </div>
@@ -105,7 +120,13 @@ function LoginContainer() {
                     />
 
                     <div className={`mt-6`}>
-                        <Button className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`} type={'submit'} size={'xlarge'} isLoading={isSubmitting} disabled={isSubmitting}>
+                        <Button
+                            className={`relative mt-4 w-full rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer`}
+                            type={'submit'}
+                            size={'xlarge'}
+                            isLoading={isSubmitting}
+                            disabled={isSubmitting}
+                        >
                             {t('login')}
                         </Button>
                     </div>

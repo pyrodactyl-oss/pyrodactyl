@@ -24,7 +24,10 @@ const ConflictStateRenderer = () => {
             </div>
         </div>
     ) : status === 'suspended' ? (
-        <ScreenBlock title={i18n.t('server:conflict.suspended')} message={i18n.t('server:conflict.suspended_message')} />
+        <ScreenBlock
+            title={i18n.t('server:conflict.suspended')}
+            message={i18n.t('server:conflict.suspended_message')}
+        />
     ) : isNodeUnderMaintenance ? (
         <ScreenBlock
             title={i18n.t('server:conflict.maintenance')}

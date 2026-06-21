@@ -2,12 +2,12 @@ import { ChevronLeft } from '@gravity-ui/icons';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import UserFormComponent from '@/components/server/users/UserFormComponent';
+
+import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 

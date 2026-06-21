@@ -1,11 +1,11 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import { Dialog } from '@/components/elements/dialog';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import reinstallServer from '@/api/server/reinstallServer';
@@ -57,9 +57,7 @@ const ReinstallServerBox = () => {
             >
                 {i18n.t('server:settings.reinstall_message')}
             </Dialog.Confirm>
-            <p className={`text-sm`}>
-                {i18n.t('server:settings.reinstall_description')}
-            </p>
+            <p className={`text-sm`}>{i18n.t('server:settings.reinstall_description')}</p>
             <div className={`mt-6 text-right`}>
                 <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
                     {i18n.t('server:settings.reinstall_button')}

@@ -1,5 +1,4 @@
 import { encodePathSegments } from '@/helpers';
-import i18n from '@/lib/i18n';
 import type { LanguageDescription } from '@codemirror/language';
 import { languages } from '@codemirror/language-data';
 import { For } from 'million/react';
@@ -22,6 +21,8 @@ import ErrorBoundary from '@/components/elements/ErrorBoundary';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import FileManagerBreadcrumbs from '@/components/server/files/FileManagerBreadcrumbs';
 import FileNameModal from '@/components/server/files/FileNameModal';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import getFileContents from '@/api/server/files/getFileContents';
@@ -81,13 +82,13 @@ const FileEditContainer = () => {
     const save = (name?: string) => {
         return new Promise<void>((resolve, reject) => {
             setLoading(true);
-            toast.success(`Saving ${name ?? filename}...`);
+            toast.success(i18n.t('server:files.saving', { name: name ?? filename }));
             clearFlashes('files:view');
             if (fetchFileContent) {
                 fetchFileContent()
                     .then((content) => saveFileContents(uuid, name ?? filename, content))
                     .then(() => {
-                        toast.success(`Saved ${name ?? filename}!`);
+                        toast.success(i18n.t('server:files.saved', { name: name ?? filename }));
                         if (name) {
                             navigate(`/server/${id}/files/edit/${encodePathSegments(name)}`);
                         }
@@ -119,11 +120,14 @@ const FileEditContainer = () => {
     };
 
     if (error) {
-        return <div>An error occurred.</div>;
+        return <div>{i18n.t('server:files.error_occurred')}</div>;
     }
 
     return (
-        <PageContentBlock title={action === 'edit' ? `Editing ${filename}` : i18n.t('server:files.new_file')} className='p-0! h-full'>
+        <PageContentBlock
+            title={action === 'edit' ? i18n.t('server:files.editing', { filename }) : i18n.t('server:files.new_file')}
+            className='p-0! h-full'
+        >
             <FlashMessageRender byKey={'files:view'} />
 
             <ErrorBoundary>
@@ -137,14 +141,7 @@ const FileEditContainer = () => {
 
             {['.pyroignore', '.pyroignore'].includes(filename) ? (
                 <div className={`mb-4 p-4 border-l-4 bg-neutral-900 rounded-sm border-cyan-400`}>
-                    <p className={`text-neutral-300 text-sm`}>
-                        You&apos;re editing a{' '}
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>.pyroignore</code> file. Any files
-                        or directories listed in here will be excluded from backups. Wildcards are supported by using an
-                        asterisk (<code className={`font-mono bg-black rounded-sm py-px px-1`}>*</code>). You can negate
-                        a prior rule by prepending an exclamation point (
-                        <code className={`font-mono bg-black rounded-sm py-px px-1`}>!</code>).
-                    </p>
+                    <p className={`text-neutral-300 text-sm`}>{i18n.t('server:files.pyroignore_description')}</p>
                 </div>
             ) : null}
 
@@ -205,7 +202,7 @@ const FileEditContainer = () => {
                                 strokeLinejoin='round'
                             />
                         </svg>
-                        <span className='sm:block hidden'>{language?.name ?? 'Language'}</span>
+                        <span className='sm:block hidden'>{language?.name ?? i18n.t('strings:language')}</span>
                         <svg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 13 13' fill='none'>
                             <path
                                 fillRule='evenodd'
@@ -274,7 +271,7 @@ const FileEditContainer = () => {
                                     sideOffset={8}
                                 >
                                     <DropdownMenuItem onSelect={() => saveAndRestart()}>
-                                        Save & Restart
+                                        {i18n.t('server:files.save_and_restart')}
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>

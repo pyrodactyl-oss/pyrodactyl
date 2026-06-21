@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import CaptchaManager from '@/lib/captcha';
+import i18n from '@/lib/i18n';
 
 interface CaptchaProps {
     onSuccess?: (token: string) => void;
@@ -44,12 +45,12 @@ export default function Captcha({
     };
 
     const handleError = (err: any) => {
-        setError('Captcha verification failed');
+        setError(i18n.t('strings:captcha_verification_failed'));
         onErrorRef.current?.(err);
     };
 
     const handleExpired = () => {
-        setError('Captcha expired');
+        setError(i18n.t('strings:captcha_expired'));
         onExpiredRef.current?.();
     };
 
@@ -97,7 +98,7 @@ export default function Captcha({
                 }
             } catch (err) {
                 if (mounted) {
-                    setError('Failed to load captcha');
+                    setError(i18n.t('strings:failed_to_load_captcha'));
                 }
             } finally {
                 if (mounted) {
@@ -123,11 +124,11 @@ export default function Captcha({
         };
 
         const handleError = (event: CustomEvent) => {
-            setError('Captcha verification failed');
+            setError(i18n.t('strings:captcha_verification_failed'));
         };
 
         const handleExpired = (event: CustomEvent) => {
-            setError('Captcha expired');
+            setError(i18n.t('strings:captcha_expired'));
         };
 
         window.addEventListener('captcha:success', handleSuccess as EventListener);

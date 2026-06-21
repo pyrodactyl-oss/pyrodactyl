@@ -1,5 +1,4 @@
 import { hashToPath } from '@/helpers';
-import i18n from '@/lib/i18n';
 import { ArrowUturnCcwLeft, TrashBin } from '@gravity-ui/icons';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import debounce from 'debounce';
@@ -22,6 +21,8 @@ import MassActionsBar from '@/components/server/files/MassActionsBar';
 import NewDirectoryButton from '@/components/server/files/NewDirectoryButton';
 import TrashFileRow from '@/components/server/files/TrashFileRow';
 import UploadButton from '@/components/server/files/UploadButton';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import { bulkDelete, bulkRestore } from '@/api/server/files/bulkTrash';
@@ -180,7 +181,11 @@ const FileManagerContainer = () => {
                                     <div className='flex flex-row gap-1'>
                                         <FileManagerStatus />
                                         <Can action={'file.delete'}>
-                                             <ActionButton variant='secondary' onClick={enterTrash} title={i18n.t('server:files.trash_button')}>
+                                            <ActionButton
+                                                variant='secondary'
+                                                onClick={enterTrash}
+                                                title={i18n.t('server:files.trash_button')}
+                                            >
                                                 <TrashBin className='h-4 w-4 text-red-400' />
                                             </ActionButton>
                                             <div className='w-2' />
@@ -379,10 +384,14 @@ const FileManagerContainer = () => {
                                     <div className='pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'>
                                         <div className='flex items-center space-x-4 pointer-events-auto rounded-lg p-4 bg-black/50 backdrop-blur-sm border border-[#ffffff12]'>
                                             <ActionButton onClick={() => setShowBulkRestore(true)}>
-                                                {i18n.t('server:files.restore_selected', { count: selectedTrash.length })}
+                                                {i18n.t('server:files.restore_selected', {
+                                                    count: selectedTrash.length,
+                                                })}
                                             </ActionButton>
                                             <ActionButton variant='danger' onClick={() => setShowBulkDelete(true)}>
-                                                {i18n.t('server:files.delete_selected', { count: selectedTrash.length })}
+                                                {i18n.t('server:files.delete_selected', {
+                                                    count: selectedTrash.length,
+                                                })}
                                             </ActionButton>
                                         </div>
                                     </div>

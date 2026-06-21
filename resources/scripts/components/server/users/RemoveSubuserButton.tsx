@@ -2,10 +2,10 @@ import { TrashBin } from '@gravity-ui/icons';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';

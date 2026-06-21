@@ -2,13 +2,13 @@ import { CircleCheck, Xmark } from '@gravity-ui/icons';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useContext, useEffect, useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Code from '@/components/elements/Code';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 
 import asDialog from '@/hoc/asDialog';
+
+import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 
@@ -16,8 +16,22 @@ const CircleProgress = ({ progress, error, className }: { progress: number; erro
     if (error) {
         return (
             <svg className={className} viewBox='0 0 32 32'>
-                <circle cx='16' cy='16' r='12' fill='none' stroke='currentColor' strokeWidth='3' className='text-red-400 opacity-50' />
-                <path d='M11 11l10 10M21 11l-10 10' stroke='currentColor' strokeWidth='3' strokeLinecap='round' className='text-red-400' />
+                <circle
+                    cx='16'
+                    cy='16'
+                    r='12'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    className='text-red-400 opacity-50'
+                />
+                <path
+                    d='M11 11l10 10M21 11l-10 10'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    strokeLinecap='round'
+                    className='text-red-400'
+                />
             </svg>
         );
     }
@@ -25,8 +39,24 @@ const CircleProgress = ({ progress, error, className }: { progress: number; erro
     if (progress >= 100) {
         return (
             <svg className={className} viewBox='0 0 32 32'>
-                <circle cx='16' cy='16' r='12' fill='none' stroke='currentColor' strokeWidth='3' className='text-green-400' />
-                <path d='M9 16l4 4 10-8' stroke='currentColor' strokeWidth='3' strokeLinecap='round' strokeLinejoin='round' className='text-green-400' fill='none' />
+                <circle
+                    cx='16'
+                    cy='16'
+                    r='12'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    className='text-green-400'
+                />
+                <path
+                    d='M9 16l4 4 10-8'
+                    stroke='currentColor'
+                    strokeWidth='3'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='text-green-400'
+                    fill='none'
+                />
             </svg>
         );
     }
@@ -101,11 +131,19 @@ const FileUploadList = () => {
             <Dialog.Footer>
                 {!allDone && (
                     <ActionButton variant='danger' onClick={() => clearFileUploads()}>
-                        Cancel Uploads
+                        {i18n.t('server:files.cancel_uploads')}
                     </ActionButton>
                 )}
-                <ActionButton variant='secondary' onClick={() => { if (allDone) { clearFileUploads(); } close(); }}>
-                    {allDone ? 'Done' : 'Close'}
+                <ActionButton
+                    variant='secondary'
+                    onClick={() => {
+                        if (allDone) {
+                            clearFileUploads();
+                        }
+                        close();
+                    }}
+                >
+                    {allDone ? i18n.t('server:operations.done') : i18n.t('server:operations.close')}
                 </ActionButton>
             </Dialog.Footer>
         </div>
@@ -113,8 +151,8 @@ const FileUploadList = () => {
 };
 
 const FileUploadListDialog = asDialog({
-    title: 'File Uploads',
-    description: 'The following files are being uploaded to your server.',
+    title: i18n.t('server:files.file_uploads'),
+    description: i18n.t('server:files.file_uploads_description'),
 })(FileUploadList);
 
 const FileManagerStatus = () => {
@@ -124,9 +162,10 @@ const FileManagerStatus = () => {
     const hasErrors = ServerContext.useStoreState((state) =>
         Object.values(state.files.uploads).some((u) => (u as any).error),
     );
-    const allDone = ServerContext.useStoreState((state) =>
-        Object.keys(state.files.uploads).length > 0 &&
-        Object.values(state.files.uploads).every((u) => !(u as any).error && u.loaded >= u.total),
+    const allDone = ServerContext.useStoreState(
+        (state) =>
+            Object.keys(state.files.uploads).length > 0 &&
+            Object.values(state.files.uploads).every((u) => !(u as any).error && u.loaded >= u.total),
     );
 
     useEffect(() => {
@@ -145,23 +184,44 @@ const FileManagerStatus = () => {
                     onClick={() => setOpen(true)}
                     title={
                         hasErrors
-                            ? `${count} files, some failed - click to view`
+                            ? i18n.t('server:files.some_failed_click_to_view', { count })
                             : allDone
-                              ? 'All uploads complete'
-                              : `${count} files uploading, click to view`
+                              ? i18n.t('server:files.all_uploads_complete')
+                              : i18n.t('server:files.files_uploading_click_to_view', { count })
                     }
                 >
                     {hasErrors ? (
                         <svg className='h-4 w-4' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                             <path d='M12 9v5M12 17h.01' stroke='currentColor' strokeWidth='2' strokeLinecap='round' />
-                            <path d='M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z' stroke='currentColor' strokeWidth='2' strokeLinejoin='round' />
+                            <path
+                                d='M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z'
+                                stroke='currentColor'
+                                strokeWidth='2'
+                                strokeLinejoin='round'
+                            />
                         </svg>
                     ) : allDone ? (
                         <CircleCheck className='h-5 w-5 text-green-400' />
                     ) : (
-                        <svg className='animate-spin h-5 w-5 text-white' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
-                            <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='4' />
-                            <path className='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
+                        <svg
+                            className='animate-spin h-5 w-5 text-white'
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                        >
+                            <circle
+                                className='opacity-25'
+                                cx='12'
+                                cy='12'
+                                r='10'
+                                stroke='currentColor'
+                                strokeWidth='4'
+                            />
+                            <path
+                                className='opacity-75'
+                                fill='currentColor'
+                                d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                            />
                         </svg>
                     )}
                 </ActionButton>

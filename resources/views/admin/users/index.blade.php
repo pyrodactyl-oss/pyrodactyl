@@ -44,16 +44,13 @@
                             <th></th>
                         </tr>
                     </thead>
-                    @php
-                        $langNames = ['en' => 'English', 'es' => 'Español'];
-                    @endphp
                     <tbody>
                         @foreach ($users as $user)
                             <tr class="align-middle">
                                 <td><code>{{ $user->id }}</code></td>
                                 <td><a href="{{ route('admin.users.view', $user->id) }}">{{ $user->email }}</a> @if($user->root_admin)<i class="fa fa-star text-yellow"></i>@endif</td>
                                 <td>{{ $user->username }}</td>
-                                <td>{{ $langNames[$user->language] ?? $user->language }}</td>
+                                <td>{{ $languages[$user->language] ?? $user->language }}</td>
                                 <td class="text-center">
                                     @if($user->use_totp)
                                         <i class="fa fa-lock text-green"></i>

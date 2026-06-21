@@ -3,11 +3,11 @@ import { Form, Formik } from 'formik';
 import { toast } from 'sonner';
 import { object, string } from 'yup';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
@@ -25,7 +25,12 @@ const RenameServerForm = () => {
         <TitledGreyBox title={i18n.t('server:settings.server_details')}>
             <Form className='flex flex-col gap-4'>
                 <Field id={'name'} name={'name'} label={i18n.t('server:settings.server_name')} type={'text'} />
-                <Field id={'description'} name={'description'} label={i18n.t('server:settings.server_description')} type={'text'} />
+                <Field
+                    id={'description'}
+                    name={'description'}
+                    label={i18n.t('server:settings.server_description')}
+                    type={'text'}
+                />
                 <div className={`mt-6 text-right`}>
                     <ActionButton variant='primary' type={'submit'}>
                         {i18n.t('server:settings.save')}

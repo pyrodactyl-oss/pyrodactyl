@@ -8,6 +8,8 @@ import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerBackup } from '@/api/server/types';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -16,8 +18,6 @@ import useFormatBytes from '@/plugins/useFormatBytes';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import BackupContextMenu from './BackupContextMenu';
-
-import i18n from '@/lib/i18n';
 
 interface Props {
     backup: ServerBackup;
@@ -114,12 +114,20 @@ const BackupItem = ({ backup }: Props) => {
                     </div>
 
                     <div className='hidden sm:block flex-shrink-0 text-right min-w-[130px] mr-5'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>{i18n.t('strings:created')}</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>
+                            {i18n.t('strings:created')}
+                        </p>
                         <p
                             className='text-sm text-zinc-300 font-medium'
-                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', { locale: i18n.language === 'es' ? es : undefined })}
+                            title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', {
+                                locale: i18n.language === 'es' ? es : undefined,
+                            })}
                         >
-                            {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}
+                            {formatDistanceToNow(backup.createdAt, {
+                                includeSeconds: true,
+                                addSuffix: true,
+                                locale: i18n.language === 'es' ? es : undefined,
+                            })}
                         </p>
                     </div>
 

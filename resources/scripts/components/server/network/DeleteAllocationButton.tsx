@@ -1,10 +1,10 @@
 import { TrashBin } from '@gravity-ui/icons';
 import { useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
+
+import i18n from '@/lib/i18n';
 
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';

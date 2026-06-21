@@ -7,12 +7,12 @@ import { Checkbox } from '@/components/elements/CheckboxNew';
 import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
+import i18n from '@/lib/i18n';
+
 import useFlash from '@/plugins/useFlash';
 import useFormatBytes from '@/plugins/useFormatBytes';
 
 import BackupContextMenu from './BackupContextMenu';
-
-import i18n from '@/lib/i18n';
 
 export interface UnifiedBackup {
     uuid: string;
@@ -209,9 +209,15 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
                     <p
                         className='text-sm text-zinc-300 font-medium'
-                        title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', { locale: i18n.language === 'es' ? es : undefined })}
+                        title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', {
+                            locale: i18n.language === 'es' ? es : undefined,
+                        })}
                     >
-                        {formatDistanceToNow(backup.createdAt, { includeSeconds: true, addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}
+                        {formatDistanceToNow(backup.createdAt, {
+                            includeSeconds: true,
+                            addSuffix: true,
+                            locale: i18n.language === 'es' ? es : undefined,
+                        })}
                     </p>
                 </div>
 

@@ -22,6 +22,7 @@ import { PageListContainer } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
 import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteAllServerBackups from '@/api/server/backups/deleteAllServerBackups';
 import { getGlobalDaemonType } from '@/api/server/getServer';
@@ -293,9 +294,7 @@ const BackupContainer = () => {
             <ServerContentBlock title={i18n.t('server:backups.title')}>
                 <FlashMessageRender byKey={'backups'} />
                 <MainPageHeader direction='column' title={i18n.t('server:backups.header')}>
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        {i18n.t('server:backups.description')}
-                    </p>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:backups.description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -315,13 +314,22 @@ const BackupContainer = () => {
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             <div className='flex flex-col gap-1 text-center sm:text-right'>
                                 {/* Backup Count Display */}
-                                {backupLimit === null && <p className='text-sm text-zinc-300'>{i18n.t('server:backups.count', { count: backupCount })}</p>}
-                                {backupLimit > 0 && (
+                                {backupLimit === null && (
                                     <p className='text-sm text-zinc-300'>
-                                        {i18n.t('server:backups.count_limited', { count: backupCount, limit: backupLimit })}
+                                        {i18n.t('server:backups.count', { count: backupCount })}
                                     </p>
                                 )}
-                                {backupLimit === 0 && <p className='text-sm text-red-400'>{i18n.t('server:backups.disabled')}</p>}
+                                {backupLimit > 0 && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {i18n.t('server:backups.count_limited', {
+                                            count: backupCount,
+                                            limit: backupLimit,
+                                        })}
+                                    </p>
+                                )}
+                                {backupLimit === 0 && (
+                                    <p className='text-sm text-red-400'>{i18n.t('server:backups.disabled')}</p>
+                                )}
 
                                 {/* Storage Usage Display */}
                                 {storage && (
@@ -360,11 +368,11 @@ const BackupContainer = () => {
                                                     <span className='font-medium'>
                                                         {formatStorage(storage.used_mb)}
                                                     </span>{' '}
-                                                    {backupStorageLimit === null ? (
-                                                        i18n.t('server:backups.space_used')
-                                                    ) : (
-                                                        i18n.t('server:backups.of_used', { amount: formatStorage(backupStorageLimit) })
-                                                    )}
+                                                    {backupStorageLimit === null
+                                                        ? i18n.t('server:backups.space_used')
+                                                        : i18n.t('server:backups.of_used', {
+                                                              amount: formatStorage(backupStorageLimit),
+                                                          })}
                                                 </p>
                                                 {(storage.repository_usage_mb > 0 || storage.legacy_usage_mb > 0) &&
                                                     storage.repository_usage_mb > 0 &&
@@ -422,9 +430,7 @@ const BackupContainer = () => {
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:backups.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:backups.description')}</p>
             </MainPageHeader>
 
             {createModalVisible && (
@@ -533,7 +539,9 @@ const BackupContainer = () => {
                             </ActionButton>
                             <ActionButton variant='danger' onClick={handleDeleteAll} disabled={isDeleting}>
                                 {isDeleting && <Spinner size='small' />}
-                                {isDeleting ? i18n.t('server:backups.deleting') : i18n.t('server:backups.delete_all_button')}
+                                {isDeleting
+                                    ? i18n.t('server:backups.deleting')
+                                    : i18n.t('server:backups.delete_all_button')}
                             </ActionButton>
                         </div>
                     </div>
@@ -574,9 +582,7 @@ const BackupContainer = () => {
                                 </svg>
                                 <div className='text-sm'>
                                     <p className='font-medium text-red-300'>{i18n.t('server:backups.warning')}</p>
-                                    <p className='text-red-400 mt-1'>
-                                        {i18n.t('server:backups.selected_warning')}
-                                    </p>
+                                    <p className='text-red-400 mt-1'>{i18n.t('server:backups.selected_warning')}</p>
                                 </div>
                             </div>
                         </div>
@@ -676,7 +682,8 @@ const BackupContainer = () => {
                                 <span className='text-sm text-zinc-300'>
                                     {selectedBackups.size > 0 ? (
                                         <>
-                                            <span className='font-medium'>{selectedBackups.size}</span> {i18n.t('server:backups.selected')}
+                                            <span className='font-medium'>{selectedBackups.size}</span>{' '}
+                                            {i18n.t('server:backups.selected')}
                                         </>
                                     ) : (
                                         i18n.t('server:backups.select_backups')
@@ -692,7 +699,9 @@ const BackupContainer = () => {
                                 </ActionButton>
                                 <Can action='backup.delete'>
                                     <ActionButton variant='danger' onClick={() => setBulkDeleteModalVisible(true)}>
-                                        {i18n.t('server:backups.delete_selected_button', { count: selectedBackups.size })}
+                                        {i18n.t('server:backups.delete_selected_button', {
+                                            count: selectedBackups.size,
+                                        })}
                                     </ActionButton>
                                 </Can>
                             </div>

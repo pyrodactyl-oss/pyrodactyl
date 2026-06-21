@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react';
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import Input from '@/components/elements/Input';
 
-import { useGlobalStateContext } from './config';
-
 import i18n from '@/lib/i18n';
+
+import { useGlobalStateContext } from './config';
 
 export const VersionSelector = () => {
     const { gameVersions, selectedVersions, setSelectedVersions } = useGlobalStateContext();

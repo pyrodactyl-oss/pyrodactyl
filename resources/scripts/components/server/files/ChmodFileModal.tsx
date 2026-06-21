@@ -1,11 +1,11 @@
 import { fileBitsToString } from '@/helpers';
 import { Form, Formik, FormikHelpers } from 'formik';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+
+import i18n from '@/lib/i18n';
 
 import chmodFiles from '@/api/server/files/chmodFiles';
 

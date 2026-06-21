@@ -5,11 +5,11 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-import i18n from '@/lib/i18n';
 
 const PIDLimitModalFeature = () => {
     const [visible, setVisible] = useState(false);
@@ -57,24 +57,22 @@ const PIDLimitModalFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title={isAdmin ? i18n.t('server:features.pid_limit.title') : i18n.t('server:features.pid_limit.possible_title')}
+            title={
+                isAdmin ? i18n.t('server:features.pid_limit.title') : i18n.t('server:features.pid_limit.possible_title')
+            }
         >
             <FlashMessageRender key={'feature:pidLimit'} />
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
-                        <p>
-                            {i18n.t('server:features.pid_limit.admin_description')}
-                        </p>
+                        <p>{i18n.t('server:features.pid_limit.admin_description')}</p>
                         <p className='mt-3'>
                             <b>{i18n.t('server:features.pid_limit.admin_note')}</b>
                         </p>
                     </>
                 ) : (
                     <>
-                        <p>
-                            {i18n.t('server:features.pid_limit.user_description')}
-                        </p>
+                        <p>{i18n.t('server:features.pid_limit.user_description')}</p>
                         <p className='mt-3'>
                             <code className={`font-mono bg-zinc-900`}>
                                 pthread_create failed, Possibly out of memory or process/resource limits reached

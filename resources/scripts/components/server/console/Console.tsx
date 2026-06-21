@@ -80,7 +80,7 @@ const Console = () => {
         switch (status) {
             // Sent by either the source or target node if a failure occurs.
             case 'failure':
-                terminal.writeln(TERMINAL_PRELUDE + 'Transfer has failed.\u001b[0m');
+                terminal.writeln(TERMINAL_PRELUDE + i18n.t('server:console.transfer_failed') + '\u001b[0m');
                 return;
         }
     };

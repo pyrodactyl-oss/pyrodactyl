@@ -15,6 +15,7 @@ import { PageListContainer, PageListItem } from '@/components/elements/pages/Pag
 import DatabaseRow from '@/components/server/databases/DatabaseRow';
 
 import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import createServerDatabase from '@/api/server/databases/createServerDatabase';
 import getServerDatabases from '@/api/server/databases/getServerDatabases';
@@ -97,11 +98,16 @@ const DatabasesContainer = () => {
                             )}
                             {databaseLimit > 0 && (
                                 <p className='text-sm text-zinc-300 text-center sm:text-right'>
-                                    {i18n.t('server:databases.count_limited', { count: databases.length, limit: databaseLimit })}
+                                    {i18n.t('server:databases.count_limited', {
+                                        count: databases.length,
+                                        limit: databaseLimit,
+                                    })}
                                 </p>
                             )}
                             {databaseLimit === 0 && (
-                                <p className='text-sm text-red-400 text-center sm:text-right'>{i18n.t('server:databases.disabled')}</p>
+                                <p className='text-sm text-red-400 text-center sm:text-right'>
+                                    {i18n.t('server:databases.disabled')}
+                                </p>
                             )}
                             {(databaseLimit === null || (databaseLimit > 0 && databaseLimit !== databases.length)) && (
                                 <ActionButton variant='primary' onClick={() => setCreateModalVisible(true)}>
@@ -112,9 +118,7 @@ const DatabasesContainer = () => {
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:databases.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:databases.description')}</p>
             </MainPageHeader>
 
             <Formik
@@ -180,7 +184,9 @@ const DatabasesContainer = () => {
                             <Database className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                            {databaseLimit === 0 ? i18n.t('server:databases.unavailable') : i18n.t('server:databases.empty')}
+                            {databaseLimit === 0
+                                ? i18n.t('server:databases.unavailable')
+                                : i18n.t('server:databases.empty')}
                         </h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
                             {databaseLimit === 0

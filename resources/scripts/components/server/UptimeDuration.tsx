@@ -11,14 +11,20 @@ const UptimeDuration = ({ uptime }: { uptime: number }) => {
     if (days > 0) {
         return (
             <>
-                {days}{i18n.t('server:console.days_short')} {hours}{i18n.t('server:console.hours_short')} {minutes}{i18n.t('server:console.minutes_short')}
+                {days}
+                {i18n.t('server:console.days_short')} {hours}
+                {i18n.t('server:console.hours_short')} {minutes}
+                {i18n.t('server:console.minutes_short')}
             </>
         );
     }
 
     return (
         <>
-            {hours}{i18n.t('server:console.hours_short')} {minutes}{i18n.t('server:console.minutes_short')} {seconds}{i18n.t('server:console.seconds_short')}
+            {hours}
+            {i18n.t('server:console.hours_short')} {minutes}
+            {i18n.t('server:console.minutes_short')} {seconds}
+            {i18n.t('server:console.seconds_short')}
         </>
     );
 };

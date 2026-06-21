@@ -4,9 +4,9 @@ import { useState } from 'react';
 
 import { Dialog } from '@/components/elements/dialog';
 
-import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
-
 import i18n from '@/lib/i18n';
+
+import { deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 
 import { useFlashKey } from '@/plugins/useFlash';
 

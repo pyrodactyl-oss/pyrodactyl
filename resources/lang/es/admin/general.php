@@ -741,4 +741,10 @@ return [
     'swal_error_title' => '¡Vaya!',
     'swal_error_text' => 'Ocurrió un error al procesar esta solicitud.',
     'swal_success' => '¡Éxito!',
+
+    'new_nest' => 'Nuevo Nest',
+    'domain_placeholder' => 'ejemplo.com',
+    'env_only_notice' => 'Tu Panel está configurado actualmente para leer la configuración solo desde el entorno. Deberás establecer <code>APP_ENVIRONMENT_ONLY=false</code> en tu archivo de entorno para cargar la configuración dinámicamente.',
+    'others' => 'otro(s)',
+    'startup_not_defined' => '¡Inicio no definido!',
 ];

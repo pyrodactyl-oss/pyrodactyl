@@ -20,9 +20,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
     return (
         <div className='p-6 space-y-6 max-w-lg mx-auto rounded-lg shadow-lg'>
             <FlashMessageRender byKey='account' />
-            <p className='text-sm text-white-600 mt-2'>
-                {i18n.t('dashboard:api_key_modal.description')}
-            </p>
+            <p className='text-sm text-white-600 mt-2'>{i18n.t('dashboard:api_key_modal.description')}</p>
             <div className='relative mt-6'>
                 <pre className='bg-gray-900 text-white p-4 rounded-lg font-mono overflow-x-auto'>
                     <CopyOnClick text={apiKey}>

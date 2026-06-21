@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import i18n from '@/lib/i18n';
+
 // ==================== TYPES ====================
 export type ModLoader = {
     id: string;
@@ -62,7 +64,7 @@ const fetchVersion = async () => {
         return response.data;
     } catch (error: any) {
         console.error('Error fetching app version:', error.response?.data || error.message);
-        toast.error('Failed to fetch app version. Using default.');
+        toast.error(i18n.t('server:modrinth.failed_fetch_version'));
         return { version: 'unknown' };
     }
 };

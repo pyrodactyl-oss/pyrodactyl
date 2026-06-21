@@ -6,11 +6,13 @@ import ActionButton from '@/components/elements/ActionButton';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import Select from '@/components/elements/Select';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
-import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import Spinner from '@/components/elements/Spinner';
 import ActivityLogEntry from '@/components/elements/activity/ActivityLogEntry';
+import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import { Input } from '@/components/elements/inputs';
 import PaginationFooter from '@/components/elements/table/PaginationFooter';
+
+import i18n from '@/lib/i18n';
 
 import { ActivityLogFilters } from '@/api/account/activity';
 import { clearActivityLogs, deleteActivityLog, useActivityLogs } from '@/api/server/activity';
@@ -20,8 +22,6 @@ import { ServerContext } from '@/state/server';
 
 import { useFlashKey } from '@/plugins/useFlash';
 import useLocationHash from '@/plugins/useLocationHash';
-
-import i18n from '@/lib/i18n';
 
 const ServerActivityLogContainer = () => {
     const { hash } = useLocationHash();
@@ -44,7 +44,10 @@ const ServerActivityLogContainer = () => {
     const handleClearAll = async () => {
         try {
             await clearActivityLogs(uuid!);
-            mutate({ items: [], pagination: { total: 0, count: 0, perPage: 25, currentPage: 1, totalPages: 1 } }, { revalidate: false });
+            mutate(
+                { items: [], pagination: { total: 0, count: 0, perPage: 25, currentPage: 1, totalPages: 1 } },
+                { revalidate: false },
+            );
         } catch {
             mutate();
         }
@@ -188,69 +191,192 @@ const ServerActivityLogContainer = () => {
 
     return (
         <>
-        <ServerContentBlock title={i18n.t('server:activity.title')}>
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
-                <FlashMessageRender byKey={'server:activity'} />
+            <ServerContentBlock title={i18n.t('server:activity.title')}>
+                <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+                    <FlashMessageRender byKey={'server:activity'} />
 
-                <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
-                    style={{
-                        animationDelay: '75ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <MainPageHeader
-                        direction='column'
-                        title={i18n.t('server:activity.header')}
-                        titleChildren={
-                            <div className='flex gap-2 items-center flex-wrap'>
-                                <ActionButton
-                                    variant='secondary'
-                                    onClick={() => setShowFilters(!showFilters)}
-                                    className='flex items-center gap-2'
-                                    title={i18n.t('server:activity.filters_toggle')}
-                                >
-                                    <Funnel width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                    Filters
-                                    {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
-                                </ActionButton>
-                                <ActionButton
-                                    variant='secondary'
-                                    onClick={exportLogs}
-                                    disabled={!filteredData?.items?.length}
-                                    className='flex items-center gap-2'
-                                    title={i18n.t('server:activity.export_csv')}
-                                >
-                                    <ArrowDownToLine width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                    Export
-                                </ActionButton>
-                                {rootAdmin && (
-                                    <ActionButton
-                                        variant='secondary'
-                                        onClick={() => setShowClearConfirm(true)}
-                                        disabled={!filteredData?.items?.length}
-                                        className='flex items-center gap-2 !text-red-400 hover:!text-red-300'
-                                        title={i18n.t('server:activity.clear_title')}
-                                    >
-                                        <TrashBin width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                        Clear
-                                    </ActionButton>
-                                )}
-                            </div>
-                        }
-                    >
-                        <p className='text-sm text-neutral-400 leading-relaxed'>
-                            {i18n.t('server:activity.description')}
-                        </p>
-                    </MainPageHeader>
-                </div>
-
-                {showFilters && (
                     <div
                         className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
                         style={{
-                            animationDelay: '100ms',
+                            animationDelay: '75ms',
+                            animationTimingFunction:
+                                'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                        }}
+                    >
+                        <MainPageHeader
+                            direction='column'
+                            title={i18n.t('server:activity.header')}
+                            titleChildren={
+                                <div className='flex gap-2 items-center flex-wrap'>
+                                    <ActionButton
+                                        variant='secondary'
+                                        onClick={() => setShowFilters(!showFilters)}
+                                        className='flex items-center gap-2'
+                                        title={i18n.t('server:activity.filters_toggle')}
+                                    >
+                                        <Funnel width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                        Filters
+                                        {hasActiveFilters && <span className='w-2 h-2 bg-brand rounded-full'></span>}
+                                    </ActionButton>
+                                    <ActionButton
+                                        variant='secondary'
+                                        onClick={exportLogs}
+                                        disabled={!filteredData?.items?.length}
+                                        className='flex items-center gap-2'
+                                        title={i18n.t('server:activity.export_csv')}
+                                    >
+                                        <ArrowDownToLine
+                                            width={22}
+                                            height={22}
+                                            className='w-4 h-4'
+                                            fill='currentColor'
+                                        />
+                                        Export
+                                    </ActionButton>
+                                    {rootAdmin && (
+                                        <ActionButton
+                                            variant='secondary'
+                                            onClick={() => setShowClearConfirm(true)}
+                                            disabled={!filteredData?.items?.length}
+                                            className='flex items-center gap-2 !text-red-400 hover:!text-red-300'
+                                            title={i18n.t('server:activity.clear_title')}
+                                        >
+                                            <TrashBin width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                            Clear
+                                        </ActionButton>
+                                    )}
+                                </div>
+                            }
+                        >
+                            <p className='text-sm text-neutral-400 leading-relaxed'>
+                                {i18n.t('server:activity.description')}
+                            </p>
+                        </MainPageHeader>
+                    </div>
+
+                    {showFilters && (
+                        <div
+                            className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                            style={{
+                                animationDelay: '100ms',
+                                animationTimingFunction:
+                                    'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
+                            }}
+                        >
+                            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
+                                <div className='flex items-center gap-2 mb-4'>
+                                    <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                                        <Funnel
+                                            width={22}
+                                            height={22}
+                                            className='w-2.5 h-2.5 text-zinc-400'
+                                            fill='currentColor'
+                                        />
+                                    </div>
+                                    <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                </div>
+
+                                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                                    <div>
+                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                        <div className='relative'>
+                                            <Magnifier
+                                                width={22}
+                                                height={22}
+                                                className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
+                                                fill='currentColor'
+                                            />
+                                            <Input.Text
+                                                type='text'
+                                                placeholder='Search events, IPs, users...'
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                                style={{ paddingLeft: '2.5rem' }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                            Event Type
+                                        </label>
+                                        <Select
+                                            value={selectedEventType}
+                                            onChange={(e) => setSelectedEventType(e.target.value)}
+                                            className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
+                                        >
+                                            <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                                All Events
+                                            </option>
+                                            {eventTypes.map((type) => (
+                                                <option
+                                                    key={type}
+                                                    value={type}
+                                                    style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                                >
+                                                    {type}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                    </div>
+
+                                    <div>
+                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                            Time Range
+                                        </label>
+                                        <Select
+                                            value={dateRange}
+                                            onChange={(e) => setDateRange(e.target.value)}
+                                            className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
+                                        >
+                                            <option
+                                                value='all'
+                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                            >
+                                                All Time
+                                            </option>
+                                            <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                                Last Hour
+                                            </option>
+                                            <option
+                                                value='24h'
+                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                            >
+                                                Last 24 Hours
+                                            </option>
+                                            <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                                Last 7 Days
+                                            </option>
+                                            <option
+                                                value='30d'
+                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                            >
+                                                Last 30 Days
+                                            </option>
+                                        </Select>
+                                    </div>
+
+                                    <div className='flex items-end'>
+                                        {hasActiveFilters && (
+                                            <ActionButton
+                                                variant='secondary'
+                                                onClick={clearAllFilters}
+                                                className='flex items-center gap-2 w-full'
+                                            >
+                                                <Xmark width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                                Clear All Filters
+                                            </ActionButton>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <div
+                        className='transform-gpu skeleton-anim-2'
+                        style={{
+                            animationDelay: '125ms',
                             animationTimingFunction:
                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                         }}
@@ -258,183 +384,82 @@ const ServerActivityLogContainer = () => {
                         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
                             <div className='flex items-center gap-2 mb-4'>
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                    <Funnel
+                                    <ClockArrowRotateLeft
                                         width={22}
                                         height={22}
-                                        className='w-2.5 h-2.5 text-zinc-400'
+                                        className=' text-zinc-400'
                                         fill='currentColor'
                                     />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
-                            </div>
-
-                            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-                                <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
-                                    <div className='relative'>
-                                        <Magnifier
-                                            width={22}
-                                            height={22}
-                                            className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
-                                            fill='currentColor'
-                                        />
-                                        <Input.Text
-                                            type='text'
-                                            placeholder='Search events, IPs, users...'
-                                            value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            style={{ paddingLeft: '2.5rem' }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
-                                    <Select
-                                        value={selectedEventType}
-                                        onChange={(e) => setSelectedEventType(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
-                                    >
-                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Events
-                                        </option>
-                                        {eventTypes.map((type) => (
-                                            <option
-                                                key={type}
-                                                value={type}
-                                                style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
-                                            >
-                                                {type}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </div>
-
-                                <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Time Range</label>
-                                    <Select
-                                        value={dateRange}
-                                        onChange={(e) => setDateRange(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
-                                    >
-                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Time
-                                        </option>
-                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last Hour
-                                        </option>
-                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 24 Hours
-                                        </option>
-                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 7 Days
-                                        </option>
-                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 30 Days
-                                        </option>
-                                    </Select>
-                                </div>
-
-                                <div className='flex items-end'>
-                                    {hasActiveFilters && (
-                                        <ActionButton
-                                            variant='secondary'
-                                            onClick={clearAllFilters}
-                                            className='flex items-center gap-2 w-full'
-                                        >
-                                            <Xmark width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                            Clear All Filters
-                                        </ActionButton>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                <div
-                    className='transform-gpu skeleton-anim-2'
-                    style={{
-                        animationDelay: '125ms',
-                        animationTimingFunction:
-                            'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
-                    }}
-                >
-                    <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                        <div className='flex items-center gap-2 mb-4'>
-                            <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <ClockArrowRotateLeft
-                                    width={22}
-                                    height={22}
-                                    className=' text-zinc-400'
-                                    fill='currentColor'
-                                />
-                            </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('server:activity.events_header')}</h3>
-                            {filteredData?.items && (
-                                <span className='text-sm text-zinc-400'>
-                                    ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
-                                </span>
-                            )}
-                        </div>
-
-                        {!data && isValidating ? (
-                            <Spinner centered />
-                        ) : !filteredData?.items?.length ? (
-                            <div className='text-center py-12'>
-                                <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? i18n.t('server:activity.no_matching') : i18n.t('server:activity.no_activity')}
+                                <h3 className='text-base font-semibold text-zinc-100'>
+                                    {i18n.t('server:activity.events_header')}
                                 </h3>
-                                <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
-                                    {hasActiveFilters
-                                        ? i18n.t('server:activity.no_matching_description')
-                                        : i18n.t('server:activity.no_activity_description')}
-                                </p>
-                                {hasActiveFilters && (
-                                    <div className='flex gap-2 justify-center'>
-                                        <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            {i18n.t('server:activity.clear_all_filters')}
-                                        </ActionButton>
-                                        <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
-                                            {i18n.t('server:activity.adjust_filters')}
-                                        </ActionButton>
-                                    </div>
+                                {filteredData?.items && (
+                                    <span className='text-sm text-zinc-400'>
+                                        ({filteredData.items.length}{' '}
+                                        {filteredData.items.length === 1 ? 'event' : 'events'})
+                                    </span>
                                 )}
                             </div>
-                        ) : (
-                            <div className='divide-y divide-zinc-800/30'>
-                                {filteredData.items.map((activity) => (
-                                    <ActivityLogEntry
-                                        key={activity.id}
-                                        activity={activity}
-                                        onDelete={rootAdmin ? handleDeleteActivity : undefined}
-                                    >
-                                    </ActivityLogEntry>
-                                ))}
-                            </div>
-                        )}
 
-                        {data && (
-                            <div className='mt-4'>
-                                <PaginationFooter
-                                    pagination={data.pagination}
-                                    onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
-                                />
-                            </div>
-                        )}
+                            {!data && isValidating ? (
+                                <Spinner centered />
+                            ) : !filteredData?.items?.length ? (
+                                <div className='text-center py-12'>
+                                    <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
+                                        {hasActiveFilters
+                                            ? i18n.t('server:activity.no_matching')
+                                            : i18n.t('server:activity.no_activity')}
+                                    </h3>
+                                    <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
+                                        {hasActiveFilters
+                                            ? i18n.t('server:activity.no_matching_description')
+                                            : i18n.t('server:activity.no_activity_description')}
+                                    </p>
+                                    {hasActiveFilters && (
+                                        <div className='flex gap-2 justify-center'>
+                                            <ActionButton variant='secondary' onClick={clearAllFilters}>
+                                                {i18n.t('server:activity.clear_all_filters')}
+                                            </ActionButton>
+                                            <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
+                                                {i18n.t('server:activity.adjust_filters')}
+                                            </ActionButton>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <div className='divide-y divide-zinc-800/30'>
+                                    {filteredData.items.map((activity) => (
+                                        <ActivityLogEntry
+                                            key={activity.id}
+                                            activity={activity}
+                                            onDelete={rootAdmin ? handleDeleteActivity : undefined}
+                                        ></ActivityLogEntry>
+                                    ))}
+                                </div>
+                            )}
+
+                            {data && (
+                                <div className='mt-4'>
+                                    <PaginationFooter
+                                        pagination={data.pagination}
+                                        onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </ServerContentBlock>
-        <ConfirmationDialog
-            open={showClearConfirm}
-            onClose={() => setShowClearConfirm(false)}
-            onConfirmed={handleClearAll}
-            title={i18n.t('server:activity.clear_title')}
-            confirm={i18n.t('server:activity.clear_all_button')}
-        >
-            {i18n.t('server:activity.clear_all_message')}
-        </ConfirmationDialog>
+            </ServerContentBlock>
+            <ConfirmationDialog
+                open={showClearConfirm}
+                onClose={() => setShowClearConfirm(false)}
+                onConfirmed={handleClearAll}
+                title={i18n.t('server:activity.clear_title')}
+                confirm={i18n.t('server:activity.clear_all_button')}
+            >
+                {i18n.t('server:activity.clear_all_message')}
+            </ConfirmationDialog>
         </>
     );
 };

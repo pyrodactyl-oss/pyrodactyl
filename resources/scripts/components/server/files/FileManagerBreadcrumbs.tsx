@@ -1,7 +1,8 @@
 import { encodePathSegments } from '@/helpers';
-import i18n from '@/lib/i18n';
 import { Fragment, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
+
+import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 

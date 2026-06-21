@@ -184,7 +184,7 @@
             swal({
               type: 'error',
               title: '{{ trans('admin/general.connection_failed') }}',
-              text: response.message || 'An unexpected error occurred.'
+              text: response.message || '{{ trans('admin/general.unexpected_error') }}'
             });
           })
           .always(function () {

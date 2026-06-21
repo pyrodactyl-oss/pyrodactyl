@@ -16,6 +16,8 @@ import Pagination from '@/components/elements/Pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 
+import i18n from '@/lib/i18n';
+
 import { toggleGhostMode } from '@/api/account/ghostMode';
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
@@ -91,7 +93,7 @@ const DashboardContainer = () => {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+        <PageContentBlock title={i18n.t('strings:dashboard')} showFlashKey={'dashboard'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <Tabs
                     defaultValue={dashboardDisplayOption}
@@ -167,7 +169,7 @@ const DashboardContainer = () => {
                                                 localStorage.setItem(`${uuid}:size_display`, 'mib');
                                             }}
                                         >
-                                            MiB
+                                            {i18n.t('strings:MiB')}
                                         </button>
                                         <button
                                             type='button'
@@ -180,7 +182,7 @@ const DashboardContainer = () => {
                                                 localStorage.setItem(`${uuid}:size_display`, 'mb');
                                             }}
                                         >
-                                            MB
+                                            {i18n.t('strings:MB')}
                                         </button>
                                     </div>
                                     {rootAdmin && (
@@ -245,13 +247,13 @@ const DashboardContainer = () => {
                                                     </div>
                                                     <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'No other servers found'
-                                                            : 'No servers found'}
+                                                            ? i18n.t('strings:no_other_servers_found')
+                                                            : i18n.t('strings:no_servers_found')}
                                                     </h3>
                                                     <p className='text-sm text-zinc-400 max-w-sm'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'There are no other servers to display.'
-                                                            : 'There are no servers associated with your account.'}
+                                                            ? i18n.t('strings:no_other_servers_description')
+                                                            : i18n.t('strings:no_servers_description')}
                                                     </p>
                                                 </div>
                                             </div>
@@ -290,13 +292,13 @@ const DashboardContainer = () => {
                                                     </div>
                                                     <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'No other servers found'
-                                                            : 'No servers found'}
+                                                            ? i18n.t('strings:no_other_servers_found')
+                                                            : i18n.t('strings:no_servers_found')}
                                                     </h3>
                                                     <p className='text-sm text-zinc-400 max-w-sm'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'There are no other servers to display.'
-                                                            : 'There are no servers associated with your account.'}
+                                                            ? i18n.t('strings:no_other_servers_description')
+                                                            : i18n.t('strings:no_servers_description')}
                                                     </p>
                                                 </div>
                                             </div>

@@ -1,8 +1,6 @@
 import { useStoreState } from 'easy-peasy';
 import isEqual from 'react-fast-compare';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -14,6 +12,7 @@ import TitledGreyBox from '@/components/elements/TitledGreyBox';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
 
 import { ip } from '@/lib/formatters';
+import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 
@@ -30,9 +29,7 @@ const SettingsContainer = () => {
         <ServerContentBlock title={i18n.t('server:settings.title')}>
             <FlashMessageRender byKey={'settings'} />
             <MainPageHeader direction='column' title={i18n.t('server:settings.header')}>
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:settings.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:settings.description')}</p>
             </MainPageHeader>
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
@@ -84,7 +81,9 @@ const SettingsContainer = () => {
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                        <ActionButton variant='secondary'>{i18n.t('server:settings.launch_sftp')}</ActionButton>
+                                    <ActionButton variant='secondary'>
+                                        {i18n.t('server:settings.launch_sftp')}
+                                    </ActionButton>
                                 </a>
                             </div>
                         </div>

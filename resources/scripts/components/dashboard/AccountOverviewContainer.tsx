@@ -18,9 +18,9 @@ import {
 } from '@/components/elements/DropdownMenu';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
-import updateAccountLanguage from '@/api/account/updateAccountLanguage';
-
 import { LANGUAGE_NAMES, SUPPORTED_LANGUAGES, loadTranslations } from '@/lib/i18n';
+
+import updateAccountLanguage from '@/api/account/updateAccountLanguage';
 
 import { useStoreActions, useStoreState } from '@/state/hooks';
 
@@ -152,7 +152,9 @@ const AccountOverviewContainer = () => {
                                     {t('version')}: {import.meta.env.VITE_PYRODACTYL_VERSION} -{' '}
                                     {import.meta.env.VITE_BRANCH_NAME}
                                 </Code>
-                                <Code>{t('commit')}: {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}</Code>
+                                <Code>
+                                    {t('commit')}: {import.meta.env.VITE_COMMIT_HASH.slice(0, 7)}
+                                </Code>
                             </div>
                         </ContentBox>
                     </div>

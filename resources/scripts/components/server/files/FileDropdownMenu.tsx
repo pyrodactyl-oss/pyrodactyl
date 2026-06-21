@@ -4,13 +4,13 @@ import { memo, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { toast } from 'sonner';
 
-import i18n from '@/lib/i18n';
-
 import Can from '@/components/elements/Can';
 import { ContextMenuContent, ContextMenuItem } from '@/components/elements/ContextMenu';
 import { Dialog } from '@/components/elements/dialog';
 import ChmodFileModal from '@/components/server/files/ChmodFileModal';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
+
+import i18n from '@/lib/i18n';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import copyFile from '@/api/server/files/copyFile';
@@ -96,11 +96,16 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             <Dialog.Confirm
                 open={showConfirmation}
                 onClose={() => setShowConfirmation(false)}
-                title={i18n.t('server:files.delete_item', { type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type') })}
+                title={i18n.t('server:files.delete_item', {
+                    type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type'),
+                })}
                 confirm={i18n.t('server:files.delete_confirm')}
                 onConfirmed={doDeletion}
             >
-                {i18n.t('server:files.delete_body', { type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type'), days: retentionDays })}
+                {i18n.t('server:files.delete_body', {
+                    type: file.isFile ? i18n.t('server:files.file_type') : i18n.t('server:files.directory_type'),
+                    days: retentionDays,
+                })}
             </Dialog.Confirm>
             {modal ? (
                 modal === 'chmod' ? (
@@ -145,7 +150,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 )}
                 {file.isArchiveType() ? (
                     <Can action={'file.create'}>
-                        <ContextMenuItem className='flex gap-2' onSelect={doUnarchive} title={i18n.t('server:files.unarchive')}>
+                        <ContextMenuItem
+                            className='flex gap-2'
+                            onSelect={doUnarchive}
+                            title={i18n.t('server:files.unarchive')}
+                        >
                             <FileZipper className='h-4! w-4!' fill='currentColor' />
                             <span>{i18n.t('server:files.unarchive')}</span>
                         </ContextMenuItem>

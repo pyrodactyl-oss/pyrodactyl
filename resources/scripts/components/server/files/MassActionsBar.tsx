@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 import RenameFileModal from '@/components/server/files/RenameFileModal';
+
+import i18n from '@/lib/i18n';
 
 import compressFiles from '@/api/server/files/compressFiles';
 import trashFiles from '@/api/server/files/trashFiles';
@@ -27,6 +27,9 @@ const MassActionsBar = () => {
     const [loadingMessage, setLoadingMessage] = useState('');
     const [showConfirm, setShowConfirm] = useState(false);
     const [showMove, setShowMove] = useState(false);
+    const [isMoving, setIsMoving] = useState(false);
+    const [isArchiving, setIsArchiving] = useState(false);
+    const [isTrashing, setIsTrashing] = useState(false);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const selectedFiles = ServerContext.useStoreState((state) => state.files.selectedFiles);
@@ -34,11 +37,17 @@ const MassActionsBar = () => {
     const retentionDays = useStoreState((state) => state.settings.data?.trash_retention_days ?? 30);
 
     useEffect(() => {
-        if (!loading) setLoadingMessage('');
+        if (!loading) {
+            setLoadingMessage('');
+            setIsMoving(false);
+            setIsArchiving(false);
+            setIsTrashing(false);
+        }
     }, [loading]);
 
     const onClickCompress = () => {
         setLoading(true);
+        setIsArchiving(true);
         clearFlashes('files');
         setLoadingMessage(i18n.t('server:files.archiving'));
 
@@ -51,6 +60,7 @@ const MassActionsBar = () => {
 
     const onClickConfirmDeletion = () => {
         setLoading(true);
+        setIsTrashing(true);
         setShowConfirm(false);
         clearFlashes('files');
         setLoadingMessage(i18n.t('server:files.trashing'));
@@ -87,13 +97,18 @@ const MassActionsBar = () => {
                     loading={loading}
                 >
                     <p className={'mb-2'}>
-                        {i18n.t('server:files.move_to_trash_message', { count: selectedFiles.length, days: retentionDays })}
+                        {i18n.t('server:files.move_to_trash_message', {
+                            count: selectedFiles.length,
+                            days: retentionDays,
+                        })}
                     </p>
                     <ul className={'list-disc pl-5 text-sm text-zinc-400 space-y-0.5'}>
                         {selectedFiles.slice(0, 15).map((file) => (
                             <li key={file}>{file}</li>
                         ))}
-                        {selectedFiles.length > 15 && <li>{i18n.t('server:files.and_others', { count: selectedFiles.length - 15 })}</li>}
+                        {selectedFiles.length > 15 && (
+                            <li>{i18n.t('server:files.and_others', { count: selectedFiles.length - 15 })}</li>
+                        )}
                     </ul>
                 </Dialog.Confirm>
                 {showMove && (
@@ -115,15 +130,15 @@ const MassActionsBar = () => {
                             className={`flex items-center space-x-4 pointer-events-auto rounded-lg p-4 bg-black/50 backdrop-blur-sm border border-[#ffffff12]`}
                         >
                             <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
-                                {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
+                                {isMoving && <Spinner size='small' />}
                                 {i18n.t('server:files.move')}
                             </ActionButton>
                             <ActionButton onClick={onClickCompress} disabled={loading}>
-                                {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
+                                {isArchiving && <Spinner size='small' />}
                                 {i18n.t('server:files.archive')}
                             </ActionButton>
                             <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
-                                {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
+                                {isTrashing && <Spinner size='small' />}
                                 {i18n.t('server:files.move_to_trash')}
                             </ActionButton>
                         </div>

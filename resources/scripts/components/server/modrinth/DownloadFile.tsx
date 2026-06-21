@@ -17,7 +17,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
     const downloadAndUploadFile = async () => {
         setLoading(true);
         try {
-            toast.info('Downloading file from Modrinth...');
+            toast.info(i18n.t('server:modrinth.downloading_from_modrinth'));
 
             // 1️⃣ Download the file from Modrinth
             const downloadResponse = await axios.get(url, {
@@ -34,7 +34,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
             formData.append('files', file, fileName);
 
             // 3️⃣ Upload to Pyrodactyl Server
-            toast.info(`Uploading ${fileName} to server...`);
+            toast.info(i18n.t('server:modrinth.uploading_to_server', { fileName }));
             await axios.post(`/api/client/servers/${serverUuid}/files/upload`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 params: { directory: `/container/${directory}` },
@@ -45,7 +45,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
                 },
             });
 
-            toast.success(`${fileName} uploaded successfully!`);
+            toast.success(i18n.t('server:modrinth.uploaded_successfully', { fileName }));
         } catch (error) {
             handleError(error);
         } finally {
@@ -55,13 +55,13 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
 
     const handleError = (error: any) => {
         if (axios.isCancel(error)) {
-            toast.warning('Request cancelled.');
+            toast.warning(i18n.t('server:modrinth.request_cancelled'));
         } else if (error.response) {
-            toast.error(`Server error! Status: ${error.response.status}`);
+            toast.error(i18n.t('server:modrinth.server_error_status', { status: error.response.status }));
         } else if (error.request) {
-            toast.error('No response from server.');
+            toast.error(i18n.t('server:modrinth.no_response_from_server'));
         } else {
-            toast.error(`Error: ${error.message}`);
+            toast.error(i18n.t('server:modrinth.error_with_message', { message: error.message }));
         }
     };
 
@@ -74,7 +74,7 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
             >
                 {loading ? i18n.t('server:operations.processing') : i18n.t('server:modrinth.download_and_upload')}
             </button>
-            {progress > 0 && <p className='mt-2 text-sm'>Upload Progress: {progress}%</p>}
+            {progress > 0 && <p className='mt-2 text-sm'>{i18n.t('server:modrinth.upload_progress', { progress })}</p>}
         </div>
     );
 };

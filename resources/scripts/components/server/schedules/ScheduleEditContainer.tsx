@@ -4,8 +4,6 @@ import { useCallback, useEffect, useState } from 'react';
 import isEqual from 'react-fast-compare';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -17,6 +15,8 @@ import DeleteScheduleButton from '@/components/server/schedules/DeleteScheduleBu
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
+
+import i18n from '@/lib/i18n';
 
 import getServerSchedule from '@/api/server/schedules/getServerSchedule';
 import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
@@ -115,7 +115,9 @@ const ScheduleEditContainer = () => {
                             <p className={`mt-1 text-sm`}>
                                 <strong>{i18n.t('server:schedules.last_run')}&nbsp;</strong>
                                 {schedule.lastRunAt ? (
-                                    format(schedule.lastRunAt, "MMM do 'at' h:mma", { locale: i18n.language === 'es' ? es : undefined })
+                                    format(schedule.lastRunAt, "MMM do 'at' h:mma", {
+                                        locale: i18n.language === 'es' ? es : undefined,
+                                    })
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>
                                 )}
@@ -125,7 +127,9 @@ const ScheduleEditContainer = () => {
 
                                 <strong>{i18n.t('server:schedules.next_run')}&nbsp;</strong>
                                 {schedule.nextRunAt ? (
-                                    format(schedule.nextRunAt, "MMM do 'at' h:mma", { locale: i18n.language === 'es' ? es : undefined })
+                                    format(schedule.nextRunAt, "MMM do 'at' h:mma", {
+                                        locale: i18n.language === 'es' ? es : undefined,
+                                    })
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>
                                 )}
@@ -138,24 +142,24 @@ const ScheduleEditContainer = () => {
                                     onClick={toggleEditModal}
                                     className={'flex-1 min-w-max'}
                                 >
-                                    Edit
+                                    {i18n.t('server:schedules.edit')}
                                 </ActionButton>
                                 <ActionButton
                                     variant='primary'
                                     onClick={() => setShowTaskModal(true)}
                                     className={'flex-1 min-w-max'}
                                 >
-                                    New Task
+                                    {i18n.t('server:schedules.new_task')}
                                 </ActionButton>
                             </Can>
                         </div>
                     </div>
                     <div className={`grid grid-cols-3 sm:grid-cols-5 gap-4`}>
-                        <CronBox title={'Minute'} value={schedule.cron.minute} />
-                        <CronBox title={'Hour'} value={schedule.cron.hour} />
-                        <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
-                        <CronBox title={'Month'} value={schedule.cron.month} />
-                        <CronBox title={'Day (Week)'} value={schedule.cron.dayOfWeek} />
+                        <CronBox title={i18n.t('server:schedules.minute')} value={schedule.cron.minute} />
+                        <CronBox title={i18n.t('server:schedules.hour')} value={schedule.cron.hour} />
+                        <CronBox title={i18n.t('server:schedules.day_of_month')} value={schedule.cron.dayOfMonth} />
+                        <CronBox title={i18n.t('server:schedules.month')} value={schedule.cron.month} />
+                        <CronBox title={i18n.t('server:schedules.day_of_week')} value={schedule.cron.dayOfWeek} />
                     </div>
                     <div>
                         {schedule.tasks.length > 0
@@ -189,7 +193,7 @@ const ScheduleEditContainer = () => {
                                     disabled={schedule.isProcessing}
                                     onClick={onTriggerExecute}
                                 >
-                                    Run Now
+                                    {i18n.t('server:schedules.run_now')}
                                 </ActionButton>
                             </Can>
                         )}

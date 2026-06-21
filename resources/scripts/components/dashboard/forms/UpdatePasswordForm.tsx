@@ -4,12 +4,12 @@ import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
+
+import i18n from '@/lib/i18n';
 
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -34,13 +34,9 @@ const UpdatePasswordForm = () => {
     const schema = Yup.object().shape({
         current: Yup.string().min(1).required(t('password_form.current_required')),
         password: Yup.string().min(8).required(t('password_form.password_required')),
-        confirmPassword: Yup.string().test(
-            'password',
-            t('password_form.confirm_mismatch'),
-            function (value) {
-                return value === this.parent.password;
-            },
-        ),
+        confirmPassword: Yup.string().test('password', t('password_form.confirm_mismatch'), function (value) {
+            return value === this.parent.password;
+        }),
     });
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {

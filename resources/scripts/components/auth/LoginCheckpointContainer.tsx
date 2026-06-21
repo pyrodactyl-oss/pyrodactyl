@@ -1,8 +1,8 @@
 import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
-import type { Location, RouteProps } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
@@ -52,9 +52,7 @@ function LoginCheckpointForm() {
                         title={isMissingDevice ? t('two_factor.recovery_code_title') : t('two_factor.auth_code_title')}
                         placeholder='000000'
                         description={
-                            isMissingDevice
-                                ? t('two_factor.recovery_description')
-                                : t('two_factor.auth_description')
+                            isMissingDevice ? t('two_factor.recovery_description') : t('two_factor.auth_description')
                         }
                         type={'text'}
                         autoComplete={'one-time-code'}
@@ -74,20 +72,31 @@ function LoginCheckpointForm() {
                 </div>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
 
-                <div className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}>
+                <div
+                    className={`mt-6 text-center w-full rounded-t-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 mb-2 hover:cursor-pointer `}
+                >
                     <span
                         onClick={() => {
                             setFieldValue('code', '');
                             setFieldValue('recoveryCode', '');
                             setIsMissingDevice((s) => !s);
                         }}
-                        className={'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'}
+                        className={
+                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
+                        }
                     >
                         {!isMissingDevice ? t('two_factor.lost_device') : t('two_factor.have_device')}
                     </span>
                 </div>
-                <div className={`text-center w-full rounded-b-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}>
-                    <Link to={'/auth/login'} className={'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'}>
+                <div
+                    className={`text-center w-full rounded-b-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
+                >
+                    <Link
+                        to={'/auth/login'}
+                        className={
+                            'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
+                        }
+                    >
                         {t('two_factor.return_to_login')}
                     </Link>
                 </div>

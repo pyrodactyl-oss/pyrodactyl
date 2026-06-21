@@ -7,9 +7,9 @@ import { Input } from '@/components/elements/inputs';
 
 import asDialog from '@/hoc/asDialog';
 
-import disableAccountTwoFactor from '@/api/account/disableAccountTwoFactor';
-
 import i18n from '@/lib/i18n';
+
+import disableAccountTwoFactor from '@/api/account/disableAccountTwoFactor';
 
 import { useStoreActions } from '@/state/hooks';
 

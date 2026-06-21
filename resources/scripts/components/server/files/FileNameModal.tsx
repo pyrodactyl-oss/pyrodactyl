@@ -2,11 +2,11 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { object, string } from 'yup';
 
-import i18n from '@/lib/i18n';
-
 import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
+
+import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 
@@ -47,8 +47,8 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                         <Field
                             id={'fileName'}
                             name={'fileName'}
-                            label={'File Name'}
-                            description={'Enter the name that this file should be saved as.'}
+                            label={i18n.t('server:files.file_name')}
+                            description={i18n.t('server:files.file_save_as_description')}
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>

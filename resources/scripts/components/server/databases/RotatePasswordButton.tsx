@@ -6,6 +6,7 @@ import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 
 import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePassword';

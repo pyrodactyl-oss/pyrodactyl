@@ -9,6 +9,7 @@ import {
 } from '@gravity-ui/icons';
 import { useStoreState } from 'easy-peasy';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
@@ -24,6 +25,8 @@ import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
+import i18n from '@/lib/i18n';
+
 import http, { httpErrorToHuman } from '@/api/http';
 import { getServerBackupDownloadUrl } from '@/api/server/backups';
 import { getGlobalDaemonType } from '@/api/server/getServer';
@@ -35,8 +38,6 @@ import { ServerContext } from '@/state/server';
 import useFlash from '@/plugins/useFlash';
 
 import { useUnifiedBackups } from '../useUnifiedBackups';
-
-import i18n from '@/lib/i18n';
 
 interface Props {
     backup: ServerBackup;
@@ -168,7 +169,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             await toggleBackupLock(backup.uuid);
             setModal('');
         } catch (error) {
-            alert(httpErrorToHuman(error));
+            toast.error(httpErrorToHuman(error));
         }
     };
 
@@ -216,7 +217,9 @@ const BackupContextMenu = ({ backup }: Props) => {
             <Dialog open={modal === 'rename'} onClose={() => setModal('')} title={i18n.t('server:backups.rename')}>
                 <div className='space-y-4'>
                     <div>
-                        <label className='block text-sm font-medium text-zinc-200 mb-2'>{i18n.t('server:backups.backup_name')}</label>
+                        <label className='block text-sm font-medium text-zinc-200 mb-2'>
+                            {i18n.t('server:backups.backup_name')}
+                        </label>
                         <input
                             type='text'
                             value={newName}
@@ -262,9 +265,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                 <div className='space-y-4'>
                     <div className='space-y-2'>
                         <p className='text-sm font-medium text-zinc-200'>&quot;{backup.name}&quot;</p>
-                        <p className='text-sm text-zinc-400'>
-                            {i18n.t('server:backups.restore_description')}
-                        </p>
+                        <p className='text-sm text-zinc-400'>{i18n.t('server:backups.restore_description')}</p>
                     </div>
 
                     <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -381,9 +382,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                             </svg>
                             <div className='text-sm'>
                                 <p className='font-medium text-red-300'>{i18n.t('server:backups.warning')}</p>
-                                <p className='text-red-400 mt-1'>
-                                    {i18n.t('server:backups.delete_warning_permanent')}
-                                </p>
+                                <p className='text-red-400 mt-1'>{i18n.t('server:backups.delete_warning_permanent')}</p>
                             </div>
                         </div>
                     </div>

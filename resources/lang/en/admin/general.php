@@ -741,4 +741,10 @@ return [
     'swal_error_title' => 'Whoops!',
     'swal_error_text' => 'An error occurred while processing this request.',
     'swal_success' => 'Success!',
+
+    'new_nest' => 'New Nest',
+    'domain_placeholder' => 'example.com',
+    'env_only_notice' => 'Your Panel is currently configured to read settings from the environment only. You will need to set <code>APP_ENVIRONMENT_ONLY=false</code> in your environment file in order to load settings dynamically.',
+    'others' => 'other(s)',
+    'startup_not_defined' => 'Startup Not Defined!',
 ];

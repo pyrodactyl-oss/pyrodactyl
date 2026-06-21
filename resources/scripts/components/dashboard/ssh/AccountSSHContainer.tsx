@@ -16,10 +16,10 @@ import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
+import i18n from '@/lib/i18n';
+
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
-
-import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 
@@ -189,7 +189,9 @@ const AccountSSHContainer = () => {
                                 <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                                     <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('dashboard:ssh_keys.empty_title')}</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                                    {i18n.t('dashboard:ssh_keys.empty_title')}
+                                </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
                                     {isValidating
                                         ? i18n.t('dashboard:ssh_keys.loading')
@@ -217,9 +219,16 @@ const AccountSSHContainer = () => {
                                                         </h4>
                                                     </div>
                                                     <div className='flex items-center gap-4 text-xs text-zinc-400'>
-                                                        <span>{i18n.t('dashboard:ssh_keys.added_label')} {format(key.createdAt, 'MMM d, yyyy HH:mm', { locale: i18n.language === 'es' ? es : undefined })}</span>
+                                                        <span>
+                                                            {i18n.t('dashboard:ssh_keys.added_label')}{' '}
+                                                            {format(key.createdAt, 'MMM d, yyyy HH:mm', {
+                                                                locale: i18n.language === 'es' ? es : undefined,
+                                                            })}
+                                                        </span>
                                                         <div className='flex items-center gap-2'>
-                                                            <span>{i18n.t('dashboard:ssh_keys.fingerprint_label')}</span>
+                                                            <span>
+                                                                {i18n.t('dashboard:ssh_keys.fingerprint_label')}
+                                                            </span>
                                                             <code className='font-mono px-2 py-1 bg-[#ffffff08] border border-[#ffffff08] rounded text-zinc-300'>
                                                                 {showKeys[key.fingerprint]
                                                                     ? `SHA256:${key.fingerprint}`

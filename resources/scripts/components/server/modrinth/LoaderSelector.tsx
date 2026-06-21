@@ -3,12 +3,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import Input from '@/components/elements/Input';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import { useGlobalStateContext } from './config';
 import { getAvailableLoaders, getLoaderType } from './eggfeatures';
-
-import i18n from '@/lib/i18n';
 
 const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt', 'bungeecord'];
 

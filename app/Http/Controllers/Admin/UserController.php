@@ -70,7 +70,10 @@ public function index(Request $request): View
         ->allowedSorts(['id', 'uuid'])
         ->paginate(50);
 
-    return $this->view->make('admin.users.index', ['users' => $users]);
+        return $this->view->make('admin.users.index', [
+            'users' => $users,
+            'languages' => $this->getAvailableLanguages(true),
+        ]);
 }
 
     /**

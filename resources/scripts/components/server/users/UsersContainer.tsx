@@ -4,8 +4,6 @@ import { For } from 'million/react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import i18n from '@/lib/i18n';
-
 import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
@@ -13,6 +11,8 @@ import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import UserRow from '@/components/server/users/UserRow';
+
+import i18n from '@/lib/i18n';
 
 import { httpErrorToHuman } from '@/api/http';
 import getServerSubusers from '@/api/server/users/getServerSubusers';
@@ -62,7 +62,9 @@ const UsersContainer = () => {
                     title={i18n.t('server:users.header')}
                     titleChildren={
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>{i18n.t('server:users.zero')}</p>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                {i18n.t('server:users.zero')}
+                            </p>
                             <Can action={'user.create'}>
                                 <ActionButton
                                     variant='primary'
@@ -76,9 +78,7 @@ const UsersContainer = () => {
                         </div>
                     }
                 >
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        {i18n.t('server:users.description')}
-                    </p>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:users.description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -95,7 +95,9 @@ const UsersContainer = () => {
                 title={i18n.t('server:users.header')}
                 titleChildren={
                     <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{i18n.t('server:users.count', { count: subusers.length })}</p>
+                        <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                            {i18n.t('server:users.count', { count: subusers.length })}
+                        </p>
                         <Can action={'user.create'}>
                             <ActionButton
                                 variant='primary'
@@ -109,9 +111,7 @@ const UsersContainer = () => {
                     </div>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    {i18n.t('server:users.description')}
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:users.description')}</p>
             </MainPageHeader>
             {!subusers.length ? (
                 <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
@@ -120,9 +120,7 @@ const UsersContainer = () => {
                             <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('server:users.empty')}</h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
-                            {i18n.t('server:users.empty_description')}
-                        </p>
+                        <p className='text-sm text-zinc-400 max-w-sm'>{i18n.t('server:users.empty_description')}</p>
                     </div>
                 </div>
             ) : (

@@ -5,13 +5,13 @@ import ActionButton from '@/components/elements/ActionButton';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import saveFileContents from '@/api/server/files/saveFileContents';
 
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-import i18n from '@/lib/i18n';
 
 const EulaModalFeature = () => {
     const [visible, setVisible] = useState(false);
@@ -26,7 +26,7 @@ const EulaModalFeature = () => {
         if (!connected || !instance || status === 'running') return;
 
         const listener = (line: string) => {
-            if (line.toLowerCase().indexOf('you need to agree to the eula in order to run the server') >= 0) {
+            if (line.toLowerCase().indexOf(i18n.t('server:features.eula.console_message').toLowerCase()) >= 0) {
                 setVisible(true);
             }
         };
@@ -73,7 +73,7 @@ const EulaModalFeature = () => {
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
                 <p className={`text-zinc-200`}>
-                    Before starting your Minecraft server, you need to accept the{' '}
+                    {i18n.t('server:features.eula.description')}{' '}
                     <a
                         target={'_blank'}
                         className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
@@ -86,10 +86,10 @@ const EulaModalFeature = () => {
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
                     <ActionButton variant='secondary' onClick={() => setVisible(false)}>
-                        I don&apos;t accept
+                        {i18n.t('server:features.eula.decline')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={onAcceptEULA}>
-                        I accept
+                        {i18n.t('server:features.eula.accept')}
                     </ActionButton>
                 </div>
             </div>

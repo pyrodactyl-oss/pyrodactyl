@@ -5,10 +5,9 @@ import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import i18n from '@/lib/i18n';
 
 import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
-
-import i18n from '@/lib/i18n';
 
 import { ServerContext } from '@/state/server';
 
@@ -58,7 +57,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const allocation = ServerContext.useStoreState((state) => {
         const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
 
-        return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
+        return !match ? i18n.t('server:details.not_applicable') : `${match.alias || ip(match.ip)}:${match.port}`;
     });
 
     // Get display address (subdomain if available and active, otherwise IP)

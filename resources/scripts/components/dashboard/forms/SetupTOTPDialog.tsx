@@ -11,10 +11,10 @@ import { Input } from '@/components/elements/inputs';
 
 import asDialog from '@/hoc/asDialog';
 
+import i18n from '@/lib/i18n';
+
 import enableAccountTwoFactor from '@/api/account/enableAccountTwoFactor';
 import getTwoFactorTokenData, { TwoFactorTokenData } from '@/api/account/getTwoFactorTokenData';
-
-import i18n from '@/lib/i18n';
 
 import { ApplicationStore } from '@/state';
 

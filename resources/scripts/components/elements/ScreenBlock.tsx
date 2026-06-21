@@ -34,7 +34,9 @@ const NotFound = () => {
         <>
             <div className='w-full h-full flex gap-12 items-center p-8 max-w-3xl mx-auto'>
                 <div className='flex flex-col gap-8 max-w-sm text-left'>
-                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>{t('errors.page_not_found')}</h1>
+                    <h1 className='text-[32px] font-extrabold leading-[98%] tracking-[-0.11rem]'>
+                        {t('errors.page_not_found')}
+                    </h1>
                     <p className=''>{t('errors.page_not_found_description')}</p>
                     <div className='flex flex-col gap-2'>
                         <Link to={'/'} className='text-brand'>

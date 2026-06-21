@@ -6,11 +6,11 @@ import Button from '@/components/elements/ActionButton';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
-
-import i18n from '@/lib/i18n';
 
 const HytaleOauthRequireFeature = () => {
     const [visible, setVisible] = useState(false);

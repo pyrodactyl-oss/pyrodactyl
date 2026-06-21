@@ -10,9 +10,9 @@ import { NavLink } from 'react-router-dom';
 import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMenu';
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 
-import { FileObject } from '@/api/server/files/loadDirectory';
-
 import i18n from '@/lib/i18n';
+
+import { FileObject } from '@/api/server/files/loadDirectory';
 
 // import FileDropdownMenu from '@/components/server/files/FileDropdownMenu';
 import { ServerContext } from '@/state/server';
@@ -74,8 +74,13 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
                             title={file.modifiedAt.toString()}
                         >
                             {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
-                                ? format(file.modifiedAt, 'MMM do, yyyy h:mma', { locale: i18n.language === 'es' ? es : undefined })
-                                : formatDistanceToNow(file.modifiedAt, { addSuffix: true, locale: i18n.language === 'es' ? es : undefined })}
+                                ? format(file.modifiedAt, 'MMM do, yyyy h:mma', {
+                                      locale: i18n.language === 'es' ? es : undefined,
+                                  })
+                                : formatDistanceToNow(file.modifiedAt, {
+                                      addSuffix: true,
+                                      locale: i18n.language === 'es' ? es : undefined,
+                                  })}
                         </div>
                     </MemoizedClickable>
                 </div>
