@@ -273,12 +273,16 @@ const ServerActivityLogContainer = () => {
                                             fill='currentColor'
                                         />
                                     </div>
-                                    <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('server:activity.filters_title')}</h3>
+                                    <h3 className='text-base font-semibold text-zinc-100'>
+                                        {i18n.t('server:activity.filters_title')}
+                                    </h3>
                                 </div>
 
                                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                     <div>
-                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('server:activity.search_label')}</label>
+                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                            {i18n.t('server:activity.search_label')}
+                                        </label>
                                         <div className='relative'>
                                             <Magnifier
                                                 width={22}
@@ -399,7 +403,8 @@ const ServerActivityLogContainer = () => {
                                         ({filteredData.items.length}{' '}
                                         {filteredData.items.length === 1
                                             ? i18n.t('server:activity.event_singular')
-                                            : i18n.t('server:activity.event_plural')})
+                                            : i18n.t('server:activity.event_plural')}
+                                        )
                                     </span>
                                 )}
                             </div>

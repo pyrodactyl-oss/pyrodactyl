@@ -185,8 +185,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         {/* Message Box */}
                         <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
                             <p className='text-sm text-zinc-300 text-center'>
-                                {operation.message ||
-                                    i18n.t('server:operations.processing')}
+                                {operation.message || i18n.t('server:operations.processing')}
                             </p>
                         </div>
 
@@ -250,9 +249,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                     /* Loading State */
                     <div className='flex items-center justify-center space-x-3 py-4'>
                         <Spinner size={'small'} />
-                        <span className='text-zinc-400 font-medium'>
-                            {i18n.t('server:operations.initializing')}
-                        </span>
+                        <span className='text-zinc-400 font-medium'>{i18n.t('server:operations.initializing')}</span>
                     </div>
                 )}
             </div>

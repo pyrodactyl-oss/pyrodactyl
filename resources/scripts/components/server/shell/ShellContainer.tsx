@@ -1223,15 +1223,11 @@ const SoftwareContainer = () => {
     // Show loading state if server data is not available
     if (!serverData) {
         return (
-            <ServerContentBlock
-                title={i18n.t('server:shell.software_management')}
-            >
+            <ServerContentBlock title={i18n.t('server:shell.software_management')}>
                 <div className='flex items-center justify-center h-64'>
                     <div className='flex flex-col items-center text-center'>
                         <Spinner size='large' />
-                        <p className='text-neutral-400 mt-4'>
-                            {i18n.t('server:shell.loading_server', )}
-                        </p>
+                        <p className='text-neutral-400 mt-4'>{i18n.t('server:shell.loading_server')}</p>
                     </div>
                 </div>
             </ServerContentBlock>
@@ -1243,7 +1239,7 @@ const SoftwareContainer = () => {
                 <OperationProgressModal
                     visible={showOperationModal}
                     operationId={currentOperationId}
-                    operationType={i18n.t('server:shell.operation_type', )}
+                    operationType={i18n.t('server:shell.operation_type')}
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
@@ -1255,7 +1251,7 @@ const SoftwareContainer = () => {
                 <WingsOperationProgressModal
                     visible={showOperationModal}
                     operationId={currentOperationId}
-                    operationType={i18n.t('server:shell.operation_type', )}
+                    operationType={i18n.t('server:shell.operation_type')}
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
@@ -1267,10 +1263,7 @@ const SoftwareContainer = () => {
     return (
         <ServerContentBlock title={i18n.t('server:shell.software_management')}>
             <div className='space-y-6'>
-                <MainPageHeader
-                    direction='column'
-                    title={i18n.t('server:shell.software_management')}
-                >
+                <MainPageHeader direction='column' title={i18n.t('server:shell.software_management')}>
                     <p className='text-neutral-400 leading-relaxed'>
                         {i18n.t('server:shell.software_management_description')}
                     </p>
@@ -1312,13 +1305,13 @@ const SoftwareContainer = () => {
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
-                title={i18n.t('server:shell.wipe_confirm_title', )}
+                title={i18n.t('server:shell.wipe_confirm_title')}
                 buttonText={
                     wipeCountdown > 0
                         ? i18n.t('server:shell.wipe_confirm_countdown', {
                               n: wipeCountdown,
                           })
-                        : i18n.t('server:shell.wipe_confirm_button', )
+                        : i18n.t('server:shell.wipe_confirm_button')
                 }
                 visible={showWipeConfirmation}
                 onConfirmed={handleWipeConfirm}
@@ -1338,35 +1331,21 @@ const SoftwareContainer = () => {
                             <h4 className='text-red-400 font-semibold mb-2'>
                                 {i18n.t('server:shell.wipe_danger_title')}
                             </h4>
-                            <p className='text-sm text-neutral-300'>
-                                {i18n.t('server:shell.wipe_danger_description')}
-                            </p>
+                            <p className='text-sm text-neutral-300'>{i18n.t('server:shell.wipe_danger_description')}</p>
                         </div>
                     </div>
                     <div className='text-sm text-neutral-300 space-y-2'>
                         <p>
-                            <strong>
-                                {i18n.t('server:shell.wipe_what_happens')}
-                            </strong>
+                            <strong>{i18n.t('server:shell.wipe_what_happens')}</strong>
                         </p>
                         <ul className='list-disc list-inside space-y-1 ml-4'>
-                            <li>
-                                {i18n.t('server:shell.wipe_bullet_1')}
-                            </li>
-                            <li>
-                                {i18n.t('server:shell.wipe_bullet_2')}
-                            </li>
-                            <li>
-                                {i18n.t('server:shell.wipe_bullet_3')}
-                            </li>
-                            <li>
-                                {i18n.t('server:shell.wipe_bullet_4')}
-                            </li>
+                            <li>{i18n.t('server:shell.wipe_bullet_1')}</li>
+                            <li>{i18n.t('server:shell.wipe_bullet_2')}</li>
+                            <li>{i18n.t('server:shell.wipe_bullet_3')}</li>
+                            <li>{i18n.t('server:shell.wipe_bullet_4')}</li>
                         </ul>
                     </div>
-                    <p className='text-sm text-neutral-300'>
-                        {i18n.t('server:shell.wipe_confirm_question')}
-                    </p>
+                    <p className='text-sm text-neutral-300'>{i18n.t('server:shell.wipe_confirm_question')}</p>
                 </div>
             </ConfirmationModal>
 

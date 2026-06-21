@@ -360,9 +360,7 @@ const BackupContextMenu = ({ backup }: Props) => {
             >
                 <FlashMessageRender byKey={'backup:delete'} />
                 <div className='space-y-4'>
-                    <p className='text-sm text-zinc-300'>
-                        {i18n.t('server:backups.delete_warning_permanent')}
-                    </p>
+                    <p className='text-sm text-zinc-300'>{i18n.t('server:backups.delete_warning_permanent')}</p>
 
                     <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
                         <div className='flex items-start gap-3'>

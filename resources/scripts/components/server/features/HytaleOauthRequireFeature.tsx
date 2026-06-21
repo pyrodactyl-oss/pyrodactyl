@@ -69,9 +69,7 @@ const HytaleOauthRequireFeature = () => {
             <FlashMessageRender key='feature:hytaleOauth' />
             <div>
                 <div className='text-center text-zinc-300 mb-6'>
-                    <p className='mb-4 text-md'>
-                        {i18n.t('server:features.hytale.auth_description')}
-                    </p>
+                    <p className='mb-4 text-md'>{i18n.t('server:features.hytale.auth_description')}</p>
                 </div>
 
                 <Button

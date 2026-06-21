@@ -140,7 +140,9 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    const serverTimezone = useStoreState((state) => state.settings.data?.timezone || i18n.t('server:schedules.unknown'));
+    const serverTimezone = useStoreState(
+        (state) => state.settings.data?.timezone || i18n.t('server:schedules.unknown'),
+    );
 
     const timezoneInfo = useMemo(() => {
         return getTimezoneInfo(serverTimezone);

@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import i18n from '@/lib/i18n';
+
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
 interface Props {

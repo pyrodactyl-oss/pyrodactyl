@@ -223,12 +223,16 @@ const ActivityLogContainer = () => {
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                     <Funnel width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('dashboard:activity.filters_title')}</h3>
+                                <h3 className='text-base font-semibold text-zinc-100'>
+                                    {i18n.t('dashboard:activity.filters_title')}
+                                </h3>
                             </div>
 
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.search_label')}</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                        {i18n.t('dashboard:activity.search_label')}
+                                    </label>
                                     <div className='relative'>
                                         <Magnifier
                                             width={22}
@@ -247,7 +251,9 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.event_type_label')}</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                        {i18n.t('dashboard:activity.event_type_label')}
+                                    </label>
                                     <Select
                                         value={selectedEventType}
                                         onChange={(e) => setSelectedEventType(e.target.value)}
@@ -269,7 +275,9 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.time_range_label')}</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>
+                                        {i18n.t('dashboard:activity.time_range_label')}
+                                    </label>
                                     <Select
                                         value={dateRange}
                                         onChange={(e) => setDateRange(e.target.value)}
@@ -323,10 +331,16 @@ const ActivityLogContainer = () => {
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                 <Magnifier width={22} height={22} className=' text-zinc-400' fill='currentColor' />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('dashboard:activity.events_header')}</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>
+                                {i18n.t('dashboard:activity.events_header')}
+                            </h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
-                                    ({filteredData.items.length} {filteredData.items.length === 1 ? i18n.t('dashboard:activity.event_count') : i18n.t('dashboard:activity.events_count')})
+                                    ({filteredData.items.length}{' '}
+                                    {filteredData.items.length === 1
+                                        ? i18n.t('dashboard:activity.event_count')
+                                        : i18n.t('dashboard:activity.events_count')}
+                                    )
                                 </span>
                             )}
                         </div>
@@ -342,7 +356,9 @@ const ActivityLogContainer = () => {
                                     fill='currentColor'
                                 />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? i18n.t('dashboard:activity.no_matching') : i18n.t('dashboard:activity.no_activity')}
+                                    {hasActiveFilters
+                                        ? i18n.t('dashboard:activity.no_matching')
+                                        : i18n.t('dashboard:activity.no_activity')}
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters

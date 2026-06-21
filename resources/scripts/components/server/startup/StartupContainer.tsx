@@ -518,9 +518,7 @@ const StartupContainer = () => {
                                     </div>
                                     <div className='flex justify-between items-center gap-2 py-2 px-3 bg-[#ffffff06] rounded border border-[#ffffff08]'>
                                         <span className='font-mono text-neutral-400'>{'SERVER_PORT'}</span>
-                                        <CopyOnClick
-                                            text={server?.allocations?.find((a) => a.isDefault)?.port || ''}
-                                        >
+                                        <CopyOnClick text={server?.allocations?.find((a) => a.isDefault)?.port || ''}>
                                             <span className='text-neutral-300 font-mono'>
                                                 {server?.allocations?.find((a) => a.isDefault)?.port || ''}
                                             </span>

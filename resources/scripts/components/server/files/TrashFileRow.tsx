@@ -85,8 +85,8 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
                 confirm={i18n.t('server:files.delete_title')}
                 onConfirmed={handleDelete}
             >
-                {i18n.t('server:files.delete_permanent_description', { name: file.original_name })}
-                {' '}{i18n.t('server:backups.cannot_undo')}
+                {i18n.t('server:files.delete_permanent_description', { name: file.original_name })}{' '}
+                {i18n.t('server:backups.cannot_undo')}
             </Dialog.Confirm>
             <ContextMenu>
                 <ContextMenuTrigger asChild>

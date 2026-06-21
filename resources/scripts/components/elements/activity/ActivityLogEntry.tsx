@@ -59,7 +59,10 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
                         to={`#${pathTo({ event: activity.event })}`}
                         className='font-mono text-xs bg-zinc-800/50 text-zinc-300 px-2 py-1 rounded hover:bg-zinc-700/50 hover:text-brand transition-colors duration-150 truncate'
                     >
-                        {i18n.t('activity:' + activity.event.replace(/:/g, '.'), { ...activity.properties, defaultValue: activity.event })}
+                        {i18n.t('activity:' + activity.event.replace(/:/g, '.'), {
+                            ...activity.properties,
+                            defaultValue: activity.event,
+                        })}
                     </Link>
 
                     {/* Compact badges */}

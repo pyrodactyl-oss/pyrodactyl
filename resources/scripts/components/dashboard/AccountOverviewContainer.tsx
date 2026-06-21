@@ -18,7 +18,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
-import { LANGUAGE_NAMES, supportedLanguages, loadTranslations } from '@/lib/i18n';
+import { LANGUAGE_NAMES, loadTranslations, supportedLanguages } from '@/lib/i18n';
 
 import updateAccountLanguage from '@/api/account/updateAccountLanguage';
 

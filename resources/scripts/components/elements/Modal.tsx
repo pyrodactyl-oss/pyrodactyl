@@ -1,6 +1,5 @@
 import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
-import i18n from '@/lib/i18n';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -8,6 +7,8 @@ import styled from 'styled-components';
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
+
+import i18n from '@/lib/i18n';
 
 const variants = {
     open: {

@@ -1,5 +1,6 @@
-import http from '@/api/http';
 import i18n from '@/lib/i18n';
+
+import http from '@/api/http';
 
 interface LoginData {
     user: string;

@@ -33,7 +33,9 @@ const UserRow = ({ subuser }: Props) => {
             <div className={`sm:ml-4 flex-1 overflow-hidden flex flex-col`}>
                 <p className={`truncate text-lg`}>{subuser.email}</p>
                 <p className={`mt-1 md:mt-0 text-xs text-zinc-400 truncate sm:text-left text-center`}>
-                    {subuser.twoFactorEnabled ? i18n.t('server:users.mfa_enabled') : i18n.t('server:users.mfa_disabled')}
+                    {subuser.twoFactorEnabled
+                        ? i18n.t('server:users.mfa_enabled')
+                        : i18n.t('server:users.mfa_disabled')}
                 </p>
             </div>
 

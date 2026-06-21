@@ -77,7 +77,11 @@ export const VersionSelector = () => {
                         {/* Show releases first */}
                         {hasReleases && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium'>{i18n.t('server:modrinth.releases')}</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium'>
+                                        {i18n.t('server:modrinth.releases')}
+                                    </p>
+                                )}
                                 {releases.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -97,7 +101,11 @@ export const VersionSelector = () => {
                         {/* Show snapshots if enabled or searching */}
                         {(showSnapshots || searchQuery) && hasSnapshots && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>{i18n.t('server:modrinth.snapshots')}</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium pt-1'>
+                                        {i18n.t('server:modrinth.snapshots')}
+                                    </p>
+                                )}
                                 {snapshots.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -117,7 +125,11 @@ export const VersionSelector = () => {
                         {/* Show betas */}
                         {hasBetas && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>{i18n.t('server:modrinth.betas')}</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium pt-1'>
+                                        {i18n.t('server:modrinth.betas')}
+                                    </p>
+                                )}
                                 {betas.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -155,7 +167,9 @@ export const VersionSelector = () => {
                                 className='w-full text-xs text-white-600 hover:text-gray-300 font-medium py-1 flex items-center justify-center gap-1'
                             >
                                 <span>{showSnapshots ? '-' : '+'}</span>
-                                {showSnapshots ? i18n.t('server:modrinth.hide_snapshots') : i18n.t('server:modrinth.show_snapshots')}
+                                {showSnapshots
+                                    ? i18n.t('server:modrinth.hide_snapshots')
+                                    : i18n.t('server:modrinth.show_snapshots')}
                             </button>
                         </div>
                     )}

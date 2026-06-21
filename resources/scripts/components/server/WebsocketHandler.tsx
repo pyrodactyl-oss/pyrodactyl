@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import Spinner from '@/components/elements/Spinner';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
-import getWebsocketToken from '@/api/server/getWebsocketToken';
-
 import i18n from '@/lib/i18n';
+
+import getWebsocketToken from '@/api/server/getWebsocketToken';
 
 import { ServerContext } from '@/state/server';
 
@@ -116,9 +116,7 @@ function WebsocketHandler() {
                 {error === 'connecting' ? (
                     <>
                         <Spinner size={'small'} />
-                        <p className={`ml-2 text-sm text-red-100`}>
-                            {i18n.t('server:console.connecting_message')}
-                        </p>
+                        <p className={`ml-2 text-sm text-red-100`}>{i18n.t('server:console.connecting_message')}</p>
                     </>
                 ) : (
                     <p className={`ml-2 text-sm text-white`}>{error}</p>
