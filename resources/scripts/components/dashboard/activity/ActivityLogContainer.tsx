@@ -223,12 +223,12 @@ const ActivityLogContainer = () => {
                                 <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                     <Funnel width={22} height={22} className='text-zinc-400' fill='currentColor' />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('dashboard:activity.filters_title')}</h3>
                             </div>
 
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.search_label')}</label>
                                     <div className='relative'>
                                         <Magnifier
                                             width={22}
@@ -247,14 +247,14 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.event_type_label')}</label>
                                     <Select
                                         value={selectedEventType}
                                         onChange={(e) => setSelectedEventType(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Events
+                                            {i18n.t('dashboard:activity.all_events')}
                                         </option>
                                         {eventTypes.map((type) => (
                                             <option
@@ -269,26 +269,26 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Time Range</label>
+                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('dashboard:activity.time_range_label')}</label>
                                     <Select
                                         value={dateRange}
                                         onChange={(e) => setDateRange(e.target.value)}
                                         className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
                                     >
                                         <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            All Time
+                                            {i18n.t('dashboard:activity.all_time')}
                                         </option>
                                         <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last Hour
+                                            {i18n.t('dashboard:activity.last_hour')}
                                         </option>
                                         <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 24 Hours
+                                            {i18n.t('dashboard:activity.last_24_hours')}
                                         </option>
                                         <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 7 Days
+                                            {i18n.t('dashboard:activity.last_7_days')}
                                         </option>
                                         <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                            Last 30 Days
+                                            {i18n.t('dashboard:activity.last_30_days')}
                                         </option>
                                     </Select>
                                 </div>
@@ -301,7 +301,7 @@ const ActivityLogContainer = () => {
                                             className='flex items-center gap-2 w-full'
                                         >
                                             <Xmark width={22} height={22} fill='currentColor' />
-                                            Clear All Filters
+                                            {i18n.t('dashboard:activity.clear_filters')}
                                         </ActionButton>
                                     )}
                                 </div>
@@ -323,10 +323,10 @@ const ActivityLogContainer = () => {
                             <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
                                 <Magnifier width={22} height={22} className=' text-zinc-400' fill='currentColor' />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Activity Events</h3>
+                            <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('dashboard:activity.events_header')}</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
-                                    ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
+                                    ({filteredData.items.length} {filteredData.items.length === 1 ? i18n.t('dashboard:activity.event_count') : i18n.t('dashboard:activity.events_count')})
                                 </span>
                             )}
                         </div>
@@ -342,20 +342,20 @@ const ActivityLogContainer = () => {
                                     fill='currentColor'
                                 />
                                 <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
-                                    {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
+                                    {hasActiveFilters ? i18n.t('dashboard:activity.no_matching') : i18n.t('dashboard:activity.no_activity')}
                                 </h3>
                                 <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
                                     {hasActiveFilters
-                                        ? "Try adjusting your filters or search terms to find the activity you're looking for."
-                                        : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'}
+                                        ? i18n.t('dashboard:activity.no_matching_description')
+                                        : i18n.t('dashboard:activity.no_activity_description')}
                                 </p>
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
                                         <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            Clear All Filters
+                                            {i18n.t('dashboard:activity.clear_filters')}
                                         </ActionButton>
                                         <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
-                                            Adjust Filters
+                                            {i18n.t('dashboard:activity.adjust_filters')}
                                         </ActionButton>
                                     </div>
                                 )}

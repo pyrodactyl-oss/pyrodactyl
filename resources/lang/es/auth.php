@@ -4,7 +4,6 @@ return [
     'login' => 'Iniciar sesión',
     'username_or_email' => 'Usuario o correo electrónico',
     'password' => 'Contraseña',
-    'failed' => 'Estas credenciales no coinciden con nuestros registros.',
     'email_label' => 'Correo electrónico',
     'forgot_password' => '¿Olvidaste tu contraseña?',
     'invalid_credentials' => 'Usuario o contraseña inválidos. Inténtalo de nuevo.',

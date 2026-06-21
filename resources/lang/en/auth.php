@@ -4,7 +4,6 @@ return [
     'login' => 'Login',
     'username_or_email' => 'Username or Email',
     'password' => 'Password',
-    'failed' => 'These credentials do not match our records.',
     'email_label' => 'Email',
     'forgot_password' => 'Forgot Password?',
     'invalid_credentials' => 'Invalid username or password. Please try again.',

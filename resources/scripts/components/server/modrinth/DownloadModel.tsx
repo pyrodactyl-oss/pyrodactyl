@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import Button from '../../elements/ButtonV2';
 
+import i18n from '@/lib/i18n';
+
 interface ApiFile {
     hashes: {
         sha512: string;
@@ -99,7 +101,7 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                         className='flex items-center justify-between w-full px-4 py-3 text-left bg-gray-900 border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50'
                         disabled
                     >
-                        <span className='font-medium truncate'>No versions available</span>
+                        <span className='font-medium truncate'>{i18n.t('server:modrinth.no_versions')}</span>
                     </Button>
                 </div>
             </div>

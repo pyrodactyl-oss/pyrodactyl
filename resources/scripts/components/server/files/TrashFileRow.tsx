@@ -81,12 +81,12 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
             <Dialog.Confirm
                 open={showDelete}
                 onClose={() => setShowDelete(false)}
-                title={`Delete ${file.original_name}`}
+                title={i18n.t('server:files.delete_item_title', { name: file.original_name })}
                 confirm={i18n.t('server:files.delete_title')}
                 onConfirmed={handleDelete}
             >
-                This will permanently delete <span className='font-semibold text-zinc-50'>{file.original_name}</span>.
-                This action cannot be undone.
+                {i18n.t('server:files.delete_permanent_description', { name: file.original_name })}
+                {' '}{i18n.t('server:backups.cannot_undo')}
             </Dialog.Confirm>
             <ContextMenu>
                 <ContextMenuTrigger asChild>

@@ -69,7 +69,7 @@ export const VersionSelector = () => {
                 <p className='text-sm text-gray-500'>{i18n.t('server:modrinth.no_versions')}</p>
             ) : !hasSearchResults ? (
                 <p className='text-sm text-gray-500 text-center py-2'>
-                    No versions found matching &quot;{searchQuery}&quot;
+                    {i18n.t('server:modrinth.no_versions_found_query', { searchQuery })}
                 </p>
             ) : (
                 <>
@@ -77,7 +77,7 @@ export const VersionSelector = () => {
                         {/* Show releases first */}
                         {hasReleases && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium'>Releases</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium'>{i18n.t('server:modrinth.releases')}</p>}
                                 {releases.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -97,7 +97,7 @@ export const VersionSelector = () => {
                         {/* Show snapshots if enabled or searching */}
                         {(showSnapshots || searchQuery) && hasSnapshots && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Snapshots</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>{i18n.t('server:modrinth.snapshots')}</p>}
                                 {snapshots.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -117,7 +117,7 @@ export const VersionSelector = () => {
                         {/* Show betas */}
                         {hasBetas && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Betas</p>}
+                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>{i18n.t('server:modrinth.betas')}</p>}
                                 {betas.map((version) => (
                                     <Checkbox
                                         key={version.id}

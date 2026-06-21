@@ -1,11 +1,9 @@
 @extends('layouts.admin')
 
-@section('title')
-    New Nest
-@endsection
+@section('title', trans('admin/general.new_nest'))
 
 @section('content-header')
-    <h1>New Nest<small>{{ trans('admin/general.new_nest_desc') }}</small></h1>
+    <h1>{{ trans('admin/general.new_nest') }}<small>{{ trans('admin/general.new_nest_desc') }}</small></h1>
     <ol class="breadcrumb">
         <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
         <li><a href="{{ route('admin.nests') }}">{{ trans('admin/general.nests') }}</a></li>
@@ -19,7 +17,7 @@
         <div class="col-md-12">
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">New Nest</h3>
+                    <h3 class="box-title">{{ trans('admin/general.new_nest') }}</h3>
                 </div>
                 <div class="box-body">
                     <div class="form-group">

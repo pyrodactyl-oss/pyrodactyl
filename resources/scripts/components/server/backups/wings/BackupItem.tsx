@@ -102,12 +102,12 @@ const BackupItem = ({ backup }: Props) => {
                     <div className='visible sm:block flex-shrink-0 text-right min-w-[90px] '>
                         {backup.completedAt && backup.bytes ? (
                             <>
-                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
+                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>{i18n.t('server:backups.size_label')}</p>
                                 <p className='text-sm text-zinc-300 font-medium'>{formatBytes(backup.bytes)}</p>
                             </>
                         ) : (
                             <>
-                                <p className='text-xs text-transparent uppercase tracking-wide mb-1'>Size</p>
+                                <p className='text-xs text-transparent uppercase tracking-wide mb-1'>{i18n.t('server:backups.size_label')}</p>
                                 <p className='text-sm text-transparent font-medium'>-</p>
                             </>
                         )}

@@ -223,7 +223,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                                 {autoCloseTimer && (
                                     <p className='text-xs text-green-200 text-center'>
                                         {i18n.t('server:operations.closing_auto', {
-                                            defaultValue: 'Closing automatically in 3 seconds',
+                                            seconds: UI_CONFIG.AUTO_CLOSE_DELAY / 1000,
                                         })}
                                     </p>
                                 )}

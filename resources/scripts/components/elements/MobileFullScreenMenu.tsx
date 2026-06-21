@@ -82,16 +82,16 @@ export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuP
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to='/' icon={House} end onClick={onClose}>
-                Servers
+                {t('nav.servers')}
             </NavigationItem>
             <NavigationItem to='/account/api' icon={AbbrApi} end onClick={onClose}>
-                API Keys
+                {t('nav.api_keys')}
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={Key} end onClick={onClose}>
-                SSH Keys
+                {t('nav.ssh_keys')}
             </NavigationItem>
             <NavigationItem to='/account' icon={Gear} end onClick={onClose}>
-                Settings
+                {t('nav.settings')}
             </NavigationItem>
         </MobileFullScreenMenu>
     );

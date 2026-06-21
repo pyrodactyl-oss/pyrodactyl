@@ -64,7 +64,7 @@ const SettingsContainer = () => {
                             </CopyOnClick>
                         </div>
                         <div className={`mt-2 flex items-center justify-between text-sm`}>
-                            <Label>{i18n.t('server:settings.username')}</Label>
+                            <Label>{i18n.t('strings:username')}</Label>
                             <CopyOnClick text={`${username}.${id}`}>
                                 <code
                                     className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}

@@ -278,11 +278,10 @@ const BackupContextMenu = ({ backup }: Props) => {
                             />
                             <div className='space-y-1'>
                                 <h4 className='text-sm text-red-200 font-medium'>
-                                    Destructive Action - Complete Server Restore
+                                    {i18n.t('server:backups.restore_warning_title')}
                                 </h4>
                                 <p className='text-xs text-red-300'>
-                                    All current files and server configuration will be deleted and replaced with the
-                                    backup data. This action cannot be undone.
+                                    {i18n.t('server:backups.restore_warning_description')}
                                 </p>
                             </div>
                         </div>
@@ -357,12 +356,12 @@ const BackupContextMenu = ({ backup }: Props) => {
                     setDeletePassword('');
                     setDeleteTotpCode('');
                 }}
-                title={`Delete "${backup.name}"`}
+                title={i18n.t('server:backups.delete_backup_name', { name: backup.name })}
             >
                 <FlashMessageRender byKey={'backup:delete'} />
                 <div className='space-y-4'>
                     <p className='text-sm text-zinc-300'>
-                        This is a permanent operation. The backup cannot be recovered once deleted.
+                        {i18n.t('server:backups.delete_warning_permanent')}
                     </p>
 
                     <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -485,7 +484,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                                         className='cursor-pointer text-red-400 focus:text-red-300'
                                     >
                                         <TrashBin width={22} height={22} className=' mr-2' fill='currentColor' />
-                                        Delete
+                                        {i18n.t('strings:delete')}
                                     </DropdownMenuItem>
                                 </>
                             )}
@@ -501,7 +500,7 @@ const BackupContextMenu = ({ backup }: Props) => {
                     className='flex items-center gap-2'
                 >
                     <TrashBin width={22} height={22} fill='currentColor' />
-                    <span className='hidden sm:inline'>Delete</span>
+                    <span className='hidden sm:inline'>{i18n.t('strings:delete')}</span>
                 </ActionButton>
             )}
         </>

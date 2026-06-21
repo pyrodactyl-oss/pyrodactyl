@@ -53,15 +53,15 @@ const schema = object().shape({
     action: string().required().oneOf(['command', 'power', 'backup']),
     payload: string().when('action', {
         is: (v) => v !== 'backup',
-        then: () => string().required('A task payload must be provided.'),
+        then: () => string().required(i18n.t('server:schedules.validation_payload_required')),
         otherwise: () => string(),
     }),
     continueOnFailure: boolean(),
     timeOffset: number()
-        .typeError('The time offset must be a valid number between 0 and 900.')
-        .required('A time offset value must be provided.')
-        .min(0, 'The time offset must be at least 0 seconds.')
-        .max(900, 'The time offset must be less than 900 seconds.'),
+        .typeError(i18n.t('server:schedules.validation_offset_type'))
+        .required(i18n.t('server:schedules.validation_offset_required'))
+        .min(0, i18n.t('server:schedules.validation_offset_min'))
+        .max(900, i18n.t('server:schedules.validation_offset_max')),
 });
 
 const ActionListener = () => {

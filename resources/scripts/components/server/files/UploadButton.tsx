@@ -149,7 +149,7 @@ const UploadButton = () => {
             .catch((error) => {
                 const message = axios.isAxiosError(error)
                     ? error.response?.data?.error || error.message
-                    : 'Upload failed';
+                    : i18n.t('server:files.upload_failed');
                 pushFileUpload({
                     name: uploadKey,
                     data: { abort: new AbortController(), loaded: file.size, total: file.size, error: message } as any,

@@ -58,7 +58,7 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
                 aria-label={i18n.t('server:users.delete_subuser')}
             >
                 <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
-                {i18n.t('server:users.delete')}
+                {i18n.t('strings:delete')}
             </ActionButton>
         </>
     );

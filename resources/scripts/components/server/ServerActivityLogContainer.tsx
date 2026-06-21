@@ -273,12 +273,12 @@ const ServerActivityLogContainer = () => {
                                             fill='currentColor'
                                         />
                                     </div>
-                                    <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                    <h3 className='text-base font-semibold text-zinc-100'>{i18n.t('server:activity.filters_title')}</h3>
                                 </div>
 
                                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
                                     <div>
-                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                        <label className='block text-sm font-medium text-zinc-300 mb-2'>{i18n.t('server:activity.search_label')}</label>
                                         <div className='relative'>
                                             <Magnifier
                                                 width={22}
@@ -288,7 +288,7 @@ const ServerActivityLogContainer = () => {
                                             />
                                             <Input.Text
                                                 type='text'
-                                                placeholder='Search events, IPs, users...'
+                                                placeholder={i18n.t('server:activity.search_placeholder')}
                                                 value={searchTerm}
                                                 onChange={(e) => setSearchTerm(e.target.value)}
                                                 style={{ paddingLeft: '2.5rem' }}
@@ -298,7 +298,7 @@ const ServerActivityLogContainer = () => {
 
                                     <div>
                                         <label className='block text-sm font-medium text-zinc-300 mb-2'>
-                                            Event Type
+                                            {i18n.t('server:activity.event_type_label')}
                                         </label>
                                         <Select
                                             value={selectedEventType}
@@ -306,7 +306,7 @@ const ServerActivityLogContainer = () => {
                                             className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-brand focus:ring-1 focus:ring-brand hover:border-zinc-500 transition-colors duration-150'
                                         >
                                             <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                                All Events
+                                                {i18n.t('server:activity.all_events')}
                                             </option>
                                             {eventTypes.map((type) => (
                                                 <option
@@ -322,7 +322,7 @@ const ServerActivityLogContainer = () => {
 
                                     <div>
                                         <label className='block text-sm font-medium text-zinc-300 mb-2'>
-                                            Time Range
+                                            {i18n.t('server:activity.time_range_label')}
                                         </label>
                                         <Select
                                             value={dateRange}
@@ -333,25 +333,25 @@ const ServerActivityLogContainer = () => {
                                                 value='all'
                                                 style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
                                             >
-                                                All Time
+                                                {i18n.t('server:activity.all_time')}
                                             </option>
                                             <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                                Last Hour
+                                                {i18n.t('server:activity.last_hour')}
                                             </option>
                                             <option
                                                 value='24h'
                                                 style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
                                             >
-                                                Last 24 Hours
+                                                {i18n.t('server:activity.last_24_hours')}
                                             </option>
                                             <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
-                                                Last 7 Days
+                                                {i18n.t('server:activity.last_7_days')}
                                             </option>
                                             <option
                                                 value='30d'
                                                 style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
                                             >
-                                                Last 30 Days
+                                                {i18n.t('server:activity.last_30_days')}
                                             </option>
                                         </Select>
                                     </div>
@@ -364,7 +364,7 @@ const ServerActivityLogContainer = () => {
                                                 className='flex items-center gap-2 w-full'
                                             >
                                                 <Xmark width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                                Clear All Filters
+                                                {i18n.t('server:activity.clear_all_filters')}
                                             </ActionButton>
                                         )}
                                     </div>
@@ -397,7 +397,9 @@ const ServerActivityLogContainer = () => {
                                 {filteredData?.items && (
                                     <span className='text-sm text-zinc-400'>
                                         ({filteredData.items.length}{' '}
-                                        {filteredData.items.length === 1 ? 'event' : 'events'})
+                                        {filteredData.items.length === 1
+                                            ? i18n.t('server:activity.event_singular')
+                                            : i18n.t('server:activity.event_plural')})
                                     </span>
                                 )}
                             </div>

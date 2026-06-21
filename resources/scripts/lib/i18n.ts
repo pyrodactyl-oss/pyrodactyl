@@ -9,7 +9,7 @@ export const LANGUAGE_NAMES: Record<SupportedLanguage, string> = {
     es: 'Español',
 };
 
-export const NAMESPACES = ['strings', 'auth', 'dashboard', 'server', 'activity', 'exceptions', 'validation'];
+export const NAMESPACES = ['strings', 'auth', 'dashboard', 'server', 'activity'];
 
 async function fetchNamespace(lng: string, ns: string) {
     const url = `/locales/locale.json?locale=${lng}&namespace=${ns}`;

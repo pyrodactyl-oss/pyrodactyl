@@ -58,7 +58,7 @@ const useLogAnalysis = () => {
                 const logContent = await getFileContents(uuid, LOG_FILE_PATH);
 
                 if (!logContent || logContent.trim().length === 0) {
-                    throw new Error('No log content found in latest.log');
+                    throw new Error(i18n.t('server:features.mclogs.no_log_content'));
                 }
 
                 const result = await analyzeLogs(logContent);

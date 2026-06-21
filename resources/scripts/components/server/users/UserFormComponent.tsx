@@ -122,9 +122,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                 }
                 validationSchema={object().shape({
                     email: string()
-                        .max(191, 'Email addresses must not exceed 191 characters.')
-                        .email('A valid email address must be provided.')
-                        .required('A valid email address must be provided.'),
+                        .max(191, i18n.t('server:users.validation_email_max'))
+                        .email(i18n.t('server:users.validation_email_valid'))
+                        .required(i18n.t('server:users.validation_email_required')),
                     permissions: array().of(string()),
                 })}
             >
@@ -299,7 +299,7 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                         <Can action={subuser ? 'user.update' : 'user.create'}>
                             <div className='flex gap-3 justify-end pt-4 border-t border-[#ffffff12]'>
                                 <ActionButton variant='secondary' type='button' onClick={onCancel}>
-                                    {i18n.t('server:users.cancel')}
+                                    {i18n.t('strings:cancel')}
                                 </ActionButton>
                                 <ActionButton variant='primary' type='submit' disabled={isSubmitting}>
                                     {subuser ? i18n.t('server:users.save_changes') : i18n.t('server:users.invite_user')}

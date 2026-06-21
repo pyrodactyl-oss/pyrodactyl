@@ -47,14 +47,14 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
                 open={visible}
                 onClose={() => setVisible(false)}
                 title={i18n.t('server:schedules.delete_schedule')}
-                confirm={i18n.t('server:schedules.delete_confirm')}
+                confirm={i18n.t('strings:delete')}
                 onConfirmed={onDelete}
                 loading={isLoading}
             >
                 {i18n.t('server:schedules.delete_schedule_desc')}
             </Dialog.Confirm>
             <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
-                {i18n.t('server:schedules.delete')}
+                {i18n.t('strings:delete')}
             </ActionButton>
         </>
     );

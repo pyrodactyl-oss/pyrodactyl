@@ -204,4 +204,7 @@ return [
     'captcha_expired' => 'Captcha expired',
     'failed_to_load_captcha' => 'Failed to load captcha',
     'generated_password' => 'Generated Password:',
+    'no_results_found' => 'No results found.',
+    'pages' => 'Pages',
+    'server' => 'Server',
 ];

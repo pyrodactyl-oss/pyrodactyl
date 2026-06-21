@@ -1318,7 +1318,7 @@ const SoftwareContainer = () => {
                 buttonText={
                     wipeCountdown > 0
                         ? i18n.t('server:shell.wipe_confirm_countdown', {
-                              defaultValue: `Yes, Wipe Files (${wipeCountdown}s)`,
+                              n: wipeCountdown,
                           })
                         : i18n.t('server:shell.wipe_confirm_button', { defaultValue: 'Yes, Wipe Files' })
                 }

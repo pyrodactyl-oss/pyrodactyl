@@ -115,7 +115,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             <div className='space-y-2 max-h-80 overflow-y-auto'>
                 {loadersToShow.length === 0 ? (
                     <p className='text-sm text-gray-500 text-center py-2'>
-                        No loaders matching &quot;{searchQuery}&quot;
+                        {i18n.t('server:modrinth.no_loaders_found_query', { searchQuery })}
                     </p>
                 ) : (
                     loadersToShow.map((loader) => (

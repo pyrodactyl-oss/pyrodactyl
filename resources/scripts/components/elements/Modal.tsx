@@ -1,5 +1,6 @@
 import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
+import i18n from '@/lib/i18n';
 import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -158,7 +159,7 @@ const Modal: React.FC<ModalProps> = ({
                                                 {closeButton && (
                                                     <div className={`my-6 sm:flex items-center justify-end`}>
                                                         <ActionButton onClick={onDismissed} className={`min-w-full`}>
-                                                            <div>Close</div>
+                                                            <div>{i18n.t('strings:close')}</div>
                                                         </ActionButton>
                                                     </div>
                                                 )}
