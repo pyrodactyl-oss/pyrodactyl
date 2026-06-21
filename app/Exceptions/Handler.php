@@ -198,7 +198,7 @@ class Handler extends ExceptionHandler
                 : strval($match ?? '500'),
             'detail' => $e instanceof HttpExceptionInterface || !is_null($match)
                 ? $e->getMessage()
-                : 'An unexpected error was encountered while processing this request, please try again.',
+                : trans('exceptions.generic_error'),
         ];
 
         if ($e instanceof ModelNotFoundException || $e->getPrevious() instanceof ModelNotFoundException) {

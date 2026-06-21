@@ -45,7 +45,7 @@ class RemovedFromServer extends Notification implements ShouldQueue
     /**
      * Set the locale for the notification based on panel default.
      */
-    public function locale(): string
+    public function locale(mixed $locale): string
     {
         return config('app.locale', 'en');
     }

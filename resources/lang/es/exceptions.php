@@ -53,7 +53,8 @@ return [
         'no_viable_nodes' => 'No se encontraron nodos que satisfagan los requisitos especificados para el despliegue automático.',
         'no_viable_allocations' => 'No se encontraron asignaciones que satisfagan los requisitos para el despliegue automático.',
     ],
-    'api' => [
+     'api' => [
         'resource_not_found' => 'El recurso solicitado no existe en este servidor.',
     ],
+    'generic_error' => 'Se produjo un error inesperado al procesar esta solicitud. Por favor, inténtalo de nuevo.',
 ];
