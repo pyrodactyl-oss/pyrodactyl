@@ -61,4 +61,16 @@ return [
     'regards' => 'Regards',
     'all_rights_reserved' => 'All rights reserved.',
     'trouble_clicking' => 'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
+    'email_subuser_added' => [
+        'greeting' => 'Hello :name!',
+        'line' => 'You have been added as a subuser for the following server, allowing you certain control over the server.',
+        'server_name' => 'Server Name',
+        'visit' => 'Visit Server',
+    ],
+    'email_subuser_removed' => [
+        'greeting' => 'Hello :name.',
+        'line' => 'You have been removed as a subuser for the following server.',
+        'server_name' => 'Server Name',
+        'visit' => 'Visit Panel',
+    ],
 ];

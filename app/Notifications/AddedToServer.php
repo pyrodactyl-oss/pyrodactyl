@@ -35,9 +35,17 @@ class AddedToServer extends Notification implements ShouldQueue
     public function toMail(): MailMessage
     {
         return (new MailMessage())
-            ->greeting('Hello ' . $this->server->user . '!')
-            ->line('You have been added as a subuser for the following server, allowing you certain control over the server.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Visit Server', url('/server/' . $this->server->uuidShort));
+            ->greeting(__('auth.email_subuser_added.greeting', ['name' => $this->server->user]))
+            ->line(__('auth.email_subuser_added.line'))
+            ->line(__('auth.email_subuser_added.server_name') . ': ' . $this->server->name)
+            ->action(__('auth.email_subuser_added.visit'), url('/server/' . $this->server->uuidShort));
+    }
+
+    /**
+     * Set the locale for the notification based on panel default.
+     */
+    public function locale(): string
+    {
+        return config('app.locale', 'en');
     }
 }

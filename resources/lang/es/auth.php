@@ -61,4 +61,16 @@ return [
     'regards' => 'Saludos',
     'all_rights_reserved' => 'Todos los derechos reservados.',
     'trouble_clicking' => 'Si tienes problemas para hacer clic en el botón ":actionText", copia y pega la siguiente URL en tu navegador:',
+    'email_subuser_added' => [
+        'greeting' => '¡Hola :name!',
+        'line' => 'Has sido añadido como subusuario al siguiente servidor, lo que te permite cierto control sobre el servidor.',
+        'server_name' => 'Nombre del servidor',
+        'visit' => 'Visitar servidor',
+    ],
+    'email_subuser_removed' => [
+        'greeting' => 'Hola :name.',
+        'line' => 'Has sido eliminado como subusuario del siguiente servidor.',
+        'server_name' => 'Nombre del servidor',
+        'visit' => 'Visitar Panel',
+    ],
 ];

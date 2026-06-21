@@ -36,9 +36,17 @@ class RemovedFromServer extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->error()
-            ->greeting('Hello ' . $this->server->user . '.')
-            ->line('You have been removed as a subuser for the following server.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Visit Panel', route('index'));
+            ->greeting(__('auth.email_subuser_removed.greeting', ['name' => $this->server->user]))
+            ->line(__('auth.email_subuser_removed.line'))
+            ->line(__('auth.email_subuser_removed.server_name') . ': ' . $this->server->name)
+            ->action(__('auth.email_subuser_removed.visit'), route('index'));
+    }
+
+    /**
+     * Set the locale for the notification based on panel default.
+     */
+    public function locale(): string
+    {
+        return config('app.locale', 'en');
     }
 }
