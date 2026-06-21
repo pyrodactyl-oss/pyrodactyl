@@ -13,12 +13,15 @@ class RemovedFromServer extends Notification implements ShouldQueue
 
     public object $server;
 
+    public string $locale;
+
     /**
      * Create a new notification instance.
      */
     public function __construct(array $server)
     {
         $this->server = (object) $server;
+        $this->locale = config('app.locale', 'en');
     }
 
     /**
@@ -45,8 +48,10 @@ class RemovedFromServer extends Notification implements ShouldQueue
     /**
      * Set the locale for the notification based on panel default.
      */
-    public function locale(mixed $locale): string
+    public function locale(mixed $locale): static
     {
-        return config('app.locale', 'en');
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
     }
 }

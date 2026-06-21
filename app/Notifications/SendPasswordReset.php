@@ -11,11 +11,14 @@ class SendPasswordReset extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public string $locale;
+
     /**
      * Create a new notification instance.
      */
     public function __construct(public string $token)
     {
+        $this->locale = config('app.locale', 'en');
     }
 
     /**
@@ -44,8 +47,10 @@ class SendPasswordReset extends Notification implements ShouldQueue
     /**
      * Set the locale for the notification based on panel default.
      */
-    public function locale(mixed $locale): string
+    public function locale(mixed $locale): static
     {
-        return config('app.locale', 'en');
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
     }
 }
