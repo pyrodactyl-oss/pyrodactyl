@@ -33,15 +33,26 @@ class AccountCreated extends Notification implements ShouldQueue
     public function toMail(): MailMessage
     {
         $message = (new MailMessage())
-            ->greeting('Hello ' . $this->user->name . '!')
-            ->line('You are receiving this email because an account has been created for you on ' . config('app.name') . '.')
-            ->line('Username: ' . $this->user->username)
-            ->line('Email: ' . $this->user->email);
+            ->greeting(__('auth.email_account_created.greeting', ['name' => $this->user->name]))
+            ->line(__('auth.email_account_created.line', ['app' => config('app.name', 'Pyrodactyl')]))
+            ->line(__('auth.email_account_created.username') . ': ' . $this->user->username)
+            ->line(__('auth.email_account_created.email') . ': ' . $this->user->email);
 
         if (!is_null($this->token)) {
-            return $message->action('Setup Your Account', url('/auth/password/reset/' . $this->token . '?email=' . urlencode($this->user->email)));
+            return $message->action(
+                __('auth.email_account_created.setup_button'),
+                url('/auth/password/reset/' . $this->token . '?email=' . urlencode($this->user->email))
+            );
         }
 
         return $message;
+    }
+
+    /**
+     * Set the locale for the notification based on panel default.
+     */
+    public function locale(): string
+    {
+        return config('app.locale', 'en');
     }
 }

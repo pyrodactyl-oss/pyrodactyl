@@ -45,4 +45,20 @@ return [
         'return_to_login' => 'Volver al inicio de sesión',
     ],
     'failed' => 'Las credenciales no coinciden con nuestros registros.',
+    'email_account_created' => [
+        'greeting' => '¡Hola :name!',
+        'line' => 'Recibes este correo porque se ha creado una cuenta para ti en :app.',
+        'username' => 'Usuario',
+        'email' => 'Correo electrónico',
+        'setup_button' => 'Configurar tu cuenta',
+    ],
+    'email_password_reset' => [
+        'subject' => 'Restablecer contraseña',
+        'line' => 'Recibes este correo porque recibimos una solicitud de restablecimiento de contraseña para tu cuenta.',
+        'action' => 'Restablecer contraseña',
+        'no_action' => 'Si no solicitaste un restablecimiento de contraseña, no es necesario realizar ninguna acción.',
+    ],
+    'regards' => 'Saludos',
+    'all_rights_reserved' => 'Todos los derechos reservados.',
+    'trouble_clicking' => 'Si tienes problemas para hacer clic en el botón ":actionText", copia y pega la siguiente URL en tu navegador:',
 ];

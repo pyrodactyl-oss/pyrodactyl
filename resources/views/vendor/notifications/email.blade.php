@@ -88,9 +88,9 @@ $style = [
                                                 {{ $greeting }}
                                             @else
                                                 @if ($level == 'error')
-                                                    Whoops!
+                                                    @lang('strings:error')
                                                 @else
-                                                    Hello!
+                                                    @lang('strings:email_address')
                                                 @endif
                                             @endif
                                         </h1>
@@ -140,7 +140,7 @@ $style = [
 
                                         <!-- Salutation -->
                                         <p style="{{ $style['paragraph'] }}">
-                                            Regards,<br>{{ config('app.name') }}
+                                            @lang('auth.regards'),<br>{{ config('app.name') }}
                                         </p>
 
                                         <!-- Sub Copy -->
@@ -149,8 +149,7 @@ $style = [
                                                 <tr>
                                                     <td style="{{ $fontFamily }}">
                                                         <p style="{{ $style['paragraph-sub'] }}">
-                                                            If you're having trouble clicking the "{{ $actionText }}" button,
-                                                            copy and paste the URL below into your web browser:
+                                                            @lang('auth.trouble_clicking', ['actionText' => $actionText])
                                                         </p>
 
                                                         <p style="{{ $style['paragraph-sub'] }}">
@@ -177,7 +176,7 @@ $style = [
                                         <p style="{{ $style['paragraph-sub'] }}">
                                             &copy; {{ date('Y') }}
                                             <a style="{{ $style['anchor'] }}" href="{{ url('/') }}" target="_blank" rel="noopener">{{ config('app.name') }}</a>.
-                                            All rights reserved.
+                                            @lang('auth.all_rights_reserved')
                                         </p>
                                     </td>
                                 </tr>

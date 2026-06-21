@@ -45,4 +45,20 @@ return [
         'return_to_login' => 'Return to Login',
     ],
     'failed' => 'These credentials do not match our records.',
+    'email_account_created' => [
+        'greeting' => 'Hello :name!',
+        'line' => 'You are receiving this email because an account has been created for you on :app.',
+        'username' => 'Username',
+        'email' => 'Email',
+        'setup_button' => 'Setup Your Account',
+    ],
+    'email_password_reset' => [
+        'subject' => 'Reset Password',
+        'line' => 'You are receiving this email because we received a password reset request for your account.',
+        'action' => 'Reset Password',
+        'no_action' => 'If you did not request a password reset, no further action is required.',
+    ],
+    'regards' => 'Regards',
+    'all_rights_reserved' => 'All rights reserved.',
+    'trouble_clicking' => 'If you\'re having trouble clicking the ":actionText" button, copy and paste the URL below into your web browser:',
 ];
