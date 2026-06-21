@@ -58,7 +58,9 @@ export const ModCard = ({ mod }: ModCardProps) => {
                         >
                             {mod.title}
                         </Link>
-                        <p className='text-sm text-gray-400 mt-1 font-medium'>by {mod.author}</p>
+                        <p className='text-sm text-gray-400 mt-1 font-medium'>
+                            {i18n.t('server:modrinth.by_author', { author: mod.author })}
+                        </p>
                     </div>
 
                     <p className='text-gray-500 leading-relaxed line-clamp-2 text-sm'>{mod.description}</p>
@@ -75,7 +77,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                                 />
                             </svg>
                             <span className='font-semibold text-gray-300'>
-                                downloads: {formatDownloads(mod.downloads)}
+                                {i18n.t('server:modrinth.downloads_label')}: {formatDownloads(mod.downloads)}
                             </span>
                         </div>
 
@@ -88,7 +90,9 @@ export const ModCard = ({ mod }: ModCardProps) => {
                             >
                                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 13l4 4L19 7' />
                             </svg>
-                            <span className='font-semibold text-gray-300'>latest: {mod.latest_version}</span>
+                            <span className='font-semibold text-gray-300'>
+                                {i18n.t('server:modrinth.latest_label')}: {mod.latest_version}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -96,7 +100,7 @@ export const ModCard = ({ mod }: ModCardProps) => {
                 <div className='flex-shrink-0 self-center align-text-left'>
                     <Button className='border-gray-500/70 border-2 rounded-md transition delay-50 duration-325 hover:border-brand/50 hover:text-gray-200 '>
                         <ArrowDownToLine width={22} height={22} className='px-1' />
-                        Install
+                        {i18n.t('server:modrinth.install')}
                     </Button>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import { AntennaSignal, Calendar, Copy, Database, FolderOpen, Gear, Person, Serv
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { array, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -38,6 +39,7 @@ interface Props {
 const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmitting, setIsSubmitting }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSubuser = ServerContext.useStoreActions((actions) => actions.subusers.appendSubuser);
+    const { t } = useTranslation('server');
     const { clearFlashes, clearAndAddHttpError } = useStoreActions(
         (actions: Actions<ApplicationStore>) => actions.flashes,
     );
@@ -231,9 +233,13 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                         );
                                                     })()}
                                                     <div className='flex-1 min-w-0'>
-                                                        <h4 className='font-medium text-zinc-200 capitalize'>{key}</h4>
+                                                        <h4 className='font-medium text-zinc-200 capitalize'>
+                                                            {t(`users.permissions.${key}.title`, { defaultValue: key })}
+                                                        </h4>
                                                         <p className='text-xs text-zinc-400 mt-1 break-words'>
-                                                            {permissions[key]?.description}
+                                                            {t(`users.permissions.${key}.desc`, {
+                                                                defaultValue: permissions[key]?.description || '',
+                                                            })}
                                                         </p>
                                                     </div>
                                                 </div>

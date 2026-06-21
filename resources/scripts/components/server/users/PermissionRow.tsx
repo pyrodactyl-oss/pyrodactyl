@@ -1,4 +1,5 @@
 import { useStoreState } from 'easy-peasy';
+import { useTranslation } from 'react-i18next';
 
 import Checkbox from '@/components/elements/Checkbox';
 import Label from '@/components/elements/Label';
@@ -11,6 +12,10 @@ interface Props {
 const PermissionRow = ({ permission, disabled }: Props) => {
     const [key = '', pkey = ''] = permission.split('.', 2);
     const permissions = useStoreState((state) => state.permissions.data);
+    const { t } = useTranslation('server');
+
+    const label = t(`users.permissions.${key}.${pkey}.label`, { defaultValue: pkey });
+    const apiDesc = permissions[key]?.keys?.[pkey] ?? '';
 
     return (
         <label htmlFor={`permission_${permission}`} className={disabled ? 'disabled' : undefined}>
@@ -24,12 +29,14 @@ const PermissionRow = ({ permission, disabled }: Props) => {
                         disabled={disabled}
                     />
                     <Label as={'p'} className={`font-medium`}>
-                        {pkey}
+                        {label}
                     </Label>
                 </div>
                 <div className={`flex-1`}>
                     {(permissions[key]?.keys?.[pkey]?.length ?? 0) > 0 && (
-                        <p className={`text-xs text-neutral-400 mt-1`}>{permissions[key]?.keys?.[pkey] ?? ''}</p>
+                        <p className={`text-xs text-neutral-400 mt-1`}>
+                            {t(`users.permissions.${key}.${pkey}.desc`, { defaultValue: apiDesc })}
+                        </p>
                     )}
                 </div>
             </div>

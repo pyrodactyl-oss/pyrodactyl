@@ -368,7 +368,7 @@ const ServerActivityLogContainer = () => {
                                                 className='flex items-center gap-2 w-full'
                                             >
                                                 <Xmark width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                            {i18n.t('server:activity.clear_all_filters')}
+                                                {i18n.t('server:activity.clear_all_filters')}
                                             </ActionButton>
                                         )}
                                     </div>

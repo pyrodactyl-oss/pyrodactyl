@@ -346,7 +346,7 @@ const ServerRouter = () => {
                             <div className='shrink-0'>
                                 <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-full'></div>
                                 <StatBlock
-                                    title={t('nav.servers')}
+                                    title={t('strings:server')}
                                     className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-default'
                                 >
                                     {serverName}

@@ -136,14 +136,16 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
 
             {/* Selection counter and clear search */}
             <div className='flex justify-between items-center pt-2 border-t border-gray-200'>
-                <span className='text-xs text-gray-500'>{selectedLoaders.length} selected</span>
+                <span className='text-xs text-gray-500'>
+                    {i18n.t('server:modrinth.selected_count', { count: selectedLoaders.length })}
+                </span>
 
                 {searchQuery && (
                     <button
                         onClick={() => setSearchQuery('')}
                         className='text-xs text-gray-600 hover:text-gray-800 font-medium'
                     >
-                        Clear search
+                        {i18n.t('server:modrinth.clear_search')}
                     </button>
                 )}
             </div>
@@ -156,7 +158,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
                         className='w-full text-xs text-white hover:text-gray-300 py-2 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5'
                     >
                         <span className='transform transition-transform duration-200'>▾</span>
-                        Show {featured.length + other.length - maxVisible} more loaders
+                        {i18n.t('server:modrinth.show_more', { count: featured.length + other.length - maxVisible })}
                     </button>
                 </div>
             )}
@@ -168,7 +170,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
                         className='w-full text-xs text-white hover:text-gray-300 py-2 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5'
                     >
                         <span className='transform transition-transform duration-200 rotate-180'>▾</span>
-                        Show less
+                        {i18n.t('server:modrinth.show_less')}
                     </button>
                 </div>
             )}
@@ -179,7 +181,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
                     onClick={() => setSearchQuery('')}
                     className='w-full text-xs text-white hover:text-gray-300 py-1 border-t border-gray-200 mt-2'
                 >
-                    Clear search
+                    {i18n.t('server:modrinth.clear_search')}
                 </button>
             )}
         </div>

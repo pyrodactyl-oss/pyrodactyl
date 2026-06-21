@@ -75,7 +75,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
     const errors: string[] = [];
 
     variables.forEach((variable) => {
-        if (!variable.user_editable) return; // Skip non-editable variables
+        if (!variable.user_editable) return;
 
         const value = pendingVariables[variable.env_variable] || '';
         const rules = variable.rules || '';
@@ -84,43 +84,39 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
             .map((rule) => rule.trim())
             .filter((rule) => rule.length > 0);
 
-        // Check if variable is required (backend automatically adds nullable if not present)
         const isRequired = ruleArray.includes('required');
         const isNullable = ruleArray.includes('nullable') || !isRequired;
 
-        // If required and empty/null
         if (isRequired && (!value || value.trim() === '')) {
-            errors.push(`${variable.name} is required.`);
+            errors.push(i18n.t('server:shell.validation.required', { name: variable.name }));
             return;
         }
 
-        // If nullable and empty, skip other validations
         if (isNullable && (!value || value.trim() === '')) {
             return;
         }
 
-        // Validate each rule
         ruleArray.forEach((rule) => {
             const [ruleName, ruleValue] = rule.split(':');
 
             switch (ruleName) {
                 case 'string':
                     if (typeof value !== 'string') {
-                        errors.push(`${variable.name} must be a string.`);
+                        errors.push(i18n.t('server:shell.validation.string', { name: variable.name }));
                     }
                     break;
 
                 case 'integer':
                 case 'numeric':
                     if (value && isNaN(Number(value))) {
-                        errors.push(`${variable.name} must be a number.`);
+                        errors.push(i18n.t('server:shell.validation.numeric', { name: variable.name }));
                     }
                     break;
 
                 case 'boolean': {
                     const boolValues = ['true', 'false', '1', '0', 'yes', 'no', 'on', 'off'];
                     if (value && !boolValues.includes(value.toLowerCase())) {
-                        errors.push(`${variable.name} must be true or false.`);
+                        errors.push(i18n.t('server:shell.validation.boolean', { name: variable.name }));
                     }
                     break;
                 }
@@ -129,7 +125,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const minValue = parseInt(ruleValue);
                         if (value.length < minValue) {
-                            errors.push(`${variable.name} must be at least ${minValue} characters.`);
+                            errors.push(i18n.t('server:shell.validation.min', { name: variable.name, min: minValue }));
                         }
                     }
                     break;
@@ -139,7 +135,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const maxValue = parseInt(ruleValue);
                         if (value.length > maxValue) {
-                            errors.push(`${variable.name} may not be greater than ${maxValue} characters.`);
+                            errors.push(i18n.t('server:shell.validation.max', { name: variable.name, max: maxValue }));
                         }
                     }
                     break;
@@ -149,7 +145,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const [min, max] = ruleValue.split(',').map((v) => parseInt(v.trim()));
                         if (value.length < min || value.length > max) {
-                            errors.push(`${variable.name} must be between ${min} and ${max} characters.`);
+                            errors.push(i18n.t('server:shell.validation.between', { name: variable.name, min, max }));
                         }
                     }
                     break;
@@ -159,7 +155,12 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                     if (ruleValue && value) {
                         const allowedValues = ruleValue.split(',').map((v) => v.trim());
                         if (!allowedValues.includes(value)) {
-                            errors.push(`${variable.name} must be one of: ${allowedValues.join(', ')}.`);
+                            errors.push(
+                                i18n.t('server:shell.validation.in', {
+                                    name: variable.name,
+                                    values: allowedValues.join(', '),
+                                }),
+                            );
                         }
                     }
                     break;
@@ -168,12 +169,11 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                 case 'regex': {
                     if (ruleValue && value) {
                         try {
-                            // Handle Laravel regex format: regex:/pattern/flags
                             const regexMatch = ruleValue.match(/^\/(.+)\/([gimuy]*)$/);
                             if (regexMatch) {
                                 const regex = new RegExp(regexMatch[1], regexMatch[2]);
                                 if (!regex.test(value)) {
-                                    errors.push(`${variable.name} format is invalid.`);
+                                    errors.push(i18n.t('server:shell.validation.regex', { name: variable.name }));
                                 }
                             }
                         } catch (e) {
@@ -185,19 +185,19 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'alpha':
                     if (value && !/^[a-zA-Z]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters.`);
+                        errors.push(i18n.t('server:shell.validation.alpha', { name: variable.name }));
                     }
                     break;
 
                 case 'alpha_num':
                     if (value && !/^[a-zA-Z0-9]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters and numbers.`);
+                        errors.push(i18n.t('server:shell.validation.alpha_num', { name: variable.name }));
                     }
                     break;
 
                 case 'alpha_dash':
                     if (value && !/^[a-zA-Z0-9_-]+$/.test(value)) {
-                        errors.push(`${variable.name} may only contain letters, numbers, dashes and underscores.`);
+                        errors.push(i18n.t('server:shell.validation.alpha_dash', { name: variable.name }));
                     }
                     break;
 
@@ -206,41 +206,20 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                         try {
                             new URL(value);
                         } catch {
-                            errors.push(`${variable.name} must be a valid URL.`);
+                            errors.push(i18n.t('server:shell.validation.url', { name: variable.name }));
                         }
                     }
                     break;
 
                 case 'email':
                     if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                        errors.push(`${variable.name} must be a valid email address.`);
+                        errors.push(i18n.t('server:shell.validation.email', { name: variable.name }));
                     }
                     break;
 
-                case 'ip': {
-                    if (value) {
-                        const ipRegex =
-                            /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-                        if (!ipRegex.test(value)) {
-                            errors.push(`${variable.name} must be a valid IP address.`);
-                        }
-                    }
-                    break;
-                }
-
-                // Skip validation rules that don't apply to frontend
-                case 'required':
-                case 'nullable':
-                case 'sometimes':
-                    break;
-
-                default:
-                    // Unknown rule - log for debugging but don't error
-                    if (
-                        process.env.NODE_ENV === 'development' &&
-                        !['string', 'array', 'file', 'image'].includes(ruleName)
-                    ) {
-                        console.warn(`Unknown validation rule: ${ruleName} for variable ${variable.name}`);
+                case 'ip':
+                    if (value && !/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(value)) {
+                        errors.push(i18n.t('server:shell.validation.ip', { name: variable.name }));
                     }
                     break;
             }
@@ -800,12 +779,12 @@ const SoftwareContainer = () => {
                                         className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-brand transition-colors font-mono resize-none'
                                     />
                                     <p className='text-xs text-neutral-400 mt-1'>
-                                        Use variables like{' '}
+                                        {i18n.t('server:shell.validation.use_variables')}{' '}
                                         {eggPreview.variables
                                             .map((v) => `{{${v.env_variable}}}`)
                                             .slice(0, 3)
                                             .join(', ')}
-                                        {eggPreview.variables.length > 3 && ', etc.'}
+                                        {eggPreview.variables.length > 3 && i18n.t('server:shell.validation.and_more')}
                                     </p>
                                 </div>
                                 <div>
@@ -881,7 +860,7 @@ const SoftwareContainer = () => {
                                                     {variable.name}
                                                     {!variable.user_editable && (
                                                         <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
-                                                            Read-only
+                                                            {i18n.t('server:shell.validation.read_only')}
                                                         </span>
                                                     )}
                                                     {variable.user_editable && variable.rules.includes('required') && (
