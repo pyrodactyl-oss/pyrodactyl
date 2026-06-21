@@ -368,7 +368,7 @@ const ActivityLogContainer = () => {
                                 {hasActiveFilters && (
                                     <div className='flex gap-2 justify-center'>
                                         <ActionButton variant='secondary' onClick={clearAllFilters}>
-                                            {i18n.t('dashboard:activity.clear_filters')}
+                                            {i18n.t('strings:clear')}
                                         </ActionButton>
                                         <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
                                             {i18n.t('dashboard:activity.adjust_filters')}
