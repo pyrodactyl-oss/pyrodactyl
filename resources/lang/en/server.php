@@ -10,7 +10,6 @@ return [
         'command_placeholder' => 'Enter a command...',
         'command_aria' => 'Console command input.',
         'transfer_failed' => 'Transfer has failed.',
-        'server_marked' => 'Server marked as :state...',
         'days_short' => 'd',
         'hours_short' => 'h',
         'minutes_short' => 'm',
