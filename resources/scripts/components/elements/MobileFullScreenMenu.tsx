@@ -79,6 +79,8 @@ interface DashboardMobileMenuProps {
 }
 
 export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => {
+    const { t } = useTranslation('strings');
+
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to='/' icon={House} end onClick={onClose}>
