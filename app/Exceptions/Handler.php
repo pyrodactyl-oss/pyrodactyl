@@ -205,7 +205,7 @@ class Handler extends ExceptionHandler
             // Show a nicer error message compared to the standard "No query results for model"
             // response that is normally returned. If we are in debug mode this will get overwritten
             // with a more specific error message to help narrow down things.
-            $error['detail'] = 'The requested resource could not be found on the server.';
+            $error['detail'] = trans('exceptions.api.resource_not_found');
         }
 
         if (config('app.debug')) {
