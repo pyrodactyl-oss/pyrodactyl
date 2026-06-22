@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Contiene todas las cadenas de traduccion para los diferentes eventos
+ * del registro de actividad. Deben estar indexadas por el valor delante
+ * de los dos puntos (:) en el nombre del evento. Si no hay dos puntos,
+ * deben estar en el nivel superior.
+ */
 return [
     'auth' => [
         'fail' => 'Inicio de sesión fallido',

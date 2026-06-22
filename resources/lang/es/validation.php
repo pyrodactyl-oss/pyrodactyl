@@ -1,6 +1,17 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Lineas de idioma para validacion
+    |--------------------------------------------------------------------------
+    |
+    | Las siguientes lineas de idioma contienen los mensajes de error
+    | predeterminados usados por la clase validadora. Algunas de estas
+    | reglas tienen multiples versiones como las reglas de tamano. Sientete libre de modificar cada uno de estos mensajes aqui.
+    |
+    */
+
     'accepted' => 'El campo :attribute debe ser aceptado.',
     'active_url' => 'El campo :attribute no es una URL válida.',
     'after' => 'El campo :attribute debe ser una fecha posterior a :date.',
@@ -74,8 +85,20 @@ return [
     'uploaded' => 'El campo :attribute falló al subirse.',
     'url' => 'El formato del campo :attribute es inválido.',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Atributos de validacion personalizados
+    |--------------------------------------------------------------------------
+    |
+    | Las siguientes lineas de idioma se usan para intercambiar los
+    | marcadores de atributos con algo mas legible como "Direccion
+    | de correo electronico" en lugar de "email". Esto ayuda a hacer los mensajes mas claros.
+    |
+    */
+
     'attributes' => [],
 
+    // Logica interna de validacion para Pyrodactyl
     'internal' => [
         'variable_value' => 'variable :env',
         'invalid_password' => 'La contraseña proporcionada es inválida para esta cuenta.',
