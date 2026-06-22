@@ -88,19 +88,19 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
             case 'failed':
                 return (
                     <span className='bg-red-500/20 border border-red-500/30 py-0.5 px-2 rounded text-red-300 text-xs font-medium'>
-                        Failed
+                        {i18n.t('server:shell.job_failed')}
                     </span>
                 );
             case 'pending':
                 return (
                     <span className='bg-yellow-500/20 border border-yellow-500/30 py-0.5 px-2 rounded text-yellow-300 text-xs font-medium'>
-                        Pending
+                        {i18n.t('server:shell.job_pending')}
                     </span>
                 );
             case 'running':
                 return (
                     <span className='bg-blue-500/20 border border-blue-500/30 py-0.5 px-2 rounded text-blue-300 text-xs font-medium'>
-                        Running ({backup.progress}%)
+                        {i18n.t('server:shell.job_running')} ({backup.progress}%)
                     </span>
                 );
             case 'completed':
