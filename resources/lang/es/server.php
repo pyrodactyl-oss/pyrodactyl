@@ -616,6 +616,7 @@ return [
         'job_completed' => 'Completado',
         'job_failed' => 'Fallido',
         'job_cancelled' => 'Cancelado',
+        'backup_automatic' => 'Automático',
         'step' => 'Paso',
         'of' => 'de',
         'step_overview' => 'Resumen',

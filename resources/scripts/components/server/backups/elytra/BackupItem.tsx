@@ -110,13 +110,13 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                 }
                 return backup.isLiveOnly ? (
                     <span className='bg-green-500/20 border border-green-500/30 py-0.5 px-2 rounded text-green-300 text-xs font-medium'>
-                        Completed
+                        {i18n.t('server:shell.job_completed')}
                     </span>
                 ) : null;
             case 'cancelled':
                 return (
                     <span className='bg-gray-500/20 border border-gray-500/30 py-0.5 px-2 rounded text-gray-300 text-xs font-medium'>
-                        Cancelled
+                        {i18n.t('server:shell.job_cancelled')}
                     </span>
                 );
             default:
@@ -153,7 +153,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                         <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
                         {backup.isAutomatic && (
                             <span className='text-xs text-blue-400 font-medium bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded'>
-                                Automatic
+                                {i18n.t('server:shell.backup_automatic')}
                             </span>
                         )}
                         {backup.isLocked && (

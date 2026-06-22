@@ -83,7 +83,7 @@ const BackupItem = ({ backup }: Props) => {
                                     <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
                                     {backup.isAutomatic && (
                                         <span className='text-xs text-blue-400 font-medium bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded'>
-                                            Automatic
+                                            {i18n.t('server:shell.backup_automatic')}
                                         </span>
                                     )}
                                     {backup.isLocked && (
