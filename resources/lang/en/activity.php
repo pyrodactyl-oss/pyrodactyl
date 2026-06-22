@@ -60,6 +60,7 @@ return [
             'fail' => 'Marked the :name backup as failed',
             'lock' => 'Locked the :name backup',
             'unlock' => 'Unlocked the :name backup',
+            'software-change' => 'Created backup before software change',
         ],
         'database' => [
             'create' => 'Created new database :name',
@@ -89,6 +90,7 @@ return [
             'trash-empty' => 'Emptied all trash',
             'restore_one' => 'Restored :file from trash',
             'restore_other' => 'Restored :count files from trash',
+            'software-change-wipe' => 'Wiped server files during software change',
         ],
         'sftp' => [
             'denied' => 'Blocked SFTP access due to permissions',
@@ -123,6 +125,14 @@ return [
         'settings' => [
             'rename' => 'Renamed the server from :old to :new',
             'description' => 'Changed the server description from :old to :new',
+            'egg' => 'Changed the server egg',
+            'egg-preview' => 'Previewed egg change for the server',
+        ],
+        'software' => [
+            'change-queued' => 'Software change queued',
+            'change-started' => 'Software change started',
+            'changed' => 'Software changed successfully',
+            'change-failed' => 'Software change failed',
         ],
         'startup' => [
             'edit' => 'Changed the :variable variable from ":old" to ":new"',

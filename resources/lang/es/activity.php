@@ -60,6 +60,7 @@ return [
             'fail' => 'Marcó la copia de seguridad :name como fallida',
             'lock' => 'Bloqueó la copia de seguridad :name',
             'unlock' => 'Desbloqueó la copia de seguridad :name',
+            'software-change' => 'Creó copia de seguridad antes del cambio de software',
         ],
         'database' => [
             'create' => 'Creó la base de datos :name',
@@ -89,6 +90,7 @@ return [
             'trash-empty' => 'Vació toda la papelera',
             'restore_one' => 'Restauró :file de la papelera',
             'restore_other' => 'Restauró :count archivos de la papelera',
+            'software-change-wipe' => 'Eliminó archivos del servidor durante el cambio de software',
         ],
         'sftp' => [
             'denied' => 'Bloqueó el acceso SFTP por permisos',
@@ -123,6 +125,14 @@ return [
         'settings' => [
             'rename' => 'Renombró el servidor de :old a :new',
             'description' => 'Cambió la descripción del servidor de :old a :new',
+            'egg' => 'Cambió el huevo del servidor',
+            'egg-preview' => 'Previsualizó el cambio de huevo del servidor',
+        ],
+        'software' => [
+            'change-queued' => 'Cambio de software en cola',
+            'change-started' => 'Cambio de software iniciado',
+            'changed' => 'Software cambiado exitosamente',
+            'change-failed' => 'Cambio de software fallido',
         ],
         'startup' => [
             'edit' => 'Cambió la variable :variable de ":old" a ":new"',
