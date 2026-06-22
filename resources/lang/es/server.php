@@ -386,6 +386,7 @@ return [
         'ahead_of' => 'por delante de',
         'behind' => 'por detrás de',
         'invalid_cron' => 'Expresión cron inválida',
+        'ignoring_files' => 'Ignorando archivos y carpetas:',
         'edit_schedule' => 'Editar programación',
         'create_new_schedule' => 'Crear nueva programación',
         'schedule_name' => 'Nombre de la programación',

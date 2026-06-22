@@ -10,6 +10,8 @@ import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
 import i18n from '@/lib/i18n';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
 import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
@@ -96,7 +98,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 {task.payload && (
                     <div className={`md:ml-6 mt-2`}>
                         {task.action === 'backup' && (
-                            <p className={`text-xs uppercase text-zinc-400 mb-1`}>Ignoring files & folders:</p>
+                            <p className={`text-xs uppercase text-zinc-400 mb-1`}>{i18n.t('server:schedules.ignoring_files')}</p>
                         )}
                         <div
                             className={`font-mono bg-zinc-800 rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
