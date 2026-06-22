@@ -1252,7 +1252,7 @@ const SoftwareContainer = () => {
                 {currentStep !== 'overview' && (
                     <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
                         <div className='flex items-center justify-between mb-2'>
-                            <span className='text-sm font-medium text-neutral-200 capitalize'>
+                            <span className='text-sm font-medium text-neutral-200'>
                                 {(() => {
                                     const stepNames: Record<string, string> = {
                                         'overview': i18n.t('server:shell.step_overview'),

@@ -84,12 +84,12 @@ class ElytraJob extends Model
     public function getStatusDisplayAttribute(): string
     {
         return match ($this->status) {
-            self::STATUS_PENDING => 'Pending',
-            self::STATUS_SUBMITTED => 'Submitted',
-            self::STATUS_RUNNING => 'Running',
-            self::STATUS_COMPLETED => 'Completed',
-            self::STATUS_FAILED => 'Failed',
-            self::STATUS_CANCELLED => 'Cancelled',
+            self::STATUS_PENDING => __('server.shell.job_pending'),
+            self::STATUS_SUBMITTED => __('server.shell.job_submitted'),
+            self::STATUS_RUNNING => __('server.shell.job_running'),
+            self::STATUS_COMPLETED => __('server.shell.job_completed'),
+            self::STATUS_FAILED => __('server.shell.job_failed'),
+            self::STATUS_CANCELLED => __('server.shell.job_cancelled'),
             default => ucfirst($this->status),
         };
     }

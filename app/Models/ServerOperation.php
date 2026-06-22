@@ -117,18 +117,18 @@ class ServerOperation extends Model
         return $this->update([
             'status' => self::STATUS_RUNNING,
             'started_at' => now(),
-            'message' => 'Operation started...',
+            'message' => __('server.shell.op_started'),
         ]);
     }
 
     /**
      * Mark operation as completed with optional message.
      */
-    public function markAsCompleted(string $message = 'Operation completed successfully'): bool
+    public function markAsCompleted(string $message = null): bool
     {
         return $this->update([
             'status' => self::STATUS_COMPLETED,
-            'message' => $message,
+            'message' => $message ?? __('server.shell.op_completed'),
         ]);
     }
 
