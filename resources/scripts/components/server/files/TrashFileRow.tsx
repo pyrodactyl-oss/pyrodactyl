@@ -71,12 +71,11 @@ const TrashFileRow = ({ file, selected, onSelect, onEnter, onRestored, onDeleted
             <Dialog.Confirm
                 open={showRestore}
                 onClose={() => setShowRestore(false)}
-                title={`Restore ${file.original_name}`}
+                title={i18n.t('server:files.restore_item_title', { name: file.original_name })}
                 confirm={i18n.t('server:files.restore_confirm')}
                 onConfirmed={handleRestore}
             >
-                Restore <span className='font-semibold text-zinc-50'>{file.original_name}</span> to its original
-                location?
+                {i18n.t('server:files.restore_item_body', { name: file.original_name })}
             </Dialog.Confirm>
             <Dialog.Confirm
                 open={showDelete}

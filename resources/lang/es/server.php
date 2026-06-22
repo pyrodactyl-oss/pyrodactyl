@@ -73,6 +73,8 @@ return [
         'restore_selected' => 'Restaurar seleccionados (:count)',
         'delete_selected' => 'Eliminar seleccionados (:count)',
         'restore_title' => 'Restaurar archivos',
+        'restore_item_title' => 'Restaurar {{name}}',
+        'restore_item_body' => '¿Restaurar {{name}} a su ubicación original?',
         'restore_confirm' => 'Restaurar',
         'restore_message' => '¿Restaurar :count elemento(s) seleccionado(s) a sus ubicaciones originales?',
         'delete_title' => 'Eliminar permanentemente',

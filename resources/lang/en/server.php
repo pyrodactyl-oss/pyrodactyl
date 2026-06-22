@@ -73,6 +73,8 @@ return [
         'restore_selected' => 'Restore Selected (:count)',
         'delete_selected' => 'Delete Selected (:count)',
         'restore_title' => 'Restore Files',
+        'restore_item_title' => 'Restore {{name}}',
+        'restore_item_body' => 'Restore {{name}} to its original location?',
         'restore_confirm' => 'Restore',
         'restore_message' => 'Restore :count selected item(s) to their original locations?',
         'delete_title' => 'Delete Permanently',
