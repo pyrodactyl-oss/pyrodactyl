@@ -357,7 +357,7 @@ return [
     'select_nest_placeholder' => 'Seleccionar un Nido',
     'startup_variable_label' => 'Variable de comando de inicio:',
     'input_rules_label' => 'Reglas de entrada:',
-    'server_must_install_properly' => 'El servidor debe instalarse correctamente para reinstalar',
+    'server_must_install_properly' => 'El servidor debe instalarse antes de reinstalar',
     'transfer_disabled_desc' => 'Transferir un servidor requiere más de un nodo configurado en tu panel.',
     'safely_delete_server_desc' => 'Esta acción intentará eliminar el servidor tanto del panel como del daemon. Si alguno de los dos informa un error, la acción se cancelará.',
     'force_delete_server_desc' => 'Esta acción intentará eliminar el servidor tanto del panel como del daemon. Si el daemon no responde o informa un error, la eliminación continuará.',

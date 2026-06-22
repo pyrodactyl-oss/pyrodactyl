@@ -357,7 +357,7 @@ return [
     'select_nest_placeholder' => 'Select a Nest',
     'startup_variable_label' => 'Startup Command Variable:',
     'input_rules_label' => 'Input Rules:',
-    'server_must_install_properly' => 'Server Must Install Properly to Reinstall',
+    'server_must_install_properly' => 'Server must be installed first to reinstall',
     'transfer_disabled_desc' => 'Transferring a server requires more than one node to be configured on your panel.',
     'safely_delete_server_desc' => 'This action will attempt to delete the server from both the panel and daemon. If either one reports an error the action will be cancelled.',
     'force_delete_server_desc' => 'This action will attempt to delete the server from both the panel and daemon. If the daemon does not respond, or reports an error the deletion will continue.',

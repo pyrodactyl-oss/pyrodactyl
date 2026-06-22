@@ -33,7 +33,7 @@
                             <button type="submit" class="btn btn-danger">{{ trans('admin/general.reinstall_server') }}</button>
                         </form>
                     @else
-                        <button class="btn btn-danger disabled">{{ trans('admin/general.server_must_install_properly') }}</button>
+                        <button class="btn btn-danger disabled" style="white-space: normal">{{ trans('admin/general.server_must_install_properly') }}</button>
                     @endif
                 </div>
             </div>
