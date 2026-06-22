@@ -596,6 +596,11 @@ return [
         'apply_changes' => 'Aplicar cambios',
         'step' => 'Paso',
         'of' => 'de',
+        'step_overview' => 'Resumen',
+        'step_select_game' => 'Seleccionar juego',
+        'step_select_software' => 'Seleccionar software',
+        'step_configure' => 'Configurar',
+        'step_review' => 'Revisar',
         'could_not_find_operation_modal' => 'No se pudo encontrar el modal de operación para este daemon: Usando {{daemonType}}',
         'validation' => [
             'required' => '{{name}} es obligatorio.',

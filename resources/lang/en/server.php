@@ -596,6 +596,11 @@ return [
         'apply_changes' => 'Apply Changes',
         'step' => 'Step',
         'of' => 'of',
+        'step_overview' => 'Overview',
+        'step_select_game' => 'Select Game',
+        'step_select_software' => 'Select Software',
+        'step_configure' => 'Configure',
+        'step_review' => 'Review',
         'could_not_find_operation_modal' => 'Could not find Operation Modal for this daemon: Using {{daemonType}}',
         'validation' => [
             'required' => '{{name}} is required.',
