@@ -123,7 +123,7 @@ class ServerViewController extends Controller
     public function manage(Request $request, Server $server): View
     {
         if ($server->status === Server::STATUS_INSTALL_FAILED) {
-            throw new DisplayException('This server is in a failed install state and cannot be recovered. Please delete and re-create the server.');
+            throw new DisplayException(trans('exceptions.server.failed_install'));
         }
 
         // Check if the panel doesn't have at least 2 nodes configured.

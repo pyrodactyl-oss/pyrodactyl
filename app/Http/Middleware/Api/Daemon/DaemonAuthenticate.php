@@ -38,13 +38,13 @@ class DaemonAuthenticate
         }
 
         if (is_null($bearer = $request->bearerToken())) {
-            throw new HttpException(401, 'Access to this endpoint must include an Authorization header.', null, ['WWW-Authenticate' => 'Bearer']);
+            throw new HttpException(401, trans('exceptions.general.no_auth_header'), null, ['WWW-Authenticate' => 'Bearer']);
         }
 
         $parts = explode('.', $bearer);
         // Ensure that all of the correct parts are provided in the header.
         if (count($parts) !== 2 || empty($parts[0]) || empty($parts[1])) {
-            throw new BadRequestHttpException('The Authorization header provided was not in a valid format.');
+            throw new BadRequestHttpException(trans('exceptions.general.invalid_auth_format'));
         }
 
         try {

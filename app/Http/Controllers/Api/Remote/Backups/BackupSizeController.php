@@ -33,7 +33,7 @@ class BackupSizeController extends Controller
 
         // Check that the server belongs to the node making the request
         if ($server->node_id !== $node->id) {
-            throw new HttpForbiddenException('You do not have permission to access that server.');
+            throw new HttpForbiddenException(trans('exceptions.general.not_authorized'));
         }
 
         // Validate the request data
@@ -59,7 +59,7 @@ class BackupSizeController extends Controller
             if (!$backup) {
                 $errors[] = [
                     'backup_uuid' => $backupData['backup_uuid'],
-                    'error' => 'Backup not found or does not belong to this server'
+                    'error' => trans('exceptions.backup.backups_not_found')
                 ];
                 continue;
             }
@@ -68,7 +68,7 @@ class BackupSizeController extends Controller
             if (!$backup->is_successful) {
                 $errors[] = [
                     'backup_uuid' => $backupData['backup_uuid'],
-                    'error' => 'Cannot update size of unsuccessful backup'
+                    'error' => trans('exceptions.backup.not_completed')
                 ];
                 continue;
             }
@@ -119,7 +119,7 @@ class BackupSizeController extends Controller
             return new JsonResponse([
                 'updated_count' => 0,
                 'total_requested' => count($validatedData['backups']),
-                'errors' => [['error' => 'Transaction failed: ' . $e->getMessage()]],
+                'errors' => [['error' => trans('exceptions.general.malformed_json') . ': ' . $e->getMessage()]],
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 

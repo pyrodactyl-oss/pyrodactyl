@@ -47,7 +47,7 @@ class ServerOperationService
         ?string $message = null
     ): ServerOperation {
         if (!$this->canAcceptOperation($server)) {
-            throw new ConflictHttpException('Server cannot accept new operations at this time.');
+            throw new ConflictHttpException(trans('exceptions.server.cannot_accept_operations'));
         }
 
         $operationId = Str::uuid()->toString();

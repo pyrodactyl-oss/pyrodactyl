@@ -22,15 +22,15 @@ class ServerStateValidationService
     {
         try {
             if ($server->status === Server::STATUS_INSTALLING) {
-                throw new ConflictHttpException('Server is currently being installed and cannot be modified.');
+                throw new ConflictHttpException(trans('exceptions.server.installing'));
             }
             
             if ($server->status === Server::STATUS_SUSPENDED) {
-                throw new ConflictHttpException('Server is suspended and cannot be modified.');
+                throw new ConflictHttpException(trans('exceptions.server.suspended'));
             }
             
             if ($server->transfer) {
-                throw new ConflictHttpException('Server is currently being transferred and cannot be modified.');
+                throw new ConflictHttpException(trans('exceptions.server.transferring'));
             }
             
             $server->refresh();
@@ -58,7 +58,7 @@ class ServerStateValidationService
     {
         $activeOperation = ServerOperation::forServer($server)->active()->first();
         if ($activeOperation) {
-            throw new ConflictHttpException('Another operation is currently in progress for this server. Please wait for it to complete.');
+            throw new ConflictHttpException(trans('exceptions.server.another_operation'));
         }
     }
 

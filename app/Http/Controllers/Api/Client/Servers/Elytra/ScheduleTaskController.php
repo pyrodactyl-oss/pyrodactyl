@@ -45,7 +45,7 @@ class ScheduleTaskController extends ClientApiController
         }
 
         if (!$server->allowsBackups() && $request->action === 'backup') {
-            throw new HttpForbiddenException("A backup task cannot be created when backups are disabled for this server.");
+            throw new HttpForbiddenException(trans('exceptions.schedules.backup_task_disabled'));
         }
 
         /** @var Task|null $lastTask */
@@ -105,7 +105,7 @@ class ScheduleTaskController extends ClientApiController
         }
 
         if (!$server->allowsBackups() && $request->action === 'backup') {
-            throw new HttpForbiddenException("A backup task cannot be created when backups are disabled for this server.");
+            throw new HttpForbiddenException(trans('exceptions.schedules.backup_task_disabled'));
         }
 
         $this->connection->transaction(function () use ($request, $schedule, $task) {
@@ -160,11 +160,11 @@ class ScheduleTaskController extends ClientApiController
         }
 
         if (!$request->user()->can(Permission::ACTION_SCHEDULE_UPDATE, $server)) {
-            throw new HttpForbiddenException('You do not have permission to perform this action.');
+            throw new HttpForbiddenException(trans('exceptions.general.permission_denied'));
         }
 
         if ($task->is_queued || $task->is_processing) {
-            throw new HttpForbiddenException('Cannot delete a task that is currently queued or processing.');
+            throw new HttpForbiddenException(trans('exceptions.schedules.task_queued'));
         }
 
         $schedule->tasks()

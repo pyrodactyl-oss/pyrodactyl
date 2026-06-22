@@ -16,7 +16,7 @@ use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 
 class LoginCheckpointController extends AbstractLoginController
 {
-    private const TOKEN_EXPIRED_MESSAGE = 'The authentication token provided has expired, please refresh the page and try again.';
+    private const TOKEN_EXPIRED_MESSAGE = 'exceptions.auth.token_expired';
 
     /**
      * LoginCheckpointController constructor.
@@ -48,7 +48,7 @@ class LoginCheckpointController extends AbstractLoginController
 
         $details = $request->session()->get('auth_confirmation_token');
         if (!$this->hasValidSessionData($details)) {
-            $this->sendFailedLoginResponse($request, null, self::TOKEN_EXPIRED_MESSAGE);
+            $this->sendFailedLoginResponse($request, null, trans(self::TOKEN_EXPIRED_MESSAGE));
         }
 
         if (!hash_equals($request->input('confirmation_token') ?? '', $details['token_value'])) {
@@ -59,7 +59,7 @@ class LoginCheckpointController extends AbstractLoginController
             /** @var User $user */
             $user = User::query()->findOrFail($details['user_id']);
         } catch (ModelNotFoundException) {
-            $this->sendFailedLoginResponse($request, null, self::TOKEN_EXPIRED_MESSAGE);
+            $this->sendFailedLoginResponse($request, null, trans(self::TOKEN_EXPIRED_MESSAGE));
         }
 
         // Recovery tokens go through a slightly different pathway for usage.
@@ -79,7 +79,7 @@ class LoginCheckpointController extends AbstractLoginController
             }
         }
 
-        $this->sendFailedLoginResponse($request, $user, !empty($recoveryToken) ? 'The recovery token provided is not valid.' : null);
+        $this->sendFailedLoginResponse($request, $user, !empty($recoveryToken) ? trans('exceptions.auth.recovery_token_invalid') : null);
     }
 
     /**

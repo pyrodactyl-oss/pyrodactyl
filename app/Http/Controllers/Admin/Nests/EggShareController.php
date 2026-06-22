@@ -75,18 +75,18 @@ class EggShareController extends Controller
             $parsed_url = parse_url($request->input('import_file_url'));
 
             if (!is_array($parsed_url) || !isset($parsed_url['host']) || !in_array($parsed_url['host'], $allowed_hosts)) {
-                $this->alert->danger('The Egg import URL is not from an allowed host.')->flash();
+                $this->alert->danger(trans('admin/general.egg_import_url_not_allowed'))->flash();
                 return redirect()->back();
             }
             if (!isset($parsed_url['scheme']) || !in_array($parsed_url['scheme'], ['http', 'https'])) {
-                $this->alert->danger('The Egg import URL scheme is invalid.')->flash();
+                $this->alert->danger(trans('admin/general.egg_import_scheme_invalid'))->flash();
                 return redirect()->back();
             }
 
             $response = @file_get_contents($request->input('import_file_url'));
 
             if ($response === false) {
-                $this->alert->danger('Fetching the Egg from the URL failed.')->flash();
+                $this->alert->danger(trans('admin/general.egg_import_failed'))->flash();
                 return redirect()->back();
             }
 
