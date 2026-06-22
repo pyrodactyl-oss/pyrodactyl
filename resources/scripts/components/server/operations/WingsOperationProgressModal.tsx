@@ -99,6 +99,17 @@ const WingsOperationProgressModal: React.FC<Props> = ({
         };
     }, [visible, operationId, uuid, startPolling, stopPolling, onComplete, onError, onClose, autoCloseTimer]);
 
+    const getStatusLabel = (status: string) => {
+        const labels: Record<string, string> = {
+            pending: i18n.t('server:shell.job_pending'),
+            running: i18n.t('server:shell.job_running'),
+            completed: i18n.t('server:shell.job_completed'),
+            failed: i18n.t('server:shell.job_failed'),
+            cancelled: i18n.t('server:shell.job_cancelled'),
+        };
+        return labels[status] || status;
+    };
+
     const renderStatusIcon = (status: string) => {
         const iconType = getStatusIconType(status as any);
 
@@ -178,7 +189,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                             <span
                                 className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-zinc-300'}`}
                             >
-                                {operation.status}
+                                {getStatusLabel(operation.status)}
                             </span>
                         </div>
 
