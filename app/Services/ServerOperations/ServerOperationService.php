@@ -58,7 +58,7 @@ class ServerOperationService
             'user_id' => $user->id,
             'type' => $type,
             'status' => ServerOperation::STATUS_PENDING,
-            'message' => $message ?? 'Operation queued for processing...',
+            'message' => $message ?? __('server.shell.op_queued'),
             'parameters' => $parameters,
         ]);
     }

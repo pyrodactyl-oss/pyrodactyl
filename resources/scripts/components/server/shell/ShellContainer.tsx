@@ -581,7 +581,7 @@ const SoftwareContainer = () => {
                         {description.slice(0, MAX_DESCRIPTION_LENGTH)}...{' '}
                         <button
                             onClick={(e) => { e.stopPropagation(); toggleDescription(id); }}
-                            className='text-brand hover:underline font-medium'
+                            className='text-brand hover:underline font-medium cursor-pointer'
                         >
                             {i18n.t('server:shell.show_more')}
                         </button>
@@ -594,7 +594,7 @@ const SoftwareContainer = () => {
                                 {' '}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); toggleDescription(id); }}
-                                    className='text-brand hover:underline font-medium'
+                                    className='text-brand hover:underline font-medium cursor-pointer'
                                 >
                                     {i18n.t('server:shell.show_less')}
                                 </button>
