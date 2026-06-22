@@ -3,7 +3,7 @@
 if (! empty($greeting)) {
     echo $greeting, "\n\n";
 } else {
-    echo __('Hello!'), "\n\n";
+    echo $level == 'error' ? __('strings:error') : __('auth.generic_greeting'), "\n\n";
 }
 
 if (! empty($introLines)) {

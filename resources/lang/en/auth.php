@@ -45,6 +45,7 @@ return [
         'return_to_login' => 'Return to Login',
     ],
     'failed' => 'These credentials do not match our records.',
+    'generic_greeting' => 'Hello!',
     'email_account_created' => [
         'subject' => 'Account Created',
         'greeting' => 'Hello :name!',

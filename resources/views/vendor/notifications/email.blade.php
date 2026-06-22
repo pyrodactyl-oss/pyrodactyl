@@ -90,7 +90,7 @@ $style = [
                                                 @if ($level == 'error')
                                                     @lang('strings:error')
                                                 @else
-                                                    {{ __('Hello!') }}
+                                                    @lang('auth.generic_greeting')
                                                 @endif
                                             @endif
                                         </h1>

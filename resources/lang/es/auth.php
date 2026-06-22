@@ -45,6 +45,7 @@ return [
         'return_to_login' => 'Volver al inicio de sesión',
     ],
     'failed' => 'Las credenciales no coinciden con nuestros registros.',
+    'generic_greeting' => '¡Hola!',
     'email_account_created' => [
         'subject' => 'Cuenta creada',
         'greeting' => '¡Hola :name!',
