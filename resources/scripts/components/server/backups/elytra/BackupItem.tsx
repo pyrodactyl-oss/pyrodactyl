@@ -14,6 +14,24 @@ import useFormatBytes from '@/plugins/useFormatBytes';
 
 import BackupContextMenu from './BackupContextMenu';
 
+const translateDaemonMessage = (msg: string | null | undefined): string | null => {
+    if (!msg) return null;
+    const map: Record<string, string> = {
+        'Generating backup archive...': i18n.t('server:shell.dm_generating_archive'),
+        'Calculating repository size...': i18n.t('server:shell.dm_calculating_size'),
+        'Verifying backup integrity...': i18n.t('server:shell.dm_verifying_integrity'),
+        'Uploading backup parts...': i18n.t('server:shell.dm_uploading_parts'),
+        'Finalizing backup...': i18n.t('server:shell.dm_finalizing_backup'),
+        'Creating backup snapshot...': i18n.t('server:shell.dm_creating_snapshot'),
+        'Cleaning up temporary files...': i18n.t('server:shell.dm_cleaning_up'),
+        'Downloading backup parts...': i18n.t('server:shell.dm_downloading_parts'),
+    };
+    if (map[msg]) return map[msg];
+    const match = msg.match(/^Backup in progress\.\.\. (\d+)%$/);
+    if (match) return i18n.t('server:shell.op_backup_progress', { progress: match[1] });
+    return msg;
+};
+
 export interface UnifiedBackup {
     uuid: string;
     name: string;
@@ -167,7 +185,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     {showProgressBar && (
                         <div className='mb-2'>
                             <div className='flex justify-between text-xs text-zinc-400 mb-1.5'>
-                                <span>{backup.message || i18n.t('server:operations.processing')}</span>
+                                <span>{translateDaemonMessage(backup.message) || i18n.t('server:operations.processing')}</span>
                                 <span>{backup.progress}%</span>
                             </div>
                             <div className='w-full bg-zinc-700 rounded-full h-2'>
@@ -183,7 +201,7 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 
                     {/* Error message for failed backups */}
                     {backup.status === 'failed' && backup.message && (
-                        <p className='text-xs text-red-400 truncate mb-1.5'>{backup.message}</p>
+                        <p className='text-xs text-red-400 truncate mb-1.5'>{translateDaemonMessage(backup.message)}</p>
                     )}
 
                     {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}

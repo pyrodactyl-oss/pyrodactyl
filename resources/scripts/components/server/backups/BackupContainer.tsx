@@ -37,6 +37,24 @@ import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import { useUnifiedBackups } from './useUnifiedBackups';
 
+const translateBackupMessage = (msg: string | null | undefined): string | null => {
+    if (!msg) return null;
+    const map: Record<string, string> = {
+        'Generating backup archive...': i18n.t('server:shell.dm_generating_archive'),
+        'Calculating repository size...': i18n.t('server:shell.dm_calculating_size'),
+        'Verifying backup integrity...': i18n.t('server:shell.dm_verifying_integrity'),
+        'Uploading backup parts...': i18n.t('server:shell.dm_uploading_parts'),
+        'Finalizing backup...': i18n.t('server:shell.dm_finalizing_backup'),
+        'Creating backup snapshot...': i18n.t('server:shell.dm_creating_snapshot'),
+        'Cleaning up temporary files...': i18n.t('server:shell.dm_cleaning_up'),
+        'Downloading backup parts...': i18n.t('server:shell.dm_downloading_parts'),
+    };
+    if (map[msg]) return map[msg];
+    const match = msg.match(/^Backup in progress\.\.\. (\d+)%$/);
+    if (match) return i18n.t('server:shell.op_backup_progress', { progress: match[1] });
+    return msg;
+};
+
 const BackupItemElytra = lazy(() => import('./elytra/BackupItem'));
 const BackupItemWings = lazy(() => import('./wings/BackupItem'));
 
@@ -785,8 +803,8 @@ const BackupContainerWrapper = () => {
                 const newProgress = progress || 0;
                 const isCompleted = status === 'completed' && newProgress === 100;
                 const displayMessage = errorMsg
-                    ? `${message || i18n.t('server:operations.failed')}: ${errorMsg}`
-                    : message || '';
+                    ? `${translateBackupMessage(message || i18n.t('server:operations.failed'))}: ${errorMsg}`
+                    : translateBackupMessage(message) || '';
 
                 if (currentState?.completed && !isCompleted) {
                     return prevProgress;
