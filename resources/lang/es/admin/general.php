@@ -623,6 +623,9 @@ return [
     'mail_disabled_warning' => 'Esta interfaz está limitada a instancias que usan SMTP como controlador de correo. Usa el comando <code>php artisan p:environment:mail</code> para actualizar tu configuración de correo, o establece <code>MAIL_DRIVER=smtp</code> en tu archivo de entorno.',
     'test_mail_settings' => 'Probar configuración de correo',
     'test_mail_begin' => 'Haz clic en «Probar» para comenzar la prueba.',
+    'settings_updated' => 'La configuración del panel se ha actualizado correctamente y el trabajador de cola se ha reiniciado para aplicar estos cambios.',
+    'advanced_settings_updated' => 'La configuración avanzada se ha actualizado correctamente y el trabajador de cola se ha reiniciado para aplicar estos cambios.',
+    'captcha_settings_updated' => 'La configuración del captcha se ha actualizado correctamente y el trabajador de cola se ha reiniciado para aplicar estos cambios.',
     'test_message_sent' => 'El mensaje de prueba se envió correctamente.',
     'mail_settings_updated' => 'La configuración de correo se ha actualizado correctamente y el trabajador de cola se reinició para aplicar estos cambios.',
 

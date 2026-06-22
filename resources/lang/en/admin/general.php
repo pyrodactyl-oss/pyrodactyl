@@ -619,6 +619,9 @@ return [
     'mail_disabled_warning' => 'This interface is limited to instances using SMTP as the mail driver. Please either use <code>php artisan p:environment:mail</code> command to update your email settings, or set <code>MAIL_DRIVER=smtp</code> in your environment file.',
     'test_mail_settings' => 'Test Mail Settings',
     'test_mail_begin' => 'Click \'Test\' to begin the test.',
+    'settings_updated' => 'Panel settings have been updated successfully and the queue worker was restarted to apply these changes.',
+    'advanced_settings_updated' => 'Advanced settings have been updated successfully and the queue worker was restarted to apply these changes.',
+    'captcha_settings_updated' => 'Captcha settings have been updated successfully and the queue worker was restarted to apply these changes.',
     'test_message_sent' => 'The test message was sent successfully.',
     'mail_settings_updated' => 'Mail settings have been updated successfully and the queue worker was restarted to apply these changes.',
 

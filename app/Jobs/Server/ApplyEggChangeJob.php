@@ -121,12 +121,12 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         $currentEgg = $this->server->egg;
         $targetEgg = Egg::find($this->eggId);
 
-        $backupName = sprintf(
-            'Software Change: %s → %s (%s)',
-            $currentEgg->name ?? 'Unknown',
-            $targetEgg->name ?? 'Unknown',
-            now()->format('M j, g:i A')
-        );
+        $backupName = __('server.shell.software_change_backup_name', [
+            'from' => $currentEgg->name ?? 'Unknown',
+            'arrow' => "\u{2192}",
+            'to' => $targetEgg->name ?? 'Unknown',
+            'date' => now()->format('M j, g:i A'),
+        ]);
 
         if (strlen($backupName) > 190) {
             $backupName = substr($backupName, 0, 187) . '...';

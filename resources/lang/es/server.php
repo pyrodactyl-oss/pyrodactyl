@@ -594,6 +594,7 @@ return [
         'ensure_backups' => 'Asegúrate de tener copias de seguridad de los datos importantes antes de continuar.',
         'back_to_configure' => 'Volver a configurar',
         'apply_changes' => 'Aplicar cambios',
+        'software_change_backup_name' => 'Cambio de software: :from :arrow :to (:date)',
         'step' => 'Paso',
         'of' => 'de',
         'step_overview' => 'Resumen',

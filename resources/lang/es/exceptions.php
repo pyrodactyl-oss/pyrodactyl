@@ -12,6 +12,7 @@ return [
         'invalid_mapping' => 'El mapeo proporcionado para el puerto :port es inválido y no pudo ser procesado.',
         'cidr_out_of_range' => 'La notación CIDR solo permite máscaras entre /25 y /32.',
         'port_out_of_range' => 'Los puertos en una asignación deben ser mayores que 1024 y menores o iguales a 65535.',
+        'auto_allocation_not_enabled' => 'La auto-asignación de servidores no está habilitada para esta instancia.',
     ],
     'nest' => [
         'delete_has_servers' => 'Un Nest con servidores activos vinculados no puede ser eliminado del Panel.',

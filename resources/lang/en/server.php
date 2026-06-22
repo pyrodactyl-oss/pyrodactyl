@@ -594,6 +594,7 @@ return [
         'ensure_backups' => 'Please ensure you have backups of important data before proceeding.',
         'back_to_configure' => 'Back to Configure',
         'apply_changes' => 'Apply Changes',
+        'software_change_backup_name' => 'Software Change: :from :arrow :to (:date)',
         'step' => 'Step',
         'of' => 'of',
         'step_overview' => 'Overview',
