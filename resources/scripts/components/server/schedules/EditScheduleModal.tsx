@@ -1,9 +1,8 @@
 import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
 import { Link, TriangleExclamation } from '@gravity-ui/icons';
-import { toString } from 'cronstrue';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { es as cronstrueEs } from 'cronstrue/locales/es';
+import ExpressionDescriptor, { toString } from 'cronstrue';
+import { es } from 'cronstrue/locales/es';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -26,6 +25,10 @@ import { Schedule } from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+
+if (es) {
+    ExpressionDescriptor.locales.es = new es();
+}
 
 interface Props {
     schedule?: Schedule;
@@ -80,16 +83,24 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
         if (absDifferenceHours === Math.floor(absDifferenceHours)) {
             // whole hours
-            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
+            const unit =
+                absDifferenceHours === 1
+                    ? i18n.t('server:schedules.timezone_hour')
+                    : i18n.t('server:schedules.timezone_hours');
+            differenceDescription = `${absDifferenceHours} ${unit} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
         } else {
             // hours & minutes
             const hours = Math.floor(absDifferenceHours);
             const minutes = Math.abs(offsetDifferenceMinutes % 60);
 
             if (hours > 0) {
-                differenceDescription = `${hours}h ${minutes}m ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
+                differenceDescription = `${hours}${i18n.t('server:schedules.hours_short')} ${minutes}${i18n.t('server:schedules.minutes_short')} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
             } else {
-                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
+                const unit =
+                    minutes === 1
+                        ? i18n.t('server:schedules.timezone_minute')
+                        : i18n.t('server:schedules.timezone_minutes');
+                differenceDescription = `${minutes} ${unit} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
             }
         }
     }
