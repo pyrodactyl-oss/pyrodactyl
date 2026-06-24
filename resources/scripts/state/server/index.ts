@@ -20,14 +20,14 @@ export type ServerStatus = 'offline' | 'starting' | 'stopping' | 'running' | nul
 
 interface ServerDataStore {
     data?: Server;
+
+    getServer: Thunk<ServerDataStore, string, Record<string, unknown>, ServerStore, Promise<void>>;
     inConflictState: Computed<ServerDataStore, boolean>;
     isInstalling: Computed<ServerDataStore, boolean>;
     permissions: string[];
-
-    getServer: Thunk<ServerDataStore, string, Record<string, unknown>, ServerStore, Promise<void>>;
+    setPermissions: Action<ServerDataStore, string[]>;
     setServer: Action<ServerDataStore, Server>;
     setServerFromState: Action<ServerDataStore, (s: Server) => Server>;
-    setPermissions: Action<ServerDataStore, string[]>;
 }
 
 const server: ServerDataStore = {
@@ -41,9 +41,7 @@ const server: ServerDataStore = {
         return state.data.status !== null || state.data.isTransferring;
     }),
 
-    isInstalling: computed((state) => {
-        return state.data?.status === 'installing' || state.data?.status === 'install_failed';
-    }),
+    isInstalling: computed((state) => state.data?.status === 'installing' || state.data?.status === 'install_failed'),
 
     getServer: thunk(async (actions, payload) => {
         const [server, permissions] = await getServer(payload);
@@ -73,8 +71,8 @@ const server: ServerDataStore = {
 };
 
 interface ServerStatusStore {
-    value: ServerStatus;
     setServerStatus: Action<ServerStatusStore, ServerStatus>;
+    value: ServerStatus;
 }
 
 const status: ServerStatusStore = {
@@ -85,14 +83,14 @@ const status: ServerStatusStore = {
 };
 
 export interface ServerStore {
-    server: ServerDataStore;
-    subusers: ServerSubuserStore;
+    clearServerState: Action<ServerStore>;
     databases: ServerDatabaseStore;
     files: ServerFileStore;
     schedules: ServerScheduleStore;
+    server: ServerDataStore;
     socket: SocketStore;
     status: ServerStatusStore;
-    clearServerState: Action<ServerStore>;
+    subusers: ServerSubuserStore;
 }
 
 export const ServerContext = createContextStore<ServerStore>({

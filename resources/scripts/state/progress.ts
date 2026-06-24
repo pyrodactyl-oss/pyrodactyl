@@ -3,10 +3,10 @@ import { type Action, action } from 'easy-peasy';
 export interface ProgressStore {
     continuous: boolean;
     progress?: number;
+    setComplete: Action<ProgressStore>;
+    setProgress: Action<ProgressStore, number | undefined>;
 
     startContinuous: Action<ProgressStore>;
-    setProgress: Action<ProgressStore, number | undefined>;
-    setComplete: Action<ProgressStore>;
 }
 
 const progress: ProgressStore = {

@@ -90,12 +90,12 @@ const FileManagerContainer = () => {
     });
 
     if (error) {
-        return <ServerError title={'Something went wrong.'} message={httpErrorToHuman(error)} />;
+        return <ServerError message={httpErrorToHuman(error)} title={'Something went wrong.'} />;
     }
 
     return (
-        <ServerContentBlock className='p-0!' title={'File Manager'} showFlashKey={'files'}>
-            <div className='px-2 sm:px-14 pt-2 h-fit sm:pt-14'>
+        <ServerContentBlock className='p-0!' showFlashKey={'files'} title={'File Manager'}>
+            <div className='h-fit px-2 pt-2 sm:px-14 sm:pt-14'>
                 <ErrorBoundary>
                     <ServerHeader />
                     <Can action={'file.create'}>
@@ -108,12 +108,12 @@ const FileManagerContainer = () => {
                             <UploadButton />
                         </div>
                     </Can>
-                    <div className={'flex flex-wrap-reverse md:flex-nowrap mb-4'}>
+                    <div className={'mb-4 flex flex-wrap-reverse md:flex-nowrap'}>
                         <FileManagerBreadcrumbs
                             renderLeft={
                                 <Checkbox
-                                    className='ml-[1.22rem] mr-4'
                                     checked={selectedFilesLength === (files?.length === 0 ? -1 : files?.length)}
+                                    className='mr-4 ml-[1.22rem]'
                                     onCheckedChange={() => onSelectAllClick()}
                                 />
                             }
@@ -121,46 +121,44 @@ const FileManagerContainer = () => {
                     </div>
                 </ErrorBoundary>
             </div>
-            {!files ? null : (
+            {files ? (
                 <>
-                    {!files.length ? (
-                        <p className={`text-sm text-zinc-400 text-center`}>This folder is empty.</p>
-                    ) : (
+                    {files.length ? (
                         <>
-                            <div className='relative p-1 border-[1px] border-[#ffffff12] rounded-md sm:ml-12 sm:mr-12 mx-2'>
-                                <div className='absolute left-4 top-1/2 pl-2 -translate-y-1/2 pointer-events-none'>
+                            <div className='relative mx-2 rounded-md border-[#ffffff12] border-[1px] p-1 sm:mr-12 sm:ml-12'>
+                                <div className='pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 pl-2'>
                                     <svg
-                                        xmlns='http://www.w3.org/2000/svg'
+                                        className='h-5 w-5 opacity-40'
                                         fill='none'
-                                        viewBox='0 0 24 24'
-                                        strokeWidth={1.5}
                                         stroke='currentColor'
-                                        className='w-5 h-5 opacity-40'
+                                        strokeWidth={1.5}
+                                        viewBox='0 0 24 24'
+                                        xmlns='http://www.w3.org/2000/svg'
                                     >
                                         <path
+                                            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
                                             strokeLinecap='round'
                                             strokeLinejoin='round'
-                                            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
                                         />
                                     </svg>
                                 </div>
 
                                 <input
-                                    ref={searchInputRef}
-                                    className='pl-14 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold outline-none'
-                                    type='text'
-                                    placeholder='Search...'
+                                    className='w-full rounded-lg bg-[#ffffff11] py-4 pl-14 font-bold text-sm outline-none'
                                     onChange={(event) => debouncedSearchTerm(event.target.value)}
+                                    placeholder='Search...'
+                                    ref={searchInputRef}
+                                    type='text'
                                 />
                             </div>
-                            <div ref={parentRef} className='max-h-screen min-h-fit overflow-auto'>
+                            <div className='max-h-screen min-h-fit overflow-auto' ref={parentRef}>
                                 <div
+                                    className='mx-2 rounded-xl border-[#ffffff12] border-[1px] bg-[radial-gradient(124.75%_124.75%_at_50.01%_-10.55%,_rgb(16,16,16)_0%,rgb(4,4,4)_100%)] p-1 sm:mr-12 sm:ml-12'
                                     data-pyro-file-manager-files
-                                    className='p-1 border-[1px] border-[#ffffff12] rounded-xl sm:ml-12 sm:mr-12 mx-2 bg-[radial-gradient(124.75%_124.75%_at_50.01%_-10.55%,_rgb(16,16,16)_0%,rgb(4,4,4)_100%)]'
                                     style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
                                 >
                                     <div
-                                        className='w-full overflow-hidden rounded-lg gap-0.5 flex flex-col'
+                                        className='flex w-full flex-col gap-0.5 overflow-hidden rounded-lg'
                                         style={{
                                             height: `${rowVirtualizer.getTotalSize()}px`,
                                             width: '100%',
@@ -171,8 +169,8 @@ const FileManagerContainer = () => {
                                             if (filesArray[item.index] !== undefined) {
                                                 return (
                                                     <div
+                                                        className='absolute top-0 left-0 w-full'
                                                         key={item.key}
-                                                        className='w-full absolute left-0 top-0'
                                                         style={{
                                                             height: `${item.size}px`,
                                                             transform: `translateY(${item.start}px)`,
@@ -193,9 +191,11 @@ const FileManagerContainer = () => {
                             </div>
                             <MassActionsBar />
                         </>
+                    ) : (
+                        <p className={'text-center text-sm text-zinc-400'}>This folder is empty.</p>
                     )}
                 </>
-            )}
+            ) : null}
         </ServerContentBlock>
     );
 };

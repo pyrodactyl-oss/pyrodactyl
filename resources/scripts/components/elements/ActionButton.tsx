@@ -1,9 +1,9 @@
 import { forwardRef } from 'react';
 
 interface ActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'primary' | 'secondary' | 'danger';
-    size?: 'start' | 'sm' | 'smCompact' | 'md' | 'mdCompact' | 'lg' | 'lgCompact';
     children: React.ReactNode;
+    size?: 'start' | 'sm' | 'smCompact' | 'md' | 'mdCompact' | 'lg' | 'lgCompact';
+    variant?: 'primary' | 'secondary' | 'danger';
 }
 
 const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
@@ -30,8 +30,8 @@ const ActionButton = forwardRef<HTMLButtonElement, ActionButtonProps>(
 
         return (
             <button
-                ref={ref}
                 className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
+                ref={ref}
                 {...props}
             >
                 {children}

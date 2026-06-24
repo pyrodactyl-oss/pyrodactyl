@@ -3,8 +3,8 @@ import { getGlobalDaemonType } from '@/api/server/getServer';
 
 interface RestoreBackupResponse {
     job_id: string;
-    status: string;
     message: string;
+    status: string;
 }
 
 export const restoreServerBackup = async (

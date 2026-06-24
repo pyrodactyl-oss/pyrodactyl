@@ -11,8 +11,8 @@
 .skin-blue .main-header .navbar .nav .open > a:hover,
 .skin-blue .main-header .navbar .nav .open > a:focus,
 .skin-blue .main-header .navbar .nav > .active > a {
-    background: rgba(0, 0, 0, 0.1);
     color: #f6f6f6;
+    background: rgba(0, 0, 0, 0.1);
 }
 .skin-blue .main-header .navbar .sidebar-toggle {
     color: #fff;
@@ -39,8 +39,8 @@
     }
 }
 .skin-blue .main-header .logo {
-    background-color: #0e4688;
     color: #fff;
+    background-color: #0e4688;
     border-bottom: 0 solid transparent;
 }
 .skin-blue .main-header .logo:hover {
@@ -95,16 +95,16 @@
     color: #fff;
 }
 .skin-blue .sidebar-form {
-    border-radius: 3px;
-    border: 1px solid #2f323f;
     margin: 10px 10px;
+    border: 1px solid #2f323f;
+    border-radius: 3px;
 }
 .skin-blue .sidebar-form input[type="text"],
 .skin-blue .sidebar-form .btn {
-    box-shadow: none;
+    height: 35px;
     background-color: #2f323f;
     border: 1px solid transparent;
-    height: 35px;
+    box-shadow: none;
 }
 .skin-blue .sidebar-form input[type="text"] {
     color: #666;
@@ -115,8 +115,8 @@
 }
 .skin-blue .sidebar-form input[type="text"]:focus,
 .skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
-    background-color: #fff;
     color: #666;
+    background-color: #fff;
 }
 .skin-blue .sidebar-form input[type="text"]:focus + .input-group-btn .btn {
     border-left-color: #fff;
@@ -129,8 +129,8 @@
     border-bottom-left-radius: 0;
 }
 .skin-blue.layout-top-nav .main-header > .logo {
-    background-color: #10529f;
     color: #fff;
+    background-color: #10529f;
     border-bottom: 0 solid transparent;
 }
 .skin-blue.layout-top-nav .main-header > .logo:hover {

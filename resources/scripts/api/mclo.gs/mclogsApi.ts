@@ -1,9 +1,4 @@
 export interface MclogsInsight {
-    id: string;
-    name: string;
-    type: string;
-    version: string;
-    title: string;
     analysis: {
         problems: Array<{
             message: string;
@@ -37,6 +32,11 @@ export interface MclogsInsight {
             };
         }>;
     };
+    id: string;
+    name: string;
+    title: string;
+    type: string;
+    version: string;
 }
 
 export interface MclogsAnalyzeRequest {
@@ -44,8 +44,8 @@ export interface MclogsAnalyzeRequest {
 }
 
 export interface MclogsErrorResponse {
-    success: false;
     error: string;
+    success: false;
 }
 
 /**

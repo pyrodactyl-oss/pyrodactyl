@@ -20,13 +20,13 @@ const StatusContainer = ({ text, type }: { text: string; type?: FlashMessageType
     const getIcon = () => {
         switch (type) {
             case 'error':
-                return <HugeiconsIcon icon={CancelCircleIcon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={CancelCircleIcon} />;
             case 'warning':
-                return <HugeiconsIcon icon={Alert02Icon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={Alert02Icon} />;
             case 'success':
-                return <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={CheckmarkCircle02Icon} />;
             case 'info':
-                return <HugeiconsIcon icon={InformationCircleIcon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={InformationCircleIcon} />;
             default:
                 return null;
         }
@@ -65,7 +65,7 @@ const FlashStatusContainer = ({ byKey }: Props) => {
             {flashes.map((flash, index) => (
                 <Fragment key={flash.id || flash.type + flash.message}>
                     {index > 0 && <></>}
-                    <StatusContainer type={flash.type} text={flash.message}></StatusContainer>
+                    <StatusContainer text={flash.message} type={flash.type} />
                 </Fragment>
             ))}
         </>

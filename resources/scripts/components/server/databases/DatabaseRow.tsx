@@ -69,17 +69,17 @@ const DatabaseRow = ({ database }: Props) => {
 
     return (
         <>
-            <Formik onSubmit={submit} initialValues={{ confirm: '' }} validationSchema={schema} isInitialValid={false}>
+            <Formik initialValues={{ confirm: '' }} isInitialValid={false} onSubmit={submit} validationSchema={schema}>
                 {({ isSubmitting, isValid, resetForm }) => (
                     <Modal
-                        visible={visible}
                         dismissable={!isSubmitting}
-                        showSpinnerOverlay={isSubmitting}
                         onDismissed={() => {
                             setVisible(false);
                             resetForm();
                         }}
+                        showSpinnerOverlay={isSubmitting}
                         title='Confirm database deletion'
+                        visible={visible}
                     >
                         <FlashMessageRender byKey={'database:delete'} />
                         <div className='flex flex-col'>
@@ -89,17 +89,17 @@ const DatabaseRow = ({ database }: Props) => {
                             </p>
                             <Form className='mt-6'>
                                 <Field
-                                    type={'text'}
-                                    id={'confirm_name'}
-                                    name={'confirm'}
-                                    label={'Confirm Database Name'}
                                     description={'Enter the database name to confirm deletion.'}
+                                    id={'confirm_name'}
+                                    label={'Confirm Database Name'}
+                                    name={'confirm'}
+                                    type={'text'}
                                 />
                                 <ActionButton
-                                    variant='danger'
-                                    type={'submit'}
-                                    className='min-w-full my-6'
+                                    className='my-6 min-w-full'
                                     disabled={!isValid || isSubmitting}
+                                    type={'submit'}
+                                    variant='danger'
                                 >
                                     {isSubmitting && <Spinner size='small' />}
                                     {isSubmitting ? 'Deleting...' : 'Delete Database'}
@@ -111,42 +111,42 @@ const DatabaseRow = ({ database }: Props) => {
             </Formik>
 
             <Modal
-                visible={connectionVisible}
-                title='Database connection details'
                 closeButton={true}
                 onDismissed={() => setConnectionVisible(false)}
+                title='Database connection details'
+                visible={connectionVisible}
             >
                 <FlashMessageRender byKey={'database-connection-modal'} />
-                <div className='flex flex-col min-w-full gap-4'>
-                    <div className='grid gap-4 sm:grid-cols-2 min-w-full'>
+                <div className='flex min-w-full flex-col gap-4'>
+                    <div className='grid min-w-full gap-4 sm:grid-cols-2'>
                         <div className='flex flex-col'>
                             <Label>Endpoint</Label>
                             <CopyOnClick text={database.connectionString}>
-                                <Input type={'text'} readOnly value={database.connectionString} />
+                                <Input readOnly type={'text'} value={database.connectionString} />
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
                             <Label>Connections from</Label>
                             <CopyOnClick text={database.allowConnectionsFrom}>
-                                <Input type={'text'} readOnly value={database.allowConnectionsFrom} />
+                                <Input readOnly type={'text'} value={database.allowConnectionsFrom} />
                             </CopyOnClick>
                         </div>
                         <div className='flex flex-col'>
                             <Label>Username</Label>
                             <CopyOnClick text={database.username}>
-                                <Input type={'text'} readOnly value={database.username} />
+                                <Input readOnly type={'text'} value={database.username} />
                             </CopyOnClick>
                         </div>
                         <Can action={'database.view_password'}>
                             <div className='flex flex-col'>
                                 <Label>Password</Label>
-                                <div className='flex flex-row min-w-full gap-2'>
-                                    <CopyOnClick text={database.password} showInNotification={false}>
+                                <div className='flex min-w-full flex-row gap-2'>
+                                    <CopyOnClick showInNotification={false} text={database.password}>
                                         <Input
-                                            type={'password'}
-                                            readOnly
-                                            value={database.password}
                                             className='flex-auto'
+                                            readOnly
+                                            type={'password'}
+                                            value={database.password}
                                         />
                                     </CopyOnClick>
                                     <Can action={'database.update'}>
@@ -157,47 +157,47 @@ const DatabaseRow = ({ database }: Props) => {
                         </Can>
                     </div>
                     <div className='flex flex-col'>
-                        <div className='flex flex-row gap-2 align-middle items-center'>
+                        <div className='flex flex-row items-center gap-2 align-middle'>
                             <Label>JDBC Connection String</Label>
                         </div>
-                        <CopyOnClick text={jdbcConnectionString} showInNotification={false}>
-                            <Input type={'password'} readOnly value={jdbcConnectionString} />
+                        <CopyOnClick showInNotification={false} text={jdbcConnectionString}>
+                            <Input readOnly type={'password'} value={jdbcConnectionString} />
                         </CopyOnClick>
                     </div>
                 </div>
             </Modal>
 
             <PageListItem>
-                <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 w-full'>
-                    <div className='flex-1 min-w-0'>
-                        <div className='flex items-center gap-3 mb-2'>
-                            <div className='flex-shrink-0 w-8 h-8 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <Database fill='currentColor' className='text-zinc-400 w-4 h-4' />
+                <div className='flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+                    <div className='min-w-0 flex-1'>
+                        <div className='mb-2 flex items-center gap-3'>
+                            <div className='flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-[#ffffff11]'>
+                                <Database className='h-4 w-4 text-zinc-400' fill='currentColor' />
                             </div>
                             <div className='min-w-0 flex-1'>
                                 <CopyOnClick text={database.name}>
-                                    <h3 className='text-base font-medium text-zinc-100 truncate'>{database.name}</h3>
+                                    <h3 className='truncate font-medium text-base text-zinc-100'>{database.name}</h3>
                                 </CopyOnClick>
                             </div>
                         </div>
 
-                        <div className='grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm'>
+                        <div className='grid grid-cols-1 gap-3 text-sm sm:grid-cols-3'>
                             <div>
-                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Endpoint</p>
+                                <p className='mb-1 text-xs text-zinc-500 uppercase tracking-wide'>Endpoint</p>
                                 <CopyOnClick text={database.connectionString}>
-                                    <p className='text-zinc-300 font-mono truncate'>{database.connectionString}</p>
+                                    <p className='truncate font-mono text-zinc-300'>{database.connectionString}</p>
                                 </CopyOnClick>
                             </div>
                             <div>
-                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>From</p>
+                                <p className='mb-1 text-xs text-zinc-500 uppercase tracking-wide'>From</p>
                                 <CopyOnClick text={database.allowConnectionsFrom}>
-                                    <p className='text-zinc-300 font-mono truncate'>{database.allowConnectionsFrom}</p>
+                                    <p className='truncate font-mono text-zinc-300'>{database.allowConnectionsFrom}</p>
                                 </CopyOnClick>
                             </div>
                             <div>
-                                <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Username</p>
+                                <p className='mb-1 text-xs text-zinc-500 uppercase tracking-wide'>Username</p>
                                 <CopyOnClick text={database.username}>
-                                    <p className='text-zinc-300 font-mono truncate'>{database.username}</p>
+                                    <p className='truncate font-mono text-zinc-300'>{database.username}</p>
                                 </CopyOnClick>
                             </div>
                         </div>
@@ -205,22 +205,22 @@ const DatabaseRow = ({ database }: Props) => {
 
                     <div className='flex items-center gap-2 sm:flex-col sm:gap-3'>
                         <ActionButton
-                            variant='secondary'
-                            size='sm'
-                            onClick={() => setConnectionVisible(true)}
                             className='flex items-center gap-2'
+                            onClick={() => setConnectionVisible(true)}
+                            size='sm'
+                            variant='secondary'
                         >
-                            <Eye fill='currentColor' className='w-4 h-4' />
+                            <Eye className='h-4 w-4' fill='currentColor' />
                             <span className='hidden sm:inline'>Details</span>
                         </ActionButton>
                         <Can action={'database.delete'}>
                             <ActionButton
-                                variant='danger'
-                                size='sm'
-                                onClick={() => setVisible(true)}
                                 className='flex items-center gap-2'
+                                onClick={() => setVisible(true)}
+                                size='sm'
+                                variant='danger'
                             >
-                                <TrashBin fill='currentColor' className='w-4 h-4' />
+                                <TrashBin className='h-4 w-4' fill='currentColor' />
                                 <span className='hidden sm:inline'>Delete</span>
                             </ActionButton>
                         </Can>

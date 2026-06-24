@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { Skeleton } from '@/components/ui/skeleton';
 
-import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import { bytesToString } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 import { ServerContext } from '@/state/server';
@@ -46,7 +46,7 @@ const ServerDetailsHeader = ({ className }: { className?: string }) => {
     // });
 
     useEffect(() => {
-        if (!connected || !instance) {
+        if (!(connected && instance)) {
             return;
         }
 
@@ -73,30 +73,28 @@ const ServerDetailsHeader = ({ className }: { className?: string }) => {
     });
 
     interface DetailProps {
-        label: string;
-        loading?: boolean;
         children?: React.ReactNode;
         className?: string;
+        label: string;
+        loading?: boolean;
     }
 
-    const Detail = ({ label, loading, children, className }: DetailProps) => {
-        return (
-            <div className={cn('flex flex-col', className)}>
-                <span className='font-bold uppercase text-cream-400/50 text-xs'>{label}</span>
-                <span className={`text-sm`}>{loading ? <Skeleton className='w-full h-[1lh]' /> : children}</span>
-            </div>
-        );
-    };
+    const Detail = ({ label, loading, children, className }: DetailProps) => (
+        <div className={cn('flex flex-col', className)}>
+            <span className='font-bold text-cream-400/50 text-xs uppercase'>{label}</span>
+            <span className={'text-sm'}>{loading ? <Skeleton className='h-[1lh] w-full' /> : children}</span>
+        </div>
+    );
 
     return (
-        <div className={cn('flex md:flex-row gap-4 flex-col text-nowrap', className)}>
-            <Detail label={'CPU'} className='w-14' loading={loading}>
+        <div className={cn('flex flex-col gap-4 text-nowrap md:flex-row', className)}>
+            <Detail className='w-14' label={'CPU'} loading={loading}>
                 {`${stats.cpu.toFixed(2)}%`}
             </Detail>
-            <Detail label={'RAM'} className='w-14' loading={loading}>
+            <Detail className='w-14' label={'RAM'} loading={loading}>
                 {bytesToString(stats.memory, 0)}
             </Detail>
-            <Detail label={'Disk'} className='w-20' loading={loading}>
+            <Detail className='w-20' label={'Disk'} loading={loading}>
                 {bytesToString(stats.disk)}
             </Detail>
         </div>

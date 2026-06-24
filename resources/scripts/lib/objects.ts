@@ -28,7 +28,7 @@ function getObjectKeys<T extends object>(o: T): (keyof T)[] {
  * @param object
  * @param indentLevel
  */
-function formatObjectToIdentString(object: any, indentLevel: number = 0): string {
+function formatObjectToIdentString(object: any, indentLevel = 0): string {
     const indent = '  '.repeat(indentLevel);
 
     if (typeof object === 'string') {
@@ -54,4 +54,4 @@ function formatObjectToIdentString(object: any, indentLevel: number = 0): string
     return `${indent}${String(object)}`;
 }
 
-export { isObject, isEmptyObject, getObjectKeys, formatObjectToIdentString };
+export { formatObjectToIdentString, getObjectKeys, isEmptyObject, isObject };

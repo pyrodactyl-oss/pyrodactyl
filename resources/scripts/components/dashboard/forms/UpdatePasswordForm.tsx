@@ -12,9 +12,9 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import type { ApplicationStore } from '@/state';
 
 interface Values {
+    confirmPassword: string;
     current: string;
     password: string;
-    confirmPassword: string;
 }
 
 const schema = Yup.object().shape({
@@ -23,7 +23,7 @@ const schema = Yup.object().shape({
     confirmPassword: Yup.string().test(
         'password',
         'Password confirmation does not match the password you entered.',
-        function(value) {
+        function (value) {
             return value === this.parent.password;
         },
     ),
@@ -58,41 +58,41 @@ const UpdatePasswordForm = () => {
     return (
         <Fragment>
             <Formik
+                initialValues={{ current: '', password: '', confirmPassword: '' }}
                 onSubmit={submit}
                 validationSchema={schema}
-                initialValues={{ current: '', password: '', confirmPassword: '' }}
             >
                 {({ isSubmitting, isValid }) => (
                     <Fragment>
                         <SpinnerOverlay size={'large'} visible={isSubmitting} />
-                        <Form className={`m-0`}>
+                        <Form className={'m-0'}>
                             <Field
                                 id={'current_password'}
-                                type={'password'}
-                                name={'current'}
                                 label={'Current Password'}
+                                name={'current'}
+                                type={'password'}
                             />
-                            <div className={`mt-6`}>
+                            <div className={'mt-6'}>
                                 <Field
-                                    id={'new_password'}
-                                    type={'password'}
-                                    name={'password'}
-                                    label={'New Password'}
                                     description={
                                         'Your new password should be at least 8 characters in length and unique to this website.'
                                     }
+                                    id={'new_password'}
+                                    label={'New Password'}
+                                    name={'password'}
+                                    type={'password'}
                                 />
                             </div>
-                            <div className={`mt-6`}>
+                            <div className={'mt-6'}>
                                 <Field
                                     id={'confirm_new_password'}
-                                    type={'password'}
-                                    name={'confirmPassword'}
                                     label={'Confirm New Password'}
+                                    name={'confirmPassword'}
+                                    type={'password'}
                                 />
                             </div>
-                            <div className={`mt-6`}>
-                                <ActionButton variant='secondary' disabled={isSubmitting || !isValid}>
+                            <div className={'mt-6'}>
+                                <ActionButton disabled={isSubmitting || !isValid} variant='secondary'>
                                     {isSubmitting && <Spinner size='small' />}
                                     {isSubmitting ? 'Updating...' : 'Update Password'}
                                 </ActionButton>

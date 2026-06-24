@@ -17,7 +17,7 @@ const EulaModalFeature = () => {
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
 
     useEffect(() => {
-        if (!connected || !instance || status === 'running') return;
+        if (!(connected && instance) || status === 'running') return;
 
         const listener = (line: string) => {
             if (line.toLowerCase().indexOf('you need to agree to the eula in order to run the server') >= 0) {
@@ -58,31 +58,31 @@ const EulaModalFeature = () => {
 
     return (
         <Modal
-            visible={visible}
-            onDismissed={() => setVisible(false)}
             closeOnBackground={false}
+            onDismissed={() => setVisible(false)}
             showSpinnerOverlay={loading}
             title='Accept Minecraft EULA'
+            visible={visible}
         >
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
-                <p className={`text-zinc-200`}>
+                <p className={'text-zinc-200'}>
                     Before starting your Minecraft server, you need to accept the{' '}
                     <a
-                        target={'_blank'}
-                        className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
-                        rel={'noreferrer noopener'}
+                        className={'text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400'}
                         href='https://www.aka.ms/MinecraftEULA'
+                        rel={'noreferrer noopener'}
+                        target={'_blank'}
                     >
                         Minecraft EULA
                     </a>
                     .
                 </p>
-                <div className={`my-6 gap-3 flex items-center justify-end`}>
-                    <ActionButton variant='secondary' onClick={() => setVisible(false)}>
+                <div className={'my-6 flex items-center justify-end gap-3'}>
+                    <ActionButton onClick={() => setVisible(false)} variant='secondary'>
                         I don&apos;t accept
                     </ActionButton>
-                    <ActionButton variant='primary' onClick={onAcceptEULA}>
+                    <ActionButton onClick={onAcceptEULA} variant='primary'>
                         I accept
                     </ActionButton>
                 </div>

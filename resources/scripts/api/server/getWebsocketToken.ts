@@ -2,8 +2,8 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 interface Response {
-    token: string;
     socket: string;
+    token: string;
 }
 
 export default (server: string): Promise<Response> => {

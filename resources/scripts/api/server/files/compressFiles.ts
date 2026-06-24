@@ -8,7 +8,7 @@ export default async (uuid: string, directory: string, files: string[]): Promise
         `/api/client/servers/${getGlobalDaemonType()}/${uuid}/files/compress`,
         { root: directory, files },
         {
-            timeout: 60000,
+            timeout: 60_000,
             timeoutErrorMessage:
                 'It looks like this archive is taking a long time to generate. It will appear once completed.',
         },

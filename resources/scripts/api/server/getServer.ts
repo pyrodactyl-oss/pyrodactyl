@@ -7,29 +7,32 @@ import { rawDataToServerAllocation, rawDataToServerEggVariable } from '@/api/tra
 let globalDaemonType: string | null = null;
 
 export interface Allocation {
+    alias: string | null;
     id: number;
     ip: string;
-    alias: string | null;
-    port: number;
-    notes: string | null;
     isDefault: boolean;
+    notes: string | null;
+    port: number;
 }
 
 export interface Server {
+    allocations: Allocation[];
+    daemonType: string;
+    description: string;
+    dockerImage: string;
+    egg: string;
+    eggFeatures: string[];
+    featureLimits: {
+        databases: number;
+        allocations: number;
+        backups: number;
+        backupStorageMb: number | null;
+    };
     id: string;
     internalId: number | string;
-    uuid: string;
-    name: string;
-    node: string;
-    isNodeUnderMaintenance: boolean;
-    status: ServerStatus;
-    sftpDetails: {
-        ip: string;
-        port: number;
-    };
     invocation: string;
-    dockerImage: string;
-    description: string;
+    isNodeUnderMaintenance: boolean;
+    isTransferring: boolean;
     limits: {
         memory: number;
         swap: number;
@@ -38,18 +41,15 @@ export interface Server {
         cpu: number;
         threads: string;
     };
-    eggFeatures: string[];
-    featureLimits: {
-        databases: number;
-        allocations: number;
-        backups: number;
-        backupStorageMb: number | null;
+    name: string;
+    node: string;
+    sftpDetails: {
+        ip: string;
+        port: number;
     };
-    isTransferring: boolean;
+    status: ServerStatus;
+    uuid: string;
     variables: ServerEggVariable[];
-    allocations: Allocation[];
-    egg: string;
-    daemonType: string;
 }
 
 export const rawDataToServerObject = ({ attributes: data }: FractalResponseData): Server => ({

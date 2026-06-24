@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
-
 const CheckboxArrow = React.forwardRef<
     React.ElementRef<'div'>,
     React.ComponentPropsWithoutRef<'div'> & {
@@ -22,11 +20,11 @@ const CheckboxArrow = React.forwardRef<
     };
 
     return (
-        <div className='flex items-center gap-2 select-none'>
+        <div className='flex select-none items-center gap-2'>
             {label && (
                 <span
+                    className={'inline-block w-full cursor-pointer rounded-lg px-2 py-1 transition-colors duration-200'}
                     onClick={toggleChecked}
-                    className={'inline-block rounded-lg w-full px-2 py-1 cursor-pointer transition-colors duration-200'}
                     {...props}
                     ref={ref}
                 >

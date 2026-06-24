@@ -3,7 +3,7 @@ export const randomInt = (low: number, high: number) => Math.floor(Math.random()
 export const cleanDirectoryPath = (path: string) => path.replace(/(\/(\/*))|(^$)/g, '/');
 
 export function fileBitsToString(mode: string, directory: boolean): string {
-    const m = parseInt(mode, 8);
+    const m = Number.parseInt(mode, 8);
 
     let buf = '';
     'dalTLDpSugct?'.split('').forEach((c, i) => {
@@ -22,10 +22,10 @@ export function fileBitsToString(mode: string, directory: boolean): string {
     }
 
     'rwxrwxrwx'.split('').forEach((c, i) => {
-        if ((m & (1 << (9 - 1 - i))) !== 0) {
-            buf = buf + c;
-        } else {
+        if ((m & (1 << (9 - 1 - i))) === 0) {
             buf = buf + '-';
+        } else {
+            buf = buf + c;
         }
     });
 

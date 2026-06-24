@@ -81,25 +81,25 @@ const JavaVersionModalFeature = () => {
 
     return (
         <Modal
-            visible={visible}
-            onDismissed={() => setVisible(false)}
             closeOnBackground={false}
+            onDismissed={() => setVisible(false)}
             showSpinnerOverlay={loading}
             title='Unsupported Java Version'
+            visible={visible}
         >
-            <div className='flex flex-col gap-4 w-full h-full'>
+            <div className='flex h-full w-full flex-col gap-4'>
                 {/*<FlashMessageRender key={'feature:javaVersion'} />*/}
                 <p>
                     This server is currently running an unsupported version of Java and cannot be started. Please select
                     a supported version from the list below to continue starting the server.
                 </p>
-                <div className={`mt-6 flex flex-row justify-end items-center gap-3 my-4`}>
+                <div className={'my-4 mt-6 flex flex-row items-center justify-end gap-3'}>
                     <Can action={'startup.docker-image'}>
                         <Spinner size='small' visible={!data || isValidating} />
                         <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                             <DropdownMenuTrigger asChild>
                                 <button
-                                    className='flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer'
+                                    className='flex h-8 cursor-pointer items-center justify-center rounded-xl border border-[#ffffff15] bg-linear-to-b from-[#ffffff10] to-[#ffffff09] px-4 font-medium text-sm text-white shadow-xs transition-colors duration-150 hover:from-[#ffffff05] hover:to-[#ffffff04]'
                                     disabled={!data}
                                 >
                                     {selectedVersion
@@ -109,14 +109,14 @@ const JavaVersionModalFeature = () => {
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                                         .join(' ') || 'Select a version'}
                                     {dropDownOpen ? (
-                                        <ChevronUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronUp className={'ml-2 h-[16px] w-[16px]'} fill={'currentColor'} />
                                     ) : (
-                                        <ChevronDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronDown className={'ml-2 h-[16px] w-[16px]'} fill={'currentColor'} />
                                     )}
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='z-99999' sideOffset={8}>
-                                <DropdownMenuRadioGroup value={selectedVersion} onValueChange={setSelectedVersion}>
+                                <DropdownMenuRadioGroup onValueChange={setSelectedVersion} value={selectedVersion}>
                                     {data &&
                                         Object.keys(data.dockerImages).map((key) => (
                                             <DropdownMenuRadioItem key={key} value={data.dockerImages[key] || ''}>
@@ -131,7 +131,7 @@ const JavaVersionModalFeature = () => {
                         Cancel
                     </Button> */}
                     <Can action={'startup.docker-image'}>
-                        <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
+                        <ActionButton className={'w-full sm:w-auto'} onClick={updateJava} variant='primary'>
                             Update
                         </ActionButton>
                     </Can>

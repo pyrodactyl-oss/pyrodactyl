@@ -37,9 +37,9 @@ interface Props {
 
 interface Values {
     action: string;
+    continueOnFailure: boolean;
     payload: string;
     timeOffset: string;
-    continueOnFailure: boolean;
 }
 
 const schema = object().shape({
@@ -62,11 +62,11 @@ const ActionListener = () => {
     const [, { initialValue: initialPayload }, { setValue, setTouched }] = useField<string>('payload');
 
     useEffect(() => {
-        if (value !== initialAction) {
-            setValue(value === 'power' ? 'start' : '');
+        if (value === initialAction) {
+            setValue(initialPayload || '');
             setTouched(false);
         } else {
-            setValue(initialPayload || '');
+            setValue(value === 'power' ? 'start' : '');
             setTouched(false);
         }
     }, [value]);
@@ -82,11 +82,12 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
     const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             clearFlashes('schedule:task');
-        };
-    }, []);
+        },
+        [],
+    );
 
     useEffect(() => {
         setPropOverrides({ title: task ? 'Edit Task' : 'Create Task' });
@@ -122,26 +123,26 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
     return (
         <div className='min-w-full'>
             <Formik
-                onSubmit={submit}
-                validationSchema={schema}
                 initialValues={{
                     action: task?.action || 'command',
                     payload: task?.payload || '',
                     timeOffset: task?.timeOffset.toString() || '0',
-                    continueOnFailure: task?.continueOnFailure || false,
+                    continueOnFailure: task?.continueOnFailure,
                 }}
+                onSubmit={submit}
+                validationSchema={schema}
             >
                 {({ isSubmitting, values }) => (
                     <Form>
                         <FlashMessageRender byKey={'schedule:task'} />
-                        <div className={`flex flex-col gap-3`}>
+                        <div className={'flex flex-col gap-3'}>
                             <div>
                                 <Label>Action</Label>
                                 <ActionListener />
                                 <FormikFieldWrapper name={'action'}>
                                     <FormikField
-                                        className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
                                         as={Select}
+                                        className='min-w-full rounded-lg bg-[#ffffff11] px-4 py-2'
                                         name={'action'}
                                     >
                                         <option className='bg-black' value={'command'}>
@@ -158,22 +159,22 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             </div>
                             <div>
                                 <Field
-                                    name={'timeOffset'}
-                                    label={'Time offset (in seconds)'}
                                     description={
                                         'The amount of time to wait after the previous task executes before running this one. If this is the first task on a schedule this will not be applied.'
                                     }
+                                    label={'Time offset (in seconds)'}
+                                    name={'timeOffset'}
                                 />
                             </div>
                         </div>
-                        <div className={`my-6`}>
+                        <div className={'my-6'}>
                             {values.action === 'command' ? (
                                 <div>
                                     <Label>Payload</Label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
-                                            className='w-full rounded-xl p-2 bg-[#ffffff11]'
                                             as={Textarea}
+                                            className='w-full rounded-xl bg-[#ffffff11] p-2'
                                             name={'payload'}
                                             rows={6}
                                         />
@@ -184,8 +185,8 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                     <Label>Payload</Label>
                                     <FormikFieldWrapper name={'payload'}>
                                         <FormikField
-                                            className='px-4 py-2 bg-[#ffffff11] rounded-lg min-w-full'
                                             as={Select}
+                                            className='min-w-full rounded-lg bg-[#ffffff11] px-4 py-2'
                                             name={'payload'}
                                         >
                                             <option className='bg-black' value={'start'}>
@@ -207,14 +208,14 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                                 <div>
                                     <Label>Ignored files (optional)</Label>
                                     <FormikFieldWrapper
-                                        name={'payload'}
                                         description={
                                             'Include the files and folders to be excluded in this backup. By default, the contents of your .pyroignore file will be used. If you have reached your backup limit, the oldest backup will be rotated.'
                                         }
+                                        name={'payload'}
                                     >
                                         <FormikField
-                                            className='w-full rounded-2xl bg-[#ffffff11]'
                                             as={Textarea}
+                                            className='w-full rounded-2xl bg-[#ffffff11]'
                                             name={'payload'}
                                             rows={6}
                                         />
@@ -223,12 +224,12 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
                             )}
                         </div>
                         <FormikSwitchV2
-                            name={'continueOnFailure'}
                             description={'Future tasks will be run if this task fails.'}
                             label={'Continue on Failure'}
+                            name={'continueOnFailure'}
                         />
-                        <div className={`flex justify-end my-6`}>
-                            <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
+                        <div className={'my-6 flex justify-end'}>
+                            <ActionButton disabled={isSubmitting} type={'submit'} variant='primary'>
                                 {task ? 'Save Changes' : 'Create Task'}
                             </ActionButton>
                         </div>

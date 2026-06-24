@@ -13,7 +13,7 @@ import packageJson from './package.json';
 
 function getLaravelAppVersion() {
     try {
-        const configPath = path.resolve(__dirname, 'config/app.php');
+        const configPath = path.resolve(import.meta.dirname, 'config/app.php');
         const configContent = fs.readFileSync(configPath, 'utf8');
 
         const versionMatch = configContent.match(/'version'\s*=>\s*'(.*?)'/);

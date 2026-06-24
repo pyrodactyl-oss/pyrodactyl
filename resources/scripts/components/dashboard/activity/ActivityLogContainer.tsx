@@ -30,7 +30,7 @@ const ActivityLogContainer = () => {
     const { data, isValidating, error } = useActivityLogs(filters, {
         revalidateOnMount: true,
         revalidateOnFocus: false,
-        refreshInterval: autoRefresh ? 30000 : 0, // Auto-refresh every 30 seconds
+        refreshInterval: autoRefresh ? 30_000 : 0, // Auto-refresh every 30 seconds
     });
 
     // Extract unique event types for filter dropdown
@@ -161,11 +161,11 @@ const ActivityLogContainer = () => {
 
     return (
         <PageContentBlock title={'Account Activity Log'}>
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+            <div className='flex h-full min-h-full w-full flex-1 flex-col px-2 sm:px-0'>
                 <FlashMessageRender byKey={'account'} />
 
                 <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                    className='skeleton-anim-2 mb-3 transform-gpu sm:mb-4'
                     style={{
                         animationDelay: '75ms',
                         animationTimingFunction:
@@ -173,38 +173,38 @@ const ActivityLogContainer = () => {
                     }}
                 >
                     <MainPageHeader title={'Activity Log'}>
-                        <div className='flex gap-2 items-center flex-wrap'>
+                        <div className='flex flex-wrap items-center gap-2'>
                             <ActionButton
-                                variant='secondary'
-                                onClick={() => setShowFilters(!showFilters)}
                                 className='flex items-center gap-2'
+                                onClick={() => setShowFilters(!showFilters)}
                                 title='Toggle Filters (Ctrl+F)'
+                                variant='secondary'
                             >
-                                <Funnel width={22} height={22} fill='currentColor' />
+                                <Funnel fill='currentColor' height={22} width={22} />
                                 Filters
-                                {hasActiveFilters && <span className='w-2 h-2 bg-blue-500 rounded-full'></span>}
+                                {hasActiveFilters && <span className='h-2 w-2 rounded-full bg-blue-500' />}
                             </ActionButton>
                             <ActionButton
-                                variant={autoRefresh ? 'primary' : 'secondary'}
-                                onClick={() => setAutoRefresh(!autoRefresh)}
                                 className='flex items-center gap-2'
+                                onClick={() => setAutoRefresh(!autoRefresh)}
                                 title='Auto Refresh (Ctrl+R)'
+                                variant={autoRefresh ? 'primary' : 'secondary'}
                             >
                                 {autoRefresh ? (
-                                    <Xmark width={22} height={22} fill='currentColor' />
+                                    <Xmark fill='currentColor' height={22} width={22} />
                                 ) : (
-                                    <Magnifier width={22} height={22} fill='currentColor' />
+                                    <Magnifier fill='currentColor' height={22} width={22} />
                                 )}
                                 {autoRefresh ? 'Live' : 'Refresh'}
                             </ActionButton>
                             <ActionButton
-                                variant='secondary'
-                                onClick={exportLogs}
-                                disabled={!filteredData?.items?.length}
                                 className='flex items-center gap-2'
+                                disabled={!filteredData?.items?.length}
+                                onClick={exportLogs}
                                 title='Export CSV (Ctrl+E)'
+                                variant='secondary'
                             >
-                                <ArrowDownToLine width={22} height={22} fill='currentColor' />
+                                <ArrowDownToLine fill='currentColor' height={22} width={22} />
                                 Export
                             </ActionButton>
                         </div>
@@ -213,56 +213,56 @@ const ActivityLogContainer = () => {
 
                 {showFilters && (
                     <div
-                        className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                        className='skeleton-anim-2 mb-3 transform-gpu sm:mb-4'
                         style={{
                             animationDelay: '100ms',
                             animationTimingFunction:
                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                         }}
                     >
-                        <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                            <div className='flex items-center gap-2 mb-4'>
-                                <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                    <Funnel width={22} height={22} className='text-zinc-400' fill='currentColor' />
+                        <div className='rounded-xl border-[#ffffff12] border-[1px] bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] p-4 shadow-sm transition-all duration-150 hover:border-[#ffffff20]'>
+                            <div className='mb-4 flex items-center gap-2'>
+                                <div className='flex h-5 w-5 items-center justify-center rounded-lg bg-[#ffffff11]'>
+                                    <Funnel className='text-zinc-400' fill='currentColor' height={22} width={22} />
                                 </div>
-                                <h3 className='text-base font-semibold text-zinc-100'>Filters</h3>
+                                <h3 className='font-semibold text-base text-zinc-100'>Filters</h3>
                             </div>
 
-                            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                            <div className='grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Search</label>
+                                    <label className='mb-2 block font-medium text-sm text-zinc-300'>Search</label>
                                     <div className='relative'>
                                         <Magnifier
-                                            width={22}
-                                            height={22}
-                                            className='absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none z-10'
+                                            className='pointer-events-none absolute top-1/2 left-3 z-10 h-4 w-4 -translate-y-1/2 transform text-zinc-400'
                                             fill='currentColor'
+                                            height={22}
+                                            width={22}
                                         />
                                         <Input.Text
-                                            type='text'
-                                            placeholder='Search events, IPs, users...'
-                                            value={searchTerm}
                                             onChange={(e) => setSearchTerm(e.target.value)}
+                                            placeholder='Search events, IPs, users...'
                                             style={{ paddingLeft: '2.5rem' }}
+                                            type='text'
+                                            value={searchTerm}
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Event Type</label>
+                                    <label className='mb-2 block font-medium text-sm text-zinc-300'>Event Type</label>
                                     <Select
-                                        value={selectedEventType}
+                                        className='w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-zinc-100 transition-colors duration-150 hover:border-zinc-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
                                         onChange={(e) => setSelectedEventType(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
+                                        value={selectedEventType}
                                     >
-                                        <option value='' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value=''>
                                             All Events
                                         </option>
                                         {eventTypes.map((type) => (
                                             <option
                                                 key={type}
-                                                value={type}
                                                 style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}
+                                                value={type}
                                             >
                                                 {type}
                                             </option>
@@ -271,25 +271,25 @@ const ActivityLogContainer = () => {
                                 </div>
 
                                 <div>
-                                    <label className='block text-sm font-medium text-zinc-300 mb-2'>Time Range</label>
+                                    <label className='mb-2 block font-medium text-sm text-zinc-300'>Time Range</label>
                                     <Select
-                                        value={dateRange}
+                                        className='w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-zinc-100 transition-colors duration-150 hover:border-zinc-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500'
                                         onChange={(e) => setDateRange(e.target.value)}
-                                        className='w-full px-3 py-2 bg-zinc-800 border border-zinc-600 rounded-lg text-zinc-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 hover:border-zinc-500 transition-colors duration-150'
+                                        value={dateRange}
                                     >
-                                        <option value='all' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value='all'>
                                             All Time
                                         </option>
-                                        <option value='1h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value='1h'>
                                             Last Hour
                                         </option>
-                                        <option value='24h' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value='24h'>
                                             Last 24 Hours
                                         </option>
-                                        <option value='7d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value='7d'>
                                             Last 7 Days
                                         </option>
-                                        <option value='30d' style={{ backgroundColor: '#27272a', color: '#f4f4f5' }}>
+                                        <option style={{ backgroundColor: '#27272a', color: '#f4f4f5' }} value='30d'>
                                             Last 30 Days
                                         </option>
                                     </Select>
@@ -298,11 +298,11 @@ const ActivityLogContainer = () => {
                                 <div className='flex items-end'>
                                     {hasActiveFilters && (
                                         <ActionButton
-                                            variant='secondary'
+                                            className='flex w-full items-center gap-2'
                                             onClick={clearAllFilters}
-                                            className='flex items-center gap-2 w-full'
+                                            variant='secondary'
                                         >
-                                            <Xmark width={22} height={22} fill='currentColor' />
+                                            <Xmark fill='currentColor' height={22} width={22} />
                                             Clear All Filters
                                         </ActionButton>
                                     )}
@@ -313,19 +313,19 @@ const ActivityLogContainer = () => {
                 )}
 
                 <div
-                    className='transform-gpu skeleton-anim-2'
+                    className='skeleton-anim-2 transform-gpu'
                     style={{
                         animationDelay: '125ms',
                         animationTimingFunction:
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
-                        <div className='flex items-center gap-2 mb-4'>
-                            <div className='w-5 h-5 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
-                                <Magnifier width={22} height={22} className=' text-zinc-400' fill='currentColor' />
+                    <div className='rounded-xl border-[#ffffff12] border-[1px] bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] p-4 shadow-sm transition-all duration-150 hover:border-[#ffffff20]'>
+                        <div className='mb-4 flex items-center gap-2'>
+                            <div className='flex h-5 w-5 items-center justify-center rounded-lg bg-[#ffffff11]'>
+                                <Magnifier className='text-zinc-400' fill='currentColor' height={22} width={22} />
                             </div>
-                            <h3 className='text-base font-semibold text-zinc-100'>Activity Events</h3>
+                            <h3 className='font-semibold text-base text-zinc-100'>Activity Events</h3>
                             {filteredData?.items && (
                                 <span className='text-sm text-zinc-400'>
                                     ({filteredData.items.length} {filteredData.items.length === 1 ? 'event' : 'events'})
@@ -335,48 +335,48 @@ const ActivityLogContainer = () => {
 
                         {!data && isValidating ? (
                             <Spinner centered />
-                        ) : !filteredData?.items?.length ? (
-                            <div className='text-center py-12'>
+                        ) : filteredData?.items?.length ? (
+                            <div className='divide-y divide-zinc-800/30'>
+                                {filteredData.items.map((activity) => (
+                                    <ActivityLogEntry activity={activity} key={activity.id}>
+                                        {typeof activity.properties.useragent === 'string' && <span />}
+                                    </ActivityLogEntry>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className='py-12 text-center'>
                                 <ArrowRotateLeft
-                                    width={22}
-                                    height={22}
-                                    className=' text-zinc-600 mb-4'
+                                    className='mb-4 text-zinc-600'
                                     fill='currentColor'
+                                    height={22}
+                                    width={22}
                                 />
-                                <h3 className='text-lg font-semibold text-zinc-300 mb-2'>
+                                <h3 className='mb-2 font-semibold text-lg text-zinc-300'>
                                     {hasActiveFilters ? 'No Matching Activity' : 'No Activity Yet'}
                                 </h3>
-                                <p className='text-sm text-zinc-400 mb-4 max-w-lg mx-auto leading-relaxed'>
+                                <p className='mx-auto mb-4 max-w-lg text-sm text-zinc-400 leading-relaxed'>
                                     {hasActiveFilters
                                         ? "Try adjusting your filters or search terms to find the activity you're looking for."
                                         : 'Activity logs will appear here as you use your account. Check back later or perform some actions to see them here.'}
                                 </p>
                                 {hasActiveFilters && (
-                                    <div className='flex gap-2 justify-center'>
-                                        <ActionButton variant='secondary' onClick={clearAllFilters}>
+                                    <div className='flex justify-center gap-2'>
+                                        <ActionButton onClick={clearAllFilters} variant='secondary'>
                                             Clear All Filters
                                         </ActionButton>
-                                        <ActionButton variant='secondary' onClick={() => setShowFilters(true)}>
+                                        <ActionButton onClick={() => setShowFilters(true)} variant='secondary'>
                                             Adjust Filters
                                         </ActionButton>
                                     </div>
                                 )}
-                            </div>
-                        ) : (
-                            <div className='divide-y divide-zinc-800/30'>
-                                {filteredData.items.map((activity) => (
-                                    <ActivityLogEntry key={activity.id} activity={activity}>
-                                        {typeof activity.properties.useragent === 'string' && <span></span>}
-                                    </ActivityLogEntry>
-                                ))}
                             </div>
                         )}
 
                         {data && (
                             <div className='mt-4'>
                                 <PaginationFooter
-                                    pagination={data.pagination}
                                     onPageSelect={(page) => setFilters((value) => ({ ...value, page }))}
+                                    pagination={data.pagination}
                                 />
                             </div>
                         )}

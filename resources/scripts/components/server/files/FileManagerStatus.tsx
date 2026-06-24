@@ -19,25 +19,25 @@ const CircleProgress = ({ progress, className }: { progress: number; className?:
     return (
         <svg className={className} viewBox='0 0 32 32'>
             <circle
-                stroke='currentColor'
-                strokeWidth='4'
-                fill='transparent'
-                r={radius}
+                className='opacity-25'
                 cx='16'
                 cy='16'
-                className='opacity-25'
+                fill='transparent'
+                r={radius}
+                stroke='currentColor'
+                strokeWidth='4'
             />
             <circle
                 className='transition-all duration-300'
-                stroke='currentColor'
-                strokeWidth='4'
-                strokeLinecap='round'
-                fill='transparent'
-                r={radius}
                 cx='16'
                 cy='16'
+                fill='transparent'
+                r={radius}
+                stroke='currentColor'
                 strokeDasharray={circumference}
                 strokeDashoffset={offset}
+                strokeLinecap='round'
+                strokeWidth='4'
                 transform='rotate(-90 16 16)'
             />
         </svg>
@@ -54,19 +54,19 @@ const FileUploadList = () => {
 
     return (
         <Tooltip.Provider>
-            <div className={'space-y-2 mt-6'}>
+            <div className={'mt-6 space-y-2'}>
                 {uploads.map(([name, file]) => (
-                    <div key={name} className={'flex items-center space-x-3 bg-zinc-700 p-3 rounded-sm'}>
+                    <div className={'flex items-center space-x-3 rounded-sm bg-zinc-700 p-3'} key={name}>
                         <Tooltip.Root delayDuration={200}>
                             <Tooltip.Trigger asChild>
                                 <div className={'shrink-0'}>
-                                    <CircleProgress progress={(file.loaded / file.total) * 100} className={'w-6 h-6'} />
+                                    <CircleProgress className={'h-6 w-6'} progress={(file.loaded / file.total) * 100} />
                                 </div>
                             </Tooltip.Trigger>
                             <Tooltip.Portal>
                                 <Tooltip.Content
+                                    className='z-9999 rounded bg-gray-800 px-2 py-1 text-gray-100 text-sm shadow-lg'
                                     side='left'
-                                    className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg z-9999'
                                     sideOffset={5}
                                 >
                                     {`${Math.floor((file.loaded / file.total) * 100)}%`}
@@ -78,18 +78,18 @@ const FileUploadList = () => {
                         <Tooltip.Root delayDuration={200}>
                             <Tooltip.Trigger asChild>
                                 <ActionButton
-                                    variant='secondary'
-                                    size='sm'
-                                    onClick={cancelFileUpload.bind(this, name)}
                                     className='hover:!text-red-400'
+                                    onClick={cancelFileUpload.bind(this, name)}
+                                    size='sm'
+                                    variant='secondary'
                                 >
                                     <Xmark />
                                 </ActionButton>
                             </Tooltip.Trigger>
                             <Tooltip.Portal>
                                 <Tooltip.Content
+                                    className='z-9999 rounded bg-gray-800 px-2 py-1 text-red-400 text-sm shadow-lg'
                                     side='right'
-                                    className='px-2 py-1 text-sm bg-gray-800 text-red-400 rounded shadow-lg z-9999'
                                     sideOffset={5}
                                 >
                                     Cancel
@@ -100,10 +100,10 @@ const FileUploadList = () => {
                     </div>
                 ))}
                 <Dialog.Footer>
-                    <ActionButton variant='danger' onClick={() => clearFileUploads()}>
+                    <ActionButton onClick={() => clearFileUploads()} variant='danger'>
                         Cancel Uploads
                     </ActionButton>
-                    <ActionButton variant='secondary' onClick={close}>
+                    <ActionButton onClick={close} variant='secondary'>
                         Close
                     </ActionButton>
                 </Dialog.Footer>
@@ -135,18 +135,18 @@ const FileManagerStatus = () => {
                     <Tooltip.Root delayDuration={200}>
                         <Tooltip.Trigger asChild>
                             <ActionButton
-                                variant='secondary'
-                                size='sm'
-                                className='w-10 h-10 p-0'
+                                className='h-10 w-10 p-0'
                                 onClick={() => {
                                     setOpen(true);
                                 }}
+                                size='sm'
+                                variant='secondary'
                             >
                                 <svg
-                                    className='animate-spin h-5 w-5 text-white'
-                                    xmlns='http://www.w3.org/2000/svg'
+                                    className='h-5 w-5 animate-spin text-white'
                                     fill='none'
                                     viewBox='0 0 24 24'
+                                    xmlns='http://www.w3.org/2000/svg'
                                 >
                                     <circle
                                         className='opacity-25'
@@ -155,19 +155,19 @@ const FileManagerStatus = () => {
                                         r='10'
                                         stroke='currentColor'
                                         strokeWidth='4'
-                                    ></circle>
+                                    />
                                     <path
                                         className='opacity-75'
-                                        fill='currentColor'
                                         d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
-                                    ></path>
+                                        fill='currentColor'
+                                    />
                                 </svg>
                             </ActionButton>
                         </Tooltip.Trigger>
                         <Tooltip.Portal>
                             <Tooltip.Content
+                                className='rounded bg-gray-800 px-2 py-1 text-gray-100 text-sm shadow-lg'
                                 side='top'
-                                className='px-2 py-1 text-sm bg-gray-800 text-gray-100 rounded shadow-lg'
                                 sideOffset={5}
                             >
                                 {`${count} files are uploading, click to view`}
@@ -175,7 +175,7 @@ const FileManagerStatus = () => {
                         </Tooltip.Portal>
                     </Tooltip.Root>
                 )}
-                <FileUploadListDialog open={open} onClose={() => setOpen(false)} />
+                <FileUploadListDialog onClose={() => setOpen(false)} open={open} />
             </Tooltip.Provider>
         </>
     );

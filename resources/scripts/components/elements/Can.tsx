@@ -6,9 +6,9 @@ import { usePermissions } from '@/plugins/usePermissions';
 
 interface Props {
     action: string | string[];
+    children: ReactNode;
     matchAny?: boolean;
     renderOnError?: ReactNode | null;
-    children: ReactNode;
 }
 
 function Can({ action, matchAny = false, renderOnError, children }: Props) {

@@ -25,30 +25,30 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
 
     return (
         <>
-            <Dialog open={open} onClose={() => setOpen(false)} hideCloseIcon title={'Event Metadata'}>
+            <Dialog hideCloseIcon onClose={() => setOpen(false)} open={open} title={'Event Metadata'}>
                 <div className='space-y-4'>
                     <div className='flex items-center justify-between'>
-                        <h4 className='text-sm font-medium text-zinc-300'>Formatted View</h4>
+                        <h4 className='font-medium text-sm text-zinc-300'>Formatted View</h4>
                         <ActionButton
-                            variant='secondary'
-                            onClick={copyToClipboard}
                             className='flex items-center gap-2 text-xs'
+                            onClick={copyToClipboard}
+                            variant='secondary'
                         >
-                            <Copy width={22} height={22} />
+                            <Copy height={22} width={22} />
                             {copied ? 'Copied!' : 'Copy JSON'}
                         </ActionButton>
                     </div>
 
-                    <div className='bg-zinc-900 rounded-lg p-4 border border-zinc-800 max-h-96 overflow-auto'>
-                        <pre className='font-mono text-sm leading-relaxed whitespace-pre-wrap text-zinc-300'>
+                    <div className='max-h-96 overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4'>
+                        <pre className='whitespace-pre-wrap font-mono text-sm text-zinc-300 leading-relaxed'>
                             {metadataString}
                         </pre>
                     </div>
 
                     <div>
-                        <h4 className='text-sm font-medium text-zinc-300 mb-2'>Raw JSON</h4>
-                        <div className='bg-zinc-900 rounded-lg p-4 border border-zinc-800 max-h-64 overflow-auto'>
-                            <pre className='font-mono text-xs leading-relaxed whitespace-pre-wrap text-zinc-400'>
+                        <h4 className='mb-2 font-medium text-sm text-zinc-300'>Raw JSON</h4>
+                        <div className='max-h-64 overflow-auto rounded-lg border border-zinc-800 bg-zinc-900 p-4'>
+                            <pre className='whitespace-pre-wrap font-mono text-xs text-zinc-400 leading-relaxed'>
                                 {metadataJson}
                             </pre>
                         </div>
@@ -56,7 +56,7 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
                 </div>
 
                 <Dialog.Footer>
-                    <ActionButton variant='secondary' onClick={() => setOpen(false)}>
+                    <ActionButton onClick={() => setOpen(false)} variant='secondary'>
                         Close
                     </ActionButton>
                 </Dialog.Footer>
@@ -64,10 +64,10 @@ const ActivityLogMetaButton = ({ meta }: { meta: Record<string, unknown> }) => {
 
             <button
                 aria-label='View additional event metadata'
-                className='w-6 h-6 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors duration-150 flex items-center justify-center'
+                className='flex h-6 w-6 items-center justify-center rounded text-zinc-400 transition-colors duration-150 hover:bg-zinc-800/50 hover:text-zinc-100'
                 onClick={() => setOpen(true)}
             >
-                <Code width={22} height={22} />
+                <Code height={22} width={22} />
             </button>
         </>
     );

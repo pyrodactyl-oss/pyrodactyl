@@ -4,8 +4,8 @@ export function formatUptime(uptime: number): string {
     }
 
     const secondsTotal = Math.floor(uptime / 1000);
-    const days = Math.floor(secondsTotal / 86400);
-    const hours = Math.floor((secondsTotal % 86400) / 3600);
+    const days = Math.floor(secondsTotal / 86_400);
+    const hours = Math.floor((secondsTotal % 86_400) / 3600);
     const minutes = Math.floor((secondsTotal % 3600) / 60);
     const seconds = secondsTotal % 60;
 

@@ -51,17 +51,17 @@ const UpdateEmailAddressForm = () => {
     };
 
     return (
-        <Formik onSubmit={submit} validationSchema={schema} initialValues={{ email: user!.email, password: '' }}>
+        <Formik initialValues={{ email: user!.email, password: '' }} onSubmit={submit} validationSchema={schema}>
             {({ isSubmitting, isValid }) => (
                 <Fragment>
                     <SpinnerOverlay size={'large'} visible={isSubmitting} />
-                    <Form className={`m-0`}>
-                        <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
-                        <div className={`mt-6`}>
-                            <Field id={'confirm_password'} type={'password'} name={'password'} label={'Password'} />
+                    <Form className={'m-0'}>
+                        <Field id={'current_email'} label={'Email'} name={'email'} type={'email'} />
+                        <div className={'mt-6'}>
+                            <Field id={'confirm_password'} label={'Password'} name={'password'} type={'password'} />
                         </div>
-                        <div className={`mt-6`}>
-                            <ActionButton variant='secondary' disabled={isSubmitting || !isValid}>
+                        <div className={'mt-6'}>
+                            <ActionButton disabled={isSubmitting || !isValid} variant='secondary'>
                                 Update Email
                             </ActionButton>
                         </div>

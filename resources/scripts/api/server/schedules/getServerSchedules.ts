@@ -2,8 +2,7 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface Schedule {
-    id: number;
-    name: string;
+    createdAt: Date;
     cron: {
         dayOfWeek: string;
         month: string;
@@ -11,26 +10,27 @@ export interface Schedule {
         hour: string;
         minute: string;
     };
+    id: number;
     isActive: boolean;
     isProcessing: boolean;
-    onlyWhenOnline: boolean;
     lastRunAt: Date | null;
+    name: string;
     nextRunAt: Date | null;
-    createdAt: Date;
-    updatedAt: Date;
+    onlyWhenOnline: boolean;
 
     tasks: Task[];
+    updatedAt: Date;
 }
 
 export interface Task {
-    id: number;
-    sequenceId: number;
     action: string;
-    payload: string;
-    timeOffset: number;
-    isQueued: boolean;
     continueOnFailure: boolean;
     createdAt: Date;
+    id: number;
+    isQueued: boolean;
+    payload: string;
+    sequenceId: number;
+    timeOffset: number;
     updatedAt: Date;
 }
 

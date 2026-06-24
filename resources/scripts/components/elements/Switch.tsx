@@ -39,37 +39,37 @@ const ToggleContainer = styled.div``;
 // `;
 
 export interface SwitchProps {
-    name: string;
-    label?: string;
-    description?: string;
-    defaultChecked?: boolean;
-    readOnly?: boolean;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     children?: React.ReactNode;
+    defaultChecked?: boolean;
+    description?: string;
+    label?: string;
+    name: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    readOnly?: boolean;
 }
 
 const Switch = ({ name, label, description, defaultChecked, readOnly, onChange, children }: SwitchProps) => {
     const uuid = useMemo(() => v4(), []);
 
     return (
-        <div className={`flex items-center`}>
-            <ToggleContainer className={`flex-none`}>
+        <div className={'flex items-center'}>
+            <ToggleContainer className={'flex-none'}>
                 {children || (
                     <Input
-                        id={uuid}
-                        name={name}
-                        type={'checkbox'}
-                        onChange={(e) => onChange && onChange(e)}
                         defaultChecked={defaultChecked}
                         disabled={readOnly}
+                        id={uuid}
+                        name={name}
+                        onChange={(e) => onChange && onChange(e)}
+                        type={'checkbox'}
                     />
                 )}
                 <Label htmlFor={uuid} />
             </ToggleContainer>
             {(label || description) && (
-                <div className={`ml-4 w-full`}>
+                <div className={'ml-4 w-full'}>
                     {label && <Label htmlFor={uuid}>{label}</Label>}
-                    {description && <p className={`text-zinc-400 text-sm mt-2`}>{description}</p>}
+                    {description && <p className={'mt-2 text-sm text-zinc-400'}>{description}</p>}
                 </div>
             )}
         </div>

@@ -11,8 +11,6 @@ type Props = Omit<React.ComponentProps<'input'>, 'type'> & {
 const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputField, ...props }, ref) => (
     <div className={clsx('flex items-center', className)}>
         <input
-            ref={ref}
-            type='checkbox'
             className={clsx(
                 'form-input',
                 styles.checkbox_input,
@@ -21,11 +19,13 @@ const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputF
                     [styles.with_input]: inputField, // Add custom styles when the input field is enabled
                 },
             )}
+            ref={ref}
+            type='checkbox'
             {...props}
         />
         {label && <label className={clsx('ml-2', styles.label)}>{label}</label>}
         {inputField && (
-            <input type='text' className={clsx('ml-2', 'form-input', styles.input_field, 'border-branding')} />
+            <input className={clsx('ml-2', 'form-input', styles.input_field, 'border-branding')} type='text' />
         )}
     </div>
 ));

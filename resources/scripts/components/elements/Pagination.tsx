@@ -4,17 +4,17 @@ import type { PaginatedResult } from '@/api/http';
 import Button from '@/components/elements/Button';
 
 interface RenderFuncProps<T> {
-    items: T[];
-    isLastPage: boolean;
     isFirstPage: boolean;
+    isLastPage: boolean;
+    items: T[];
 }
 
 interface Props<T> {
-    data: PaginatedResult<T>;
-    showGoToLast?: boolean;
-    showGoToFirst?: boolean;
-    onPageSelect: (page: number) => void;
     children: (props: RenderFuncProps<T>) => React.ReactNode;
+    data: PaginatedResult<T>;
+    onPageSelect: (page: number) => void;
+    showGoToFirst?: boolean;
+    showGoToLast?: boolean;
 }
 
 const Block = styled(Button)``;
@@ -39,13 +39,15 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
         <>
             {children({ items, isFirstPage, isLastPage })}
             {pages.length > 1 && (
-                <div className={`flex justify-center mt-4`}>
+                <div className={'mt-4 flex justify-center'}>
                     <div
-                        className={`flex justify-center gap-3 p-[4px] w-fit bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#00000017] rounded-md`}
+                        className={
+                            'flex w-fit justify-center gap-3 rounded-md border border-[#00000017] bg-linear-to-b from-[#ffffff10] to-[#ffffff09] p-[4px]'
+                        }
                     >
                         <Block
-                            isSecondary
                             color={'primary'}
+                            isSecondary
                             onClick={() =>
                                 pagination.currentPage > 1 &&
                                 pagination.totalPages > 1 &&
@@ -53,39 +55,39 @@ function Pagination<T>({ data: { items, pagination }, onPageSelect, children }: 
                             }
                         >
                             <ArrowLeft
-                                width={22}
-                                height={22}
+                                className={`${pagination.currentPage === 1 ? 'cursor-not-allowed text-neutral-500' : 'text-white'}`}
                                 fill={'currentColor'}
-                                className={`${pagination.currentPage === 1 ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
+                                height={22}
+                                width={22}
                             />
                         </Block>
                         {pages.map((i) => (
                             <Block
-                                isSecondary={pagination.currentPage !== i}
                                 color={'primary'}
+                                isSecondary={pagination.currentPage !== i}
                                 key={`block_page_${i}`}
                                 onClick={() => onPageSelect(i)}
                             >
                                 {i === pagination.currentPage ? (
-                                    <span className='text-neutral-500 cursor-not-allowed'>{i}</span>
+                                    <span className='cursor-not-allowed text-neutral-500'>{i}</span>
                                 ) : (
                                     i
                                 )}
                             </Block>
                         ))}
                         <Block
-                            isSecondary
                             color={'primary'}
+                            isSecondary
                             onClick={() =>
                                 pagination.currentPage < pagination.totalPages &&
                                 onPageSelect(pagination.currentPage + 1)
                             }
                         >
                             <ArrowRight
-                                width={22}
-                                height={22}
+                                className={`${pagination.currentPage === pagination.totalPages ? 'cursor-not-allowed text-neutral-500' : 'text-white'}`}
                                 fill={'currentColor'}
-                                className={`${pagination.currentPage === pagination.totalPages ? 'text-neutral-500 cursor-not-allowed' : 'text-white'}`}
+                                height={22}
+                                width={22}
                             />
                         </Block>
                     </div>

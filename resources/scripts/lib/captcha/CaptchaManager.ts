@@ -128,7 +128,7 @@ export class CaptchaManager {
      * Reset the widget
      */
     public resetWidget(): void {
-        if (!this.isEnabled() || !this.widgetId) {
+        if (!(this.isEnabled() && this.widgetId)) {
             return;
         }
 

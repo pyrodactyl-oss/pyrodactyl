@@ -19,7 +19,7 @@ export default ({ type, position, className }: DialogIconProps) => {
 
         setIcon(
             <div className={clsx(styles.dialog_icon, styles[type], className)}>
-                <Shield width={22} height={22} fill='currentColor' />
+                <Shield fill='currentColor' height={22} width={22} />
             </div>,
         );
     }, [type, className]);

@@ -26,8 +26,8 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
 
     return (
         <Formik
-            onSubmit={submit}
             initialValues={{ fileName: '' }}
+            onSubmit={submit}
             validationSchema={object().shape({
                 fileName: string().required().min(1),
             })}
@@ -41,15 +41,15 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                     title='New file'
                     {...props}
                 >
-                    <Form className='m-0 w-full flex flex-col gap-4'>
+                    <Form className='m-0 flex w-full flex-col gap-4'>
                         <Field
-                            id={'fileName'}
-                            name={'fileName'}
-                            label={'File Name'}
-                            description={'Enter the name that this file should be saved as.'}
                             autoFocus
+                            description={'Enter the name that this file should be saved as.'}
+                            id={'fileName'}
+                            label={'File Name'}
+                            name={'fileName'}
                         />
-                        <div className={`flex justify-end w-full my-4`}>
+                        <div className={'my-4 flex w-full justify-end'}>
                             <ActionButton variant='primary'>Create File</ActionButton>
                         </div>
                     </Form>

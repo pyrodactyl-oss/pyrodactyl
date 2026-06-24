@@ -3,7 +3,7 @@ import '../types';
 
 export class RecaptchaProvider extends BaseCaptchaProvider {
     private loadPromise: Promise<void> | null = null;
-    private siteKey: string = '';
+    private siteKey = '';
 
     getName(): string {
         return 'recaptcha';

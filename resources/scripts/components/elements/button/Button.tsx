@@ -6,35 +6,33 @@ import { type ButtonProps, Options } from '@/components/elements/button/types';
 import styles from './style.module.css';
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ children, shape, size, variant, className, ...rest }, ref) => {
-        return (
-            <button
-                ref={ref}
-                className={clsx(
-                    styles.button,
-                    styles.primary,
-                    {
-                        [styles.secondary]: variant === Options.Variant.Secondary,
-                        [styles.square]: shape === Options.Shape.IconSquare,
-                        [styles.small]: size === Options.Size.Small,
-                        [styles.large]: size === Options.Size.Large,
-                    },
-                    className,
-                )}
-                {...rest}
-            >
-                {children}
-            </button>
-        );
-    },
+    ({ children, shape, size, variant, className, ...rest }, ref) => (
+        <button
+            className={clsx(
+                styles.button,
+                styles.primary,
+                {
+                    [styles.secondary]: variant === Options.Variant.Secondary,
+                    [styles.square]: shape === Options.Shape.IconSquare,
+                    [styles.small]: size === Options.Size.Small,
+                    [styles.large]: size === Options.Size.Large,
+                },
+                className,
+            )}
+            ref={ref}
+            {...rest}
+        >
+            {children}
+        </button>
+    ),
 );
 
 const TextButton = forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => (
-    <Button ref={ref} className={clsx(styles.text, className)} {...props} />
+    <Button className={clsx(styles.text, className)} ref={ref} {...props} />
 ));
 
 const DangerButton = forwardRef<HTMLButtonElement, ButtonProps>(({ className, ...props }, ref) => (
-    <Button ref={ref} className={clsx(styles.danger, className)} {...props} />
+    <Button className={clsx(styles.danger, className)} ref={ref} {...props} />
 ));
 
 const _Button = Object.assign(Button, {

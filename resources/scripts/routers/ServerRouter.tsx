@@ -246,49 +246,45 @@ const ServerRouter = () => {
 
     return (
         <Fragment key={'server-router'}>
-            {!uuid || !id ? (
-                error ? (
-                    <ServerError title='Something went wrong' message={error} />
-                ) : null
-            ) : (
+            {uuid && id ? (
                 <>
                     {/* Mobile Top Bar */}
                     <MobileTopBar
                         onMenuToggle={toggleMobileMenu}
-                        onTriggerLogout={onTriggerLogout}
                         onSelectAdminPanel={onSelectManageServer}
+                        onTriggerLogout={onTriggerLogout}
                         rootAdmin={rootAdmin}
                     />
 
                     {/* Mobile Full Screen Menu */}
                     <ServerMobileMenu
+                        allocationLimit={allocationLimit}
+                        backupLimit={backupLimit}
+                        databaseLimit={databaseLimit}
                         isVisible={isMobileMenuVisible}
                         onClose={closeMobileMenu}
                         serverId={id}
-                        databaseLimit={databaseLimit}
-                        backupLimit={backupLimit}
-                        allocationLimit={allocationLimit}
                         subdomainSupported={subdomainSupported}
                     />
 
-                    <div className='flex flex-row w-full lg:pt-0 pt-16'>
+                    <div className='flex w-full flex-row pt-16 lg:pt-0'>
                         {/* Desktop Sidebar */}
-                        <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a] flex flex-col h-full'>
-                            <div className='flex flex-row items-center justify-between h-8'>
-                                <NavLink to={'/'} className='flex shrink-0 h-8 w-fit'>
+                        <MainSidebar className='flex hidden h-full w-[300px] flex-col bg-[#1a1a1a] lg:relative lg:flex lg:shrink-0'>
+                            <div className='flex h-8 flex-row items-center justify-between'>
+                                <NavLink className='flex h-8 w-fit shrink-0' to={'/'}>
                                     <Logo uniqueId='server-desktop-sidebar' />
                                 </NavLink>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-[#ffffff11] p-2 select-none cursor-pointer'>
-                                            <Ellipsis fill='currentColor' width={26} height={22} />
+                                        <button className='flex h-10 w-10 cursor-pointer select-none items-center justify-center rounded-md p-2 text-white hover:bg-[#ffffff11]'>
+                                            <Ellipsis fill='currentColor' height={22} width={26} />
                                         </button>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent className='z-99999 select-none relative' sideOffset={8}>
+                                    <DropdownMenuContent className='relative z-99999 select-none' sideOffset={8}>
                                         {rootAdmin && (
                                             <DropdownMenuItem onSelect={onSelectManageServer}>
                                                 Manage Server
-                                                <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs select-none'>
+                                                <span className='z-10 ml-2 select-none rounded-full bg-brand px-2 py-1 text-xs'>
                                                     Staff
                                                 </span>
                                             </DropdownMenuItem>
@@ -298,10 +294,10 @@ const ServerRouter = () => {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>
-                            <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
+                            <div aria-hidden className='mt-8 mb-4 min-h-[1px] w-6 bg-[#ffffff33]' />
                             {/* Highlight */}
                             <div
-                                className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none'
+                                className='pointer-events-none absolute left-0 h-10 w-[3px] rounded-full bg-brand'
                                 style={{
                                     top: adjustedTop,
                                     height,
@@ -311,7 +307,7 @@ const ServerRouter = () => {
                                 }}
                             />
                             <div
-                                className='absolute bg-zinc-900 w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
+                                className='pointer-events-none absolute left-0 h-10 w-12 rounded-full bg-zinc-900 blur-2xl'
                                 style={{
                                     top: adjustedTop,
                                     opacity: isHighlightVisible ? 0.5 : 0,
@@ -319,27 +315,27 @@ const ServerRouter = () => {
                                 }}
                             />
                             <ul
-                                ref={navContainerRef}
-                                onScroll={handleScroll}
-                                data-pyro-subnav-routes-wrapper=''
                                 className='pyro-subnav-routes-wrapper flex-grow overflow-y-auto'
+                                data-pyro-subnav-routes-wrapper=''
+                                onScroll={handleScroll}
+                                ref={navContainerRef}
                             >
                                 {/* Dynamic navigation items from routes config */}
                                 {navRoutes.map((route) => (
                                     <ServerSidebarNavItem
                                         key={route.path || 'home'}
+                                        onClick={() => {}}
                                         ref={getRefForRoute(route)}
                                         route={route}
                                         serverId={id}
-                                        onClick={() => {}}
                                     />
                                 ))}
                             </ul>
                             <div className='shrink-0'>
-                                <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-full'></div>
+                                <div aria-hidden className='mt-8 mb-4 min-h-[1px] w-full bg-[#ffffff33]' />
                                 <StatBlock
+                                    className='rounded-xl border-[#ffffff11] border-[1px] bg-[#ffffff09] p-4 text-center shadow-xs hover:cursor-default'
                                     title='server'
-                                    className='p-4 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl text-center hover:cursor-default'
                                 >
                                     {serverName}
                                 </StatBlock>
@@ -352,9 +348,9 @@ const ServerRouter = () => {
                             <TransferListener />
                             <WebsocketHandler />
                             <main
+                                className='relative inset-[1px] h-full w-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                                 data-pyro-main=''
                                 data-pyro-transitionrouter=''
-                                className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             >
                                 {inConflictState &&
                                 (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
@@ -364,8 +360,6 @@ const ServerRouter = () => {
                                         <Routes location={location}>
                                             {routes.server.map(({ route, permission, component: Component }) => (
                                                 <Route
-                                                    key={route}
-                                                    path={route}
                                                     element={
                                                         <PermissionRoute permission={permission ?? undefined}>
                                                             <Suspense fallback={null}>
@@ -373,10 +367,12 @@ const ServerRouter = () => {
                                                             </Suspense>
                                                         </PermissionRoute>
                                                     }
+                                                    key={route}
+                                                    path={route}
                                                 />
                                             ))}
 
-                                            <Route path='*' element={<NotFound />} />
+                                            <Route element={<NotFound />} path='*' />
                                         </Routes>
                                     </ErrorBoundary>
                                 )}
@@ -384,7 +380,9 @@ const ServerRouter = () => {
                         </MainWrapper>
                     </div>
                 </>
-            )}
+            ) : error ? (
+                <ServerError message={error} title='Something went wrong' />
+            ) : null}
         </Fragment>
     );
 };

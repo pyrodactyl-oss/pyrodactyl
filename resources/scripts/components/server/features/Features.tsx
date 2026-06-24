@@ -8,11 +8,13 @@ import features from './index';
 type ListItems = [string, ComponentType][];
 
 const Features = ({ enabled }: { enabled: string[] }) => {
-    const mapped: ListItems = useMemo(() => {
-        return getObjectKeys(features)
-            .filter((key) => enabled.map((v) => v.toLowerCase()).includes(key.toLowerCase()))
-            .reduce((arr, key) => [...arr, [key, features[key]]] as ListItems, [] as ListItems);
-    }, [enabled]);
+    const mapped: ListItems = useMemo(
+        () =>
+            getObjectKeys(features)
+                .filter((key) => enabled.map((v) => v.toLowerCase()).includes(key.toLowerCase()))
+                .reduce((arr, key) => [...arr, [key, features[key]]] as ListItems, [] as ListItems),
+        [enabled],
+    );
 
     return (
         <Suspense fallback={null}>

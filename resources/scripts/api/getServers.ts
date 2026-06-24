@@ -2,13 +2,13 @@ import http, { getPaginationSet, type PaginatedResult } from '@/api/http';
 import { rawDataToServerObject, type Server } from '@/api/server/getServer';
 
 interface QueryParams {
-    query?: string;
     page?: number;
+    query?: string;
     type?: string;
 }
 
-export default ({ query, ...params }: QueryParams): Promise<PaginatedResult<Server>> => {
-    return new Promise((resolve, reject) => {
+export default ({ query, ...params }: QueryParams): Promise<PaginatedResult<Server>> =>
+    new Promise((resolve, reject) => {
         http.get('/api/client', {
             params: {
                 'filter[*]': query,
@@ -23,4 +23,3 @@ export default ({ query, ...params }: QueryParams): Promise<PaginatedResult<Serv
             )
             .catch(reject);
     });
-};

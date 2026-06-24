@@ -1,16 +1,16 @@
 import http from '@/api/http';
 
 interface LoginData {
-    user: string;
     password: string;
+    user: string;
     [key: string]: any; // Allow additional fields like captcha responses
 }
 
 interface LoginResponse {
     complete: boolean;
-    intended?: string;
     confirmationToken?: string;
     error?: string;
+    intended?: string;
 }
 
 export default async (data: LoginData): Promise<LoginResponse> => {

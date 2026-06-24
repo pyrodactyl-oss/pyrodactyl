@@ -24,7 +24,7 @@ export const rawDataToFileObject = (data: FractalResponseData): FileObject => ({
     createdAt: new Date(data.attributes.created_at),
     modifiedAt: new Date(data.attributes.modified_at),
 
-    isArchiveType: function () {
+    isArchiveType() {
         return (
             this.isFile &&
             [
@@ -45,7 +45,7 @@ export const rawDataToFileObject = (data: FractalResponseData): FileObject => ({
         );
     },
 
-    isEditable: function () {
+    isEditable() {
         if (this.isArchiveType() || !this.isFile) return false;
 
         const matches = ['application/jar', 'application/octet-stream', 'inode/directory', /^image\/(?!svg\+xml)/];
@@ -58,7 +58,7 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     uuid: attributes.uuid,
     isSuccessful: attributes.is_successful,
     isLocked: attributes.is_locked,
-    isAutomatic: attributes.is_automatic || false,
+    isAutomatic: attributes.is_automatic,
     name: attributes.name,
     ignoredFiles: attributes.ignored_files,
     checksum: attributes.checksum,
@@ -77,7 +77,7 @@ export const rawDataToServerBackup = ({ attributes }: FractalResponseData): Serv
     jobError: attributes.job_error || null,
     jobStartedAt: attributes.job_started_at ? new Date(attributes.job_started_at) : null,
     jobLastUpdatedAt: attributes.job_last_updated_at ? new Date(attributes.job_last_updated_at) : null,
-    canRetry: attributes.can_retry || false,
+    canRetry: attributes.can_retry,
     isInProgress: ['pending', 'running'].includes(attributes.job_status || ''),
 });
 

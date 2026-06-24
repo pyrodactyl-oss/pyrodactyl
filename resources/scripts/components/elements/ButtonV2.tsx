@@ -5,17 +5,15 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string;
 }
 
-const Button = ({ className, ...props }: Props) => {
-    return (
-        <button
-            className={clsx(
-                'flex items-center justify-center h-8 px-4 text-sm font-medium text-white transition-colors duration-150 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-full shadow-xs hover:from-[#ffffff05] hover:to-[#ffffff04] cursor-pointer',
-                className,
-            )}
-            {...props}
-        />
-    );
-};
+const Button = ({ className, ...props }: Props) => (
+    <button
+        className={clsx(
+            'flex h-8 cursor-pointer items-center justify-center rounded-full border border-[#ffffff15] bg-linear-to-b from-[#ffffff10] to-[#ffffff09] px-4 font-medium text-sm text-white shadow-xs transition-colors duration-150 hover:from-[#ffffff05] hover:to-[#ffffff04]',
+            className,
+        )}
+        {...props}
+    />
+);
 Button.displayName = 'Button';
 
 export default Button;

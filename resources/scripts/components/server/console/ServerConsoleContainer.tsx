@@ -20,22 +20,22 @@ const ServerConsoleContainer = () => {
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
 
     return (
-        <PageContentBlock title={'Console'} background={false} className='overflow-y-visible'>
-            <div className='w-full h-full flex gap-4'>
-                <div className='flex flex-col flex-1 gap-4'>
+        <PageContentBlock background={false} className='overflow-y-visible' title={'Console'}>
+            <div className='flex h-full w-full gap-4'>
+                <div className='flex flex-1 flex-col gap-4'>
                     <ServerHeader powerButtons={true} />
                     {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
-                        <Alert type={'warning'} className={''}>
+                        <Alert className={''} type={'warning'}>
                             {isNodeUnderMaintenance
                                 ? 'The node of this server is currently under maintenance and all actions are unavailable.'
                                 : isInstalling
-                                    ? 'This server is currently running its installation process and most actions are unavailable.'
-                                    : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                                  ? 'This server is currently running its installation process and most actions are unavailable.'
+                                  : 'This server is currently being transferred to another node and all actions are unavailable.'}
                         </Alert>
                     )}
                     <Console />
                 </div>
-                <div className='relative w-(--sidebar-full-width) overflow-y-auto overflow-x-visible flex-none -mb-(--main-wrapper-spacing) pb-(--main-wrapper-spacing)'>
+                <div className='relative -mb-(--main-wrapper-spacing) w-(--sidebar-full-width) flex-none overflow-y-auto overflow-x-visible pb-(--main-wrapper-spacing)'>
                     <div className='flex flex-col gap-4'>
                         <Spinner.Suspense>
                             <StatGraphs />
@@ -47,7 +47,7 @@ const ServerConsoleContainer = () => {
                     <Features enabled={eggFeatures} />
                 </ErrorBoundary>
             </div>
-        </PageContentBlock >
+        </PageContentBlock>
     );
 };
 

@@ -6,7 +6,7 @@ describe('@/lib/formatters.ts', () => {
             expect(mbToBytes(1)).toBe(1_048_576);
             expect(mbToBytes(0)).toBe(0);
             expect(mbToBytes(0.1)).toBe(104_857);
-            expect(mbToBytes(0.001)).toBe(1_048);
+            expect(mbToBytes(0.001)).toBe(1048);
             expect(mbToBytes(1024)).toBe(1_073_741_824);
         });
     });

@@ -3,14 +3,14 @@ import { type Action, action, type Thunk, thunk } from 'easy-peasy';
 import updateAccountEmail from '@/api/account/updateAccountEmail';
 
 export interface UserData {
-    uuid: string;
-    username: string;
+    createdAt: Date;
     email: string;
     language: string;
     rootAdmin: boolean;
-    useTotp: boolean;
-    createdAt: Date;
     updatedAt: Date;
+    username: string;
+    useTotp: boolean;
+    uuid: string;
 }
 
 export interface UserStore {

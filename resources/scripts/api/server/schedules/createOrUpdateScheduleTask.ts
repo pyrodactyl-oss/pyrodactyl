@@ -4,9 +4,9 @@ import { rawDataToServerTask, type Task } from '@/api/server/schedules/getServer
 
 interface Data {
     action: string;
+    continueOnFailure: boolean;
     payload: string;
     timeOffset: string | number;
-    continueOnFailure: boolean;
 }
 
 export default async (uuid: string, schedule: number, task: number | undefined, data: Data): Promise<Task> => {

@@ -1,30 +1,29 @@
 import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
 import { format } from 'date-fns';
 import { type Actions, useStoreActions } from 'easy-peasy';
-import { type FormikHelpers } from 'formik';
+import type { FormikHelpers } from 'formik';
 import { lazy, useEffect, useState } from 'react';
 import createApiKey from '@/api/account/createApiKey';
 import deleteApiKey from '@/api/account/deleteApiKey';
 import getApiKeys, { type ApiKey } from '@/api/account/getApiKeys';
 import { httpErrorToHuman } from '@/api/http';
 import ApiKeyModal from '@/components/dashboard/ApiKeyModal';
-import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
+import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Dialog } from '@/components/elements/dialog';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
+import { Button } from '@/components/ui/button';
 import { useFlashKey } from '@/plugins/useFlash';
 import type { ApplicationStore } from '@/state';
-
 import ServerHeader from '../HeaderManger';
-import CopyOnClick from '@/components/elements/CopyOnClick';
 
 const CreateApiKeyModal = lazy(() => import('./CreateApiKeyModal'));
 
 interface CreateValues {
-    description: string;
     allowedIps: string;
+    description: string;
 }
 
 const AccountApiContainer = () => {
@@ -84,53 +83,53 @@ const AccountApiContainer = () => {
     return (
         <PageContentBlock title={'Api Key'}>
             <FlashMessageRender byKey='account:api-keys' />
-            <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
+            <ApiKeyModal apiKey={apiKey} onModalDismissed={() => setApiKey('')} visible={apiKey.length > 0} />
             <ServerHeader title='Api Keys' />
 
             <CreateApiKeyModal
-                open={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
                 onSubmit={submitCreate}
+                open={showCreateModal}
             />
 
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+            <div className='flex h-full min-h-full w-full flex-1 flex-col px-2 sm:px-0'>
                 <div
-                    className='transform-gpu skeleton-anim-2'
+                    className='skeleton-anim-2 transform-gpu'
                     style={{
                         animationDelay: '75ms',
                         animationTimingFunction:
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <div className='rounded-xl p-4 sm:p-6 shadow-sm'>
+                    <div className='rounded-xl p-4 shadow-sm sm:p-6'>
                         <SpinnerOverlay visible={loading} />
                         <Dialog.Confirm
-                            title={'Delete API Key'}
                             confirm={'Delete Key'}
-                            open={!!deleteIdentifier}
                             onClose={() => setDeleteIdentifier('')}
                             onConfirmed={() => doDeletion(deleteIdentifier)}
+                            open={!!deleteIdentifier}
+                            title={'Delete API Key'}
                         >
                             All requests using the <Code>{deleteIdentifier}</Code> key will be invalidated.
                         </Dialog.Confirm>
                         <div className='mb-4'>
                             <Button
-                                variant='secondary'
-                                onClick={() => setShowCreateModal(true)}
                                 className='flex items-center gap-2'
+                                onClick={() => setShowCreateModal(true)}
+                                variant='secondary'
                             >
-                                <Plus width={22} height={22} fill='currentColor' />
+                                <Plus fill='currentColor' height={22} width={22} />
                                 Create API Key
                             </Button>
                         </div>
 
                         {keys.length === 0 ? (
-                            <div className='text-center py-12'>
-                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-mocha-400 flex items-center justify-center'>
-                                    <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
+                            <div className='py-12 text-center'>
+                                <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-mocha-400'>
+                                    <Key className='text-zinc-400' fill='currentColor' height={22} width={22} />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No API Keys</h3>
-                                <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
+                                <h3 className='mb-2 font-medium text-lg text-zinc-200'>No API Keys</h3>
+                                <p className='mx-auto max-w-sm text-sm text-zinc-400'>
                                     {loading
                                         ? 'Loading your API keys...'
                                         : "You haven't created any API keys yet. Create one to get started with the API."}
@@ -140,23 +139,23 @@ const AccountApiContainer = () => {
                             <div className='space-y-3'>
                                 {keys.map((key, index) => (
                                     <div
+                                        className='skeleton-anim-2 transform-gpu'
                                         key={key.identifier}
-                                        className='transform-gpu skeleton-anim-2'
                                         style={{
                                             animationDelay: `${index * 25 + 100}ms`,
                                             animationTimingFunction:
                                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                                         }}
                                     >
-                                        <div className='bg-mocha-500 border-mocha-300 border-[1px] rounded-lg transition-all duration-150 p-4'>
+                                        <div className='rounded-lg border-[1px] border-mocha-300 bg-mocha-500 p-4 transition-all duration-150'>
                                             <div className='flex items-center justify-between'>
-                                                <div className='flex-1 min-w-0'>
-                                                    <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-text truncate'>
+                                                <div className='min-w-0 flex-1'>
+                                                    <div className='mb-2 flex items-center gap-3'>
+                                                        <h4 className='truncate font-medium text-sm text-text'>
                                                             {key.description}
                                                         </h4>
                                                     </div>
-                                                    <div className='flex items-center gap-4 text-xs font-large text-text/20'>
+                                                    <div className='flex items-center gap-4 font-large text-text/20 text-xs'>
                                                         <span>
                                                             Last used:{' '}
                                                             {key.lastUsedAt
@@ -166,25 +165,25 @@ const AccountApiContainer = () => {
                                                         <div className='flex items-center gap-2 hover:cursor-pointer'>
                                                             <span>Key:</span>
 
-                                                            <code className='font-mono px-2 py-1 bg-mocha-400 border border-mocha-200 rounded text-zinc-300 flex'>
+                                                            <code className='flex rounded border border-mocha-200 bg-mocha-400 px-2 py-1 font-mono text-zinc-300'>
                                                                 <span className='flex items-center gap-1'>
                                                                     {showKeys[key.identifier] ? (
                                                                         <EyeSlash
+                                                                            fill='currentColor'
+                                                                            height={18}
                                                                             onClick={() =>
                                                                                 toggleKeyVisibility(key.identifier)
                                                                             }
                                                                             width={18}
-                                                                            height={18}
-                                                                            fill='currentColor'
                                                                         />
                                                                     ) : (
                                                                         <Eye
+                                                                            fill='currentColor'
+                                                                            height={18}
                                                                             onClick={() =>
                                                                                 toggleKeyVisibility(key.identifier)
                                                                             }
                                                                             width={18}
-                                                                            height={18}
-                                                                            fill='currentColor'
                                                                         />
                                                                     )}
                                                                     {showKeys[key.identifier] ? (
@@ -207,12 +206,12 @@ const AccountApiContainer = () => {
                                                 </div>
 
                                                 <Button
-                                                    variant='attention'
-                                                    size='sm'
                                                     className='ml-4'
                                                     onClick={() => setDeleteIdentifier(key.identifier)}
+                                                    size='sm'
+                                                    variant='attention'
                                                 >
-                                                    <TrashBin width={20} height={20} fill='currentColor' />
+                                                    <TrashBin fill='currentColor' height={20} width={20} />
                                                 </Button>
                                             </div>
                                         </div>

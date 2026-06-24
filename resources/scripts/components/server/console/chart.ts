@@ -99,9 +99,9 @@ function getEmptyData(label: string, sets = 1, callback?: ChartDatasetCallback |
 const merge = deepmergeCustom({ mergeArrays: false });
 
 interface UseChartOptions {
-    sets: number;
-    options?: DeepPartial<ChartOptions<'line'>> | number | undefined;
     callback?: ChartDatasetCallback | undefined;
+    options?: DeepPartial<ChartOptions<'line'>> | number | undefined;
+    sets: number;
 }
 
 function useChart(label: string, opts?: UseChartOptions) {
@@ -154,4 +154,4 @@ function useChartTickLabel(label: string, max: number, tickLabel: string, roundT
     });
 }
 
-export { useChart, useChartTickLabel, getOptions, getEmptyData };
+export { getEmptyData, getOptions, useChart, useChartTickLabel };

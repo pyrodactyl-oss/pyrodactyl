@@ -63,40 +63,40 @@ const Dialog = ({
             {open && (
                 <DialogContext.Provider value={{ setIcon, setFooter, setIconPosition }}>
                     <HDialog
-                        static
-                        as={motion.div}
-                        initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
+                        as={motion.div}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        open={open}
+                        initial={{ opacity: 0 }}
                         onClose={onDialogClose}
+                        open={open}
+                        static
+                        transition={{ duration: 0.15 }}
                     >
                         <div
+                            className={'fixed inset-0 z-9997 backdrop-blur-xs'}
                             style={{
                                 background:
                                     'radial-gradient(50% 50% at 50% 50%, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0.94) 100%)',
                             }}
-                            className={'fixed inset-0 backdrop-blur-xs z-9997'}
                         />
-                        <div className={'fixed inset-0 overflow-y-auto z-9998'}>
+                        <div className={'fixed inset-0 z-9998 overflow-y-auto'}>
                             <div
-                                ref={container}
                                 className={styles.dialogContainer}
                                 onMouseDown={onContainerClick.bind(this, true)}
                                 onMouseUp={onContainerClick.bind(this, false)}
+                                ref={container}
                             >
                                 <HDialog.Panel
-                                    as={motion.div}
-                                    initial={'closed'}
                                     animate={down ? 'bounce' : 'open'}
-                                    exit={'closed'}
-                                    variants={variants}
+                                    as={motion.div}
                                     className={styles.panel}
+                                    exit={'closed'}
+                                    initial={'closed'}
+                                    variants={variants}
                                 >
-                                    <div className={'flex p-6 pb-0 overflow-y-auto'}>
+                                    <div className={'flex overflow-y-auto p-6 pb-0'}>
                                         {iconPosition === 'container' && icon}
-                                        <div className={'flex-1 max-h-[70vh] min-w-0'}>
+                                        <div className={'max-h-[70vh] min-w-0 flex-1'}>
                                             <div className={'flex items-center'}>
                                                 {iconPosition !== 'container' && icon}
                                                 <div>
@@ -115,9 +115,9 @@ const Dialog = ({
                                     {footer}
                                     {/* Keep this below the other buttons so that it isn't the default focus if they're present. */}
                                     {!hideCloseIcon && (
-                                        <div className={'absolute right-0 top-0 m-4 p-2 opacity-45 hover:opacity-100'}>
-                                            <button onClick={onClose} className='cursor-pointer'>
-                                                <Xmark width={22} height={22} fill='currentColor' />
+                                        <div className={'absolute top-0 right-0 m-4 p-2 opacity-45 hover:opacity-100'}>
+                                            <button className='cursor-pointer' onClick={onClose}>
+                                                <Xmark fill='currentColor' height={22} width={22} />
                                             </button>
                                         </div>
                                     )}

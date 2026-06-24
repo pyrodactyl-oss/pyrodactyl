@@ -61,17 +61,17 @@ const MassActionsBar = () => {
 
     return (
         <>
-            <div className={`pointer-events-none fixed bottom-0 z-20 left-0 right-0 flex justify-center`}>
-                <SpinnerOverlay visible={loading} size={'large'} fixed>
+            <div className={'pointer-events-none fixed right-0 bottom-0 left-0 z-20 flex justify-center'}>
+                <SpinnerOverlay fixed size={'large'} visible={loading}>
                     {loadingMessage}
                 </SpinnerOverlay>
                 <Dialog.Confirm
-                    title={'Delete Files'}
-                    open={showConfirm}
                     confirm={'Delete'}
+                    loading={loading}
                     onClose={() => setShowConfirm(false)}
                     onConfirmed={onClickConfirmDeletion}
-                    loading={loading}
+                    open={showConfirm}
+                    title={'Delete Files'}
                 >
                     <p className={'mb-2'}>
                         Are you sure you want to delete&nbsp;
@@ -85,29 +85,29 @@ const MassActionsBar = () => {
                 </Dialog.Confirm>
                 {showMove && (
                     <RenameFileModal
-                        files={selectedFiles}
-                        visible
                         appear
-                        useMoveTerminology
+                        files={selectedFiles}
                         onDismissed={() => setShowMove(false)}
+                        useMoveTerminology
+                        visible
                     />
                 )}
-                <FadeTransition duration='duration-75' show={selectedFiles.length > 0} appear unmount>
+                <FadeTransition appear duration='duration-75' show={selectedFiles.length > 0} unmount>
                     <div
                         className={
-                            'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
+                            'pointer-events-none fixed right-0 bottom-0 left-0 z-50 mb-6 flex w-full justify-center'
                         }
                     >
-                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
+                        <div className={'pointer-events-auto flex items-center space-x-4 rounded-sm bg-black/50 p-4'}>
+                            <ActionButton disabled={loading} onClick={() => setShowMove(true)}>
                                 {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
                                 Move
                             </ActionButton>
-                            <ActionButton onClick={onClickCompress} disabled={loading}>
+                            <ActionButton disabled={loading} onClick={onClickCompress}>
                                 {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
                                 Archive
                             </ActionButton>
-                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
+                            <ActionButton disabled={loading} onClick={() => setShowConfirm(true)} variant='danger'>
                                 {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
                                 Delete
                             </ActionButton>

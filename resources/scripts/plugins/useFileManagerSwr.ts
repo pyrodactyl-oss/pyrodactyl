@@ -14,7 +14,7 @@ export default () => {
         getDirectorySwrKey(uuid, directory),
         () => loadDirectory(uuid, cleanDirectoryPath(directory)),
         {
-            focusThrottleInterval: 30000,
+            focusThrottleInterval: 30_000,
             revalidateOnMount: false,
             refreshInterval: 0,
             errorRetryCount: 2,

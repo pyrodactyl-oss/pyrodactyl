@@ -4,29 +4,25 @@ import type * as Models from '@definitions/user/models';
 import type { FractalResponseData } from '@/api/http';
 
 export default class Transformers {
-    static toSSHKey = (data: Record<any, any>): Models.SSHKey => {
-        return {
-            name: data.name,
-            publicKey: data.public_key,
-            fingerprint: data.fingerprint,
-            createdAt: new Date(data.created_at),
-        };
-    };
+    static toSSHKey = (data: Record<any, any>): Models.SSHKey => ({
+        name: data.name,
+        publicKey: data.public_key,
+        fingerprint: data.fingerprint,
+        createdAt: new Date(data.created_at),
+    });
 
-    static toUser = ({ attributes }: FractalResponseData): Models.User => {
-        return {
-            uuid: attributes.uuid,
-            username: attributes.username,
-            email: attributes.email,
-            image: attributes.image,
-            twoFactorEnabled: attributes['2fa_enabled'],
-            permissions: attributes.permissions || [],
-            createdAt: new Date(attributes.created_at),
-            can(permission): boolean {
-                return this.permissions.includes(permission);
-            },
-        };
-    };
+    static toUser = ({ attributes }: FractalResponseData): Models.User => ({
+        uuid: attributes.uuid,
+        username: attributes.username,
+        email: attributes.email,
+        image: attributes.image,
+        twoFactorEnabled: attributes['2fa_enabled'],
+        permissions: attributes.permissions || [],
+        createdAt: new Date(attributes.created_at),
+        can(permission): boolean {
+            return this.permissions.includes(permission);
+        },
+    });
 
     static toActivityLog = ({ attributes }: FractalResponseData): Models.ActivityLog => {
         const { actor } = attributes.relationships || {};

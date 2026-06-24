@@ -57,28 +57,28 @@ const UsersContainer = () => {
                     direction='column'
                     title={'Users'}
                     titleChildren={
-                        <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
+                        <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
+                            <p className='text-center text-sm text-zinc-300 sm:text-right'>0 users</p>
                             <Can action={'user.create'}>
                                 <ActionButton
-                                    variant='primary'
-                                    onClick={() => navigate(`/server/${serverId}/users/new`)}
                                     className='flex items-center gap-2'
+                                    onClick={() => navigate(`/server/${serverId}/users/new`)}
+                                    variant='primary'
                                 >
-                                    <Plus width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                    <Plus className='h-4 w-4' fill='currentColor' height={22} width={22} />
                                     New User
                                 </ActionButton>
                             </Can>
                         </div>
                     }
                 >
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
+                    <p className='text-neutral-400 text-sm leading-relaxed'>
                         Manage user access to your server. Grant specific permissions to other users to help you manage
                         and maintain your server.
                     </p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                    <div className='h-8 w-8 animate-spin rounded-full border-brand border-b-2' />
                 </div>
             </ServerContentBlock>
         );
@@ -91,44 +91,44 @@ const UsersContainer = () => {
                 direction='column'
                 title={'Users'}
                 titleChildren={
-                    <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
+                    <div className='flex flex-col items-center justify-end gap-4 sm:flex-row'>
+                        <p className='text-center text-sm text-zinc-300 sm:text-right'>{subusers.length} users</p>
                         <Can action={'user.create'}>
                             <ActionButton
-                                variant='primary'
-                                onClick={() => navigate(`/server/${serverId}/users/new`)}
                                 className='flex items-center gap-2'
+                                onClick={() => navigate(`/server/${serverId}/users/new`)}
+                                variant='primary'
                             >
-                                <Plus width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                                <Plus className='h-4 w-4' fill='currentColor' height={22} width={22} />
                                 New User
                             </ActionButton>
                         </Can>
                     </div>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
+                <p className='text-neutral-400 text-sm leading-relaxed'>
                     Manage user access to your server. Grant specific permissions to other users to help you manage and
                     maintain your server.
                 </p>
             </MainPageHeader>
-            {!subusers.length ? (
-                <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
-                    <div className='text-center'>
-                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
-                        </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>No users found</h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
-                            Your server does not have any additional users. Add others to help you manage your server.
-                        </p>
-                    </div>
-                </div>
-            ) : (
+            {subusers.length ? (
                 <PageListContainer data-pyro-users-container-users>
                     <For each={subusers} memo>
                         {(subuser) => <UserRow key={subuser.uuid} subuser={subuser} />}
                     </For>
                 </PageListContainer>
+            ) : (
+                <div className='flex min-h-[60vh] flex-col items-center justify-center px-4 py-12'>
+                    <div className='text-center'>
+                        <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffffff11]'>
+                            <Person className='h-8 w-8 text-zinc-400' fill='currentColor' height={22} width={22} />
+                        </div>
+                        <h3 className='mb-2 font-medium text-lg text-zinc-200'>No users found</h3>
+                        <p className='max-w-sm text-sm text-zinc-400'>
+                            Your server does not have any additional users. Add others to help you manage your server.
+                        </p>
+                    </div>
+                </div>
             )}
         </ServerContentBlock>
     );

@@ -1,12 +1,10 @@
+import { useEffect, useMemo } from 'react';
 import HeaderCentered from '@/components/dashboard/header/HeaderCentered';
-
-import { useEffect } from 'react';
 import { useHeader } from '@/contexts/HeaderContext';
 import { ServerContext } from '@/state/server';
-import { useMemo } from 'react';
+import PowerButtons from './PowerButtons';
 import ServerDetailsHeader from './ServerDetailsHeader';
 import { StatusPillHeader } from './StatusPillHeader';
-import PowerButtons from './PowerButtons';
 
 interface headerProps {
     powerButtons?: boolean;
@@ -18,7 +16,7 @@ const ServerHeader = (props: headerProps) => {
 
     const buttonsSection = useMemo(
         () => (
-            <PowerButtons className={`flex gap-2 items-center justify-center ${props.powerButtons ? '' : 'hidden'}`} />
+            <PowerButtons className={`flex items-center justify-center gap-2 ${props.powerButtons ? '' : 'hidden'}`} />
         ),
         [props.powerButtons],
     );
@@ -28,10 +26,10 @@ const ServerHeader = (props: headerProps) => {
             <HeaderCentered className='flex items-center gap-6'>
                 <div className='flex items-center gap-3'>
                     <StatusPillHeader />
-                    <span className='xl:max-w-[20vw] min-w-0 truncate'>{name}</span>
+                    <span className='min-w-0 truncate xl:max-w-[20vw]'>{name}</span>
                 </div>
 
-                <div className='border-l border-gray-200 h-6' />
+                <div className='h-6 border-gray-200 border-l' />
                 <ServerDetailsHeader />
             </HeaderCentered>
         ),

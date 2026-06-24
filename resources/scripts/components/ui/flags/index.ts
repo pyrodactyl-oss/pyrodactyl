@@ -5,11 +5,11 @@ import { default as NL } from './NL.svg';
 import { default as US } from './US.svg';
 
 const Flags = {
-    EU: EU,
-    US: US,
-    NL: NL,
-    DE: DE,
-    EN: EN,
+    EU,
+    US,
+    NL,
+    DE,
+    EN,
 };
 
 export default Flags;

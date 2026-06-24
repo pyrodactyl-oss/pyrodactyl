@@ -37,23 +37,23 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     return (
         <>
             <ConfirmationModal
-                title={`Remove ${subuser.username}?`}
                 buttonText={`Remove ${subuser.username}`}
-                visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
+                title={`Remove ${subuser.username}?`}
+                visible={showConfirmation}
             >
                 All access to the server will be removed immediately.
             </ConfirmationModal>
             <ActionButton
-                variant='danger'
-                size='sm'
+                aria-label='Delete subuser'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label='Delete subuser'
+                size='sm'
+                variant='danger'
             >
-                <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
+                <TrashBin className='h-4 w-4' fill='currentColor' height={22} width={22} />
                 Delete
             </ActionButton>
         </>

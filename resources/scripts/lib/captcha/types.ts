@@ -1,6 +1,19 @@
 // Global type definitions for captcha providers
 declare global {
     interface Window {
+        grecaptcha?: {
+            render: (container: string | HTMLElement, options: any) => number;
+            getResponse: (widgetId?: number) => string;
+            reset: (widgetId?: number) => void;
+            execute: (siteKey: string, options?: { action: string }) => Promise<string>;
+            ready: (callback: () => void) => void;
+        };
+        hcaptcha?: {
+            render: (container: string | HTMLElement, params: any) => string;
+            reset: (widgetId?: string) => void;
+            getResponse: (widgetId?: string) => string;
+            remove: (widgetId?: string) => void;
+        };
         SiteConfiguration?: {
             captcha: {
                 enabled: boolean;
@@ -14,19 +27,6 @@ declare global {
             reset: (widgetId?: string) => void;
             getResponse: (widgetId?: string) => string;
             remove: (widgetId?: string) => void;
-        };
-        hcaptcha?: {
-            render: (container: string | HTMLElement, params: any) => string;
-            reset: (widgetId?: string) => void;
-            getResponse: (widgetId?: string) => string;
-            remove: (widgetId?: string) => void;
-        };
-        grecaptcha?: {
-            render: (container: string | HTMLElement, options: any) => number;
-            getResponse: (widgetId?: number) => string;
-            reset: (widgetId?: number) => void;
-            execute: (siteKey: string, options?: { action: string }) => Promise<string>;
-            ready: (callback: () => void) => void;
         };
     }
 }

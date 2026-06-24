@@ -61,46 +61,46 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
     return (
         <form id={'enable-totp-form'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
-            <div className={'flex items-center justify-center w-56 h-56 p-2 bg-zinc-50 shadow-sm mx-auto mt-6'}>
-                {!token ? (
-                    <Spinner />
+            <div className={'mx-auto mt-6 flex h-56 w-56 items-center justify-center bg-zinc-50 p-2 shadow-sm'}>
+                {token ? (
+                    <QRCodeSVG className={'h-full w-full shadow-none'} value={token.image_url_data} />
                 ) : (
-                    <QRCodeSVG value={token.image_url_data} className={`w-full h-full shadow-none`} />
+                    <Spinner />
                 )}
             </div>
             <CopyOnClick text={token?.secret}>
-                <p className={'font-mono text-sm text-zinc-100 text-center mt-2'}>
+                <p className={'mt-2 text-center font-mono text-sm text-zinc-100'}>
                     {token?.secret.match(/.{1,4}/g)!.join(' ') || 'Loading...'}
                 </p>
             </CopyOnClick>
-            <p id={'totp-code-description'} className={'mt-6'}>
+            <p className={'mt-6'} id={'totp-code-description'}>
                 Scan the QR code above using an authenticator app, or enter the secret code above. Then, enter the
                 6-digit code it generates below.
             </p>
             <Input.Text
                 aria-labelledby={'totp-code-description'}
-                variant={Input.Text.Variants.Loose}
-                value={value}
-                onChange={(e) => setValue(e.currentTarget.value)}
+                autoComplete={'one-time-code'}
                 className={'mt-3'}
+                inputMode={'numeric'}
+                onChange={(e) => setValue(e.currentTarget.value)}
+                pattern={'\\d{6}'}
                 placeholder={'000000'}
                 type={'text'}
-                inputMode={'numeric'}
-                autoComplete={'one-time-code'}
-                pattern={'\\d{6}'}
+                value={value}
+                variant={Input.Text.Variants.Loose}
             />
-            <label htmlFor={'totp-password'} className={'block mt-3'}>
+            <label className={'mt-3 block'} htmlFor={'totp-password'}>
                 Account Password
             </label>
             <Input.Text
-                variant={Input.Text.Variants.Loose}
                 className={'mt-1'}
+                onChange={(e) => setPassword(e.currentTarget.value)}
                 type={'password'}
                 value={password}
-                onChange={(e) => setPassword(e.currentTarget.value)}
+                variant={Input.Text.Variants.Loose}
             />
             <Dialog.Footer>
-                <ActionButton variant='secondary' onClick={close}>
+                <ActionButton onClick={close} variant='secondary'>
                     Cancel
                 </ActionButton>
                 {/* <Tooltip
@@ -113,10 +113,10 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     delay={100}
                 > */}
                 <ActionButton
-                    variant='primary'
                     disabled={!token || value.length !== 6 || !password.length}
-                    type={'submit'}
                     form={'enable-totp-form'}
+                    type={'submit'}
+                    variant='primary'
                 >
                     Enable
                 </ActionButton>

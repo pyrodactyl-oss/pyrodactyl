@@ -4,15 +4,15 @@ import { v4 } from 'uuid';
 import CopyOnClick from './CopyOnClick';
 
 export interface ContainerProps {
-    title: string;
-    description: string;
     children?: React.ReactNode;
-    icon?: React.ComponentType<{ className?: string; fill?: string }>;
-    labelClasses?: string;
-    titleClasses?: string;
+    copyDescription?: boolean;
+    description: string;
     descriptionClasses?: string;
     divClasses?: string;
-    copyDescription?: boolean;
+    icon?: React.ComponentType<{ className?: string; fill?: string }>;
+    labelClasses?: string;
+    title: string;
+    titleClasses?: string;
 }
 
 const ItemContainer = ({
@@ -30,18 +30,18 @@ const ItemContainer = ({
 
     return (
         <div
-            className={`flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg ${divClasses}`}
+            className={`flex items-center justify-between gap-2 rounded-lg border-[#ffffff0e] border-[1px] bg-[#3333332a] p-4 ${divClasses}`}
         >
             {icon && (
-                <div className={`w-10 h-10 items-center justify-center hidden sm:flex`}>
+                <div className={'hidden h-10 w-10 items-center justify-center sm:flex'}>
                     {React.createElement(icon, {
                         className: 'w-6 h-6',
                         fill: 'currentColor',
                     })}
                 </div>
             )}
-            <div className={`flex flex-1 flex-col`}>
-                <label htmlFor={uuid} className={`text-neutral-300 text-md font-bold ${titleClasses} ${labelClasses}`}>
+            <div className={'flex flex-1 flex-col'}>
+                <label className={`font-bold text-md text-neutral-300 ${titleClasses} ${labelClasses}`} htmlFor={uuid}>
                     {title}
                 </label>
 
@@ -49,16 +49,16 @@ const ItemContainer = ({
                 {copyDescription ? (
                     <CopyOnClick text={description}>
                         <label
+                            className={`font-semibold text-neutral-500 text-sm ${descriptionClasses} ${labelClasses}`}
                             htmlFor={uuid}
-                            className={`text-neutral-500 text-sm font-semibold ${descriptionClasses} ${labelClasses}`}
                         >
                             {description}
                         </label>
                     </CopyOnClick>
                 ) : (
                     <label
+                        className={`font-semibold text-neutral-500 text-sm ${descriptionClasses} ${labelClasses}`}
                         htmlFor={uuid}
-                        className={`text-neutral-500 text-sm font-semibold ${descriptionClasses} ${labelClasses}`}
                     >
                         {description}
                     </label>

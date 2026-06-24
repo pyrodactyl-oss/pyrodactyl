@@ -5,9 +5,9 @@ import { encodePathSegments } from '@/helpers';
 import { ServerContext } from '@/state/server';
 
 interface Props {
+    isNewFile?: boolean;
     renderLeft?: JSX.Element;
     withinFileEditor?: boolean;
-    isNewFile?: boolean;
 }
 
 const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
@@ -49,50 +49,50 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
     };
 
     return (
-        <div className={`group select-none flex grow-0 items-center text-sm overflow-x-hidden`}>
-            {renderLeft || <div className={`w-12`} />}
-            <NavLink to={`/server/${id}/files`} className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
+        <div className={'group flex grow-0 select-none items-center overflow-x-hidden text-sm'}>
+            {renderLeft || <div className={'w-12'} />}
+            <NavLink className={'px-1 text-zinc-200 no-underline hover:text-zinc-100'} to={`/server/${id}/files`}>
                 root
             </NavLink>
             <svg
-                xmlns='http://www.w3.org/2000/svg'
+                className='h-3 w-3'
                 fill='none'
-                viewBox='0 0 24 24'
-                strokeWidth={1.5}
                 stroke='currentColor'
-                className='w-3 h-3'
+                strokeWidth={1.5}
+                viewBox='0 0 24 24'
+                xmlns='http://www.w3.org/2000/svg'
             >
-                <path strokeLinecap='round' strokeLinejoin='round' d='m8.25 4.5 7.5 7.5-7.5 7.5' />
+                <path d='m8.25 4.5 7.5 7.5-7.5 7.5' strokeLinecap='round' strokeLinejoin='round' />
             </svg>
             {breadcrumbs().map((crumb, index) =>
                 crumb.path ? (
                     <Fragment key={index}>
                         <NavLink
+                            className={'px-1 text-zinc-200 no-underline hover:text-zinc-100'}
                             to={`/server/${id}/files#${encodePathSegments(crumb.path)}`}
-                            className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}
                         >
                             {crumb.name}
                         </NavLink>
                         <svg
-                            xmlns='http://www.w3.org/2000/svg'
+                            className='h-3 w-3'
                             fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
                             stroke='currentColor'
-                            className='w-3 h-3'
+                            strokeWidth={1.5}
+                            viewBox='0 0 24 24'
+                            xmlns='http://www.w3.org/2000/svg'
                         >
-                            <path strokeLinecap='round' strokeLinejoin='round' d='m8.25 4.5 7.5 7.5-7.5 7.5' />
+                            <path d='m8.25 4.5 7.5 7.5-7.5 7.5' strokeLinecap='round' strokeLinejoin='round' />
                         </svg>
                     </Fragment>
                 ) : (
-                    <span key={index} className={`px-1 text-zinc-300`}>
+                    <span className={'px-1 text-zinc-300'} key={index}>
                         {crumb.name}
                     </span>
                 ),
             )}
             {file && (
                 <Fragment>
-                    <span className={`px-1 text-zinc-300`}>{file}</span>
+                    <span className={'px-1 text-zinc-300'}>{file}</span>
                 </Fragment>
             )}
         </div>

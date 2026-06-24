@@ -93,11 +93,11 @@ function ResetPasswordContainer() {
     return (
         <ContentBox>
             <Formik
-                onSubmit={submit}
                 initialValues={{
                     password: '',
                     password_confirmation: '',
                 }}
+                onSubmit={submit}
                 validationSchema={object().shape({
                     password: string()
                         .required('A new password is required.')
@@ -108,26 +108,26 @@ function ResetPasswordContainer() {
                 })}
             >
                 {({ isSubmitting }) => (
-                    <LoginFormContainer className={`w-full flex`}>
+                    <LoginFormContainer className={'flex w-full'}>
                         <Link to='/'>
-                            <div className='flex h-12 mb-4 items-center w-full'>
+                            <div className='mb-4 flex h-12 w-full items-center'>
                                 <Logo />
                             </div>
                         </Link>
-                        <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
+                        <div aria-hidden className='my-8 min-h-[1px] bg-[#ffffff33]' />
 
                         <div className='text-center'>
-                            <Input className='text-center' value={email} disabled />
+                            <Input className='text-center' disabled value={email} />
                         </div>
-                        <div className={`mt-6`}>
+                        <div className={'mt-6'}>
                             <Field
+                                description={'Passwords must be at least 8 characters in length.'}
                                 label={'New Password'}
                                 name={'password'}
                                 type={'password'}
-                                description={'Passwords must be at least 8 characters in length.'}
                             />
                         </div>
-                        <div className={`mt-6`}>
+                        <div className={'mt-6'}>
                             <Field label={'Confirm New Password'} name={'password_confirmation'} type={'password'} />
                         </div>
                         <Captcha
@@ -140,25 +140,29 @@ function ResetPasswordContainer() {
                             }}
                         />
 
-                        <div className={`mt-6`}>
+                        <div className={'mt-6'}>
                             <Button
-                                className='w-full mt-4 rounded-full bg-brand border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2'
-                                size={'xlarge'}
-                                type={'submit'}
+                                className='mt-4 w-full rounded-full border-0 bg-brand py-2 font-bold text-sm capitalize outline-hidden ring-0'
                                 disabled={isSubmitting}
                                 isLoading={isSubmitting}
+                                size={'xlarge'}
+                                type={'submit'}
                             >
                                 Reset Password
                             </Button>
                         </div>
-                        <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
+                        <div aria-hidden className='my-8 min-h-[1px] bg-[#ffffff33]' />
 
                         <div
-                            className={`text-center w-full rounded-lg bg-[#ffffff33] border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 `}
+                            className={
+                                'w-full rounded-lg border-0 bg-[#ffffff33] py-2 text-center font-bold text-sm capitalize outline-hidden ring-0'
+                            }
                         >
                             <Link
+                                className={
+                                    'border-color-[#ffffff33] pt-4 text-white text-xs uppercase tracking-wide no-underline hover:text-neutral-700'
+                                }
                                 to={'/auth/login'}
-                                className={`text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700 border-color-[#ffffff33] pt-4`}
                             >
                                 Return to Login
                             </Link>

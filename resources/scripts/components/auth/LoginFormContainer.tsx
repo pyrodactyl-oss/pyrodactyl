@@ -11,20 +11,18 @@ type Props = React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, 
 };
 
 const TitleSection = ({ title, subtitle }: { title?: string; subtitle?: string }) => (
-    <div className='space-y-2 font-medium mb-8'>
+    <div className='mb-8 space-y-2 font-medium'>
         {title && <h2 className='text-3xl'>{title}</h2>}
         {/*{subtitle && <span className='text-primary/40'>{subtitle}</span>}*/}
         {subtitle && <span className='text-secondary'>{subtitle}</span>}
     </div>
 );
 
-const ReturnToLogin = () => {
-    return <SecondaryLink to='/auth/login'>Return to login</SecondaryLink>;
-};
+const ReturnToLogin = () => <SecondaryLink to='/auth/login'>Return to login</SecondaryLink>;
 
 const LoginFormContainer = forwardRef<HTMLFormElement, PropsWithChildren<Props>>(
     ({ children, className, ...props }, ref) => (
-        <Form {...props} ref={ref} noValidate className={`w-full text-sm ${className || ''}`}>
+        <Form {...props} className={`w-full text-sm ${className || ''}`} noValidate ref={ref}>
             <FlashMessageRender />
             {children}
         </Form>
@@ -33,5 +31,5 @@ const LoginFormContainer = forwardRef<HTMLFormElement, PropsWithChildren<Props>>
 
 LoginFormContainer.displayName = 'LoginFormContainer';
 
-export { TitleSection, ReturnToLogin };
+export { ReturnToLogin, TitleSection };
 export default LoginFormContainer;

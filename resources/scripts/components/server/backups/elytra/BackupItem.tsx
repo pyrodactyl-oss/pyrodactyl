@@ -13,31 +13,31 @@ import useFlash from '@/plugins/useFlash';
 import BackupContextMenu from './BackupContextMenu';
 
 export interface UnifiedBackup {
-    uuid: string;
-    name: string;
-    status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
-    progress: number;
-    message: string;
-    isSuccessful?: boolean;
-    isLocked: boolean;
-    isAutomatic: boolean;
-    checksum?: string;
     bytes?: number;
-    createdAt: Date;
-    completedAt?: Date | null;
-    canRetry: boolean;
     canDelete: boolean;
     canDownload: boolean;
     canRestore: boolean;
-    isLiveOnly: boolean;
+    canRetry: boolean;
+    checksum?: string;
+    completedAt?: Date | null;
+    createdAt: Date;
+    isAutomatic: boolean;
     isDeletion?: boolean;
+    isLiveOnly: boolean;
+    isLocked: boolean;
+    isSuccessful?: boolean;
+    message: string;
+    name: string;
+    progress: number;
+    status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+    uuid: string;
 }
 
 interface Props {
     backup: UnifiedBackup;
+    isSelectable?: boolean;
     isSelected?: boolean;
     onToggleSelect?: () => void;
-    isSelectable?: boolean;
     retryBackup: (backupUuid: string) => Promise<void>;
 }
 
@@ -71,32 +71,33 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 
         if (isActive) {
             return <Spinner size={'small'} />;
-        } else if (backup.isLocked) {
-            return <Lock width={22} height={22} className='text-red-400 ' fill='currentColor' />;
-        } else if (backup.status === 'completed' || backup.isSuccessful) {
-            return <Cloud width={22} height={22} className='text-green-400 ' fill='currentColor' />;
-        } else {
-            return <Cloud width={22} height={22} className='text-red-400 ' fill='currentColor' />;
         }
+        if (backup.isLocked) {
+            return <Lock className='text-red-400' fill='currentColor' height={22} width={22} />;
+        }
+        if (backup.status === 'completed' || backup.isSuccessful) {
+            return <Cloud className='text-green-400' fill='currentColor' height={22} width={22} />;
+        }
+        return <Cloud className='text-red-400' fill='currentColor' height={22} width={22} />;
     };
 
     const getStatusBadge = () => {
         switch (backup.status) {
             case 'failed':
                 return (
-                    <span className='bg-red-500/20 border border-red-500/30 py-0.5 px-2 rounded text-red-300 text-xs font-medium'>
+                    <span className='rounded border border-red-500/30 bg-red-500/20 px-2 py-0.5 font-medium text-red-300 text-xs'>
                         Failed
                     </span>
                 );
             case 'pending':
                 return (
-                    <span className='bg-yellow-500/20 border border-yellow-500/30 py-0.5 px-2 rounded text-yellow-300 text-xs font-medium'>
+                    <span className='rounded border border-yellow-500/30 bg-yellow-500/20 px-2 py-0.5 font-medium text-xs text-yellow-300'>
                         Pending
                     </span>
                 );
             case 'running':
                 return (
-                    <span className='bg-blue-500/20 border border-blue-500/30 py-0.5 px-2 rounded text-blue-300 text-xs font-medium'>
+                    <span className='rounded border border-blue-500/30 bg-blue-500/20 px-2 py-0.5 font-medium text-blue-300 text-xs'>
                         Running ({backup.progress}%)
                     </span>
                 );
@@ -106,13 +107,13 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     return null;
                 }
                 return backup.isLiveOnly ? (
-                    <span className='bg-green-500/20 border border-green-500/30 py-0.5 px-2 rounded text-green-300 text-xs font-medium'>
+                    <span className='rounded border border-green-500/30 bg-green-500/20 px-2 py-0.5 font-medium text-green-300 text-xs'>
                         Completed
                     </span>
                 ) : null;
             case 'cancelled':
                 return (
-                    <span className='bg-gray-500/20 border border-gray-500/30 py-0.5 px-2 rounded text-gray-300 text-xs font-medium'>
+                    <span className='rounded border border-gray-500/30 bg-gray-500/20 px-2 py-0.5 font-medium text-gray-300 text-xs'>
                         Cancelled
                     </span>
                 );
@@ -126,9 +127,9 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 
     return (
         <PageListItem>
-            <div className='flex items-center gap-3 w-full'>
+            <div className='flex w-full items-center gap-3'>
                 {/* Selection checkbox - always reserve space to prevent layout shift */}
-                <div className='flex-shrink-0 w-5'>
+                <div className='w-5 flex-shrink-0'>
                     {isSelectable && onToggleSelect ? (
                         <Checkbox
                             checked={isSelected}
@@ -136,25 +137,25 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                             onClick={(e: React.MouseEvent) => e.stopPropagation()}
                         />
                     ) : (
-                        <div className='w-5 h-5' />
+                        <div className='h-5 w-5' />
                     )}
                 </div>
 
-                <div className='flex-shrink-0 w-9 h-9 rounded-lg bg-[#ffffff11] flex items-center justify-center'>
+                <div className='flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-[#ffffff11]'>
                     {getStatusIcon()}
                 </div>
 
-                <div className='flex-1 min-w-0'>
-                    <div className='flex items-center gap-2 mb-1.5'>
+                <div className='min-w-0 flex-1'>
+                    <div className='mb-1.5 flex items-center gap-2'>
                         {getStatusBadge()}
-                        <h3 className='text-sm font-medium text-zinc-100 truncate'>{backup.name}</h3>
+                        <h3 className='truncate font-medium text-sm text-zinc-100'>{backup.name}</h3>
                         {backup.isAutomatic && (
-                            <span className='text-xs text-blue-400 font-medium bg-blue-500/10 border border-blue-500/20 px-2 py-0.5 rounded'>
+                            <span className='rounded border border-blue-500/20 bg-blue-500/10 px-2 py-0.5 font-medium text-blue-400 text-xs'>
                                 Automatic
                             </span>
                         )}
                         {backup.isLocked && (
-                            <span className='text-xs text-red-400 font-medium bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded'>
+                            <span className='rounded border border-red-500/20 bg-red-500/10 px-2 py-0.5 font-medium text-red-400 text-xs'>
                                 Locked
                             </span>
                         )}
@@ -163,11 +164,11 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     {/* Progress bar for active backups */}
                     {showProgressBar && (
                         <div className='mb-2'>
-                            <div className='flex justify-between text-xs text-zinc-400 mb-1.5'>
+                            <div className='mb-1.5 flex justify-between text-xs text-zinc-400'>
                                 <span>{backup.message || 'Processing...'}</span>
                                 <span>{backup.progress}%</span>
                             </div>
-                            <div className='w-full bg-zinc-700 rounded-full h-2'>
+                            <div className='h-2 w-full rounded-full bg-zinc-700'>
                                 <div
                                     className={`h-2 rounded-full transition-all duration-300 ${
                                         backup.status === 'completed' ? 'bg-green-500' : 'bg-blue-500'
@@ -180,32 +181,32 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
 
                     {/* Error message for failed backups */}
                     {backup.status === 'failed' && backup.message && (
-                        <p className='text-xs text-red-400 truncate mb-1.5'>{backup.message}</p>
+                        <p className='mb-1.5 truncate text-red-400 text-xs'>{backup.message}</p>
                     )}
 
-                    {backup.checksum && <p className='text-xs text-zinc-400 font-mono truncate'>{backup.checksum}</p>}
+                    {backup.checksum && <p className='truncate font-mono text-xs text-zinc-400'>{backup.checksum}</p>}
                 </div>
 
                 {/* Size info for completed backups */}
-                <div className='hidden sm:block flex-shrink-0 text-right min-w-[90px]'>
+                <div className='hidden min-w-[90px] flex-shrink-0 text-right sm:block'>
                     {backup.completedAt && backup.isSuccessful && backup.bytes ? (
                         <>
-                            <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Size</p>
-                            <p className='text-sm text-zinc-300 font-medium'>{bytesToString(backup.bytes)}</p>
+                            <p className='mb-1 text-xs text-zinc-500 uppercase tracking-wide'>Size</p>
+                            <p className='font-medium text-sm text-zinc-300'>{bytesToString(backup.bytes)}</p>
                         </>
                     ) : (
                         <>
-                            <p className='text-xs text-transparent uppercase tracking-wide mb-1'>Size</p>
-                            <p className='text-sm text-transparent font-medium'>-</p>
+                            <p className='mb-1 text-transparent text-xs uppercase tracking-wide'>Size</p>
+                            <p className='font-medium text-sm text-transparent'>-</p>
                         </>
                     )}
                 </div>
 
                 {/* Created time */}
-                <div className='hidden sm:block flex-shrink-0 text-right min-w-[130px]'>
-                    <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>Created</p>
+                <div className='hidden min-w-[130px] flex-shrink-0 text-right sm:block'>
+                    <p className='mb-1 text-xs text-zinc-500 uppercase tracking-wide'>Created</p>
                     <p
-                        className='text-sm text-zinc-300 font-medium'
+                        className='font-medium text-sm text-zinc-300'
                         title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')}
                     >
                         {formatDistanceToNow(backup.createdAt, {
@@ -216,28 +217,28 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                 </div>
 
                 {/* Actions - fixed width to prevent layout shifts */}
-                <div className='flex-shrink-0 flex items-center gap-2 min-w-[68px] justify-end'>
+                <div className='flex min-w-[68px] flex-shrink-0 items-center justify-end gap-2'>
                     {/* Retry button for failed backups */}
                     {backup.status === 'failed' && backup.canRetry && (
                         <Can action='backup.create'>
                             <button
+                                className='rounded-lg border border-blue-500/20 bg-blue-500/10 p-2 text-blue-400 transition-colors hover:bg-blue-500/20'
                                 onClick={handleRetry}
-                                className='p-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-colors'
                                 title='Retry backup'
                             >
-                                <CloudArrowUpIn width={22} height={22} />
+                                <CloudArrowUpIn height={22} width={22} />
                             </button>
                         </Can>
                     )}
 
                     {/* Context menu for actionable backups */}
                     <Can action={['backup.download', 'backup.restore', 'backup.delete']} matchAny>
-                        {!isActive && !backup.isLiveOnly && (
+                        {!(isActive || backup.isLiveOnly) && (
                             <BackupContextMenu
                                 backup={{
                                     uuid: backup.uuid,
                                     name: backup.name,
-                                    isSuccessful: backup.isSuccessful || false,
+                                    isSuccessful: backup.isSuccessful,
                                     isLocked: backup.isLocked,
                                     checksum: backup.checksum || '',
                                     bytes: backup.bytes || 0,

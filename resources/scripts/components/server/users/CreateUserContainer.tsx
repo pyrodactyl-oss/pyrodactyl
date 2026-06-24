@@ -27,21 +27,21 @@ const CreateUserContainer = () => {
         <ServerContentBlock title={'Create User'}>
             <MainPageHeader title={'Create New User'}>
                 <ActionButton
-                    variant='secondary'
-                    onClick={() => navigate(`/server/${serverId}/users`)}
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
+                    onClick={() => navigate(`/server/${serverId}/users`)}
+                    variant='secondary'
                 >
-                    <ChevronLeft width={22} height={22} fill='currentColor' />
+                    <ChevronLeft fill='currentColor' height={22} width={22} />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>
 
             <UserFormComponent
-                onSuccess={handleSuccess}
-                onCancel={handleCancel}
                 flashKey='user:create'
                 isSubmitting={isSubmitting}
+                onCancel={handleCancel}
+                onSuccess={handleSuccess}
                 setIsSubmitting={setIsSubmitting}
             />
         </ServerContentBlock>

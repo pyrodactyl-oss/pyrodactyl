@@ -50,37 +50,21 @@ const FlashMessageRender = ({ byKey }: Props) => {
                 return (
                     <Fragment key={flash.id || flash.type + flash.message}>
                         <div
-                            className={`
-                                flex items-start gap-3 p-4 rounded-2xl border
-                                bg-[var(--color-bg)] backdrop-blur-sm
-                                ${styles.container}
-                                transition-all duration-200 ease-in-out
-                                hover:shadow-lg hover:scale-[1.02]
-                            `}
+                            className={`flex items-start gap-3 rounded-2xl border bg-[var(--color-bg)] p-4 backdrop-blur-sm ${styles.container}transition-all duration-200 ease-in-out hover:scale-[1.02] hover:shadow-lg`}
                             role='alert'
                         >
                             <span
-                                className={`
-                                flex-shrink-0 w-6 h-6 rounded-full
-                                flex items-center justify-center text-sm font-bold
-                                ${styles.title}
+                                className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full font-bold text-sm ${styles.title}
                             `}
                             >
                                 {styles.icon}
                             </span>
 
-                            <div className='flex-1 min-w-0'>
+                            <div className='min-w-0 flex-1'>
                                 {flash.title && (
-                                    <h3
-                                        className={`
-                                        font-bold text-base mb-1
-                                        text-cream-400
-                                    `}
-                                    >
-                                        {flash.title}
-                                    </h3>
+                                    <h3 className={'mb-1 font-bold text-base text-cream-400'}>{flash.title}</h3>
                                 )}
-                                <div className='text-sm text-cream-400/80 break-words'>
+                                <div className='break-words text-cream-400/80 text-sm'>
                                     <Code>{flash.message}</Code>
                                 </div>
                             </div>

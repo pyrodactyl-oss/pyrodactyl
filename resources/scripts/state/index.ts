@@ -7,11 +7,11 @@ import settings, { type SettingsStore } from '@/state/settings';
 import user, { type UserStore } from '@/state/user';
 
 export interface ApplicationStore {
-    permissions: GloablPermissionsStore;
     flashes: FlashStore;
-    user: UserStore;
-    settings: SettingsStore;
+    permissions: GloablPermissionsStore;
     progress: ProgressStore;
+    settings: SettingsStore;
+    user: UserStore;
 }
 
 const state: ApplicationStore = {

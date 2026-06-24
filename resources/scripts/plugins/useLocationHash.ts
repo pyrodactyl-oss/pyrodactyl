@@ -11,7 +11,7 @@ export default () => {
             .reduce((obj, str) => {
                 const [key = '', value = ''] = str.split('=');
 
-                return !str.trim() ? obj : { ...obj, [key]: value };
+                return str.trim() ? { ...obj, [key]: value } : obj;
             }, {});
 
     const pathTo = (params: Record<string, string>): string => {

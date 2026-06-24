@@ -8,10 +8,10 @@ import type { ServerEggVariable } from '@/api/server/types';
 import { rawDataToServerEggVariable } from '@/api/transformers';
 
 interface Response {
-    invocation: string;
-    variables: ServerEggVariable[];
     dockerImages: Record<string, string>;
+    invocation: string;
     rawStartupCommand: string;
+    variables: ServerEggVariable[];
 }
 
 export default (uuid: string, fallbackData?: Response, config?: SWRConfiguration<Response, AxiosError>) =>

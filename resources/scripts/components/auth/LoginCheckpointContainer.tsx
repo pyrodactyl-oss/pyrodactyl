@@ -2,7 +2,7 @@ import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
 import type { Location, RouteProps } from 'react-router-dom';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import loginCheckpoint from '@/api/auth/loginCheckpoint';
 import LoginFormContainer from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
@@ -28,50 +28,54 @@ function LoginCheckpointForm() {
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
     return (
-        <LoginFormContainer className={`w-full flex flex-col`}>
-            <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
+        <LoginFormContainer className={'flex w-full flex-col'}>
+            <h2 className='mb-2 font-extrabold text-xl'>Two Factor Authentication</h2>
 
-            <div className={`mt-6`}>
+            <div className={'mt-6'}>
                 <Field
-                    name={isMissingDevice ? 'recoveryCode' : 'code'}
-                    title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
-                    placeholder='000000'
+                    autoComplete={'one-time-code'}
+                    autoFocus
                     description={
                         isMissingDevice
                             ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
                             : 'Enter the two-factor token displayed by your device.'
                     }
+                    name={isMissingDevice ? 'recoveryCode' : 'code'}
+                    placeholder='000000'
+                    title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
                     type={'text'}
-                    autoComplete={'one-time-code'}
-                    autoFocus
                 />
             </div>
 
-            <div className='flex w-full justify-between items-center'>
+            <div className='flex w-full items-center justify-between'>
                 <Button
-                    className={`bg-mocha-100 rounded-full p-2 px-4 text-black hover:cursor-pointer hover:bg-mocha-200 hover:scale-102 ease-in-out`}
-                    size={'xlarge'}
-                    type={'submit'}
+                    className={
+                        'rounded-full bg-mocha-100 p-2 px-4 text-black ease-in-out hover:scale-102 hover:cursor-pointer hover:bg-mocha-200'
+                    }
                     disabled={isSubmitting}
                     isLoading={isSubmitting}
+                    size={'xlarge'}
+                    type={'submit'}
                 >
                     Sign in
                 </Button>
                 <span
+                    className={
+                        'block rounded-full border border-white/20 px-4 py-2.5 text-center font-medium text-white text-xs uppercase tracking-wide transition-colors duration-200 hover:bg-white/10 hover:text-white/80 focus:outline-none focus:ring-2 focus:ring-white/30'
+                    }
                     onClick={() => {
                         setFieldValue('code', '');
                         setFieldValue('recoveryCode', '');
                         setIsMissingDevice((s) => !s);
                     }}
-                    className={
-                        'block text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
-                    }
                 >
-                    {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                    {isMissingDevice ? 'I Have My Device' : "I've Lost My Device"}
                 </span>
             </div>
             <div
-                className={`text-right w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
+                className={
+                    'w-full rounded-b-lg border-0 py-2 text-right font-bold text-sm capitalize outline-hidden ring-0 hover:cursor-pointer'
+                }
             >
                 <SecondaryLink to='/auth/login'>Return to Login</SecondaryLink>
             </div>

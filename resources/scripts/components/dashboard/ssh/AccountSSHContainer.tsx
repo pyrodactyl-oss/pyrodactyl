@@ -2,23 +2,22 @@ import { Eye, EyeSlash, Key, Plus, TrashBin } from '@gravity-ui/icons';
 import { format } from 'date-fns';
 import { type Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, type FormikHelpers } from 'formik';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { object, string } from 'yup';
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
-import { Button } from '@/components/ui/button';
 import Code from '@/components/elements/Code';
+import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Dialog } from '@/components/elements/dialog';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ServerHeader from '@/components/HeaderManger';
+import { Button } from '@/components/ui/button';
 import { useFlashKey } from '@/plugins/useFlash';
 import type { ApplicationStore } from '@/state';
-
-import ServerHeader from '@/components/HeaderManger';
-import CopyOnClick from '@/components/elements/CopyOnClick';
 
 interface CreateValues {
     name: string;
@@ -92,10 +91,8 @@ const AccountSSHContainer = () => {
             {/* Create SSH Key Modal */}
             {showCreateModal && (
                 <Dialog.Confirm
-                    open={showCreateModal}
-                    onClose={() => setShowCreateModal(false)}
-                    title='Add SSH Key'
                     confirm='Add Key'
+                    onClose={() => setShowCreateModal(false)}
                     onConfirmed={() => {
                         const form = document.getElementById('create-ssh-form') as HTMLFormElement;
                         if (form) {
@@ -103,112 +100,114 @@ const AccountSSHContainer = () => {
                             if (submitButton) submitButton.click();
                         }
                     }}
+                    open={showCreateModal}
+                    title='Add SSH Key'
                 >
                     <Formik
-                        onSubmit={submitCreate}
                         initialValues={{ name: '', publicKey: '' }}
+                        onSubmit={submitCreate}
                         validationSchema={object().shape({
                             name: string().required('SSH Key Name is required'),
                             publicKey: string().required('Public Key is required'),
                         })}
                     >
                         {({ isSubmitting }) => (
-                            <Form id='create-ssh-form' className='space-y-4'>
+                            <Form className='space-y-4' id='create-ssh-form'>
                                 <SpinnerOverlay visible={isSubmitting} />
 
                                 <FormikFieldWrapper
+                                    description='A name to identify this SSH key.'
                                     label='SSH Key Name'
                                     name='name'
-                                    description='A name to identify this SSH key.'
                                 >
-                                    <Field name='name' as={Input} className='w-full' />
+                                    <Field as={Input} className='w-full' name='name' />
                                 </FormikFieldWrapper>
 
                                 <FormikFieldWrapper
+                                    description='Enter your public SSH key.'
                                     label='Public Key'
                                     name='publicKey'
-                                    description='Enter your public SSH key.'
                                 >
-                                    <Field name='publicKey' as={Input} className='w-full' />
+                                    <Field as={Input} className='w-full' name='publicKey' />
                                 </FormikFieldWrapper>
 
-                                <button type='submit' className='hidden' />
+                                <button className='hidden' type='submit' />
                             </Form>
                         )}
                     </Formik>
                 </Dialog.Confirm>
             )}
 
-            <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
+            <div className='flex h-full min-h-full w-full flex-1 flex-col px-2 sm:px-0'>
                 <div
-                    className='transform-gpu skeleton-anim-2 mb-3 sm:mb-4'
+                    className='skeleton-anim-2 mb-3 transform-gpu sm:mb-4'
                     style={{
                         animationDelay: '50ms',
                         animationTimingFunction:
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
-                ></div>
+                />
 
                 <div
-                    className='transform-gpu skeleton-anim-2'
+                    className='skeleton-anim-2 transform-gpu'
                     style={{
                         animationDelay: '75ms',
                         animationTimingFunction:
                             'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                     }}
                 >
-                    <div className='rounded-xl p-6 md:p-4 shadow-sm'>
+                    <div className='rounded-xl p-6 shadow-sm md:p-4'>
                         <SpinnerOverlay visible={!data && isValidating} />
                         <Dialog.Confirm
-                            title={'Delete SSH Key'}
                             confirm={'Delete Key'}
-                            open={!!deleteKey}
                             onClose={() => setDeleteKey(null)}
                             onConfirmed={doDeletion}
+                            open={!!deleteKey}
+                            title={'Delete SSH Key'}
                         >
                             Removing the <Code>{deleteKey?.name}</Code> SSH key will invalidate its usage across the
                             Panel.
                         </Dialog.Confirm>
                         <div className='mb-4'>
                             <Button
-                                variant='secondary'
-                                onClick={() => setShowCreateModal(true)}
                                 className='flex items-center gap-2'
+                                onClick={() => setShowCreateModal(true)}
+                                variant='secondary'
                             >
-                                <Plus width={22} height={22} fill='currentColor' />
+                                <Plus fill='currentColor' height={22} width={22} />
                                 Add SSH Key
                             </Button>
                         </div>
 
                         {!data || data.length === 0 ? (
-                            <div className='text-center py-12'>
-                                <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                                    <Key width={22} height={22} className='text-zinc-400' fill='currentColor' />
+                            <div className='py-12 text-center'>
+                                <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffffff11]'>
+                                    <Key className='text-zinc-400' fill='currentColor' height={22} width={22} />
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No SSH Keys</h3>
-                                <p className='text-sm text-zinc-400 max-w-sm mx-auto'>
-                                    {!data
-                                        ? 'Loading your SSH keys...'
-                                        : "You haven't added any SSH keys yet. Add one to securely access your servers."}
+                                <h3 className='mb-2 font-medium text-lg text-zinc-200'>No SSH Keys</h3>
+                                <p className='mx-auto max-w-sm text-sm text-zinc-400'>
+                                    {data
+                                        ? "You haven't added any SSH keys yet. Add one to securely access your servers."
+                                        : 'Loading your SSH keys...'}
                                 </p>
                             </div>
                         ) : (
                             <div className='space-y-3'>
                                 {data.map((key, index) => (
                                     <div
+                                        className='skeleton-anim-2 transform-gpu'
                                         key={key.fingerprint}
-                                        className='transform-gpu skeleton-anim-2'
                                         style={{
                                             animationDelay: `${index * 25 + 100}ms`,
                                             animationTimingFunction:
                                                 'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                                         }}
                                     >
-                                        <div className='bg-mocha-500 border-mocha-300 border-[1px] rounded-lg transition-all duration-150 p-4'>
+                                        <div className='rounded-lg border-[1px] border-mocha-300 bg-mocha-500 p-4 transition-all duration-150'>
                                             <div className='flex items-center justify-between'>
-                                                <div className='flex-1 min-w-0'>
-                                                    <div className='flex items-center gap-3 mb-2'>
-                                                        <h4 className='text-sm font-medium text-zinc-100 truncate'>
+                                                <div className='min-w-0 flex-1'>
+                                                    <div className='mb-2 flex items-center gap-3'>
+                                                        <h4 className='truncate font-medium text-sm text-zinc-100'>
                                                             {key.name}
                                                         </h4>
                                                     </div>
@@ -216,26 +215,26 @@ const AccountSSHContainer = () => {
                                                         <span>Added: {format(key.createdAt, 'MMM d, yyyy HH:mm')}</span>
                                                         <div className='flex items-center gap-2'>
                                                             <span>Fingerprint:</span>
-                                                            <code className='flex gap-1 font-mono px-2 py-1 bg-mocha-400 border border-mocha-200 rounded text-zinc-300'>
+                                                            <code className='flex gap-1 rounded border border-mocha-200 bg-mocha-400 px-2 py-1 font-mono text-zinc-300'>
                                                                 {showKeys[key.fingerprint] ? (
                                                                     <EyeSlash
+                                                                        className='hover:cursor-pointer'
+                                                                        fill='currentColor'
+                                                                        height={18}
                                                                         onClick={() =>
                                                                             toggleKeyVisibility(key.fingerprint)
                                                                         }
-                                                                        className='hover:cursor-pointer'
                                                                         width={18}
-                                                                        height={18}
-                                                                        fill='currentColor'
                                                                     />
                                                                 ) : (
                                                                     <Eye
+                                                                        className='hover:cursor-pointer'
+                                                                        fill='currentColor'
+                                                                        height={18}
                                                                         onClick={() =>
                                                                             toggleKeyVisibility(key.fingerprint)
                                                                         }
-                                                                        className='hover:cursor-pointer'
                                                                         width={18}
-                                                                        height={18}
-                                                                        fill='currentColor'
                                                                     />
                                                                 )}
                                                                 {showKeys[key.fingerprint] ? (
@@ -250,8 +249,6 @@ const AccountSSHContainer = () => {
                                                     </div>
                                                 </div>
                                                 <Button
-                                                    variant='attention'
-                                                    size='sm'
                                                     className='ml-4'
                                                     onClick={() =>
                                                         setDeleteKey({
@@ -259,8 +256,10 @@ const AccountSSHContainer = () => {
                                                             fingerprint: key.fingerprint,
                                                         })
                                                     }
+                                                    size='sm'
+                                                    variant='attention'
                                                 >
-                                                    <TrashBin width={20} height={20} fill='currentColor' />
+                                                    <TrashBin fill='currentColor' height={20} width={20} />
                                                 </Button>
                                             </div>
                                         </div>

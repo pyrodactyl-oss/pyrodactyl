@@ -1,8 +1,8 @@
 export interface LoaderMatch {
-    type: 'mod' | 'plugin';
-    loader: string;
-    feature: string;
     exactMatch: boolean;
+    feature: string;
+    loader: string;
+    type: 'mod' | 'plugin';
 }
 
 export const parseEggFeatures = (features: string[]): LoaderMatch[] => {

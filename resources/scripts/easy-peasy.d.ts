@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // noinspection ES6UnusedImports
-import EasyPeasy, { Actions, State } from 'easy-peasy';
+import { Actions, State } from 'easy-peasy';
 
 import { ApplicationStore } from '@/state';
 

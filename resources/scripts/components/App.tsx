@@ -26,7 +26,6 @@ const UnifiedRouter = lazy(() => import('@/routers/UnifiedRouter'));
 const AuthenticationRouter = lazy(() => import('@/routers/AuthenticationRouter'));
 
 interface ExtendedWindow extends Window {
-    SiteConfiguration?: SiteSettings;
     PyrodactylUser?: {
         uuid: string;
         username: string;
@@ -38,6 +37,7 @@ interface ExtendedWindow extends Window {
         updated_at: string;
         created_at: string;
     };
+    SiteConfiguration?: SiteSettings;
 }
 
 const App = () => {
@@ -65,8 +65,8 @@ const App = () => {
             <StoreProvider store={store}>
                 <PyrodactylProvider>
                     <div
+                        className='relative flex h-full w-full flex-row overflow-hidden rounded-lg p-2'
                         data-pyro-routerwrap=''
-                        className='relative w-full h-full flex flex-row p-2 overflow-hidden rounded-lg'
                     >
                         <Toaster
                             theme='dark'
@@ -80,16 +80,15 @@ const App = () => {
                         <BrowserRouter>
                             <Routes>
                                 <Route
-                                    path='/auth/*'
                                     element={
                                         <Spinner.Suspense>
                                             <AuthenticationRouter />
                                         </Spinner.Suspense>
                                     }
+                                    path='/auth/*'
                                 />
 
                                 <Route
-                                    path='/*'
                                     element={
                                         <AuthenticatedRoute>
                                             <Spinner.Suspense>
@@ -99,6 +98,7 @@ const App = () => {
                                             </Spinner.Suspense>
                                         </AuthenticatedRoute>
                                     }
+                                    path='/*'
                                 />
 
                                 {/* <Route */}
@@ -112,7 +112,7 @@ const App = () => {
                                 {/*     } */}
                                 {/* /> */}
 
-                                <Route path='*' element={<NotFound />} />
+                                <Route element={<NotFound />} path='*' />
                             </Routes>
                         </BrowserRouter>
                     </div>

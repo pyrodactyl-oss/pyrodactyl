@@ -5,7 +5,7 @@ import { OPERATION_STATUS, type OperationStatus } from '@/api/server/serverOpera
  */
 export const UI_CONFIG = {
     AUTO_CLOSE_DELAY: 3000,
-    PROGRESS_UPDATE_INTERVAL: 30000,
+    PROGRESS_UPDATE_INTERVAL: 30_000,
     ESTIMATED_PROGRESS_WIDTH: 60,
 } as const;
 
@@ -48,9 +48,8 @@ export const STATUS_CONFIG = {
 /**
  * Get status-specific styling configuration.
  */
-export const getStatusStyling = (status: OperationStatus) => {
-    return STATUS_CONFIG[status] || STATUS_CONFIG[OPERATION_STATUS.PENDING];
-};
+export const getStatusStyling = (status: OperationStatus) =>
+    STATUS_CONFIG[status] || STATUS_CONFIG[OPERATION_STATUS.PENDING];
 
 /**
  * Get appropriate icon type for operation status.
@@ -73,34 +72,27 @@ export const getStatusIconType = (status: OperationStatus): 'spinner' | 'success
 /**
  * Check if operation modal can be closed or dismissed.
  */
-export const canCloseOperation = (operation: any, error: string | null): boolean => {
-    return Boolean((operation && (operation.is_completed || operation.has_failed)) || error);
-};
+export const canCloseOperation = (operation: any, error: string | null): boolean =>
+    Boolean((operation && (operation.is_completed || operation.has_failed)) || error);
 
 /**
  * Format operation ID for compact display.
  */
-export const formatOperationId = (operationId: string): string => {
-    return `${operationId.split('-')[0]}...`;
-};
+export const formatOperationId = (operationId: string): string => `${operationId.split('-')[0]}...`;
 
 /**
  * Check if operation status is active (pending or running).
  */
-export const isActiveStatus = (status: OperationStatus): boolean => {
-    return status === OPERATION_STATUS.PENDING || status === OPERATION_STATUS.RUNNING;
-};
+export const isActiveStatus = (status: OperationStatus): boolean =>
+    status === OPERATION_STATUS.PENDING || status === OPERATION_STATUS.RUNNING;
 
 /**
  * Check if operation status indicates successful completion.
  */
-export const isCompletedStatus = (status: OperationStatus): boolean => {
-    return status === OPERATION_STATUS.COMPLETED;
-};
+export const isCompletedStatus = (status: OperationStatus): boolean => status === OPERATION_STATUS.COMPLETED;
 
 /**
  * Check if operation status indicates failure or cancellation.
  */
-export const isFailedStatus = (status: OperationStatus): boolean => {
-    return status === OPERATION_STATUS.FAILED || status === OPERATION_STATUS.CANCELLED;
-};
+export const isFailedStatus = (status: OperationStatus): boolean =>
+    status === OPERATION_STATUS.FAILED || status === OPERATION_STATUS.CANCELLED;

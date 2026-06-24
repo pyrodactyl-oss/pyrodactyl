@@ -15,14 +15,14 @@ const Checkbox = React.forwardRef<
     };
 
     return (
-        <div className={cn('flex items-center gap-2 select-none', className)} {...props} ref={ref}>
+        <div className={cn('flex select-none items-center gap-2', className)} {...props} ref={ref}>
             {label && (
                 <span
-                    onClick={handleClick}
                     className={cn(
-                        'inline-block rounded-lg w-full px-2 py-1 cursor-pointer transition-colors duration-200 mb-2',
+                        'mb-2 inline-block w-full cursor-pointer rounded-lg px-2 py-1 transition-colors duration-200',
                         checked ? 'bg-brand/40 text-white' : 'border-transparent hover:bg-gray-700/30',
                     )}
+                    onClick={handleClick}
                 >
                     {label}
                 </span>

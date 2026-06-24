@@ -15,9 +15,7 @@ const useSSHKeys = (config?: SWRConfiguration<SSHKey[], AxiosError>) => {
         async () => {
             const { data } = await http.get('/api/client/account/ssh-keys');
 
-            return (data as FractalResponseList).data.map((datum: any) => {
-                return Transformers.toSSHKey(datum.attributes);
-            });
+            return (data as FractalResponseList).data.map((datum: any) => Transformers.toSSHKey(datum.attributes));
         },
         { revalidateOnMount: false, ...(config || {}) },
     );
@@ -35,4 +33,4 @@ const createSSHKey = async (name: string, publicKey: string): Promise<SSHKey> =>
 const deleteSSHKey = async (fingerprint: string): Promise<void> =>
     await http.post('/api/client/account/ssh-keys/remove', { fingerprint });
 
-export { useSSHKeys, createSSHKey, deleteSSHKey };
+export { createSSHKey, deleteSSHKey, useSSHKeys };

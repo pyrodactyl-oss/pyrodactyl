@@ -9,19 +9,19 @@ import './sidebar-logo.css';
 import './sidebar-modern.css';
 
 interface NavItem {
-    to: string;
-    icon: IconSvgElement;
-    text: string;
-    minimizedText?: string;
-    tabName: string;
-    ref: RefObject<HTMLAnchorElement | null>;
     end: boolean;
+    icon: IconSvgElement;
+    minimizedText?: string;
     permission?: string | string[];
+    ref: RefObject<HTMLAnchorElement | null>;
+    tabName: string;
+    text: string;
+    to: string;
 }
 
 interface SidebarProps {
-    navItems: NavItem[];
     className?: string;
+    navItems: NavItem[];
     onNavClick?: () => void;
 }
 
@@ -74,18 +74,20 @@ export default memo(function Sidebar({ navItems, className, onNavClick }: Sideba
     }, [navItems.length]);
 
     // stable path to tab mapping
-    const pathToTabMapping = useMemo(() => {
-        return navItems.map((item) => ({
-            pattern: (path: string) => {
-                if (item.to === '/' && item.end) {
-                    return path.endsWith('/');
-                }
-                return path.endsWith(item.to);
-            },
-            tabName: item.tabName,
-            ref: item.ref,
-        }));
-    }, [navItems]);
+    const pathToTabMapping = useMemo(
+        () =>
+            navItems.map((item) => ({
+                pattern: (path: string) => {
+                    if (item.to === '/' && item.end) {
+                        return path.endsWith('/');
+                    }
+                    return path.endsWith(item.to);
+                },
+                tabName: item.tabName,
+                ref: item.ref,
+            })),
+        [navItems],
+    );
 
     // current active tab
     const currentActiveTab = useMemo(() => {
@@ -101,25 +103,25 @@ export default memo(function Sidebar({ navItems, className, onNavClick }: Sideba
     return (
         <div
             className={cn(
-                'sidebar-container flex-col shrink-0 rounded-lg px-8 select-none overflow-y-auto relative',
+                'sidebar-container relative shrink-0 select-none flex-col overflow-y-auto rounded-lg px-8',
                 className,
             )}
         >
-            <div className='sidebar-indicator absolute bg-mocha-400 border border-mocha-300 left-[2rem] rounded-xl pointer-events-none' />
+            <div className='sidebar-indicator pointer-events-none absolute left-[2rem] rounded-xl border border-mocha-300 bg-mocha-400' />
             <ul className='flex flex-col text-sm'>
                 {navItems.map((item, index) => {
                     const isActive = currentActiveTab === item.tabName;
                     return (
-                        <li key={item.tabName} data-tab={item.tabName} data-active={isActive}>
+                        <li data-active={isActive} data-tab={item.tabName} key={item.tabName}>
                             <NavItem
-                                to={item.to}
-                                icon={item.icon}
-                                text={item.text}
-                                itemRef={item.ref}
                                 end={item.end}
+                                icon={item.icon}
+                                itemRef={item.ref}
                                 lastItem={index === navItems.length - 1}
-                                permission={item.permission}
                                 onNavClick={handleNavClick}
+                                permission={item.permission}
+                                text={item.text}
+                                to={item.to}
                             />
                         </li>
                     );

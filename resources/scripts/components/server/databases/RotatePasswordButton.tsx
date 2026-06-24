@@ -48,9 +48,9 @@ const RotatePasswordButton = ({
     };
 
     return (
-        <ActionButton onClick={rotate} className='flex-none'>
-            <div className='flex justify-center items-center'>
-                {!loading && <ArrowsRotateRight width={22} height={22} />}
+        <ActionButton className='flex-none' onClick={rotate}>
+            <div className='flex items-center justify-center'>
+                {!loading && <ArrowsRotateRight height={22} width={22} />}
                 {loading && <Spinner size={'small'} />}
             </div>
         </ActionButton>

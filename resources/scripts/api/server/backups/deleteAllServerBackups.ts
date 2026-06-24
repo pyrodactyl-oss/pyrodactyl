@@ -5,7 +5,7 @@ export default async (uuid: string, password: string, twoFactor: any, totpCode: 
     const daemonType = getGlobalDaemonType();
     const response = await http.delete(`/api/client/servers/${daemonType}/${uuid}/backups/delete-all`, {
         data: {
-            password: password,
+            password,
             ...(twoFactor ? { totp_code: totpCode } : {}),
         },
     });

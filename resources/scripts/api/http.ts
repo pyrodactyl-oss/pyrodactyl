@@ -4,7 +4,7 @@ import { store } from '@/state';
 
 const http: AxiosInstance = axios.create({
     withCredentials: true,
-    timeout: 20000,
+    timeout: 20_000,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         Accept: 'application/json',
@@ -69,16 +69,16 @@ export function httpErrorToHuman(error: any): string {
 }
 
 export interface FractalResponseData {
-    object: string;
     attributes: {
         [k: string]: any;
         relationships?: Record<string, FractalResponseData | FractalResponseList | null | undefined>;
     };
+    object: string;
 }
 
 export interface FractalResponseList {
-    object: 'list';
     data: FractalResponseData[];
+    object: 'list';
 }
 
 export interface FractalPaginatedResponse extends FractalResponseList {
@@ -100,10 +100,10 @@ export interface PaginatedResult<T> {
 }
 
 export interface PaginationDataSet {
-    total: number;
     count: number;
-    perPage: number;
     currentPage: number;
+    perPage: number;
+    total: number;
     totalPages: number;
 }
 
@@ -120,10 +120,10 @@ export function getPaginationSet(data: any): PaginationDataSet {
 type QueryBuilderFilterValue = string | number | boolean | null;
 
 export interface QueryBuilderParams<FilterKeys extends string = string, SortKeys extends string = string> {
-    page?: number;
     filters?: {
         [K in FilterKeys]?: QueryBuilderFilterValue | Readonly<QueryBuilderFilterValue[]>;
     };
+    page?: number;
     sorts?: {
         [K in SortKeys]?: -1 | 0 | 1 | 'asc' | 'desc' | null;
     };
@@ -148,7 +148,7 @@ export const withQueryBuilderParams = (data?: QueryBuilderParams): Record<string
 
     const sorts = Object.keys(data.sorts || {}).reduce((arr, key) => {
         const value = data.sorts?.[key];
-        if (!value || !['asc', 'desc', 1, -1].includes(value)) {
+        if (!(value && ['asc', 'desc', 1, -1].includes(value))) {
             return arr;
         }
 
@@ -157,7 +157,7 @@ export const withQueryBuilderParams = (data?: QueryBuilderParams): Record<string
 
     return {
         ...filters,
-        sort: !sorts.length ? undefined : sorts.join(','),
+        sort: sorts.length ? sorts.join(',') : undefined,
         page: data.page,
     };
 };

@@ -38,7 +38,7 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
             false,
         );
 
-        const data = files.map((f) => ({ file: f.file, mode: mode }));
+        const data = files.map((f) => ({ file: f.file, mode }));
 
         chmodFiles(uuid, directory, data)
             .then((): Promise<any> => (files.length > 0 ? mutate() : Promise.resolve()))
@@ -52,30 +52,30 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
     };
 
     return (
-        <Formik onSubmit={submit} initialValues={{ mode: files.length > 1 ? '' : (files[0]?.mode ?? '') }}>
+        <Formik initialValues={{ mode: files.length > 1 ? '' : (files[0]?.mode ?? '') }} onSubmit={submit}>
             {({ isSubmitting }) => (
                 <Modal
                     {...props}
-                    title='Configure permissions'
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
+                    title='Configure permissions'
                 >
-                    <Form className={`w-full m-0`}>
-                        <div className={`flex flex-col`}>
-                            <div className={`w-full`}>
+                    <Form className={'m-0 w-full'}>
+                        <div className={'flex flex-col'}>
+                            <div className={'w-full'}>
                                 <Field
-                                    type={'string'}
-                                    id={'file_mode'}
-                                    name={'mode'}
-                                    label={'File Mode'}
+                                    autoFocus
                                     description={
                                         'This is intended for advanced users. You may irreperably damage your server by changing file permissions.'
                                     }
-                                    autoFocus
+                                    id={'file_mode'}
+                                    label={'File Mode'}
+                                    name={'mode'}
+                                    type={'string'}
                                 />
                             </div>
-                            <div className={`flex justify-end w-full my-6`}>
-                                <ActionButton variant='primary' type='submit'>
+                            <div className={'my-6 flex w-full justify-end'}>
+                                <ActionButton type='submit' variant='primary'>
                                     Update
                                 </ActionButton>
                             </div>

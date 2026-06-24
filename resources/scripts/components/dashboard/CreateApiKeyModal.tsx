@@ -6,15 +6,15 @@ import Input from '@/components/elements/Input';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 interface CreateValues {
-    description: string;
     allowedIps: string;
+    description: string;
 }
 
 interface CreateApiKeyModalProps {
-    open: boolean;
+    isSubmitting?: boolean;
     onClose: () => void;
     onSubmit: (values: CreateValues, helpers: FormikHelpers<CreateValues>) => void;
-    isSubmitting?: boolean;
+    open: boolean;
 }
 
 const validationSchema = object().shape({
@@ -25,10 +25,10 @@ const validationSchema = object().shape({
 export default function CreateApiKeyModal({ open, onClose, onSubmit, isSubmitting = false }: CreateApiKeyModalProps) {
     return (
         <Dialog.Confirm
-            open={open}
-            onClose={onClose}
-            title='Create API Key'
             confirm='Create Key'
+            // Optional: disable confirm button while submitting
+            confirmDisabled={isSubmitting}
+            onClose={onClose}
             onConfirmed={() => {
                 // Trigger form submission programmatically
                 const form = document.getElementById('create-api-form') as HTMLFormElement;
@@ -37,44 +37,44 @@ export default function CreateApiKeyModal({ open, onClose, onSubmit, isSubmittin
                     if (submitButton) submitButton.click();
                 }
             }}
-            // Optional: disable confirm button while submitting
-            confirmDisabled={isSubmitting}
+            open={open}
+            title='Create API Key'
         >
             <Formik
                 initialValues={{ description: '', allowedIps: '' }}
-                validationSchema={validationSchema}
                 onSubmit={onSubmit}
+                validationSchema={validationSchema}
             >
                 {({ isSubmitting: formikIsSubmitting }) => (
-                    <Form id='create-api-form' className='space-y-4'>
+                    <Form className='space-y-4' id='create-api-form'>
                         <SpinnerOverlay visible={formikIsSubmitting || isSubmitting} />
 
                         <FormikFieldWrapper
+                            description='A description of this API key.'
                             label='Description'
                             name='description'
-                            description='A description of this API key.'
                         >
-                            <Field name='description' as={Input} className='w-full' autoFocus />
+                            <Field as={Input} autoFocus className='w-full' name='description' />
                         </FormikFieldWrapper>
 
                         <FormikFieldWrapper
-                            label='Allowed IPs'
-                            name='allowedIps'
                             description={
                                 'Leave blank to allow any IP address. ' +
                                 'Otherwise provide each IP or CIDR range on a new line (e.g. 192.168.1.1, 10.0.0.0/24).'
                             }
+                            label='Allowed IPs'
+                            name='allowedIps'
                         >
                             <Field
-                                name='allowedIps'
                                 as='textarea'
+                                className='w-full rounded border border-[#ffffff12] bg-[#ffffff0d] p-3 text-sm text-zinc-100 focus:border-blue-500 focus:outline-none'
+                                name='allowedIps'
                                 rows={4}
-                                className='w-full rounded bg-[#ffffff0d] border border-[#ffffff12] p-3 text-sm text-zinc-100 focus:outline-none focus:border-blue-500'
                             />
                         </FormikFieldWrapper>
 
                         {/* Hidden submit button — triggered by Dialog confirm */}
-                        <button type='submit' className='hidden' />
+                        <button className='hidden' type='submit' />
                     </Form>
                 )}
             </Formik>

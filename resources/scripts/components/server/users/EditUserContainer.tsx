@@ -42,16 +42,16 @@ const EditUserContainer = () => {
             <ServerContentBlock title={'Edit User'}>
                 <MainPageHeader title={'Edit User'}>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
+                        onClick={() => navigate(`/server/${serverId}/users`)}
+                        variant='secondary'
                     >
-                        <ChevronLeft width={22} height={22} fill='currentColor' />
+                        <ChevronLeft fill='currentColor' height={22} width={22} />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
-                    <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
+                    <div className='h-8 w-8 animate-spin rounded-full border-brand border-b-2' />
                 </div>
             </ServerContentBlock>
         );
@@ -63,21 +63,21 @@ const EditUserContainer = () => {
             <ServerContentBlock title={'Edit User'}>
                 <MainPageHeader title={'Edit User'}>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => navigate(`/server/${serverId}/users`)}
                         className='flex items-center gap-2'
+                        onClick={() => navigate(`/server/${serverId}/users`)}
+                        variant='secondary'
                     >
-                        <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                        <ChevronLeft className='h-4 w-4' fill='currentColor' height={22} width={22} />
                         Back to Users
                     </ActionButton>
                 </MainPageHeader>
-                <div className='flex flex-col items-center justify-center py-12 px-4'>
+                <div className='flex flex-col items-center justify-center px-4 py-12'>
                     <div className='text-center'>
-                        <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
-                            <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
+                        <div className='mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#ffffff11]'>
+                            <Person className='h-8 w-8 text-zinc-400' fill='currentColor' height={22} width={22} />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>User not found</h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
+                        <h3 className='mb-2 font-medium text-lg text-zinc-200'>User not found</h3>
+                        <p className='max-w-sm text-sm text-zinc-400'>
                             The user you&apos;re trying to edit could not be found.
                         </p>
                     </div>
@@ -90,23 +90,23 @@ const EditUserContainer = () => {
         <ServerContentBlock title={'Edit User'}>
             <MainPageHeader title={`Edit User: ${subuser.email}`}>
                 <ActionButton
-                    variant='secondary'
-                    onClick={() => navigate(`/server/${serverId}/users`)}
                     className='flex items-center gap-2'
                     disabled={isSubmitting}
+                    onClick={() => navigate(`/server/${serverId}/users`)}
+                    variant='secondary'
                 >
-                    <ChevronLeft width={22} height={22} className='w-4 h-4' fill='currentColor' />
+                    <ChevronLeft className='h-4 w-4' fill='currentColor' height={22} width={22} />
                     Back to Users
                 </ActionButton>
             </MainPageHeader>
 
             <UserFormComponent
-                subuser={subuser}
-                onSuccess={handleSuccess}
-                onCancel={handleCancel}
                 flashKey='user:edit'
                 isSubmitting={isSubmitting}
+                onCancel={handleCancel}
+                onSuccess={handleSuccess}
                 setIsSubmitting={setIsSubmitting}
+                subuser={subuser}
             />
         </ServerContentBlock>
     );

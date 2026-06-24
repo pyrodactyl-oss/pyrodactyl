@@ -99,7 +99,7 @@ export const useUnifiedBackups = () => {
                 canDownload: backup.isSuccessful && !live,
                 canRestore: backup.isSuccessful && !live,
                 isLiveOnly: false,
-                isDeletion: live?.isDeletion || false,
+                isDeletion: live?.isDeletion,
             });
         }
     }
@@ -108,7 +108,7 @@ export const useUnifiedBackups = () => {
     for (const [backupUuid, live] of Object.entries(liveProgress)) {
         const existsInSwr = unifiedBackups.some((b) => b.uuid === backupUuid);
 
-        if (!existsInSwr && !live.isDeletion) {
+        if (!(existsInSwr || live.isDeletion)) {
             unifiedBackups.push({
                 uuid: backupUuid,
                 name: live.backupName || live.message || 'Processing...',

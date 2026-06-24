@@ -4,14 +4,13 @@ import { httpErrorToHuman } from '@/api/http';
 import deleteSchedule from '@/api/server/schedules/deleteSchedule';
 import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
-import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 
 import type { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 interface Props {
-    scheduleId: number;
     onDeleted: () => void;
+    scheduleId: number;
 }
 
 const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
@@ -40,16 +39,16 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
     return (
         <>
             <Dialog.Confirm
-                open={visible}
-                onClose={() => setVisible(false)}
-                title={'Delete Schedule'}
                 confirm={'Delete'}
-                onConfirmed={onDelete}
                 loading={isLoading}
+                onClose={() => setVisible(false)}
+                onConfirmed={onDelete}
+                open={visible}
+                title={'Delete Schedule'}
             >
                 All tasks will be removed and any running processes will be terminated.
             </Dialog.Confirm>
-            <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
+            <ActionButton className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)} variant='danger'>
                 Delete
             </ActionButton>
         </>

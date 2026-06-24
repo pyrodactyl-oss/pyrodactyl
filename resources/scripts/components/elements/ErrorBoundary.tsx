@@ -24,9 +24,9 @@ class ErrorBoundary extends Component<Props, State> {
     override render() {
         if (this.state.hasError) {
             return (
-                <div className={`flex items-center justify-center w-full my-4`}>
-                    <div className={`flex items-center bg-neutral-900 rounded-sm p-3 text-red-500`}>
-                        <p className={`text-sm text-neutral-100`}>
+                <div className={'my-4 flex w-full items-center justify-center'}>
+                    <div className={'flex items-center rounded-sm bg-neutral-900 p-3 text-red-500'}>
+                        <p className={'text-neutral-100 text-sm'}>
                             An error was encountered by the application while rendering this view. Try refreshing the
                             page.
                         </p>

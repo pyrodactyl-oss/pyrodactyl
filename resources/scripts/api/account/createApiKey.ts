@@ -1,8 +1,8 @@
 import { type ApiKey, rawDataToApiKey } from '@/api/account/getApiKeys';
 import http from '@/api/http';
 
-export default (description: string, allowedIps: string): Promise<ApiKey & { secretToken: string }> => {
-    return new Promise((resolve, reject) => {
+export default (description: string, allowedIps: string): Promise<ApiKey & { secretToken: string }> =>
+    new Promise((resolve, reject) => {
         http.post('/api/client/account/api-keys', {
             description,
             allowed_ips: allowedIps.length > 0 ? allowedIps.split('\n') : [],
@@ -16,4 +16,3 @@ export default (description: string, allowedIps: string): Promise<ApiKey & { sec
             )
             .catch(reject);
     });
-};

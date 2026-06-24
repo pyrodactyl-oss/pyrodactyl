@@ -2,16 +2,14 @@
 
 import Flags from './flags/index';
 
-const Flag = (props: { code: keyof typeof Flags | string; width?: number; alt?: string; height?: number }) => {
-    return (
-        <img
-            src={Flags[props.code.toUpperCase() as keyof typeof Flags]}
-            alt={props.alt || `${props.code} flag`}
-            width={props.width || 20}
-            height={props.height || 20}
-            className='mr-2 inline-block'
-        />
-    );
-};
+const Flag = (props: { code: keyof typeof Flags | string; width?: number; alt?: string; height?: number }) => (
+    <img
+        alt={props.alt || `${props.code} flag`}
+        className='mr-2 inline-block'
+        height={props.height || 20}
+        src={Flags[props.code.toUpperCase() as keyof typeof Flags]}
+        width={props.width || 20}
+    />
+);
 
 export default Flag;

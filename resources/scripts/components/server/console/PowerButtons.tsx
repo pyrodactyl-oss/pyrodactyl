@@ -7,7 +7,6 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import { Dialog } from '@/components/elements/dialog';
 import type { PowerAction } from '@/components/server/console/ServerConsoleContainer';
-import { Button } from '@/components/ui/button';
 
 import { ServerContext } from '@/state/server';
 
@@ -62,52 +61,52 @@ const PowerButtons = ({ className }: PowerButtonProps) => {
             }}
         >
             <Dialog.Confirm
-                open={open}
+                confirm={'Continue'}
                 hideCloseIcon
                 onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
                 onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
+                open={open}
+                title={'Forcibly Stop Process'}
             >
                 Forcibly stopping a server can lead to data corruption.
             </Dialog.Confirm>
             <Can action={'control.start'}>
                 <ActionButton
-                    variant={'secondary'}
-                    size={'start'}
-                    className='px-3 gap-1 rounded-full'
+                    aria-label='Start server'
+                    className='gap-1 rounded-full px-3'
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
-                    aria-label='Start server'
+                    size={'start'}
+                    variant={'secondary'}
                 >
                     <div className='flex flex-row items-center gap-1.5'>
-                        <HugeiconsIcon size={16} strokeWidth={2} icon={PlayIcon} className='size-4' />
+                        <HugeiconsIcon className='size-4' icon={PlayIcon} size={16} strokeWidth={2} />
                         Start
                     </div>
                 </ActionButton>
             </Can>
             <Can action={'control.restart'}>
                 <ActionButton
-                    variant={'secondary'}
-                    size={'start'}
-                    className='p-1 gap-1 rounded-full size-8'
+                    aria-label='Restart server'
+                    className='size-8 gap-1 rounded-full p-1'
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
-                    aria-label='Restart server'
+                    size={'start'}
+                    variant={'secondary'}
                 >
-                    <HugeiconsIcon size={16} icon={Rotate01FreeIcons} />
+                    <HugeiconsIcon icon={Rotate01FreeIcons} size={16} />
                 </ActionButton>
             </Can>
             <Can action={'control.stop'}>
                 <ActionButton
-                    variant={'secondary'}
-                    size={'start'}
-                    className='p-1 gap-1 rounded-full size-8'
+                    aria-label={`${killable ? 'Kill' : 'Stop'} server`}
+                    className='size-8 gap-1 rounded-full p-1'
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
-                    aria-label={`${killable ? 'Kill' : 'Stop'} server`}
+                    size={'start'}
+                    variant={'secondary'}
                 >
-                    <HugeiconsIcon size={16} icon={StopIcon} />
+                    <HugeiconsIcon icon={StopIcon} size={16} />
                 </ActionButton>
             </Can>
         </div>

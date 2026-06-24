@@ -7,38 +7,38 @@ export type ServerStatus =
     | null;
 
 export interface ServerBackup {
-    uuid: string;
-    isSuccessful: boolean;
-    isLocked: boolean;
-    isAutomatic: boolean;
-    name: string;
-    ignoredFiles: string;
-    checksum: string;
-    bytes: number;
-    sizeGb: number;
     adapter: string;
-    isRustic: boolean;
-    snapshotId: string | null;
-    createdAt: Date;
+    bytes: number;
+    canRetry: boolean;
+    checksum: string;
     completedAt: Date | null;
+    createdAt: Date;
+    ignoredFiles: string;
+    isAutomatic: boolean;
+    isInProgress: boolean;
+    isLocked: boolean;
+    isRustic: boolean;
+    isSuccessful: boolean;
+    jobError: string | null;
     // Async job fields
     jobId: string | null;
-    jobStatus: 'pending' | 'running' | 'completed' | 'failed';
-    jobProgress: number;
-    jobMessage: string | null;
-    jobError: string | null;
-    jobStartedAt: Date | null;
     jobLastUpdatedAt: Date | null;
-    canRetry: boolean;
-    isInProgress: boolean;
+    jobMessage: string | null;
+    jobProgress: number;
+    jobStartedAt: Date | null;
+    jobStatus: 'pending' | 'running' | 'completed' | 'failed';
+    name: string;
+    sizeGb: number;
+    snapshotId: string | null;
+    uuid: string;
 }
 
 export interface ServerEggVariable {
-    name: string;
+    defaultValue: string;
     description: string;
     envVariable: string;
-    defaultValue: string;
-    serverValue: string | null;
     isEditable: boolean;
+    name: string;
     rules: string[];
+    serverValue: string | null;
 }

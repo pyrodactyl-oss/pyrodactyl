@@ -46,7 +46,7 @@ const terminalProps: ITerminalOptions = {
     fontSize: 12,
     fontFamily: 'monospace, monospace',
     // rows: 30,
-    theme: theme,
+    theme,
 };
 
 const Console = () => {
@@ -302,12 +302,12 @@ const Console = () => {
     ]);
 
     return (
-        <div className='flex w-full h-full'>
-            <div className={cn('relative flex size-full flex-col overflow-x-hidden contain-inline-size flex-1')}>
-                <SpinnerOverlay visible={!connected} size={'large'} />
+        <div className='flex h-full w-full'>
+            <div className={cn('relative flex size-full flex-1 flex-col overflow-x-hidden contain-inline-size')}>
+                <SpinnerOverlay size={'large'} visible={!connected} />
                 <div
                     className={cn(
-                        'bg-bg-raised border-mocha-400 p-4 flex flex-1 flex-col overflow-hidden rounded-2xl border text-sm',
+                        'flex flex-1 flex-col overflow-hidden rounded-2xl border border-mocha-400 bg-bg-raised p-4 text-sm',
                         {
                             'rounded-b': !canSendCommands,
                         },
@@ -316,19 +316,19 @@ const Console = () => {
                     <div className='size-full' ref={ref} />
 
                     {canSendCommands && (
-                        <div className='w-full rounded-2xl border border-mocha-300 bg-mocha-400 p-2 text-zinc-100 flex px-(--padding-x) relative [--padding-x:--spacing(4)] text-sm'>
+                        <div className='relative flex w-full rounded-2xl border border-mocha-300 bg-mocha-400 p-2 px-(--padding-x) text-sm text-zinc-100 [--padding-x:--spacing(4)]'>
                             <input
-                                ref={inputRef}
-                                className='w-full'
-                                type={'text'}
-                                placeholder={'Enter a command'}
                                 aria-label={'Console command input.'}
-                                disabled={!instance || !connected}
-                                onKeyDown={handleCommandKeyDown}
-                                autoCorrect={'off'}
                                 autoCapitalize={'none'}
+                                autoCorrect={'off'}
+                                className='w-full'
+                                disabled={!(instance && connected)}
+                                onKeyDown={handleCommandKeyDown}
+                                placeholder={'Enter a command'}
+                                ref={inputRef}
+                                type={'text'}
                             />
-                            <KeyboardShortcut keys={['/']} variant='faded' className='pl-(--padding-x)' />
+                            <KeyboardShortcut className='pl-(--padding-x)' keys={['/']} variant='faded' />
                         </div>
                     )}
                 </div>

@@ -27,16 +27,16 @@ const DeleteSSHKeyButton = ({ name, fingerprint }: { name: string; fingerprint: 
     return (
         <>
             <Dialog.Confirm
+                confirm={'Delete Key'}
+                onClose={() => setVisible(false)}
+                onConfirmed={onClick}
                 open={visible}
                 title={'Delete SSH Key'}
-                confirm={'Delete Key'}
-                onConfirmed={onClick}
-                onClose={() => setVisible(false)}
             >
                 Removing the <Code>{name}</Code> SSH key will invalidate its usage across the Panel.
             </Dialog.Confirm>
             <button
-                className='p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all duration-150'
+                className='rounded-lg p-2 text-red-400 transition-all duration-150 hover:bg-red-500/10 hover:text-red-300'
                 onClick={() => setVisible(true)}
             >
                 <FontAwesomeIcon icon={faTrashAlt} size='lg' />

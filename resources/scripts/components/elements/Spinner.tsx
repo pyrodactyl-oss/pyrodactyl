@@ -6,11 +6,11 @@ import ErrorBoundary from '@/components/elements/ErrorBoundary';
 export type SpinnerSize = 'small' | 'base' | 'large';
 
 interface Props {
+    centered?: boolean;
+    children?: React.ReactNode;
+    isBlue?: boolean;
     size?: SpinnerSize;
     visible?: boolean;
-    centered?: boolean;
-    isBlue?: boolean;
-    children?: React.ReactNode;
 }
 
 interface Spinner extends React.FC<Props> {
@@ -32,7 +32,7 @@ const SpinnerComponent = styled.div<Props>`
 
     ${(props) =>
         props.size === 'small'
-            ? `width: 16px; height: 16px; border-width: 2px;`
+            ? 'width: 16px; height: 16px; border-width: 2px;'
             : props.size === 'large'
               ? css`
                     width: 64px;
@@ -41,19 +41,14 @@ const SpinnerComponent = styled.div<Props>`
                 `
               : null};
 
-    border-color: ${(props) => (!props.isBlue ? 'rgba(255, 255, 255, 0.2)' : 'hsla(212, 92%, 43%, 0.2)')};
-    border-top-color: ${(props) => (!props.isBlue ? 'rgb(255, 255, 255)' : 'hsl(212, 92%, 43%)')};
+    border-color: ${(props) => (props.isBlue ? 'hsla(212, 92%, 43%, 0.2)' : 'rgba(255, 255, 255, 0.2)')};
+    border-top-color: ${(props) => (props.isBlue ? 'hsl(212, 92%, 43%)' : 'rgb(255, 255, 255)')};
 `;
 
 const Spinner: Spinner = ({ centered, visible = true, ...props }) =>
     visible &&
     (centered ? (
-        <div
-            className={`
-              flex justify-center items-center w-full
-              sm:absolute sm:inset-0 sm:z-50
-          `}
-        >
+        <div className={'flex w-full items-center justify-center sm:absolute sm:inset-0 sm:z-50'}>
             <SpinnerComponent {...props} />
         </div>
     ) : (

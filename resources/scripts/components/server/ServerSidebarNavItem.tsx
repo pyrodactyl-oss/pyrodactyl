@@ -8,9 +8,9 @@ import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
 import { ServerContext } from '@/state/server';
 
 interface ServerSidebarNavItemProps {
+    onClick?: () => void;
     route: ServerRouteDefinition;
     serverId: string;
-    onClick?: () => void;
 }
 
 /**
@@ -71,13 +71,13 @@ const ServerSidebarNavItem = forwardRef<HTMLAnchorElement, ServerSidebarNavItemP
 
         const NavContent = (
             <NavLink
-                ref={ref}
-                to={to}
+                className='flex flex-row items-center rounded-md transition-colors duration-200 hover:bg-[#ffffff11]'
                 end={end}
                 onClick={onClick}
-                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
+                ref={ref}
+                to={to}
             >
-                {Icon && <Icon className='ml-3' width={22} height={22} fill='currentColor' />}
+                {Icon && <Icon className='ml-3' fill='currentColor' height={22} width={22} />}
                 <p>{name}</p>
             </NavLink>
         );

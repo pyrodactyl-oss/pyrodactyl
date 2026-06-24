@@ -65,33 +65,33 @@ const VariableBox = ({ variable }: Props) => {
     const selectValues = variable.rules.find((v) => v.startsWith('in:'))?.split(',') || [];
 
     return (
-        <div className='flex flex-col justify-between gap-4 bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] p-4 sm:p-5 rounded-xl hover:border-[#ffffff20] transition-all'>
+        <div className='flex flex-col justify-between gap-4 rounded-xl border-[#ffffff15] border-[1px] bg-linear-to-b from-[#ffffff08] to-[#ffffff05] p-4 transition-all hover:border-[#ffffff20] sm:p-5'>
             <FlashMessageRender byKey={FLASH_KEY} />
             <div className='space-y-3'>
-                <div className='flex flex-col items-baseline sm:flex-row sm:justify-between gap-2 sm:gap-3'>
-                    <div className='flex items-center gap-2 min-w-0'>
+                <div className='flex flex-col items-baseline gap-2 sm:flex-row sm:justify-between sm:gap-3'>
+                    <div className='flex min-w-0 items-center gap-2'>
                         {!variable.isEditable && (
                             <Lock
-                                width={22}
-                                height={22}
+                                className='h-4 w-4 flex-shrink-0 text-neutral-500'
                                 fill={'currentColor'}
-                                className='text-neutral-500 w-4 h-4 flex-shrink-0'
+                                height={22}
+                                width={22}
                             />
                         )}
-                        <span className='text-sm font-medium text-neutral-200 break-words'>{variable.name}</span>
+                        <span className='break-words font-medium text-neutral-200 text-sm'>{variable.name}</span>
                     </div>
-                    <div className='text-xs leading-5 text-neutral-500 font-mono rounded w-fit'>
+                    <div className='w-fit rounded font-mono text-neutral-500 text-xs leading-5'>
                         {variable.envVariable}
                     </div>
                 </div>
-                <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed break-words'>
+                <p className='break-words text-neutral-400 text-xs leading-relaxed sm:text-sm'>
                     {variable.description}
                 </p>
             </div>
             <InputSpinner visible={loading}>
                 {useSwitch ? (
-                    <div className='flex items-center justify-between p-3 sm:p-4 bg-linear-to-b from-[#ffffff06] to-[#ffffff03] border border-[#ffffff10] rounded-xl'>
-                        <span className='text-sm font-medium text-neutral-300'>
+                    <div className='flex items-center justify-between rounded-xl border border-[#ffffff10] bg-linear-to-b from-[#ffffff06] to-[#ffffff03] p-3 sm:p-4'>
+                        <span className='font-medium text-neutral-300 text-sm'>
                             {isStringSwitch
                                 ? variable.serverValue === 'true'
                                     ? 'Enabled'
@@ -101,11 +101,11 @@ const VariableBox = ({ variable }: Props) => {
                                   : 'Off'}
                         </span>
                         <Switch
-                            disabled={!canEdit || !variable.isEditable}
-                            name={variable.envVariable}
                             defaultChecked={
                                 isStringSwitch ? variable.serverValue === 'true' : variable.serverValue === '1'
                             }
+                            disabled={!(canEdit && variable.isEditable)}
+                            name={variable.envVariable}
                             onCheckedChange={() => {
                                 if (canEdit && variable.isEditable) {
                                     if (isStringSwitch) {
@@ -123,33 +123,33 @@ const VariableBox = ({ variable }: Props) => {
                             <DropdownMenu onOpenChange={(open) => setDropDownOpen(open)}>
                                 <DropdownMenuTrigger asChild>
                                     <button
-                                        className='w-full flex items-center justify-between gap-3 h-11 sm:h-12 px-3 sm:px-4 text-sm font-medium text-white transition-all duration-200 bg-linear-to-b from-[#ffffff10] to-[#ffffff09] border border-[#ffffff15] rounded-xl hover:from-[#ffffff15] hover:to-[#ffffff10] hover:border-[#ffffff25] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation'
-                                        disabled={!canEdit || !variable.isEditable}
+                                        className='flex h-11 w-full cursor-pointer touch-manipulation items-center justify-between gap-3 rounded-xl border border-[#ffffff15] bg-linear-to-b from-[#ffffff10] to-[#ffffff09] px-3 font-medium text-sm text-white transition-all duration-200 hover:border-[#ffffff25] hover:from-[#ffffff15] hover:to-[#ffffff10] disabled:cursor-not-allowed disabled:opacity-50 sm:h-12 sm:px-4'
+                                        disabled={!(canEdit && variable.isEditable)}
                                     >
-                                        <span className='font-mono text-neutral-200 truncate text-left'>
+                                        <span className='truncate text-left font-mono text-neutral-200'>
                                             {variable.serverValue}
                                         </span>
                                         {dropDownOpen ? (
                                             <ChevronUp
-                                                width={22}
-                                                height={22}
+                                                className='h-[14px] w-[14px] flex-shrink-0 opacity-60'
                                                 fill={'currentColor'}
-                                                className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
+                                                height={22}
+                                                width={22}
                                             />
                                         ) : (
                                             <ChevronDown
-                                                width={22}
-                                                height={22}
+                                                className='h-[14px] w-[14px] flex-shrink-0 opacity-60'
                                                 fill={'currentColor'}
-                                                className='w-[14px] h-[14px] opacity-60 flex-shrink-0'
+                                                height={22}
+                                                width={22}
                                             />
                                         )}
                                     </button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className='z-99999' sideOffset={8}>
                                     <DropdownMenuRadioGroup
-                                        value={variable.serverValue ?? ''}
                                         onValueChange={setVariableValue}
+                                        value={variable.serverValue ?? ''}
                                     >
                                         {selectValues.map((selectValue) => (
                                             <DropdownMenuRadioItem
@@ -164,17 +164,17 @@ const VariableBox = ({ variable }: Props) => {
                             </DropdownMenu>
                         ) : (
                             <Input
-                                className='w-full h-11 sm:h-12 text-sm sm:text-base'
+                                className='h-11 w-full text-sm sm:h-12 sm:text-base'
+                                defaultValue={variable.serverValue ?? ''}
+                                disabled={!(canEdit && variable.isEditable)}
+                                name={variable.envVariable}
                                 onKeyUp={(e) => {
                                     if (canEdit && variable.isEditable) {
                                         setVariableValue(e.currentTarget.value);
                                     }
                                 }}
-                                readOnly={!canEdit || !variable.isEditable}
-                                name={variable.envVariable}
-                                defaultValue={variable.serverValue ?? ''}
                                 placeholder={variable.defaultValue || 'Enter value...'}
-                                disabled={!canEdit || !variable.isEditable}
+                                readOnly={!(canEdit && variable.isEditable)}
                             />
                         )}
                     </>

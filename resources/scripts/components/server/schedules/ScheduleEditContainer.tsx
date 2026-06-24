@@ -19,11 +19,11 @@ import useFlash from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
 
 const CronBox = ({ title, value }: { title: string; value: string }) => (
-    <ItemContainer title={title} description={value} />
+    <ItemContainer description={value} title={title} />
 );
 
 const ActivePill = ({ active }: { active: boolean }) => (
-    <span className='flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white'>
+    <span className='ml-4 flex items-center rounded-full bg-neutral-600 px-2 py-px text-white text-xs uppercase'>
         {active ? 'Active' : 'Inactive'}
     </span>
 );
@@ -86,18 +86,22 @@ const ScheduleEditContainer = () => {
         <PageContentBlock title={'Schedules'}>
             <FlashMessageRender byKey={'schedules'} />
             {!schedule || isLoading ? (
-                <Spinner size={'large'} centered />
+                <Spinner centered size={'large'} />
             ) : (
-                <div className={`rounded-sm shadow-sm flex flex-col gap-6`}>
+                <div className={'flex flex-col gap-6 rounded-sm shadow-sm'}>
                     <div
-                        className={`bg-[#ffffff09] border-[1px] border-[#ffffff11] flex items-center place-content-between flex-col md:flex-row gap-6 p-6 rounded-2xl overflow-hidden`}
+                        className={
+                            'flex flex-col place-content-between items-center gap-6 overflow-hidden rounded-2xl border-[#ffffff11] border-[1px] bg-[#ffffff09] p-6 md:flex-row'
+                        }
                     >
-                        <div className={`flex-none self-start`}>
-                            <h3 className={`flex items-center text-neutral-100 text-2xl`}>
+                        <div className={'flex-none self-start'}>
+                            <h3 className={'flex items-center text-2xl text-neutral-100'}>
                                 {schedule.name}
                                 {schedule.isProcessing ? (
                                     <span
-                                        className={`flex items-center rounded-full px-2 py-px text-xs ml-4 uppercase bg-neutral-600 text-white`}
+                                        className={
+                                            'ml-4 flex items-center rounded-full bg-neutral-600 px-2 py-px text-white text-xs uppercase'
+                                        }
                                     >
                                         Processing
                                     </span>
@@ -105,7 +109,7 @@ const ScheduleEditContainer = () => {
                                     <ActivePill active={schedule.isActive} />
                                 )}
                             </h3>
-                            <p className={`mt-1 text-sm`}>
+                            <p className={'mt-1 text-sm'}>
                                 <strong>Last run at:&nbsp;</strong>
                                 {schedule.lastRunAt ? (
                                     format(schedule.lastRunAt, "MMM do 'at' h:mma")
@@ -113,8 +117,8 @@ const ScheduleEditContainer = () => {
                                     <span>N/A</span>
                                 )}
 
-                                <span className={`ml-4 pl-4 border-l-4 border-neutral-600 py-px hidden sm:inline`} />
-                                <br className={`sm:hidden`} />
+                                <span className={'ml-4 hidden border-neutral-600 border-l-4 py-px pl-4 sm:inline'} />
+                                <br className={'sm:hidden'} />
 
                                 <strong>Next run at:&nbsp;</strong>
                                 {schedule.nextRunAt ? (
@@ -124,26 +128,26 @@ const ScheduleEditContainer = () => {
                                 )}
                             </p>
                         </div>
-                        <div className={`flex gap-2 flex-col md:flex-row md:min-w-0 min-w-full`}>
+                        <div className={'flex min-w-full flex-col gap-2 md:min-w-0 md:flex-row'}>
                             <Can action={'schedule.update'}>
                                 <ActionButton
-                                    variant='secondary'
+                                    className={'min-w-max flex-1'}
                                     onClick={toggleEditModal}
-                                    className={'flex-1 min-w-max'}
+                                    variant='secondary'
                                 >
                                     Edit
                                 </ActionButton>
                                 <ActionButton
-                                    variant='primary'
+                                    className={'min-w-max flex-1'}
                                     onClick={() => setShowTaskModal(true)}
-                                    className={'flex-1 min-w-max'}
+                                    variant='primary'
                                 >
                                     New Task
                                 </ActionButton>
                             </Can>
                         </div>
                     </div>
-                    <div className={`grid grid-cols-3 sm:grid-cols-5 gap-4`}>
+                    <div className={'grid grid-cols-3 gap-4 sm:grid-cols-5'}>
                         <CronBox title={'Minute'} value={schedule.cron.minute} />
                         <CronBox title={'Hour'} value={schedule.cron.hour} />
                         <CronBox title={'Day (Month)'} value={schedule.cron.dayOfMonth} />
@@ -159,28 +163,28 @@ const ScheduleEditContainer = () => {
                                   .map((task) => (
                                       <ScheduleTaskRow
                                           key={`${schedule.id}_${task.id}`}
-                                          task={task}
                                           schedule={schedule}
+                                          task={task}
                                       />
                                   ))
                             : null}
                     </div>
-                    <EditScheduleModal visible={showEditModal} schedule={schedule} onModalDismissed={toggleEditModal} />
-                    <div className={`gap-3 flex sm:justify-end`}>
+                    <EditScheduleModal onModalDismissed={toggleEditModal} schedule={schedule} visible={showEditModal} />
+                    <div className={'flex gap-3 sm:justify-end'}>
                         <Can action={'schedule.delete'}>
                             <DeleteScheduleButton
-                                scheduleId={schedule.id}
                                 onDeleted={() => navigate(`/server/${id}/schedules`)}
+                                scheduleId={schedule.id}
                             />
                         </Can>
                         {schedule.tasks.length > 0 && (
                             <Can action={'schedule.update'}>
-                                <SpinnerOverlay visible={runLoading} size={'large'} />
+                                <SpinnerOverlay size={'large'} visible={runLoading} />
                                 <ActionButton
-                                    variant='secondary'
                                     className={'flex-1 sm:flex-none'}
                                     disabled={schedule.isProcessing}
                                     onClick={onTriggerExecute}
+                                    variant='secondary'
                                 >
                                     Run Now
                                 </ActionButton>
@@ -188,9 +192,9 @@ const ScheduleEditContainer = () => {
                         )}
                     </div>
                     <TaskDetailsModal
+                        onModalDismissed={() => setShowTaskModal(false)}
                         schedule={schedule}
                         visible={showTaskModal}
-                        onModalDismissed={() => setShowTaskModal(false)}
                     />
                 </div>
             )}

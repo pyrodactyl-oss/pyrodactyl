@@ -1,11 +1,11 @@
 export interface Mode {
-    name: string;
+    alias?: string[];
+    ext?: string[];
+    file?: RegExp;
     mime: string;
     mimes?: string[];
     mode: string;
-    ext?: string[];
-    alias?: string[];
-    file?: RegExp;
+    name: string;
 }
 
 const modes: Mode[] = [

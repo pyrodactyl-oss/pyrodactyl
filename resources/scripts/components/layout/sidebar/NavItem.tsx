@@ -5,28 +5,28 @@ import { NavLink } from 'react-router-dom';
 import Can from '@/components/elements/Can';
 
 interface RenderedNavItem {
-    to: string;
-    icon: IconSvgElement;
-    text: string;
-    itemRef: React.RefObject<HTMLAnchorElement | null>;
     end: boolean;
+    icon: IconSvgElement;
+    itemRef: React.RefObject<HTMLAnchorElement | null>;
     lastItem?: boolean;
-    permission?: string | string[];
     onNavClick?: () => void;
+    permission?: string | string[];
+    text: string;
+    to: string;
 }
 
 const NavItem = memo(({ to, icon, text, itemRef, end, permission, onNavClick }: RenderedNavItem) => {
     const navLink = (
         <NavLink
-            to={to}
-            end={end}
-            className='nav-item flex items-center duration-200 select-none font-medium relative opacity-40 '
-            ref={itemRef}
+            className='nav-item relative flex select-none items-center font-medium opacity-40 duration-200'
             draggable={false}
+            end={end}
             onClick={onNavClick}
+            ref={itemRef}
+            to={to}
         >
-            <HugeiconsIcon className='nav-icon size-5 shrink-0 transition-transform' strokeWidth={2} icon={icon} />
-            <p className='nav-text text-sm text-nowrap transition-transform'>{text}</p>
+            <HugeiconsIcon className='nav-icon size-5 shrink-0 transition-transform' icon={icon} strokeWidth={2} />
+            <p className='nav-text text-nowrap text-sm transition-transform'>{text}</p>
         </NavLink>
     );
 

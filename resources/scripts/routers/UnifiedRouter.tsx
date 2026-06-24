@@ -44,16 +44,15 @@ import { ServerContext } from '@/state/server';
 const blank_egg_prefix = '@';
 
 interface Egg {
-    object: string;
     attributes: {
         uuid: string;
         name: string;
         description: string;
     };
+    object: string;
 }
 
 interface Nest {
-    object: string;
     attributes: {
         id: number;
         name: string;
@@ -64,6 +63,7 @@ interface Nest {
             };
         };
     };
+    object: string;
 }
 
 const UnifiedRouter = () => {
@@ -311,10 +311,10 @@ const UnifiedRouter = () => {
         <SidebarProvider>
             <HeaderProvider>
                 <Fragment key={'unified-router'}>
-                    <div className='flex flex-col w-full h-full relative'>
+                    <div className='relative flex h-full w-full flex-col'>
                         <AppHeader serverId={isServerRoute ? serverInternalId?.toString() : undefined} />
 
-                        <div className='flex h-full w-full overflow-hidden relative'>
+                        <div className='relative flex h-full w-full overflow-hidden'>
                             <Sidebar navItems={navItems} />
 
                             {/* server-specific components - only render when we have server data */}
@@ -331,13 +331,13 @@ const UnifiedRouter = () => {
                                 <MainWrapper>
                                     {/* server error state */}
                                     {isServerRoute && error && (
-                                        <ServerError title='Something went wrong' message={error} />
+                                        <ServerError message={error} title='Something went wrong' />
                                     )}
 
                                     {/* server loading state */}
-                                    {isServerRoute && !error && (!uuid || !id) && (
-                                        <div className='flex items-center justify-center h-full opacity-10'>
-                                            <div className='p-1 pyro-logo1 '>
+                                    {isServerRoute && !error && !(uuid && id) && (
+                                        <div className='flex h-full items-center justify-center opacity-10'>
+                                            <div className='pyro-logo1 p-1'>
                                                 <Logo />
                                             </div>
                                         </div>
@@ -364,12 +364,12 @@ const UnifiedRouter = () => {
                                                 {/* dashboard routes */}
                                                 {!isServerRoute && (
                                                     <>
-                                                        <Route path='' element={<DashboardContainer />} />
+                                                        <Route element={<DashboardContainer />} path='' />
                                                         {routes.account.map(({ route, component: Component }) => (
                                                             <Route
+                                                                element={<Component />}
                                                                 key={route}
                                                                 path={`/account/${route}`.replace('//', '/')}
-                                                                element={<Component />}
                                                             />
                                                         ))}
                                                     </>
@@ -380,12 +380,6 @@ const UnifiedRouter = () => {
                                                         {routes.server.map(
                                                             ({ route, permission, component: Component }) => (
                                                                 <Route
-                                                                    key={route}
-                                                                    path={
-                                                                        route === ''
-                                                                            ? `/server/${id}`
-                                                                            : `/server/${id}/${route}`
-                                                                    }
                                                                     element={
                                                                         <PermissionRoute permission={permission}>
                                                                             <Suspense fallback={null}>
@@ -393,12 +387,18 @@ const UnifiedRouter = () => {
                                                                             </Suspense>
                                                                         </PermissionRoute>
                                                                     }
+                                                                    key={route}
+                                                                    path={
+                                                                        route === ''
+                                                                            ? `/server/${id}`
+                                                                            : `/server/${id}/${route}`
+                                                                    }
                                                                 />
                                                             ),
                                                         )}
                                                     </>
                                                 )}
-                                                <Route path='*' element={<NotFound />} />
+                                                <Route element={<NotFound />} path='*' />
                                             </Routes>
                                         </ErrorBoundary>
                                     )}

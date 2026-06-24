@@ -2,7 +2,11 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface SubdomainInfo {
-    supported: boolean;
+    available_domains: Array<{
+        id: number;
+        name: string;
+        is_active: boolean;
+    }>;
     current_subdomain?: {
         object: string;
         attributes: {
@@ -13,12 +17,8 @@ export interface SubdomainInfo {
             is_active: boolean;
         };
     };
-    available_domains: Array<{
-        id: number;
-        name: string;
-        is_active: boolean;
-    }>;
     message?: string;
+    supported: boolean;
 }
 
 export interface AvailabilityResponse {
@@ -27,16 +27,15 @@ export interface AvailabilityResponse {
 }
 const daemonType = getGlobalDaemonType();
 
-export const getSubdomainInfo = (uuid: string): Promise<SubdomainInfo> => {
-    return new Promise((resolve, reject) => {
+export const getSubdomainInfo = (uuid: string): Promise<SubdomainInfo> =>
+    new Promise((resolve, reject) => {
         http.get(`/api/client/servers/${uuid}/subdomain`)
             .then(({ data }) => resolve(data))
             .catch(reject);
     });
-};
 
-export const setSubdomain = (uuid: string, subdomain: string, domainId: number): Promise<void> => {
-    return new Promise((resolve, reject) => {
+export const setSubdomain = (uuid: string, subdomain: string, domainId: number): Promise<void> =>
+    new Promise((resolve, reject) => {
         http.post(`/api/client/servers/${uuid}/subdomain`, {
             subdomain,
             domain_id: domainId,
@@ -44,22 +43,20 @@ export const setSubdomain = (uuid: string, subdomain: string, domainId: number):
             .then(() => resolve())
             .catch(reject);
     });
-};
 
-export const deleteSubdomain = (uuid: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
+export const deleteSubdomain = (uuid: string): Promise<void> =>
+    new Promise((resolve, reject) => {
         http.delete(`/api/client/servers/${uuid}/subdomain`)
             .then(() => resolve())
             .catch(reject);
     });
-};
 
 export const checkSubdomainAvailability = (
     uuid: string,
     subdomain: string,
     domainId: number,
-): Promise<AvailabilityResponse> => {
-    return new Promise((resolve, reject) => {
+): Promise<AvailabilityResponse> =>
+    new Promise((resolve, reject) => {
         http.post(`/api/client/servers/${uuid}/subdomain/check-availability`, {
             subdomain,
             domain_id: domainId,
@@ -67,4 +64,3 @@ export const checkSubdomainAvailability = (
             .then(({ data }) => resolve(data))
             .catch(reject);
     });
-};

@@ -31,17 +31,16 @@ import { useDeepCompareEffect } from '@/plugins/useDeepCompareEffect';
 import { ServerContext } from '@/state/server';
 
 interface Egg {
-    object: string;
     attributes: {
         id: number;
         uuid: string;
         name: string;
         description: string;
     };
+    object: string;
 }
 
 interface Nest {
-    object: string;
     attributes: {
         id: number;
         uuid: string;
@@ -57,6 +56,7 @@ interface Nest {
             };
         };
     };
+    object: string;
 }
 
 const MAX_DESCRIPTION_LENGTH = 150;
@@ -122,7 +122,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'min': {
                     if (ruleValue && value) {
-                        const minValue = parseInt(ruleValue);
+                        const minValue = Number.parseInt(ruleValue);
                         if (value.length < minValue) {
                             errors.push(`${variable.name} must be at least ${minValue} characters.`);
                         }
@@ -132,7 +132,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'max': {
                     if (ruleValue && value) {
-                        const maxValue = parseInt(ruleValue);
+                        const maxValue = Number.parseInt(ruleValue);
                         if (value.length > maxValue) {
                             errors.push(`${variable.name} may not be greater than ${maxValue} characters.`);
                         }
@@ -142,7 +142,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'between': {
                     if (ruleValue && value) {
-                        const [min, max] = ruleValue.split(',').map((v) => parseInt(v.trim()));
+                        const [min, max] = ruleValue.split(',').map((v) => Number.parseInt(v.trim()));
                         if (value.length < min || value.length > max) {
                             errors.push(`${variable.name} must be between ${min} and ${max} characters.`);
                         }
@@ -258,8 +258,8 @@ const SoftwareContainer = () => {
     //const originalEgg = currentEgg;
     const currentEggName = useMemo(() => {
         // Don't attempt calculation until both nests data and currentEgg are available
-        if (!nests || !currentEgg) {
-            return undefined;
+        if (!(nests && currentEgg)) {
+            return;
         }
 
         const foundNest = nests.find((nest) =>
@@ -403,7 +403,7 @@ const SoftwareContainer = () => {
     };
 
     const handleEggSelection = async (egg: Egg) => {
-        if (!selectedNest || !uuid) return;
+        if (!(selectedNest && uuid)) return;
 
         setIsLoading(true);
         setSelectedEgg(egg);
@@ -480,7 +480,7 @@ const SoftwareContainer = () => {
     };
 
     const applyChanges = async () => {
-        if (!selectedEgg || !selectedNest || !eggPreview) return;
+        if (!(selectedEgg && selectedNest && eggPreview)) return;
 
         // Show final confirmation if wipe files is selected without backup
         if (shouldWipe && !shouldBackup) {
@@ -493,7 +493,7 @@ const SoftwareContainer = () => {
     };
 
     const executeApplyChanges = async () => {
-        if (!selectedEgg || !selectedNest || !eggPreview || !uuid) return;
+        if (!(selectedEgg && selectedNest && eggPreview && uuid)) return;
 
         setIsLoading(true);
 
@@ -510,8 +510,8 @@ const SoftwareContainer = () => {
                 selectedDockerImage && eggPreview.docker_images
                     ? eggPreview.docker_images[selectedDockerImage]
                     : eggPreview.default_docker_image && eggPreview.docker_images
-                        ? eggPreview.docker_images[eggPreview.default_docker_image]
-                        : '';
+                      ? eggPreview.docker_images[eggPreview.default_docker_image]
+                      : '';
 
             // Filter out empty environment variables to prevent validation issues
             const filteredEnvironment: Record<string, string> = {};
@@ -593,13 +593,13 @@ const SoftwareContainer = () => {
         const showFull = showFullDescriptions[id];
 
         return (
-            <p className='text-sm text-neutral-400 leading-relaxed'>
+            <p className='text-neutral-400 text-sm leading-relaxed'>
                 {isLong && !showFull ? (
                     <>
                         {description.slice(0, MAX_DESCRIPTION_LENGTH)}...{' '}
                         <button
+                            className='font-medium text-brand hover:underline'
                             onClick={() => toggleDescription(id)}
-                            className='text-brand hover:underline font-medium'
                         >
                             Show more
                         </button>
@@ -611,8 +611,8 @@ const SoftwareContainer = () => {
                             <>
                                 {' '}
                                 <button
+                                    className='font-medium text-brand hover:underline'
                                     onClick={() => toggleDescription(id)}
-                                    className='text-brand hover:underline font-medium'
                                 >
                                     Show less
                                 </button>
@@ -626,22 +626,22 @@ const SoftwareContainer = () => {
 
     const renderOverview = () => (
         <TitledGreyBox title='Current Software'>
-            <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4'>
-                <div className='flex items-center gap-3 sm:gap-4 min-w-0 flex-1'>
-                    <div className='w-10 h-10 sm:w-12 sm:h-12 bg-[#ffffff11] rounded-lg flex items-center justify-center flex-shrink-0'>
+            <div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
+                <div className='flex min-w-0 flex-1 items-center gap-3 sm:gap-4'>
+                    <div className='flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#ffffff11] sm:h-12 sm:w-12'>
                         <Box
-                            width={22}
-                            height={22}
+                            className='h-5 w-5 text-neutral-300 sm:h-6 sm:w-6'
                             fill='currentColor'
-                            className='w-5 h-5 sm:w-6 sm:h-6 text-neutral-300'
+                            height={22}
+                            width={22}
                         />
                     </div>
                     <div className='min-w-0 flex-1'>
                         {currentEggName ? (
                             currentEggName.includes(blank_egg_prefix) ? (
-                                <p className='text-amber-400 font-medium text-sm sm:text-base'>No software selected</p>
+                                <p className='font-medium text-amber-400 text-sm sm:text-base'>No software selected</p>
                             ) : (
-                                <p className='text-neutral-200 font-medium text-sm sm:text-base truncate'>
+                                <p className='truncate font-medium text-neutral-200 text-sm sm:text-base'>
                                     {currentEggName}
                                 </p>
                             )
@@ -651,14 +651,15 @@ const SoftwareContainer = () => {
                                 <span className='text-neutral-400 text-sm'>Loading...</span>
                             </div>
                         )}
-                        <p className='text-xs sm:text-sm text-neutral-400 leading-relaxed'>
+                        <p className='text-neutral-400 text-xs leading-relaxed sm:text-sm'>
                             Manage your server&apos;s game or software configuration
                         </p>
                     </div>
                 </div>
-                <div className='flex-shrink-0 w-full sm:w-auto'>
+                <div className='w-full flex-shrink-0 sm:w-auto'>
                     <ActionButton
-                        variant='primary'
+                        className='w-full sm:w-auto'
+                        disabled={isLoading}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
@@ -668,8 +669,7 @@ const SoftwareContainer = () => {
                                 console.error('Error in change software click:', error);
                             }
                         }}
-                        className='w-full sm:w-auto'
-                        disabled={isLoading}
+                        variant='primary'
                     >
                         {isLoading && <Spinner size='small' />}
                         Change Software
@@ -682,17 +682,17 @@ const SoftwareContainer = () => {
     const renderGameSelection = () => (
         <TitledGreyBox title='Select Category'>
             <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the type of game or software you want to run</p>
+                <p className='text-neutral-400 text-sm'>Choose the type of game or software you want to run</p>
 
-                <div className='grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-4'>
+                <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3'>
                     {nests?.map((nest) =>
                         nest?.attributes?.name?.includes(hidden_nest_prefix) ? null : (
                             <button
+                                className='touch-manipulation rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4 text-left transition-all hover:border-[#ffffff20] active:bg-[#ffffff12] sm:p-5'
                                 key={nest?.attributes?.uuid}
                                 onClick={() => handleNestSelection(nest)}
-                                className='p-4 sm:p-5 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left active:bg-[#ffffff12] touch-manipulation'
                             >
-                                <h3 className='font-semibold text-neutral-200 mb-2 text-base sm:text-lg'>
+                                <h3 className='mb-2 font-semibold text-base text-neutral-200 sm:text-lg'>
                                     {nest?.attributes?.name}
                                 </h3>
                                 {renderDescription(
@@ -706,9 +706,9 @@ const SoftwareContainer = () => {
 
                 <div className='flex justify-center pt-4'>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('overview')}
                         className='w-full sm:w-auto'
+                        onClick={() => setCurrentStep('overview')}
+                        variant='secondary'
                     >
                         Back to Overview
                     </ActionButton>
@@ -720,25 +720,25 @@ const SoftwareContainer = () => {
     const renderSoftwareSelection = () => (
         <TitledGreyBox title={`Select Software - ${selectedNest?.attributes.name}`}>
             <div className='space-y-4'>
-                <p className='text-sm text-neutral-400'>Choose the specific software version for your server</p>
+                <p className='text-neutral-400 text-sm'>Choose the specific software version for your server</p>
 
                 {isLoading ? (
                     <div className='flex items-center justify-center py-16'>
                         <div className='flex flex-col items-center text-center'>
                             <Spinner size='large' />
-                            <p className='text-neutral-400 mt-4'>Loading software options...</p>
+                            <p className='mt-4 text-neutral-400'>Loading software options...</p>
                         </div>
                     </div>
                 ) : (
-                    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'>
+                    <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3'>
                         {selectedNest?.attributes?.relationships?.eggs?.data?.map((egg) => (
                             <button
+                                className='touch-manipulation rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4 text-left transition-all hover:border-[#ffffff20] disabled:cursor-not-allowed disabled:opacity-50'
+                                disabled={isLoading}
                                 key={egg.attributes.uuid}
                                 onClick={() => handleEggSelection(egg)}
-                                disabled={isLoading}
-                                className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all text-left touch-manipulation disabled:opacity-50 disabled:cursor-not-allowed'
                             >
-                                <div className='flex items-center gap-2 mb-2'>
+                                <div className='mb-2 flex items-center gap-2'>
                                     {isLoading && selectedEgg?.attributes?.uuid === egg?.attributes?.uuid && (
                                         <Spinner size='small' />
                                     )}
@@ -752,18 +752,18 @@ const SoftwareContainer = () => {
                     </div>
                 )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                <div className='flex flex-col justify-center gap-3 pt-4 sm:flex-row'>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('select-game')}
                         className='w-full sm:w-auto'
+                        onClick={() => setCurrentStep('select-game')}
+                        variant='secondary'
                     >
                         Back to Games
                     </ActionButton>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('overview')}
                         className='w-full sm:w-auto'
+                        onClick={() => setCurrentStep('overview')}
+                        variant='secondary'
                     >
                         Cancel
                     </ActionButton>
@@ -779,20 +779,20 @@ const SoftwareContainer = () => {
                     <div className='space-y-6'>
                         {/* Software Configuration */}
                         <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Software Configuration</h3>
-                            <div className='grid grid-cols-1 xl:grid-cols-2 gap-4'>
+                            <h3 className='font-semibold text-lg text-neutral-200'>Software Configuration</h3>
+                            <div className='grid grid-cols-1 gap-4 xl:grid-cols-2'>
                                 <div>
-                                    <label className='text-sm font-medium text-neutral-300 block mb-2'>
+                                    <label className='mb-2 block font-medium text-neutral-300 text-sm'>
                                         Startup Command
                                     </label>
                                     <textarea
-                                        value={customStartup}
+                                        className='w-full resize-none rounded-lg border border-[#ffffff12] bg-[#ffffff08] px-3 py-2 font-mono text-neutral-200 text-sm transition-colors placeholder:text-neutral-500 focus:border-brand focus:outline-none'
                                         onChange={(e) => setCustomStartup(e.target.value)}
                                         placeholder='Enter custom startup command...'
                                         rows={3}
-                                        className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none focus:border-brand transition-colors font-mono resize-none'
+                                        value={customStartup}
                                     />
-                                    <p className='text-xs text-neutral-400 mt-1'>
+                                    <p className='mt-1 text-neutral-400 text-xs'>
                                         Use variables like{' '}
                                         {eggPreview.variables
                                             .map((v) => `{{${v.env_variable}}}`)
@@ -802,42 +802,42 @@ const SoftwareContainer = () => {
                                     </p>
                                 </div>
                                 <div>
-                                    <label className='text-sm font-medium text-neutral-300 block mb-2'>
+                                    <label className='mb-2 block font-medium text-neutral-300 text-sm'>
                                         Docker Image
                                     </label>
                                     {eggPreview.docker_images && Object.keys(eggPreview.docker_images).length > 1 ? (
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <button className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200 focus:outline-none focus:border-brand transition-colors text-left flex items-center justify-between hover:border-[#ffffff20]'>
+                                                <button className='flex w-full items-center justify-between rounded-lg border border-[#ffffff12] bg-[#ffffff08] px-3 py-2 text-left text-neutral-200 text-sm transition-colors hover:border-[#ffffff20] focus:border-brand focus:outline-none'>
                                                     <span className='truncate'>
                                                         {selectedDockerImage || 'Select image...'}
                                                     </span>
                                                     <svg
-                                                        className='w-4 h-4 text-neutral-400 flex-shrink-0'
+                                                        className='h-4 w-4 flex-shrink-0 text-neutral-400'
                                                         fill='none'
                                                         stroke='currentColor'
                                                         viewBox='0 0 24 24'
                                                     >
                                                         <path
+                                                            d='M19 9l-7 7-7-7'
                                                             strokeLinecap='round'
                                                             strokeLinejoin='round'
                                                             strokeWidth={2}
-                                                            d='M19 9l-7 7-7-7'
                                                         />
                                                     </svg>
                                                 </button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent className='w-full min-w-[300px]'>
                                                 <DropdownMenuRadioGroup
-                                                    value={selectedDockerImage}
                                                     onValueChange={setSelectedDockerImage}
+                                                    value={selectedDockerImage}
                                                 >
                                                     {Object.entries(eggPreview.docker_images).map(
                                                         ([displayName, _]) => (
                                                             <DropdownMenuRadioItem
+                                                                className='font-mono text-sm'
                                                                 key={displayName}
                                                                 value={displayName}
-                                                                className='text-sm font-mono'
                                                             >
                                                                 <span>{displayName}</span>
                                                             </DropdownMenuRadioItem>
@@ -847,12 +847,12 @@ const SoftwareContainer = () => {
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     ) : (
-                                        <div className='w-full px-3 py-2 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
+                                        <div className='w-full rounded-lg border border-[#ffffff12] bg-[#ffffff08] px-3 py-2 text-neutral-200 text-sm'>
                                             {(eggPreview.docker_images && Object.keys(eggPreview.docker_images)[0]) ||
                                                 'Default Image'}
                                         </div>
                                     )}
-                                    <p className='text-xs text-neutral-400 mt-1'>
+                                    <p className='mt-1 text-neutral-400 text-xs'>
                                         Container runtime environment for your server
                                     </p>
                                 </div>
@@ -862,31 +862,31 @@ const SoftwareContainer = () => {
                         {/* Environment Variables */}
                         {eggPreview.variables.length > 0 && (
                             <div className='space-y-4'>
-                                <h3 className='text-lg font-semibold text-neutral-200'>Environment Variables</h3>
-                                <div className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+                                <h3 className='font-semibold text-lg text-neutral-200'>Environment Variables</h3>
+                                <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
                                     {eggPreview.variables.map((variable) => (
-                                        <div key={variable.env_variable} className='space-y-3'>
+                                        <div className='space-y-3' key={variable.env_variable}>
                                             <div>
-                                                <label className='text-sm font-medium text-neutral-200 block mb-1'>
+                                                <label className='mb-1 block font-medium text-neutral-200 text-sm'>
                                                     {variable.name}
                                                     {!variable.user_editable && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-amber-500/20 text-amber-400 rounded'>
+                                                        <span className='ml-2 rounded bg-amber-500/20 px-2 py-0.5 text-amber-400 text-xs'>
                                                             Read-only
                                                         </span>
                                                     )}
                                                     {variable.user_editable && variable.rules.includes('required') && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-red-500/20 text-red-400 rounded'>
+                                                        <span className='ml-2 rounded bg-red-500/20 px-2 py-0.5 text-red-400 text-xs'>
                                                             Required
                                                         </span>
                                                     )}
                                                     {variable.user_editable && !variable.rules.includes('required') && (
-                                                        <span className='ml-2 px-2 py-0.5 text-xs bg-neutral-500/20 text-neutral-400 rounded'>
+                                                        <span className='ml-2 rounded bg-neutral-500/20 px-2 py-0.5 text-neutral-400 text-xs'>
                                                             Optional
                                                         </span>
                                                     )}
                                                 </label>
                                                 {variable.description && (
-                                                    <p className='text-xs text-neutral-400 mb-2'>
+                                                    <p className='mb-2 text-neutral-400 text-xs'>
                                                         {variable.description}
                                                     </p>
                                                 )}
@@ -895,25 +895,26 @@ const SoftwareContainer = () => {
                                             {variable.user_editable ? (
                                                 <div>
                                                     <input
-                                                        type='text'
-                                                        value={pendingVariables[variable.env_variable] || ''}
+                                                        className={`w-full rounded-lg border bg-[#ffffff08] px-3 py-2 text-neutral-200 text-sm transition-colors placeholder:text-neutral-500 focus:outline-none ${
+                                                            variableErrors[variable.env_variable]
+                                                                ? 'border-red-500 focus:border-red-500'
+                                                                : 'border-[#ffffff12] focus:border-brand'
+                                                        }`}
                                                         onChange={(e) =>
                                                             handleVariableChange(variable.env_variable, e.target.value)
                                                         }
                                                         placeholder={variable.default_value || 'Enter value...'}
-                                                        className={`w-full px-3 py-2 bg-[#ffffff08] border rounded-lg text-sm text-neutral-200 placeholder:text-neutral-500 focus:outline-none transition-colors ${variableErrors[variable.env_variable]
-                                                                ? 'border-red-500 focus:border-red-500'
-                                                                : 'border-[#ffffff12] focus:border-brand'
-                                                            }`}
+                                                        type='text'
+                                                        value={pendingVariables[variable.env_variable] || ''}
                                                     />
                                                     {variableErrors[variable.env_variable] && (
-                                                        <p className='text-xs text-red-400 mt-1'>
+                                                        <p className='mt-1 text-red-400 text-xs'>
                                                             {variableErrors[variable.env_variable]}
                                                         </p>
                                                     )}
                                                 </div>
                                             ) : (
-                                                <div className='w-full px-3 py-2 bg-[#ffffff04] border border-[#ffffff08] rounded-lg text-sm text-neutral-300 font-mono'>
+                                                <div className='w-full rounded-lg border border-[#ffffff08] bg-[#ffffff04] px-3 py-2 font-mono text-neutral-300 text-sm'>
                                                     {pendingVariables[variable.env_variable] ||
                                                         variable.default_value ||
                                                         'Not set'}
@@ -921,7 +922,7 @@ const SoftwareContainer = () => {
                                             )}
 
                                             <div className='flex justify-between text-xs'>
-                                                <span className='text-neutral-500 font-mono'>
+                                                <span className='font-mono text-neutral-500'>
                                                     {variable.env_variable}
                                                 </span>
                                                 {variable.rules && (
@@ -936,40 +937,40 @@ const SoftwareContainer = () => {
 
                         {/* Safety Options */}
                         <div className='space-y-4'>
-                            <h3 className='text-lg font-semibold text-neutral-200'>Safety Options</h3>
+                            <h3 className='font-semibold text-lg text-neutral-200'>Safety Options</h3>
                             <div className='space-y-3'>
-                                <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
-                                    <div className='flex-1 min-w-0 pr-4'>
-                                        <label className='text-sm font-medium text-neutral-200 block mb-1'>
+                                <div className='flex items-center justify-between rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4 transition-colors hover:border-[#ffffff20]'>
+                                    <div className='min-w-0 flex-1 pr-4'>
+                                        <label className='mb-1 block font-medium text-neutral-200 text-sm'>
                                             Create Backup
                                         </label>
-                                        <p className='text-xs text-neutral-400 leading-relaxed'>
+                                        <p className='text-neutral-400 text-xs leading-relaxed'>
                                             {backupLimit !== 0 &&
-                                                (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
+                                            (backupLimit === null || (backups?.backupCount || 0) < backupLimit)
                                                 ? 'Automatically create a backup before applying changes'
                                                 : backupLimit === 0
-                                                    ? 'Backups are disabled for this server'
-                                                    : 'Backup limit reached'}
+                                                  ? 'Backups are disabled for this server'
+                                                  : 'Backup limit reached'}
                                         </p>
                                     </div>
                                     <div className='flex-shrink-0'>
                                         <Switch
                                             checked={shouldBackup}
-                                            onCheckedChange={setShouldBackup}
                                             disabled={
                                                 backupLimit === 0 ||
                                                 (backupLimit !== null && (backups?.backupCount || 0) >= backupLimit)
                                             }
+                                            onCheckedChange={setShouldBackup}
                                         />
                                     </div>
                                 </div>
 
-                                <div className='flex items-center justify-between p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-colors'>
-                                    <div className='flex-1 min-w-0 pr-4'>
-                                        <label className='text-sm font-medium text-neutral-200 block mb-1'>
+                                <div className='flex items-center justify-between rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4 transition-colors hover:border-[#ffffff20]'>
+                                    <div className='min-w-0 flex-1 pr-4'>
+                                        <label className='mb-1 block font-medium text-neutral-200 text-sm'>
                                             Wipe Files
                                         </label>
-                                        <p className='text-xs text-neutral-400 leading-relaxed'>
+                                        <p className='text-neutral-400 text-xs leading-relaxed'>
                                             Delete all files before installing new software
                                         </p>
                                     </div>
@@ -982,19 +983,19 @@ const SoftwareContainer = () => {
                     </div>
                 )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                <div className='flex flex-col justify-center gap-3 pt-4 sm:flex-row'>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('select-software')}
                         className='w-full sm:w-auto'
+                        onClick={() => setCurrentStep('select-software')}
+                        variant='secondary'
                     >
                         Back to Software
                     </ActionButton>
                     <ActionButton
-                        variant='primary'
-                        onClick={proceedToReview}
-                        disabled={!eggPreview || isLoading}
                         className='w-full sm:w-auto'
+                        disabled={!eggPreview || isLoading}
+                        onClick={proceedToReview}
+                        variant='primary'
                     >
                         {isLoading && <Spinner size='small' />}
                         Review Changes
@@ -1010,26 +1011,26 @@ const SoftwareContainer = () => {
                 {selectedEgg && eggPreview && (
                     <div className='space-y-6'>
                         {/* Summary */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Change Summary</h3>
-                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm'>
+                        <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4'>
+                            <h3 className='mb-4 font-semibold text-lg text-neutral-200'>Change Summary</h3>
+                            <div className='grid grid-cols-1 gap-4 text-sm sm:grid-cols-2'>
                                 <div>
                                     <span className='text-neutral-400'>From:</span>
-                                    <div className='text-neutral-200 font-medium'>
+                                    <div className='font-medium text-neutral-200'>
                                         {currentEggName || 'No software'}
                                     </div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>To:</span>
-                                    <div className='text-brand font-medium'>{selectedEgg.attributes.name}</div>
+                                    <div className='font-medium text-brand'>{selectedEgg.attributes.name}</div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>Category:</span>
-                                    <div className='text-neutral-200 font-medium'>{selectedNest?.attributes.name}</div>
+                                    <div className='font-medium text-neutral-200'>{selectedNest?.attributes.name}</div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400'>Docker Image:</span>
-                                    <div className='text-neutral-200 font-medium'>
+                                    <div className='font-medium text-neutral-200'>
                                         {selectedDockerImage || 'Default'}
                                     </div>
                                 </div>
@@ -1037,18 +1038,18 @@ const SoftwareContainer = () => {
                         </div>
 
                         {/* Startup Command Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Startup Configuration</h3>
+                        <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4'>
+                            <h3 className='mb-4 font-semibold text-lg text-neutral-200'>Startup Configuration</h3>
                             <div className='space-y-3'>
                                 <div>
                                     <span className='text-neutral-400 text-sm'>Startup Command:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg font-mono text-sm text-neutral-200 whitespace-pre-wrap'>
+                                    <div className='mt-1 whitespace-pre-wrap rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-3 font-mono text-neutral-200 text-sm'>
                                         {customStartup || eggPreview.egg.startup}
                                     </div>
                                 </div>
                                 <div>
                                     <span className='text-neutral-400 text-sm'>Docker Image:</span>
-                                    <div className='mt-1 p-3 bg-[#ffffff08] border border-[#ffffff12] rounded-lg text-sm text-neutral-200'>
+                                    <div className='mt-1 rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-3 text-neutral-200 text-sm'>
                                         {selectedDockerImage || 'Default Image'}
                                     </div>
                                 </div>
@@ -1057,21 +1058,21 @@ const SoftwareContainer = () => {
 
                         {/* Configuration Review */}
                         {eggPreview.variables.length > 0 && (
-                            <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                                <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Variable Configuration</h3>
+                            <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4'>
+                                <h3 className='mb-4 font-semibold text-lg text-neutral-200'>Variable Configuration</h3>
                                 <div className='space-y-2'>
                                     {eggPreview.variables.map((variable) => (
                                         <div
+                                            className='flex items-center justify-between rounded-lg bg-[#ffffff08] px-3 py-2'
                                             key={variable.env_variable}
-                                            className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'
                                         >
                                             <div>
-                                                <span className='text-neutral-200 font-medium'>{variable.name}</span>
-                                                <span className='text-neutral-500 text-sm ml-2 font-mono'>
+                                                <span className='font-medium text-neutral-200'>{variable.name}</span>
+                                                <span className='ml-2 font-mono text-neutral-500 text-sm'>
                                                     ({variable.env_variable})
                                                 </span>
                                             </div>
-                                            <div className='text-brand font-mono text-sm'>
+                                            <div className='font-mono text-brand text-sm'>
                                                 {pendingVariables[variable.env_variable] ||
                                                     variable.default_value ||
                                                     'Not set'}
@@ -1083,16 +1084,16 @@ const SoftwareContainer = () => {
                         )}
 
                         {/* Safety Options Review */}
-                        <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                            <h3 className='text-lg font-semibold text-neutral-200 mb-4'>Safety Options</h3>
+                        <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4'>
+                            <h3 className='mb-4 font-semibold text-lg text-neutral-200'>Safety Options</h3>
                             <div className='space-y-2'>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                <div className='flex items-center justify-between rounded-lg bg-[#ffffff08] px-3 py-2'>
                                     <span className='text-neutral-200'>Create Backup</span>
                                     <span className={shouldBackup ? 'text-green-400' : 'text-neutral-400'}>
                                         {shouldBackup ? 'Yes' : 'No'}
                                     </span>
                                 </div>
-                                <div className='flex justify-between items-center py-2 px-3 bg-[#ffffff08] rounded-lg'>
+                                <div className='flex items-center justify-between rounded-lg bg-[#ffffff08] px-3 py-2'>
                                     <span className='text-neutral-200'>Wipe Files</span>
                                     <span className={shouldWipe ? 'text-amber-400' : 'text-neutral-400'}>
                                         {shouldWipe ? 'Yes' : 'No'}
@@ -1106,30 +1107,33 @@ const SoftwareContainer = () => {
                             <div className='space-y-3'>
                                 {eggPreview.warnings.map((warning, index) => (
                                     <div
+                                        className={`rounded-lg border p-4 ${
+                                            warning.severity === 'error'
+                                                ? 'border-red-500/20 bg-red-500/10'
+                                                : 'border-amber-500/20 bg-amber-500/10'
+                                        }`}
                                         key={index}
-                                        className={`p-4 border rounded-lg ${warning.severity === 'error'
-                                                ? 'bg-red-500/10 border-red-500/20'
-                                                : 'bg-amber-500/10 border-amber-500/20'
-                                            }`}
                                     >
                                         <div className='flex items-start gap-3'>
                                             <TriangleExclamation
-                                                width={22}
-                                                height={22}
+                                                className={`mt-0.5 h-5 w-5 flex-shrink-0 ${
+                                                    warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                }`}
                                                 fill='currentColor'
-                                                className={`w-5 h-5 flex-shrink-0 mt-0.5 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                    }`}
+                                                height={22}
+                                                width={22}
                                             />
                                             <div>
                                                 <h4
-                                                    className={`font-semibold mb-2 ${warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
-                                                        }`}
+                                                    className={`mb-2 font-semibold ${
+                                                        warning.severity === 'error' ? 'text-red-400' : 'text-amber-400'
+                                                    }`}
                                                 >
                                                     {warning.type === 'subdomain_incompatible'
                                                         ? 'Subdomain Will Be Deleted'
                                                         : 'Warning'}
                                                 </h4>
-                                                <p className='text-sm text-neutral-300'>{warning.message}</p>
+                                                <p className='text-neutral-300 text-sm'>{warning.message}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1138,22 +1142,22 @@ const SoftwareContainer = () => {
                         )}
 
                         {/* General Warning */}
-                        <div className='p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg'>
+                        <div className='rounded-lg border border-amber-500/20 bg-amber-500/10 p-4'>
                             <div className='flex items-start gap-3'>
                                 <TriangleExclamation
-                                    width={22}
-                                    height={22}
+                                    className='mt-0.5 h-5 w-5 flex-shrink-0 text-amber-400'
                                     fill='currentColor'
-                                    className='w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5'
+                                    height={22}
+                                    width={22}
                                 />
                                 <div>
-                                    <h4 className='text-amber-400 font-semibold mb-2'>This will:</h4>
-                                    <ul className='text-sm text-neutral-300'>
+                                    <h4 className='mb-2 font-semibold text-amber-400'>This will:</h4>
+                                    <ul className='text-neutral-300 text-sm'>
                                         <li>• Stop and reinstall your server</li>
                                         <li>• Take several minutes to complete</li>
                                         <li>• Modify and remove some files</li>
                                     </ul>
-                                    <span className='text-sm font-bold mt-4'>
+                                    <span className='mt-4 font-bold text-sm'>
                                         Please ensure you have backups of important data before proceeding.
                                     </span>
                                 </div>
@@ -1162,19 +1166,19 @@ const SoftwareContainer = () => {
                     </div>
                 )}
 
-                <div className='flex flex-col sm:flex-row justify-center gap-3 pt-4'>
+                <div className='flex flex-col justify-center gap-3 pt-4 sm:flex-row'>
                     <ActionButton
-                        variant='secondary'
-                        onClick={() => setCurrentStep('configure')}
                         className='w-full sm:w-auto'
+                        onClick={() => setCurrentStep('configure')}
+                        variant='secondary'
                     >
                         Back to Configure
                     </ActionButton>
                     <ActionButton
-                        variant='primary'
-                        onClick={applyChanges}
-                        disabled={isLoading}
                         className='w-full sm:w-auto'
+                        disabled={isLoading}
+                        onClick={applyChanges}
+                        variant='primary'
                     >
                         {isLoading && <Spinner size='small' />}
                         Apply Changes
@@ -1188,10 +1192,10 @@ const SoftwareContainer = () => {
     if (!serverData) {
         return (
             <ServerContentBlock title='Software Management'>
-                <div className='flex items-center justify-center h-64'>
+                <div className='flex h-64 items-center justify-center'>
                     <div className='flex flex-col items-center text-center'>
                         <Spinner size='large' />
-                        <p className='text-neutral-400 mt-4'>Loading server information...</p>
+                        <p className='mt-4 text-neutral-400'>Loading server information...</p>
                     </div>
                 </div>
             </ServerContentBlock>
@@ -1201,24 +1205,24 @@ const SoftwareContainer = () => {
         if (daemonType == 'elytra') {
             return (
                 <OperationProgressModal
-                    visible={showOperationModal}
-                    operationId={currentOperationId}
-                    operationType='Software Change'
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
+                    operationId={currentOperationId}
+                    operationType='Software Change'
+                    visible={showOperationModal}
                 />
             );
         }
         if (daemonType == 'wings') {
             return (
                 <WingsOperationProgressModal
-                    visible={showOperationModal}
-                    operationId={currentOperationId}
-                    operationType='Software Change'
                     onClose={closeOperationModal}
                     onComplete={handleOperationComplete}
                     onError={handleOperationError}
+                    operationId={currentOperationId}
+                    operationType='Software Change'
+                    visible={showOperationModal}
                 />
             );
         }
@@ -1235,12 +1239,12 @@ const SoftwareContainer = () => {
 
                 {/* Progress indicator */}
                 {currentStep !== 'overview' && (
-                    <div className='p-4 bg-[#ffffff08] border border-[#ffffff12] rounded-lg'>
-                        <div className='flex items-center justify-between mb-2'>
-                            <span className='text-sm font-medium text-neutral-200 capitalize'>
+                    <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff08] p-4'>
+                        <div className='mb-2 flex items-center justify-between'>
+                            <span className='font-medium text-neutral-200 text-sm capitalize'>
                                 {currentStep.replace('-', ' ')}
                             </span>
-                            <span className='text-sm text-neutral-400'>
+                            <span className='text-neutral-400 text-sm'>
                                 Step{' '}
                                 {['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(
                                     currentStep,
@@ -1248,13 +1252,13 @@ const SoftwareContainer = () => {
                                 of 4
                             </span>
                         </div>
-                        <div className='w-full bg-[#ffffff12] rounded-full h-2'>
+                        <div className='h-2 w-full rounded-full bg-[#ffffff12]'>
                             <div
-                                className='bg-brand h-2 rounded-full transition-all duration-300'
+                                className='h-2 rounded-full bg-brand transition-all duration-300'
                                 style={{
                                     width: `${(['overview', 'select-game', 'select-software', 'configure', 'review'].indexOf(currentStep) / 4) * 100}%`,
                                 }}
-                            ></div>
+                            />
                         </div>
                     </div>
                 )}
@@ -1269,43 +1273,43 @@ const SoftwareContainer = () => {
 
             {/* Wipe Files Confirmation Modal */}
             <ConfirmationModal
-                title='Wipe All Files Without Backup?'
                 buttonText={wipeCountdown > 0 ? `Yes, Wipe Files (${wipeCountdown}s)` : 'Yes, Wipe Files'}
-                visible={showWipeConfirmation}
-                onConfirmed={handleWipeConfirm}
-                onModalDismissed={() => setShowWipeConfirmation(false)}
                 disabled={wipeCountdown > 0 && !shiftPressed}
                 loading={wipeLoading}
+                onConfirmed={handleWipeConfirm}
+                onModalDismissed={() => setShowWipeConfirmation(false)}
+                title='Wipe All Files Without Backup?'
+                visible={showWipeConfirmation}
             >
                 <div className='space-y-4'>
-                    <div className='flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
+                    <div className='flex items-start gap-3 rounded-lg border border-red-500/20 bg-red-500/10 p-4'>
                         <TriangleExclamation
-                            width={22}
-                            height={22}
+                            className='mt-0.5 h-5 w-5 flex-shrink-0 text-red-400'
                             fill='currentColor'
-                            className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
+                            height={22}
+                            width={22}
                         />
                         <div>
-                            <h4 className='text-red-400 font-semibold mb-2'>DANGER: No Backup Selected</h4>
-                            <p className='text-sm text-neutral-300'>
+                            <h4 className='mb-2 font-semibold text-red-400'>DANGER: No Backup Selected</h4>
+                            <p className='text-neutral-300 text-sm'>
                                 You have chosen to wipe all files <strong>without creating a backup</strong>. This
                                 action will <strong>permanently delete ALL files</strong> on your server and cannot be
                                 undone.
                             </p>
                         </div>
                     </div>
-                    <div className='text-sm text-neutral-300 space-y-2'>
+                    <div className='space-y-2 text-neutral-300 text-sm'>
                         <p>
                             <strong>What will happen:</strong>
                         </p>
-                        <ul className='list-disc list-inside space-y-1 ml-4'>
+                        <ul className='ml-4 list-inside list-disc space-y-1'>
                             <li>All server files will be permanently deleted</li>
                             <li>Your server will be stopped and reinstalled</li>
                             <li>Any custom configurations or data will be lost</li>
                             <li>This action cannot be reversed</li>
                         </ul>
                     </div>
-                    <p className='text-sm text-neutral-300'>
+                    <p className='text-neutral-300 text-sm'>
                         Are you absolutely sure you want to proceed without a backup?
                     </p>
                 </div>
