@@ -124,6 +124,8 @@ const OperationProgressModal: React.FC<Props> = ({
             'Job completed successfully': i18n.t('server:shell.dm_job_completed'),
             'Locating rustic S3 backup...': i18n.t('server:shell.dm_locating_rustic'),
             'Deleting rustic S3 backup...': i18n.t('server:shell.dm_deleting_rustic'),
+            'Creating backup before proceeding...': i18n.t('server:shell.dm_creating_backup'),
+            'Wiping server files...': i18n.t('server:shell.dm_wiping_files'),
         };
         if (map[msg]) return map[msg];
         // Handle "Backup in progress... X%" pattern from daemon

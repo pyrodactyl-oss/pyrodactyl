@@ -622,6 +622,8 @@ return [
         'dm_job_completed' => 'Trabajo completado exitosamente',
         'dm_locating_rustic' => 'Localizando copia de seguridad rustic S3...',
         'dm_deleting_rustic' => 'Eliminando copia de seguridad rustic S3...',
+        'dm_creating_backup' => 'Creando copia de seguridad antes de continuar...',
+        'dm_wiping_files' => 'Eliminando archivos del servidor...',
         'job_pending' => 'Pendiente',
         'job_submitted' => 'Enviado',
         'job_running' => 'Ejecutando',

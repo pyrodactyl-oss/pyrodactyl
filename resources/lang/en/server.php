@@ -622,6 +622,8 @@ return [
         'dm_job_completed' => 'Job completed successfully',
         'dm_locating_rustic' => 'Locating rustic S3 backup...',
         'dm_deleting_rustic' => 'Deleting rustic S3 backup...',
+        'dm_creating_backup' => 'Creating backup before proceeding...',
+        'dm_wiping_files' => 'Wiping server files...',
         'job_pending' => 'Pending',
         'job_submitted' => 'Submitted',
         'job_running' => 'Running',
