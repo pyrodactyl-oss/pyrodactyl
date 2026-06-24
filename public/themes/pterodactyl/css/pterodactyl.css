@@ -475,12 +475,12 @@ label.control-label>span {
 }
 
 label.control-label>span.field-required:before {
-    content: 'required';
+    content: ' *';
     color: #dd4b39;
 }
 
 label.control-label>span.field-optional:before {
-    content: 'optional';
+    content: none;
     color: #bbbbbb;
 }
 
