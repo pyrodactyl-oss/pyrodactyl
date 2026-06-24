@@ -52,6 +52,8 @@ class IndexController extends Controller
       $this->settings->set('settings::' . $key, $value);
     }
 
+    app()->setLocale($request->input('app:locale'));
+
     $this->kernel->call('queue:restart');
     $this->alert->success(trans('admin/general.settings_updated'))->flash();
 
