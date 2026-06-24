@@ -128,7 +128,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
     const { addError, clearFlashes } = useFlash();
     const { dismiss, setPropOverrides } = useContext(ModalContext);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
     const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Unknown');
 
@@ -138,13 +138,13 @@ const EditScheduleModal = ({ schedule }: Props) => {
         setPropOverrides({
             title: schedule ? 'Edit schedule' : 'Create new schedule',
         });
-    }, []);
+    }, [schedule, setPropOverrides]);
 
     useEffect(
         () => () => {
             clearFlashes('schedule:edit');
         },
-        [],
+        [clearFlashes],
     );
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {

@@ -12,7 +12,7 @@ export default (
     }, [handler]);
 
     useEffect(() => {
-        const isSupported = window && window.addEventListener;
+        const isSupported = window?.addEventListener;
         if (!isSupported) return;
 
         const eventListener = (event: any) => savedHandler.current(event);
@@ -20,5 +20,5 @@ export default (
         return () => {
             window.removeEventListener(eventName, eventListener);
         };
-    }, [eventName, window]);
+    }, [eventName, options]);
 };

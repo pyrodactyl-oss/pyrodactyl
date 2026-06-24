@@ -1,10 +1,10 @@
+import * as child from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react-swc';
-import * as child from 'child_process';
-import fs from 'fs';
 import laravel from 'laravel-vite-plugin';
 import million from 'million/compiler';
-import path from 'path';
 import { dirname, resolve } from 'pathe';
 import { defineConfig } from 'vite';
 import manifestSRI from 'vite-plugin-manifest-sri';
@@ -18,7 +18,7 @@ function getLaravelAppVersion() {
 
         const versionMatch = configContent.match(/'version'\s*=>\s*'(.*?)'/);
 
-        if (versionMatch && versionMatch[1]) {
+        if (versionMatch?.[1]) {
             return versionMatch[1];
         }
 

@@ -142,7 +142,7 @@ const ServerActivityLogContainer = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showFilters]);
+    }, [showFilters, exportLogs]);
 
     useEffect(() => {
         setFilters((value) => ({
@@ -153,7 +153,7 @@ const ServerActivityLogContainer = () => {
 
     useEffect(() => {
         clearAndAddHttpError(error);
-    }, [error]);
+    }, [error, clearAndAddHttpError]);
 
     return (
         <ServerContentBlock showFlashKey={'activity'} title={'Activity Log'}>

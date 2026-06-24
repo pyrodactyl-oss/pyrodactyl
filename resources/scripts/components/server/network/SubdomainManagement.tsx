@@ -1,6 +1,7 @@
 import { Link } from '@gravity-ui/icons';
 import { Field, Form, Formik, type FormikHelpers } from 'formik';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import {
     checkSubdomainAvailability,
@@ -27,27 +28,32 @@ interface SubdomainFormValues {
     subdomain: string;
 }
 
-const CleanInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-    ({ className = '', ...props }, ref) => (
-        <input
-            className={`border-0 bg-transparent text-white placeholder-zinc-400 outline-none focus:ring-0 ${className}`}
-            ref={ref}
-            {...props}
-        />
-    ),
+const CleanInput = ({
+    className = '',
+    ref,
+    ...props
+}: React.InputHTMLAttributes<HTMLInputElement> & { ref?: React.RefObject<HTMLInputElement | null> }) => (
+    <input
+        className={`border-0 bg-transparent text-white placeholder-zinc-400 outline-none focus:ring-0 ${className}`}
+        ref={ref}
+        {...props}
+    />
 );
 CleanInput.displayName = 'CleanInput';
 
-const CleanSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
-    ({ className = '', children, ...props }, ref) => (
-        <select
-            className={`border-0 bg-transparent text-zinc-300 outline-none focus:ring-0 ${className}`}
-            ref={ref}
-            {...props}
-        >
-            {children}
-        </select>
-    ),
+const CleanSelect = ({
+    className = '',
+    children,
+    ref,
+    ...props
+}: React.SelectHTMLAttributes<HTMLSelectElement> & { ref?: React.RefObject<HTMLSelectElement | null> }) => (
+    <select
+        className={`border-0 bg-transparent text-zinc-300 outline-none focus:ring-0 ${className}`}
+        ref={ref}
+        {...props}
+    >
+        {children}
+    </select>
 );
 CleanSelect.displayName = 'CleanSelect';
 
@@ -75,14 +81,14 @@ const SubdomainManagement = () => {
     } | null>(null);
     const [isEditing, setIsEditing] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network:subdomain');
 
     const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         loadSubdomainInfo();
-    }, []);
+    }, [loadSubdomainInfo]);
 
     const loadSubdomainInfo = async () => {
         try {
@@ -113,13 +119,17 @@ const SubdomainManagement = () => {
 
             try {
                 setCheckingAvailability(true);
-                const response = await checkSubdomainAvailability(uuid, subdomain.trim(), Number.parseInt(domainId));
+                const response = await checkSubdomainAvailability(
+                    uuid,
+                    subdomain.trim(),
+                    Number.parseInt(domainId, 10),
+                );
                 setAvailabilityStatus({
                     checked: true,
                     available: response.available,
                     message: response.message,
                 });
-            } catch (error) {
+            } catch {
                 setAvailabilityStatus({
                     checked: true,
                     available: false,
@@ -161,7 +171,7 @@ const SubdomainManagement = () => {
         try {
             clearFlashes();
             setLoading(true);
-            await setSubdomain(uuid, values.subdomain.trim(), Number.parseInt(values.domain_id));
+            await setSubdomain(uuid, values.subdomain.trim(), Number.parseInt(values.domain_id, 10));
             await loadSubdomainInfo();
             setAvailabilityStatus(null);
             if (isEditing) {

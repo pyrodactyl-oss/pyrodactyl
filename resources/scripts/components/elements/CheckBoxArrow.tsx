@@ -1,14 +1,18 @@
 import * as React from 'react';
 
-const CheckboxArrow = React.forwardRef<
-    React.ElementRef<'div'>,
-    React.ComponentPropsWithoutRef<'div'> & {
-        label?: string;
-        onChange?: () => void;
-        toggleable?: boolean;
-    }
->(({ className, label, onChange, toggleable = true, ...props }, ref) => {
-    const [checked, setChecked] = React.useState(false);
+const CheckboxArrow = ({
+    className,
+    label,
+    onChange,
+    toggleable = true,
+    ref,
+    ...props
+}: (React.ComponentPropsWithoutRef<'div'> & {
+    label?: string;
+    onChange?: () => void;
+    toggleable?: boolean;
+}) & { ref?: React.RefObject<React.ElementRef<'div'> | null> }) => {
+    const [_checked, setChecked] = React.useState(false);
 
     const toggleChecked = () => {
         if (!toggleable) return;
@@ -33,7 +37,7 @@ const CheckboxArrow = React.forwardRef<
             )}
         </div>
     );
-});
+};
 
 CheckboxArrow.displayName = 'CheckboxArrow';
 

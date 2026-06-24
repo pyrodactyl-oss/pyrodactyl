@@ -32,7 +32,6 @@ const FlashMessageRender = ({ byKey }: Props) => {
                     title: 'text-brand-500',
                     icon: '⚠',
                 };
-            case 'info':
             default:
                 return {
                     container: 'border-brand/50 bg-brand/10',

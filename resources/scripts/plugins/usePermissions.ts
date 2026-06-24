@@ -6,7 +6,7 @@ export const usePermissions = (action: string | string[]): boolean[] => {
 
     return useDeepCompareMemo(() => {
         if (userPermissions[0] === '*') {
-            return Array(Array.isArray(action) ? action.length : 1).fill(true);
+            return new Array(Array.isArray(action) ? action.length : 1).fill(true);
         }
 
         return (Array.isArray(action) ? action : [action]).map(

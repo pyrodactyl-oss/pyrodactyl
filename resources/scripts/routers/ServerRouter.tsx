@@ -37,7 +37,7 @@ const ServerRouter = () => {
     const params = useParams<'id'>();
     const location = useLocation();
 
-    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const rootAdmin = useStoreState((state) => state.user.data?.rootAdmin);
     const [error, setError] = useState('');
     const [subdomainSupported, setSubdomainSupported] = useState(false);
 
@@ -97,7 +97,7 @@ const ServerRouter = () => {
         () => () => {
             clearServerState();
         },
-        [],
+        [clearServerState],
     );
 
     useEffect(() => {
@@ -115,7 +115,7 @@ const ServerRouter = () => {
         return () => {
             clearServerState();
         };
-    }, [params.id]);
+    }, [params.id, clearServerState, getServer]);
 
     useEffect(() => {
         const checkSubdomainSupport = async () => {
@@ -124,7 +124,7 @@ const ServerRouter = () => {
                     const data = await getSubdomainInfo(uuid);
                     setSubdomainSupported(data.supported);
                 }
-            } catch (error) {
+            } catch {
                 setSubdomainSupported(false);
             }
         };
@@ -183,7 +183,7 @@ const ServerRouter = () => {
         setHeight('34px');
         const timeoutId = setTimeout(() => setHeight('40px'), 200);
         return () => clearTimeout(timeoutId);
-    }, [top]);
+    }, []);
 
     // Track scroll position of the nav container
     const handleScroll = useCallback((e: React.UIEvent<HTMLUListElement>) => {
@@ -214,7 +214,7 @@ const ServerRouter = () => {
             window.removeEventListener('resize', handleResize);
             clearTimeout(resizeTimeout);
         };
-    }, [id, uuid, measureContainer]);
+    }, [measureContainer]);
 
     // Adjust top position based on scroll offset
     const adjustedTop = typeof top === 'number' ? top - scrollOffset : top;

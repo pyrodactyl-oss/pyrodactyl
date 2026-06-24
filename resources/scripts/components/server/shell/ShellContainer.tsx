@@ -107,7 +107,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'integer':
                 case 'numeric':
-                    if (value && isNaN(Number(value))) {
+                    if (value && Number.isNaN(Number(value))) {
                         errors.push(`${variable.name} must be a number.`);
                     }
                     break;
@@ -122,7 +122,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'min': {
                     if (ruleValue && value) {
-                        const minValue = Number.parseInt(ruleValue);
+                        const minValue = Number.parseInt(ruleValue, 10);
                         if (value.length < minValue) {
                             errors.push(`${variable.name} must be at least ${minValue} characters.`);
                         }
@@ -132,7 +132,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'max': {
                     if (ruleValue && value) {
-                        const maxValue = Number.parseInt(ruleValue);
+                        const maxValue = Number.parseInt(ruleValue, 10);
                         if (value.length > maxValue) {
                             errors.push(`${variable.name} may not be greater than ${maxValue} characters.`);
                         }
@@ -142,7 +142,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
 
                 case 'between': {
                     if (ruleValue && value) {
-                        const [min, max] = ruleValue.split(',').map((v) => Number.parseInt(v.trim()));
+                        const [min, max] = ruleValue.split(',').map((v) => Number.parseInt(v.trim(), 10));
                         if (value.length < min || value.length > max) {
                             errors.push(`${variable.name} must be between ${min} and ${max} characters.`);
                         }
@@ -171,7 +171,7 @@ const validateEnvironmentVariables = (variables: any[], pendingVariables: Record
                                     errors.push(`${variable.name} format is invalid.`);
                                 }
                             }
-                        } catch (e) {
+                        } catch {
                             // Invalid regex - skip validation
                         }
                     }
@@ -521,7 +521,7 @@ const SoftwareContainer = () => {
                 }
             });
 
-            if (daemonType?.toLowerCase() == 'elytra') {
+            if (daemonType?.toLowerCase() === 'elytra') {
                 const response = await applyEggChange(uuid, {
                     egg_id: selectedEgg.attributes.id,
                     nest_id: selectedNest.attributes.id,
@@ -535,7 +535,7 @@ const SoftwareContainer = () => {
                 setCurrentOperationId(response.operation_id);
 
                 setShowOperationModal(true);
-            } else if (daemonType?.toLowerCase() == 'wings') {
+            } else if (daemonType?.toLowerCase() === 'wings') {
                 await applyEggChangeSync(uuid, {
                     egg_id: selectedEgg.attributes.id,
                     nest_id: selectedNest.attributes.id,
@@ -1202,7 +1202,7 @@ const SoftwareContainer = () => {
         );
     }
     function RenderOperationModal() {
-        if (daemonType == 'elytra') {
+        if (daemonType === 'elytra') {
             return (
                 <OperationProgressModal
                     onClose={closeOperationModal}
@@ -1214,7 +1214,7 @@ const SoftwareContainer = () => {
                 />
             );
         }
-        if (daemonType == 'wings') {
+        if (daemonType === 'wings') {
             return (
                 <WingsOperationProgressModal
                     onClose={closeOperationModal}

@@ -13,7 +13,7 @@ const PIDLimitModalFeature = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const isAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const isAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     useEffect(() => {
         if (!(connected && instance) || status === 'running') return;
@@ -42,7 +42,7 @@ const PIDLimitModalFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:pidLimit');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Modal

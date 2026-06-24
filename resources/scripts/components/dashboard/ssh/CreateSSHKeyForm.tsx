@@ -19,7 +19,7 @@ interface Values {
 }
 
 const CreateSSHKeyForm = () => {
-    const [sshKey, setSshKey] = useState('');
+    const [_sshKey, setSshKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { mutate } = useSSHKeys();
 

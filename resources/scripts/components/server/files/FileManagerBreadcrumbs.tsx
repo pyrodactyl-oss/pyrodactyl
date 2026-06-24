@@ -11,7 +11,7 @@ interface Props {
 }
 
 const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Props) => {
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
+    const id = ServerContext.useStoreState((state) => state.server.data?.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const params = useParams<'*'>();
@@ -26,7 +26,7 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
         if (withinFileEditor && params['*'] !== undefined && !isNewFile) {
             setFile(decodeURIComponent(params['*']).split('/').pop());
         }
-    }, [withinFileEditor, isNewFile]);
+    }, [withinFileEditor, isNewFile, params['*']]);
 
     const breadcrumbs = (): { name: string; path?: string }[] => {
         if (directory === '.') {
@@ -90,11 +90,7 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
                     </span>
                 ),
             )}
-            {file && (
-                <Fragment>
-                    <span className={'px-1 text-zinc-300'}>{file}</span>
-                </Fragment>
-            )}
+            {file && <span className={'px-1 text-zinc-300'}>{file}</span>}
         </div>
     );
 };

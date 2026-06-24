@@ -24,7 +24,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const [modal, setModal] = useState<ModalType | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError, clearFlashes } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -32,7 +32,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const doDeletion = async () => {
         clearFlashes('files');
 
-        await mutate((files) => files!.filter((f) => f.key !== file.key), false);
+        await mutate((files) => files?.filter((f) => f.key !== file.key), false);
 
         deleteFiles(uuid, directory, [file.name]).catch((error) => {
             mutate();

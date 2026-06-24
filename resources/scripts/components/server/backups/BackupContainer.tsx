@@ -142,16 +142,16 @@ const BackupContainer = () => {
     const { backups, backupCount, storage, pagination, error, isValidating, createBackup, retryBackup, refresh } =
         useUnifiedBackups();
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
-    const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backupStorageMb);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups);
+    const backupStorageLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backupStorageMb);
 
     // Check if any backup operation is in progress
     const hasActiveOperation = Object.values(liveProgress).some((op) => !op.completed);
 
     useEffect(() => {
         clearFlashes('backups:create');
-    }, [createModalVisible]);
+    }, [clearFlashes]);
 
     const submitBackup = async (values: BackupValues, { setSubmitting }: FormikHelpers<BackupValues>) => {
         clearFlashes('backups:create');
@@ -284,7 +284,7 @@ const BackupContainer = () => {
             return;
         }
         clearAndAddHttpError({ error, key: 'backups' });
-    }, [error]);
+    }, [error, clearFlashes, clearAndAddHttpError]);
 
     if (!backups || (error && isValidating)) {
         return (
@@ -729,7 +729,7 @@ const BackupContainer = () => {
                         )}
                     </PageListContainer>
 
-                    {pagination && pagination.currentPage && pagination.totalPages && pagination.totalPages > 1 && (
+                    {pagination?.currentPage && pagination.totalPages && pagination.totalPages > 1 && (
                         <Pagination data={{ items: backups, pagination }} onPageSelect={setPage}>
                             {() => null}
                         </Pagination>
@@ -769,7 +769,7 @@ const BackupContainerWrapper = () => {
                 } else {
                     data = rawData;
                 }
-            } catch (error) {
+            } catch {
                 return;
             }
 

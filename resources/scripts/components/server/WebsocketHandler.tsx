@@ -103,7 +103,7 @@ function WebsocketHandler() {
         }
 
         connect(uuid);
-    }, [uuid]);
+    }, [uuid, instance, connect]);
 
     return error ? (
         <FadeTransition duration='duration-150' show>

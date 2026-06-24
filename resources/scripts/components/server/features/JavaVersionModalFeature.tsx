@@ -35,7 +35,7 @@ const JavaVersionModalFeature = () => {
     const [dropDownOpen, setDropDownOpen] = useState(false);
     const [selectedVersion, setSelectedVersion] = useState('');
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { instance } = ServerContext.useStoreState((state) => state.socket);
@@ -50,7 +50,7 @@ const JavaVersionModalFeature = () => {
         mutate().then((value) => {
             setSelectedVersion(Object.values(value?.dockerImages || [])[0] || '');
         });
-    }, [visible]);
+    }, [visible, mutate]);
 
     useWebsocketEvent(SocketEvent.CONSOLE_OUTPUT, (data) => {
         if (status === 'running') return;
@@ -77,7 +77,7 @@ const JavaVersionModalFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:javaVersion');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Modal

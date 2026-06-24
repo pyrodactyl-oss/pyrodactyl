@@ -13,7 +13,7 @@ const CreateUserContainer = () => {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const serverId = ServerContext.useStoreState((state) => state.server.data?.id);
 
     const handleSuccess = () => {
         navigate(`/server/${serverId}/users`);

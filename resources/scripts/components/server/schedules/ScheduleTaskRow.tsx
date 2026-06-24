@@ -31,7 +31,7 @@ const getActionDetails = (action: string): [string, any, boolean?] => {
 };
 
 const ScheduleTaskRow = ({ schedule, task }: Props) => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { clearFlashes, addError } = useFlash();
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

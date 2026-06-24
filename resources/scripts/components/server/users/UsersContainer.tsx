@@ -20,8 +20,8 @@ const UsersContainer = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    const serverId = ServerContext.useStoreState((state) => state.server.data?.id);
     const subusers = ServerContext.useStoreState((state) => state.subusers.data);
     const setSubusers = ServerContext.useStoreActions((actions) => actions.subusers.setSubusers);
 
@@ -40,14 +40,14 @@ const UsersContainer = () => {
                 console.error(error);
                 addError({ key: 'users', message: httpErrorToHuman(error) });
             });
-    }, []);
+    }, [uuid, addError, setSubusers, clearFlashes]);
 
     useEffect(() => {
         getPermissions().catch((error) => {
             addError({ key: 'users', message: httpErrorToHuman(error) });
             console.error(error);
         });
-    }, []);
+    }, [getPermissions, addError]);
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
         return (

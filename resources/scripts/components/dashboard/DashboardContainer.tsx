@@ -30,11 +30,11 @@ const DashboardContainer = () => {
     const { search } = useLocation();
     const defaultPage = Number(new URLSearchParams(search).get('page') || '1');
 
-    const [page, setPage] = useState(!isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
+    const [page, setPage] = useState(!Number.isNaN(defaultPage) && defaultPage > 0 ? defaultPage : 1);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
-    const uuid = useStoreState((state) => state.user.data!.uuid);
-    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
-    const [showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
+    const uuid = useStoreState((state) => state.user.data?.uuid);
+    const rootAdmin = useStoreState((state) => state.user.data?.rootAdmin);
+    const [_showOnlyAdmin, setShowOnlyAdmin] = usePersistedState(`${uuid}:show_all_servers`, false);
     const [serverViewMode, setServerViewMode] = usePersistedState<'owner' | 'admin-all' | 'all'>(
         `${uuid}:server_view_mode`,
         'owner',
@@ -60,7 +60,7 @@ const DashboardContainer = () => {
         { revalidateOnFocus: false },
     );
 
-    const handleFilterToggle = useCallback(() => {
+    const _handleFilterToggle = useCallback(() => {
         setShowOnlyAdmin((s) => !s);
     }, [setShowOnlyAdmin]);
 
@@ -126,14 +126,12 @@ const DashboardContainer = () => {
                     </DropdownMenuItem>
 
                     {rootAdmin && (
-                        <>
-                            <DropdownMenuItem
-                                className={serverViewMode === 'admin-all' ? 'bg-accent/20' : ''}
-                                onSelect={() => setServerViewMode('admin-all')}
-                            >
-                                All Servers (Admin)
-                            </DropdownMenuItem>
-                        </>
+                        <DropdownMenuItem
+                            className={serverViewMode === 'admin-all' ? 'bg-accent/20' : ''}
+                            onSelect={() => setServerViewMode('admin-all')}
+                        >
+                            All Servers (Admin)
+                        </DropdownMenuItem>
                     )}
                     <DropdownMenuItem
                         className={serverViewMode === 'all' ? 'bg-accent/20' : ''}
@@ -144,7 +142,7 @@ const DashboardContainer = () => {
                 </DropdownMenuContent>
             </DropdownMenu>
         ),
-        [rootAdmin, showOnlyAdmin],
+        [rootAdmin, setServerViewMode, serverViewMode],
     );
 
     useEffect(() => {

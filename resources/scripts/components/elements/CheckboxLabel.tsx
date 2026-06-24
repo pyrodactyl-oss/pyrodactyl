@@ -1,15 +1,19 @@
-import * as React from 'react';
+import type * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-const Checkbox = React.forwardRef<
-    HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement> & {
-        label?: string;
-        checked?: boolean;
-        onChange?: (checked: boolean) => void;
-    }
->(({ label, checked = false, onChange, className, ...props }, ref) => {
+const Checkbox = ({
+    label,
+    checked = false,
+    onChange,
+    className,
+    ref,
+    ...props
+}: (React.HTMLAttributes<HTMLDivElement> & {
+    label?: string;
+    checked?: boolean;
+    onChange?: (checked: boolean) => void;
+}) & { ref?: React.RefObject<HTMLDivElement | null> }) => {
     const handleClick = () => {
         onChange?.(!checked);
     };
@@ -29,7 +33,7 @@ const Checkbox = React.forwardRef<
             )}
         </div>
     );
-});
+};
 
 Checkbox.displayName = 'Checkbox';
 

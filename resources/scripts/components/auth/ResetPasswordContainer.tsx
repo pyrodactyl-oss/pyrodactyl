@@ -27,7 +27,7 @@ function ResetPasswordContainer() {
 
     useEffect(() => {
         clearFlashes();
-    }, []);
+    }, [clearFlashes]);
 
     const parsed = new URLSearchParams(location.search);
     if (email.length === 0 && parsed.get('email')) {

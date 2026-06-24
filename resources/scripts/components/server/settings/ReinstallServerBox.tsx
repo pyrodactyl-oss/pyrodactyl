@@ -10,7 +10,7 @@ import type { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 const ReinstallServerBox = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -43,7 +43,7 @@ const ReinstallServerBox = () => {
 
     useEffect(() => {
         clearFlashes();
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <TitledGreyBox title={'Reinstall Server'}>

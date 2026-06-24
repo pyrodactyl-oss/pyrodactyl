@@ -146,7 +146,7 @@ const ActivityLogContainer = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showFilters, autoRefresh]);
+    }, [showFilters, autoRefresh, exportLogs]);
 
     useEffect(() => {
         setFilters((value) => ({
@@ -157,7 +157,7 @@ const ActivityLogContainer = () => {
 
     useEffect(() => {
         clearAndAddHttpError(error);
-    }, [error]);
+    }, [error, clearAndAddHttpError]);
 
     return (
         <PageContentBlock title={'Account Activity Log'}>

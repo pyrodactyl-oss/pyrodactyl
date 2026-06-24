@@ -37,8 +37,8 @@ const databaseSchema = object().shape({
 });
 
 const DatabasesContainer = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const databaseLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.databases);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    const databaseLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.databases);
 
     const { addError, clearFlashes } = useFlash();
     const [loading, setLoading] = useState(true);
@@ -77,7 +77,7 @@ const DatabasesContainer = () => {
                 addError({ key: 'databases', message: httpErrorToHuman(error) });
             })
             .then(() => setLoading(false));
-    }, []);
+    }, [clearFlashes, uuid, setDatabases, databases.length, addError]);
 
     return (
         <ServerContentBlock showFlashKey={'databases'} title={'Databases'}>
@@ -159,7 +159,7 @@ const DatabasesContainer = () => {
             ) : databases.length > 0 ? (
                 <PageListContainer data-pyro-databases>
                     <For each={databases} memo>
-                        {(database, index) => <DatabaseRow database={database} key={database.id} />}
+                        {(database, _index) => <DatabaseRow database={database} key={database.id} />}
                     </For>
                 </PageListContainer>
             ) : (

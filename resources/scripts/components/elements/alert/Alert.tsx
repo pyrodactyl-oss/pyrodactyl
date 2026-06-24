@@ -12,8 +12,8 @@ const Alert = ({ type, className, children }: AlertProps) => (
         className={clsx(
             'flex items-center rounded-md border-l-8 px-4 py-3 text-zinc-50 shadow-sm',
             {
-                ['border-red-500 bg-red-500/25']: type === 'danger',
-                ['border-yellow-500 bg-yellow-500/25']: type === 'warning',
+                'border-red-500 bg-red-500/25': type === 'danger',
+                'border-yellow-500 bg-yellow-500/25': type === 'warning',
             },
             className,
         )}

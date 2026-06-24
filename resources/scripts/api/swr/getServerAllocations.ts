@@ -8,7 +8,7 @@ import { rawDataToServerAllocation } from '@/api/transformers';
 import { ServerContext } from '@/state/server';
 
 export default () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const daemonType = getGlobalDaemonType();
 
     return useSWR<Allocation[]>(

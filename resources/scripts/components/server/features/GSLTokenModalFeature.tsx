@@ -17,7 +17,7 @@ const GSLTokenModalFeature = () => {
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
@@ -62,7 +62,7 @@ const GSLTokenModalFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:gslToken');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Formik initialValues={{ gslToken: '' }} onSubmit={updateGSLToken}>

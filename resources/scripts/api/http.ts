@@ -42,7 +42,7 @@ export default http;
  * make sure we display the message from the server back to the user if we can.
  */
 export function httpErrorToHuman(error: any): string {
-    if (error.response && error.response.data) {
+    if (error.response?.data) {
         let { data } = error.response;
 
         // Some non-JSON requests can still return the error as a JSON block. In those cases, attempt
@@ -55,7 +55,7 @@ export function httpErrorToHuman(error: any): string {
             }
         }
 
-        if (data.errors && data.errors[0] && data.errors[0].detail) {
+        if (data.errors?.[0]?.detail) {
             return data.errors[0].detail;
         }
 

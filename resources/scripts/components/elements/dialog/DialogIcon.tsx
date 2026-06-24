@@ -22,11 +22,15 @@ export default ({ type, position, className }: DialogIconProps) => {
                 <Shield fill='currentColor' height={22} width={22} />
             </div>,
         );
-    }, [type, className]);
+    }, [
+        type,
+        className, // const Icon = icons[type];
+        setIcon,
+    ]);
 
     useEffect(() => {
         setIconPosition(position);
-    }, [position]);
+    }, [position, setIconPosition]);
 
     return null;
 };

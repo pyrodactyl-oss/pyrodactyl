@@ -11,7 +11,7 @@ interface headerProps {
 }
 
 const ServerHeader = (props: headerProps) => {
-    const name = ServerContext.useStoreState((state) => state.server.data!.name);
+    const name = ServerContext.useStoreState((state) => state.server.data?.name);
     const { setHeaderActions, clearHeaderActions } = useHeader();
 
     const buttonsSection = useMemo(

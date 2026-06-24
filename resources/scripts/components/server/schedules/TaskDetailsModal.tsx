@@ -69,7 +69,7 @@ const ActionListener = () => {
             setValue(value === 'power' ? 'start' : '');
             setTouched(false);
         }
-    }, [value]);
+    }, [value, setValue, initialAction, setTouched, initialPayload]);
 
     return null;
 };
@@ -78,20 +78,20 @@ const TaskDetailsModal = ({ schedule, task }: Props) => {
     const { dismiss, setPropOverrides } = useContext(ModalContext);
     const { clearFlashes, addError } = useFlash();
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    const backupLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.backups);
+    const backupLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.backups);
 
     useEffect(
         () => () => {
             clearFlashes('schedule:task');
         },
-        [],
+        [clearFlashes],
     );
 
     useEffect(() => {
         setPropOverrides({ title: task ? 'Edit Task' : 'Create Task' });
-    }, []);
+    }, [task, setPropOverrides]);
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('schedule:task');

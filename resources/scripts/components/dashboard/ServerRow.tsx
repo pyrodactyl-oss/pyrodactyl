@@ -92,7 +92,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
         return () => {
             if (interval.current) clearInterval(interval.current);
         };
-    }, [isSuspended]);
+    }, [isSuspended, getStats]);
 
     const alarms = { cpu: false, memory: false, disk: false };
     if (stats) {
@@ -155,7 +155,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         <div className='text-xs opacity-25'>Sit tight!</div>
                     )
                 ) : (
-                    <Fragment>
+                    <>
                         <div className={'hidden sm:flex'}>
                             <div className={'justify - center gap 2 w fit flex'}>
                                 <p className='w-fit whitespace-nowrap font-bold text-[#ffffff66] text-sm'>CPU:</p>
@@ -178,7 +178,7 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                                 </p>
                             </div>
                         </div>
-                    </Fragment>
+                    </>
                 )}
             </div>
         </StatusIndicatorBox>

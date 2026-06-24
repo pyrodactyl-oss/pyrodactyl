@@ -93,7 +93,7 @@ export default function Captcha({
                 if (mounted) {
                     setWidgetId(id);
                 }
-            } catch (err) {
+            } catch {
                 if (mounted) {
                     setError('Failed to load captcha');
                 }
@@ -112,19 +112,19 @@ export default function Captcha({
                 CaptchaManager.removeWidget();
             }
         };
-    }, [theme, size]);
+    }, [theme, size, widgetId, handleSuccess, handleExpired, handleError]);
 
     // Set up event listeners for captcha events
     useEffect(() => {
-        const handleSuccess = (event: CustomEvent) => {
+        const handleSuccess = (_event: CustomEvent) => {
             setError(null);
         };
 
-        const handleError = (event: CustomEvent) => {
+        const handleError = (_event: CustomEvent) => {
             setError('Captcha verification failed');
         };
 
-        const handleExpired = (event: CustomEvent) => {
+        const handleExpired = (_event: CustomEvent) => {
             setError('Captcha expired');
         };
 

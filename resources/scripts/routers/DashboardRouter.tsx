@@ -22,7 +22,7 @@ import routes from '@/routers/routes';
 
 const DashboardRouter = () => {
     const location = useLocation();
-    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const rootAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     // Mobile menu state
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -79,7 +79,7 @@ const DashboardRouter = () => {
         setHeight('34px');
         const timeoutId = setTimeout(() => setHeight('40px'), 200);
         return () => clearTimeout(timeoutId);
-    }, [top]);
+    }, []);
 
     return (
         <Fragment key={'dashboard-router'}>

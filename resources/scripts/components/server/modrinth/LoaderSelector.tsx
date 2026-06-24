@@ -25,13 +25,13 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
     const [showAll, setShowAll] = useState(false);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data?.eggFeatures || []);
     const availableLoaders = getAvailableLoaders(eggFeatures);
-    const loaderType = getLoaderType(eggFeatures);
+    const _loaderType = getLoaderType(eggFeatures);
 
     // selectedLoaders.push(...availableLoaders);
     // setSelectedLoaders([...new Set([...selectedLoaders, ...availableLoaders])]);
     useEffect(() => {
         selectedLoaders.push(...availableLoaders);
-    }, []);
+    }, [selectedLoaders.push, availableLoaders]);
 
     const { featured, other, filtered } = useMemo(() => {
         if (!loaders.length) return { featured: [], other: [], filtered: [] };

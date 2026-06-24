@@ -20,7 +20,7 @@ import styles from './style.module.css';
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
     const [canRead] = usePermissions(['file.read']);
     const [canReadContents] = usePermissions(['file.read-content']);
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
+    const id = ServerContext.useStoreState((state) => state.server.data?.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     return (file.isFile && !(file.isEditable() && canReadContents)) || !(file.isFile || canRead) ? (

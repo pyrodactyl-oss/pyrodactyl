@@ -15,9 +15,9 @@ interface Props {
 }
 
 const UserRow = ({ subuser }: Props) => {
-    const uuid = useStoreState((state) => state.user!.data!.uuid);
+    const uuid = useStoreState((state) => state.user?.data?.uuid);
     const navigate = useNavigate();
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const serverId = ServerContext.useStoreState((state) => state.server.data?.id);
 
     const handleEditClick = () => {
         navigate(`/server/${serverId}/users/${subuser.uuid}/edit`);
@@ -43,25 +43,23 @@ const UserRow = ({ subuser }: Props) => {
                     <p className={'text-xs text-zinc-500 uppercase'}>Permissions</p>
                 </div>
                 {subuser.uuid !== uuid && (
-                    <>
-                        <div className='flex items-center justify-center gap-2 align-middle'>
-                            <Can action={'user.update'}>
-                                <ActionButton
-                                    aria-label='Edit subuser'
-                                    className='flex items-center gap-2'
-                                    onClick={handleEditClick}
-                                    size='sm'
-                                    variant='secondary'
-                                >
-                                    <Pencil fill='currentColor' height={22} width={22} />
-                                    Edit
-                                </ActionButton>
-                            </Can>
-                            <Can action={'user.delete'}>
-                                <RemoveSubuserButton subuser={subuser} />
-                            </Can>
-                        </div>
-                    </>
+                    <div className='flex items-center justify-center gap-2 align-middle'>
+                        <Can action={'user.update'}>
+                            <ActionButton
+                                aria-label='Edit subuser'
+                                className='flex items-center gap-2'
+                                onClick={handleEditClick}
+                                size='sm'
+                                variant='secondary'
+                            >
+                                <Pencil fill='currentColor' height={22} width={22} />
+                                Edit
+                            </ActionButton>
+                        </Can>
+                        <Can action={'user.delete'}>
+                            <RemoveSubuserButton subuser={subuser} />
+                        </Can>
+                    </div>
                 )}
             </div>
         </PageListItem>

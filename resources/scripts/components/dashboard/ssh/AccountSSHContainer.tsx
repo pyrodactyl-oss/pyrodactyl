@@ -41,7 +41,7 @@ const AccountSSHContainer = () => {
 
     useEffect(() => {
         clearAndAddHttpError(error);
-    }, [error]);
+    }, [error, clearAndAddHttpError]);
 
     const doDeletion = () => {
         if (!deleteKey) return;

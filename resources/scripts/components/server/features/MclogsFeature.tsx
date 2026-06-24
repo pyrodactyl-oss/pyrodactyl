@@ -24,7 +24,7 @@ const useLogAnalysis = () => {
     const [error, setError] = useState<string | null>(null);
     const [showCard, setShowCard] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
 
     const consoleBufferRef = useRef<string[]>([]);

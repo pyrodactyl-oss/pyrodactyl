@@ -13,7 +13,7 @@ const SteamDiskSpaceFeature = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const isAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const isAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     useEffect(() => {
         if (!(connected && instance) || status === 'running') return;
@@ -35,7 +35,7 @@ const SteamDiskSpaceFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:steamDiskSpace');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Modal
@@ -62,12 +62,10 @@ const SteamDiskSpaceFeature = () => {
                         </p>
                     </>
                 ) : (
-                    <>
-                        <p className={'mt-4'}>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
-                        </p>
-                    </>
+                    <p className={'mt-4'}>
+                        This server has run out of available disk space and cannot complete the install or update
+                        process. Please get in touch with the administrator(s) and inform them of disk space issues.
+                    </p>
                 )}
             </div>
         </Modal>

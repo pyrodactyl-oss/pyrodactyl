@@ -11,14 +11,14 @@ import type { ApplicationStore } from '@/state';
 const ConfigureTwoFactorForm = () => {
     const [tokens, setTokens] = useState<string[]>([]);
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
-    const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
+    const isEnabled = useStoreState((state: ApplicationStore) => state.user.data?.useTotp);
     const { clearFlashes } = useFlash();
 
     useEffect(
         () => () => {
             clearFlashes('account:two-step');
         },
-        [visible],
+        [clearFlashes],
     );
 
     const onTokens = (tokens: string[]) => {

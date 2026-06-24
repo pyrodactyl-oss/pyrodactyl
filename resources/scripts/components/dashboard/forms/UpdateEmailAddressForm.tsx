@@ -1,6 +1,5 @@
 import { type Actions, type State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, type FormikHelpers } from 'formik';
-import { Fragment } from 'react';
 import * as Yup from 'yup';
 import { httpErrorToHuman } from '@/api/http';
 import ActionButton from '@/components/elements/ActionButton';
@@ -51,9 +50,9 @@ const UpdateEmailAddressForm = () => {
     };
 
     return (
-        <Formik initialValues={{ email: user!.email, password: '' }} onSubmit={submit} validationSchema={schema}>
+        <Formik initialValues={{ email: user?.email, password: '' }} onSubmit={submit} validationSchema={schema}>
             {({ isSubmitting, isValid }) => (
-                <Fragment>
+                <>
                     <SpinnerOverlay size={'large'} visible={isSubmitting} />
                     <Form className={'m-0'}>
                         <Field id={'current_email'} label={'Email'} name={'email'} type={'email'} />
@@ -66,7 +65,7 @@ const UpdateEmailAddressForm = () => {
                             </ActionButton>
                         </div>
                     </Form>
-                </Fragment>
+                </>
             )}
         </Formik>
     );

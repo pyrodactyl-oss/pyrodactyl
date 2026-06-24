@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type * as React from 'react';
 import styled from 'styled-components';
 
 interface CheckboxProps {
@@ -24,7 +24,12 @@ const StyledLabel = styled.label`
     cursor: pointer;
 `;
 
-const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ label, checked, onChange }, ref) => (
+const Checkbox = ({
+    label,
+    checked,
+    onChange,
+    ref,
+}: CheckboxProps & { ref?: React.RefObject<HTMLInputElement | null> }) => (
     <CheckboxWrapper>
         {label && (
             <StyledLabel>
@@ -33,7 +38,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ label, che
             </StyledLabel>
         )}
     </CheckboxWrapper>
-));
+);
 
 Checkbox.displayName = 'Checkbox';
 

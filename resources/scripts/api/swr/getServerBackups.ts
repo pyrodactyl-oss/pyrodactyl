@@ -42,7 +42,7 @@ type BackupResponse = PaginatedResult<ServerBackup> & {
 
 export default () => {
     const { page } = useContext(Context);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const daemonType = getGlobalDaemonType();
 
     return useSWR<BackupResponse>(

@@ -26,7 +26,7 @@ interface StatsData {
 
 const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
-    const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
+    const limits = ServerContext.useStoreState((state) => state.server.data?.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
 
     const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
@@ -63,7 +63,7 @@ const StatGraphs = () => {
             setUptime(0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status]);
+    }, [status, network.clear, memory.clear, cpu.clear]);
 
     useWebsocketEvent(SocketEvent.STATS, (data: string) => {
         let values: StatsData;
@@ -88,12 +88,12 @@ const StatGraphs = () => {
     });
 
     const allocation = ServerContext.useStoreState((state) => {
-        const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
+        const match = state.server.data?.allocations.find((allocation) => allocation.isDefault);
 
         return match ? `${match.alias || ip(match.ip)}:${match.port}` : 'n/a';
     });
 
-    const description = ServerContext.useStoreState((state) => state.server.data!.description);
+    const description = ServerContext.useStoreState((state) => state.server.data?.description);
 
     return (
         <TooltipProvider>

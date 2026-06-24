@@ -30,7 +30,7 @@ const AllocationRow = ({ allocation }: Props) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { mutate } = getServerAllocations();
 
     const onNotesChanged = useCallback(

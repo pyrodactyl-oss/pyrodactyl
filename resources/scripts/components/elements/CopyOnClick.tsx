@@ -13,7 +13,7 @@ interface CopyOnClickProps {
 const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) => {
     const [copied, setCopied] = useState(false);
     let truncatedText;
-    if (showInNotification == false) {
+    if (showInNotification === false) {
         truncatedText = '';
     } else {
         const length = 80;
@@ -32,7 +32,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
         return () => {
             clearTimeout(timeout);
         };
-    }, [copied]);
+    }, [copied, truncatedText]);
 
     if (!React.isValidElement(children)) {
         throw new Error('Component passed to <CopyOnClick/> must be a valid React element.');

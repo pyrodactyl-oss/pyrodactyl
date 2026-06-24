@@ -155,7 +155,7 @@ export const useOperationPolling = () => {
             const cleanup = pollOperationStatus(uuid, operationId, onUpdate, onComplete, onError);
             activePollers.set(operationId, cleanup);
         },
-        [activePollers],
+        [activePollers, stopPolling],
     );
 
     const stopPolling = React.useCallback(

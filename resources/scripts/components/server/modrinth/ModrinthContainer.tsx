@@ -38,7 +38,7 @@ const ModrinthContainerInner = () => {
         debounce((value: string) => {
             setSearchQuery(value);
         }, 500),
-        [setSearchQuery],
+        [],
     );
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

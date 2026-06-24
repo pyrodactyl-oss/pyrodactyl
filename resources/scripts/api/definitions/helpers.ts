@@ -36,7 +36,7 @@ function transform<T>(
         return data.data.map(transformer);
     }
 
-    if (!(data && data.attributes) || data.object === 'null_resource') {
+    if (!data?.attributes || data.object === 'null_resource') {
         return missing;
     }
 

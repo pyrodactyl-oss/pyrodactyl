@@ -29,12 +29,12 @@ const BackupItem = ({ backup }: Props) => {
             await mutate(
                 (data) => ({
                     ...data!,
-                    items: data!.items.map((b) =>
+                    items: data?.items.map((b) =>
                         b.uuid === backup.uuid
                             ? {
                                   ...b,
                                   isSuccessful: true,
-                                  checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
+                                  checksum: `${parsed.checksum_type || ''}:${parsed.checksum || ''}`,
                                   bytes: parsed.file_size || 0,
                                   completedAt: new Date(),
                               }

@@ -14,7 +14,7 @@ interface Props {
 const DeleteAllocationButton = ({ allocation }: Props) => {
     const [confirm, setConfirm] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
     const { mutate } = getServerAllocations();

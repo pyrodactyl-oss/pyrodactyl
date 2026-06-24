@@ -19,7 +19,7 @@ const DisableTOTPDialog = () => {
 
     useEffect(() => {
         setProps((state) => ({ ...state, preventExternalClose: submitting }));
-    }, [submitting]);
+    }, [submitting, setProps]);
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

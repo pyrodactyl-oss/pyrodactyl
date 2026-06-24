@@ -42,7 +42,7 @@ const AccountApiContainer = () => {
             .then((keys) => setKeys(keys))
             .then(() => setLoading(false))
             .catch((error) => clearAndAddHttpError(error));
-    }, []);
+    }, [clearAndAddHttpError]);
 
     const doDeletion = (identifier: string) => {
         setLoading(true);

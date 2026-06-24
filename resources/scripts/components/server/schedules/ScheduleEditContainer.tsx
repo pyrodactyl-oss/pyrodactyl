@@ -32,8 +32,8 @@ const ScheduleEditContainer = () => {
     const { id: scheduleId } = useParams<'id'>();
     const navigate = useNavigate();
 
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const id = ServerContext.useStoreState((state) => state.server.data?.id);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
 
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +61,7 @@ const ScheduleEditContainer = () => {
                 clearAndAddHttpError({ error, key: 'schedules' });
             })
             .then(() => setIsLoading(false));
-    }, [scheduleId]);
+    }, [scheduleId, clearAndAddHttpError, uuid, schedule?.id, clearFlashes, appendSchedule]);
 
     const toggleEditModal = useCallback(() => {
         setShowEditModal((s) => !s);
@@ -70,7 +70,7 @@ const ScheduleEditContainer = () => {
     const onTriggerExecute = useCallback(() => {
         clearFlashes('schedule');
         setRunLoading(true);
-        triggerScheduleExecution(id, schedule!.id)
+        triggerScheduleExecution(id, schedule?.id)
             .then(() => {
                 setRunLoading(false);
                 appendSchedule({ ...schedule!, isProcessing: true });

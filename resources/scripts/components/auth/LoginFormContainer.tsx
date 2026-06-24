@@ -1,6 +1,5 @@
 import { Form } from 'formik';
 import type { PropsWithChildren } from 'react';
-import { forwardRef } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
 
@@ -20,13 +19,16 @@ const TitleSection = ({ title, subtitle }: { title?: string; subtitle?: string }
 
 const ReturnToLogin = () => <SecondaryLink to='/auth/login'>Return to login</SecondaryLink>;
 
-const LoginFormContainer = forwardRef<HTMLFormElement, PropsWithChildren<Props>>(
-    ({ children, className, ...props }, ref) => (
-        <Form {...props} className={`w-full text-sm ${className || ''}`} noValidate ref={ref}>
-            <FlashMessageRender />
-            {children}
-        </Form>
-    ),
+const LoginFormContainer = ({
+    children,
+    className,
+    ref,
+    ...props
+}: PropsWithChildren<Props> & { ref?: RefObject<HTMLFormElement | null> }) => (
+    <Form {...props} className={`w-full text-sm ${className || ''}`} noValidate ref={ref}>
+        <FlashMessageRender />
+        {children}
+    </Form>
 );
 
 LoginFormContainer.displayName = 'LoginFormContainer';

@@ -8,7 +8,7 @@ export function fileBitsToString(mode: string, directory: boolean): string {
     let buf = '';
     'dalTLDpSugct?'.split('').forEach((c, i) => {
         if ((m & (1 << (32 - 1 - i))) !== 0) {
-            buf = buf + c;
+            buf += c;
         }
     });
 
@@ -23,9 +23,9 @@ export function fileBitsToString(mode: string, directory: boolean): string {
 
     'rwxrwxrwx'.split('').forEach((c, i) => {
         if ((m & (1 << (9 - 1 - i))) === 0) {
-            buf = buf + '-';
+            buf += '-';
         } else {
-            buf = buf + c;
+            buf += c;
         }
     });
 

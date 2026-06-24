@@ -24,8 +24,8 @@ const UploadButton = () => {
     const { mutate } = useFileManagerSwr();
     const { addError, clearAndAddHttpError } = useFlashKey('files');
 
-    const name = ServerContext.useStoreState((state) => state.server.data!.name);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const name = ServerContext.useStoreState((state) => state.server.data?.name);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
     const { clearFileUploads, removeFileUpload, pushFileUpload } = ServerContext.useStoreActions(
         (actions) => actions.files,
@@ -49,7 +49,7 @@ const UploadButton = () => {
         if (visible) setVisible(false);
     });
 
-    useEffect(() => () => timeouts.forEach(clearTimeout), []);
+    useEffect(() => () => timeouts.forEach(clearTimeout), [timeouts.forEach]);
 
     const onFileSubmission = (files: FileList) => {
         clearAndAddHttpError();
@@ -161,10 +161,7 @@ const UploadButton = () => {
                 ref={fileUploadInput}
                 type={'file'}
             />
-            <ActionButton
-                onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
-                variant='secondary'
-            >
+            <ActionButton onClick={() => fileUploadInput.current?.click()} variant='secondary'>
                 Upload
             </ActionButton>
         </>

@@ -40,7 +40,7 @@ const HytaleOauthRequireFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:hytaleOauth');
-    }, []);
+    }, [clearFlashes]);
 
     const handleAuthenticate = () => {
         if (verificationUri) {

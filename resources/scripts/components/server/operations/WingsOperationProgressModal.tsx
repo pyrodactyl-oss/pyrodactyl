@@ -39,7 +39,7 @@ const WingsOperationProgressModal: React.FC<Props> = ({
     onComplete,
     onError,
 }) => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const [operation, setOperation] = useState<ServerOperation | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);

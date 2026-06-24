@@ -3,21 +3,21 @@ import React, { createContext, type ReactNode, useContext, useState } from 'reac
 import { toast } from 'sonner';
 
 // ==================== TYPES ====================
-export type ModLoader = {
+export interface ModLoader {
+    icon?: string;
     id: string;
     name: string;
-    icon?: string;
     supportedEnvironments: ('client' | 'server')[];
     supportedProjectTypes: string[];
-};
+}
 
-export type GameVersion = {
+export interface GameVersion {
     id: string;
-    name: string;
-    type: 'release' | 'snapshot' | 'beta';
-    releaseDate?: string;
     isFeatured?: boolean;
-};
+    name: string;
+    releaseDate?: string;
+    type: 'release' | 'snapshot' | 'beta';
+}
 
 export interface Mod {
     author: string;

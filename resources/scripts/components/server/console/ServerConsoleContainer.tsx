@@ -15,9 +15,9 @@ export type PowerAction = 'start' | 'stop' | 'restart' | 'kill';
 
 const ServerConsoleContainer = () => {
     const isInstalling = ServerContext.useStoreState((state) => state.server.isInstalling);
-    const isTransferring = ServerContext.useStoreState((state) => state.server.data!.isTransferring);
-    const eggFeatures = ServerContext.useStoreState((state) => state.server.data!.eggFeatures, isEqual);
-    const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
+    const isTransferring = ServerContext.useStoreState((state) => state.server.data?.isTransferring);
+    const eggFeatures = ServerContext.useStoreState((state) => state.server.data?.eggFeatures, isEqual);
+    const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data?.isNodeUnderMaintenance);
 
     return (
         <PageContentBlock background={false} className='overflow-y-visible' title={'Console'}>

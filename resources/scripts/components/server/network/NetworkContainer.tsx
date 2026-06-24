@@ -17,9 +17,9 @@ import { ServerContext } from '@/state/server';
 
 const NetworkContainer = () => {
     const [_, setLoading] = useState(false);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
-    const allocationLimit = ServerContext.useStoreState((state) => state.server.data!.featureLimits.allocations);
-    const allocations = ServerContext.useStoreState((state) => state.server.data!.allocations, isEqual);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    const allocationLimit = ServerContext.useStoreState((state) => state.server.data?.featureLimits.allocations);
+    const allocations = ServerContext.useStoreState((state) => state.server.data?.allocations, isEqual);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
     const { clearFlashes, clearAndAddHttpError } = useFlashKey('server:network');
@@ -27,11 +27,11 @@ const NetworkContainer = () => {
 
     useEffect(() => {
         mutate(allocations);
-    }, []);
+    }, [allocations, mutate]);
 
     useEffect(() => {
         clearAndAddHttpError(error);
-    }, [error]);
+    }, [error, clearAndAddHttpError]);
 
     useDeepCompareEffect(() => {
         if (!data) return;

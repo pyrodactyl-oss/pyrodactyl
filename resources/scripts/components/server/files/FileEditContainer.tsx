@@ -46,8 +46,8 @@ const FileEditContainer = () => {
 
     const navigate = useNavigate();
 
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const id = ServerContext.useStoreState((state) => state.server.data?.id);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const instance = ServerContext.useStoreState((state) => state.socket.instance);
     const setDirectory = ServerContext.useStoreActions((actions) => actions.files.setDirectory);
     const { addError, clearFlashes } = useFlash();
@@ -73,7 +73,7 @@ const FileEditContainer = () => {
                 setError(httpErrorToHuman(error));
             })
             .then(() => setLoading(false));
-    }, [action, uuid, filename]);
+    }, [action, uuid, filename, setDirectory]);
 
     const save = (name?: string) =>
         new Promise<void>((resolve, reject) => {

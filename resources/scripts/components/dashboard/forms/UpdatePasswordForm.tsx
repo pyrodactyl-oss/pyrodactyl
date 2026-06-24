@@ -1,6 +1,5 @@
 import { type Actions, type State, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik, type FormikHelpers } from 'formik';
-import { Fragment } from 'react';
 import * as Yup from 'yup';
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -56,52 +55,45 @@ const UpdatePasswordForm = () => {
     };
 
     return (
-        <Fragment>
-            <Formik
-                initialValues={{ current: '', password: '', confirmPassword: '' }}
-                onSubmit={submit}
-                validationSchema={schema}
-            >
-                {({ isSubmitting, isValid }) => (
-                    <Fragment>
-                        <SpinnerOverlay size={'large'} visible={isSubmitting} />
-                        <Form className={'m-0'}>
+        <Formik
+            initialValues={{ current: '', password: '', confirmPassword: '' }}
+            onSubmit={submit}
+            validationSchema={schema}
+        >
+            {({ isSubmitting, isValid }) => (
+                <>
+                    <SpinnerOverlay size={'large'} visible={isSubmitting} />
+                    <Form className={'m-0'}>
+                        <Field id={'current_password'} label={'Current Password'} name={'current'} type={'password'} />
+                        <div className={'mt-6'}>
                             <Field
-                                id={'current_password'}
-                                label={'Current Password'}
-                                name={'current'}
+                                description={
+                                    'Your new password should be at least 8 characters in length and unique to this website.'
+                                }
+                                id={'new_password'}
+                                label={'New Password'}
+                                name={'password'}
                                 type={'password'}
                             />
-                            <div className={'mt-6'}>
-                                <Field
-                                    description={
-                                        'Your new password should be at least 8 characters in length and unique to this website.'
-                                    }
-                                    id={'new_password'}
-                                    label={'New Password'}
-                                    name={'password'}
-                                    type={'password'}
-                                />
-                            </div>
-                            <div className={'mt-6'}>
-                                <Field
-                                    id={'confirm_new_password'}
-                                    label={'Confirm New Password'}
-                                    name={'confirmPassword'}
-                                    type={'password'}
-                                />
-                            </div>
-                            <div className={'mt-6'}>
-                                <ActionButton disabled={isSubmitting || !isValid} variant='secondary'>
-                                    {isSubmitting && <Spinner size='small' />}
-                                    {isSubmitting ? 'Updating...' : 'Update Password'}
-                                </ActionButton>
-                            </div>
-                        </Form>
-                    </Fragment>
-                )}
-            </Formik>
-        </Fragment>
+                        </div>
+                        <div className={'mt-6'}>
+                            <Field
+                                id={'confirm_new_password'}
+                                label={'Confirm New Password'}
+                                name={'confirmPassword'}
+                                type={'password'}
+                            />
+                        </div>
+                        <div className={'mt-6'}>
+                            <ActionButton disabled={isSubmitting || !isValid} variant='secondary'>
+                                {isSubmitting && <Spinner size='small' />}
+                                {isSubmitting ? 'Updating...' : 'Update Password'}
+                            </ActionButton>
+                        </div>
+                    </Form>
+                </>
+            )}
+        </Formik>
     );
 };
 

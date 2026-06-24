@@ -82,9 +82,16 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
         //     searchQuery,
         // });
         fetchMods(true);
-    }, [selectedLoaders.join(','), selectedVersions.join(','), searchQuery]);
+    }, [
+        // console.log('Filters changed, fetching mods:', {
+        //     selectedLoaders,
+        //     selectedVersions,
+        //     searchQuery,
+        // });
+        fetchMods,
+    ]);
 
-    const handleLoadMore = () => {
+    const _handleLoadMore = () => {
         if (!isLoading && hasMore) {
             setPage((prev) => prev + 20);
             fetchMods(false);

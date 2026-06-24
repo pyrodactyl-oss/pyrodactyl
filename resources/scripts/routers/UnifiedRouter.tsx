@@ -67,7 +67,7 @@ interface Nest {
 }
 
 const UnifiedRouter = () => {
-    const params = useParams<'id'>();
+    const _params = useParams<'id'>();
     const location = useLocation();
     const isServerRoute = location.pathname.startsWith('/server/');
 
@@ -75,7 +75,7 @@ const UnifiedRouter = () => {
     const serverIdFromPath = isServerRoute ? location.pathname.split('/')[2] : undefined;
     const serverId = serverIdFromPath;
 
-    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const rootAdmin = useStoreState((state) => state.user.data?.rootAdmin);
     const [error, setError] = useState('');
     const [nests, setNests] = useState<Nest[]>();
 
@@ -97,11 +97,9 @@ const UnifiedRouter = () => {
     //     serverIdFromPath,
     // });
 
-    const egg_name =
-        nests &&
-        nests
-            .find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
-            ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id)?.attributes.name;
+    const egg_name = nests
+        ?.find((nest) => nest.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id))
+        ?.attributes.relationships.eggs.data.find((egg) => egg.attributes.uuid === egg_id)?.attributes.name;
 
     // fetch nests data when component mounts
     useEffect(() => {
@@ -375,29 +373,26 @@ const UnifiedRouter = () => {
                                                     </>
                                                 )}{' '}
                                                 {/* server routes */}
-                                                {isServerRoute && uuid && id && (
-                                                    <>
-                                                        {routes.server.map(
-                                                            ({ route, permission, component: Component }) => (
-                                                                <Route
-                                                                    element={
-                                                                        <PermissionRoute permission={permission}>
-                                                                            <Suspense fallback={null}>
-                                                                                <Component />
-                                                                            </Suspense>
-                                                                        </PermissionRoute>
-                                                                    }
-                                                                    key={route}
-                                                                    path={
-                                                                        route === ''
-                                                                            ? `/server/${id}`
-                                                                            : `/server/${id}/${route}`
-                                                                    }
-                                                                />
-                                                            ),
-                                                        )}
-                                                    </>
-                                                )}
+                                                {isServerRoute &&
+                                                    uuid &&
+                                                    id &&
+                                                    routes.server.map(({ route, permission, component: Component }) => (
+                                                        <Route
+                                                            element={
+                                                                <PermissionRoute permission={permission}>
+                                                                    <Suspense fallback={null}>
+                                                                        <Component />
+                                                                    </Suspense>
+                                                                </PermissionRoute>
+                                                            }
+                                                            key={route}
+                                                            path={
+                                                                route === ''
+                                                                    ? `/server/${id}`
+                                                                    : `/server/${id}/${route}`
+                                                            }
+                                                        />
+                                                    ))}
                                                 <Route element={<NotFound />} path='*' />
                                             </Routes>
                                         </ErrorBoundary>

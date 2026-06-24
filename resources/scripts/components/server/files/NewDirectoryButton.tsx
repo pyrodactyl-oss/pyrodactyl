@@ -42,7 +42,7 @@ const schema = object().shape({
 const NewDirectoryDialog = asDialog({
     title: 'New Folder',
 })(() => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const { mutate } = useFileManagerSwr();
@@ -53,7 +53,7 @@ const NewDirectoryDialog = asDialog({
         () => () => {
             clearAndAddHttpError();
         },
-        [],
+        [clearAndAddHttpError],
     );
 
     const submit = ({ directoryName }: Values, { setSubmitting }: FormikHelpers<Values>) => {

@@ -14,7 +14,7 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const removeSubuser = ServerContext.useStoreActions((actions) => actions.subusers.removeSubuser);
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 

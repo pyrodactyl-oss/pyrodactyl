@@ -41,13 +41,13 @@ const StartupContainer = () => {
     const [canEditCommand] = usePermissions(['startup.command']);
     const [canEditDockerImage] = usePermissions(['startup.docker-image']);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const server = ServerContext.useStoreState((state) => state.server.data!, isEqual);
     const variables = ServerContext.useStoreState(
         ({ server }) => ({
-            variables: server.data!.variables,
-            invocation: server.data!.invocation,
-            dockerImage: server.data!.dockerImage,
+            variables: server.data?.variables,
+            invocation: server.data?.invocation,
+            dockerImage: server.data?.dockerImage,
         }),
         isEqual,
     );

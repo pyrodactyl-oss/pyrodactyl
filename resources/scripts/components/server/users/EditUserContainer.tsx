@@ -15,7 +15,7 @@ const EditUserContainer = () => {
     const { id } = useParams<{ id: string }>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const serverId = ServerContext.useStoreState((state) => state.server.data?.id);
     const subusers = ServerContext.useStoreState((state) => state.subusers.data);
 
     // Find the subuser by UUID
