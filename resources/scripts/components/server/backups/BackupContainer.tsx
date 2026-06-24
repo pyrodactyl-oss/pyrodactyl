@@ -48,6 +48,9 @@ const translateBackupMessage = (msg: string | null | undefined): string | null =
         'Creating backup snapshot...': i18n.t('server:shell.dm_creating_snapshot'),
         'Cleaning up temporary files...': i18n.t('server:shell.dm_cleaning_up'),
         'Downloading backup parts...': i18n.t('server:shell.dm_downloading_parts'),
+        'Job completed successfully': i18n.t('server:shell.dm_job_completed'),
+        'Locating rustic S3 backup...': i18n.t('server:shell.dm_locating_rustic'),
+        'Deleting rustic S3 backup...': i18n.t('server:shell.dm_deleting_rustic'),
     };
     if (map[msg]) return map[msg];
     const match = msg.match(/^Backup in progress\.\.\. (\d+)%$/);
