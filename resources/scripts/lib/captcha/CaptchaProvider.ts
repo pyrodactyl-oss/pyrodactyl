@@ -1,8 +1,8 @@
 export interface CaptchaConfig {
     enabled: boolean;
     provider: string;
-    siteKey: string;
     scriptIncludes: string[];
+    siteKey: string;
 }
 
 export interface CaptchaProviderInterface {
@@ -12,14 +12,19 @@ export interface CaptchaProviderInterface {
     getName(): string;
 
     /**
-     * Get the script URLs needed for this provider
+     * Get the response token from the widget
      */
-    getScriptUrls(): string[];
+    getResponse(widgetId?: string): string | null;
 
     /**
      * Get the response field name for form submission
      */
     getResponseFieldName(): string;
+
+    /**
+     * Get the script URLs needed for this provider
+     */
+    getScriptUrls(): string[];
 
     /**
      * Check if the provider's SDK is loaded
@@ -32,33 +37,28 @@ export interface CaptchaProviderInterface {
     loadSdk(): Promise<void>;
 
     /**
+     * Remove the widget
+     */
+    remove(widgetId?: string): void;
+
+    /**
      * Render the captcha widget
      */
     render(container: HTMLElement, config: CaptchaRenderConfig): Promise<string>;
 
     /**
-     * Get the response token from the widget
-     */
-    getResponse(widgetId?: string): string | null;
-
-    /**
      * Reset the widget
      */
     reset(widgetId?: string): void;
-
-    /**
-     * Remove the widget
-     */
-    remove(widgetId?: string): void;
 }
 
 export interface CaptchaRenderConfig {
-    siteKey: string;
-    theme?: 'light' | 'dark' | 'auto';
-    size?: 'normal' | 'compact' | 'invisible' | 'flexible';
-    onSuccess?: (token: string) => void;
     onError?: (error: any) => void;
     onExpired?: () => void;
+    onSuccess?: (token: string) => void;
+    siteKey: string;
+    size?: 'normal' | 'compact' | 'invisible' | 'flexible';
+    theme?: 'light' | 'dark' | 'auto';
 }
 
 export abstract class BaseCaptchaProvider implements CaptchaProviderInterface {

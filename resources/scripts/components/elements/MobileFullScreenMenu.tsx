@@ -10,23 +10,23 @@ import { getServerNavRoutes } from '@/routers/routes';
 import { ServerContext } from '@/state/server';
 
 interface MobileFullScreenMenuProps {
+    children: React.ReactNode;
     isVisible: boolean;
     onClose: () => void;
-    children: React.ReactNode;
 }
 
 const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreenMenuProps) => {
     if (!isVisible) return null;
 
     return (
-        <div className='lg:hidden fixed inset-0 z-9999 bg-[#1a1a1a] pt-16'>
+        <div className='fixed inset-0 z-9999 bg-[#1a1a1a] pt-16 lg:hidden'>
             {/* Close button */}
             <button
-                onClick={onClose}
-                className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
                 aria-label='Close menu'
+                className='absolute top-4 right-4 rounded-lg p-2 text-white/70 transition-all duration-200 hover:bg-white/10 hover:text-white'
+                onClick={onClose}
             >
-                <Xmark width={22} height={22} fill='currentColor' />
+                <Xmark fill='currentColor' height={22} width={22} />
             </button>
 
             {/* Full screen navigation menu */}
@@ -41,30 +41,30 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
 };
 
 interface NavigationItemProps {
-    to: string;
-    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     children: React.ReactNode;
     end?: boolean;
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     onClick: () => void;
+    to: string;
 }
 
 const NavigationItem = ({ to, icon: Icon, children, end = false, onClick }: NavigationItemProps) => (
     <NavLink
-        to={to}
-        end={end}
         className={({ isActive }) =>
-            `flex items-center gap-4 p-4 rounded-md transition-all duration-200 ${
+            `flex items-center gap-4 rounded-md p-4 transition-all duration-200 ${
                 isActive
-                    ? 'bg-gradient-to-r from-brand/20 to-brand/10 border-l-4 border-brand text-white'
-                    : 'text-white/80 hover:text-white hover:bg-[#ffffff11] border-l-4 border-transparent'
+                    ? 'border-brand border-l-4 bg-gradient-to-r from-brand/20 to-brand/10 text-white'
+                    : 'border-transparent border-l-4 text-white/80 hover:bg-[#ffffff11] hover:text-white'
             }`
         }
+        end={end}
         onClick={onClick}
+        to={to}
     >
         <div>
-            <Icon width={22} height={22} fill='currentColor' />
+            <Icon fill='currentColor' height={22} width={22} />
         </div>
-        <span className='text-lg font-medium'>{children}</span>
+        <span className='font-medium text-lg'>{children}</span>
     </NavLink>
 );
 
@@ -73,29 +73,27 @@ interface DashboardMobileMenuProps {
     onClose: () => void;
 }
 
-export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => {
-    return (
-        <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
-            <NavigationItem to='/' icon={House} end onClick={onClose}>
-                Servers
-            </NavigationItem>
-            <NavigationItem to='/account/api' icon={AbbrApi} end onClick={onClose}>
-                API Keys
-            </NavigationItem>
-            <NavigationItem to='/account/ssh' icon={Key} end onClick={onClose}>
-                SSH Keys
-            </NavigationItem>
-            <NavigationItem to='/account' icon={Gear} end onClick={onClose}>
-                Settings
-            </NavigationItem>
-        </MobileFullScreenMenu>
-    );
-};
+export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => (
+    <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
+        <NavigationItem end icon={House} onClick={onClose} to='/'>
+            Servers
+        </NavigationItem>
+        <NavigationItem end icon={AbbrApi} onClick={onClose} to='/account/api'>
+            API Keys
+        </NavigationItem>
+        <NavigationItem end icon={Key} onClick={onClose} to='/account/ssh'>
+            SSH Keys
+        </NavigationItem>
+        <NavigationItem end icon={Gear} onClick={onClose} to='/account'>
+            Settings
+        </NavigationItem>
+    </MobileFullScreenMenu>
+);
 
 interface ServerMobileNavItemProps {
+    onClose: () => void;
     route: ServerRouteDefinition;
     serverId: string;
-    onClose: () => void;
 }
 
 /**
@@ -140,12 +138,12 @@ const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemPr
         return limitValue !== 0;
     };
 
-    if (!isVisible() || !Icon || !name) return null;
+    if (!(isVisible() && Icon && name)) return null;
 
     const to = path ? `/server/${serverId}/${path}` : `/server/${serverId}`;
 
     const NavContent = (
-        <NavigationItem to={to} icon={Icon} end={end} onClick={onClose}>
+        <NavigationItem end={end} icon={Icon} onClick={onClose} to={to}>
             {name}
         </NavigationItem>
     );
@@ -162,14 +160,14 @@ const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemPr
 };
 
 interface ServerMobileMenuProps {
-    isVisible: boolean;
-    onClose: () => void;
-    serverId?: string;
+    allocationLimit?: number | null;
+    backupLimit?: number | null;
     // These props are kept for backwards compatibility but are no longer used
     // The component now reads feature limits directly from ServerContext
     databaseLimit?: number | null;
-    backupLimit?: number | null;
-    allocationLimit?: number | null;
+    isVisible: boolean;
+    onClose: () => void;
+    serverId?: string;
     subdomainSupported?: boolean;
 }
 
@@ -182,7 +180,7 @@ export const ServerMobileMenu = ({ isVisible, onClose, serverId }: ServerMobileM
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             {navRoutes.map((route) => (
-                <ServerMobileNavItem key={route.path || 'home'} route={route} serverId={serverId} onClose={onClose} />
+                <ServerMobileNavItem key={route.path || 'home'} onClose={onClose} route={route} serverId={serverId} />
             ))}
         </MobileFullScreenMenu>
     );

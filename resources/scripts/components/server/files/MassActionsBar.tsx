@@ -12,7 +12,7 @@ import useFlash from '@/plugins/useFlash';
 import { ServerContext } from '@/state/server';
 
 const MassActionsBar = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
 
     const { mutate } = useFileManagerSwr();
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -49,7 +49,7 @@ const MassActionsBar = () => {
 
         deleteFiles(uuid, directory, selectedFiles)
             .then(async () => {
-                await mutate((files) => files!.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
+                await mutate((files) => files?.filter((f) => selectedFiles.indexOf(f.name) < 0), false);
                 setSelectedFiles([]);
             })
             .catch(async (error) => {
@@ -60,62 +60,58 @@ const MassActionsBar = () => {
     };
 
     return (
-        <>
-            <div className={`pointer-events-none fixed bottom-0 z-20 left-0 right-0 flex justify-center`}>
-                <SpinnerOverlay visible={loading} size={'large'} fixed>
-                    {loadingMessage}
-                </SpinnerOverlay>
-                <Dialog.Confirm
-                    title={'Delete Files'}
-                    open={showConfirm}
-                    confirm={'Delete'}
-                    onClose={() => setShowConfirm(false)}
-                    onConfirmed={onClickConfirmDeletion}
-                    loading={loading}
+        <div className={'pointer-events-none fixed right-0 bottom-0 left-0 z-20 flex justify-center'}>
+            <SpinnerOverlay fixed size={'large'} visible={loading}>
+                {loadingMessage}
+            </SpinnerOverlay>
+            <Dialog.Confirm
+                confirm={'Delete'}
+                loading={loading}
+                onClose={() => setShowConfirm(false)}
+                onConfirmed={onClickConfirmDeletion}
+                open={showConfirm}
+                title={'Delete Files'}
+            >
+                <p className={'mb-2'}>
+                    Are you sure you want to delete&nbsp;
+                    <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} files</span>? This is a
+                    permanent action and the files cannot be recovered.
+                </p>
+                {selectedFiles.slice(0, 15).map((file) => (
+                    <li key={file}>{file}</li>
+                ))}
+                {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
+            </Dialog.Confirm>
+            {showMove && (
+                <RenameFileModal
+                    appear
+                    files={selectedFiles}
+                    onDismissed={() => setShowMove(false)}
+                    useMoveTerminology
+                    visible
+                />
+            )}
+            <FadeTransition appear duration='duration-75' show={selectedFiles.length > 0} unmount>
+                <div
+                    className={'pointer-events-none fixed right-0 bottom-0 left-0 z-50 mb-6 flex w-full justify-center'}
                 >
-                    <p className={'mb-2'}>
-                        Are you sure you want to delete&nbsp;
-                        <span className={'font-semibold text-zinc-50'}>{selectedFiles.length} files</span>? This is a
-                        permanent action and the files cannot be recovered.
-                    </p>
-                    {selectedFiles.slice(0, 15).map((file) => (
-                        <li key={file}>{file}</li>
-                    ))}
-                    {selectedFiles.length > 15 && <li>and {selectedFiles.length - 15} others</li>}
-                </Dialog.Confirm>
-                {showMove && (
-                    <RenameFileModal
-                        files={selectedFiles}
-                        visible
-                        appear
-                        useMoveTerminology
-                        onDismissed={() => setShowMove(false)}
-                    />
-                )}
-                <FadeTransition duration='duration-75' show={selectedFiles.length > 0} appear unmount>
-                    <div
-                        className={
-                            'pointer-events-none fixed bottom-0 left-0 right-0 mb-6 flex justify-center w-full z-50'
-                        }
-                    >
-                        <div className={`flex items-center space-x-4 pointer-events-auto rounded-sm p-4 bg-black/50`}>
-                            <ActionButton onClick={() => setShowMove(true)} disabled={loading}>
-                                {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
-                                Move
-                            </ActionButton>
-                            <ActionButton onClick={onClickCompress} disabled={loading}>
-                                {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
-                                Archive
-                            </ActionButton>
-                            <ActionButton variant='danger' onClick={() => setShowConfirm(true)} disabled={loading}>
-                                {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
-                                Delete
-                            </ActionButton>
-                        </div>
+                    <div className={'pointer-events-auto flex items-center space-x-4 rounded-sm bg-black/50 p-4'}>
+                        <ActionButton disabled={loading} onClick={() => setShowMove(true)}>
+                            {loading && loadingMessage.includes('Moving') && <Spinner size='small' />}
+                            Move
+                        </ActionButton>
+                        <ActionButton disabled={loading} onClick={onClickCompress}>
+                            {loading && loadingMessage.includes('Archiving') && <Spinner size='small' />}
+                            Archive
+                        </ActionButton>
+                        <ActionButton disabled={loading} onClick={() => setShowConfirm(true)} variant='danger'>
+                            {loading && loadingMessage.includes('Deleting') && <Spinner size='small' />}
+                            Delete
+                        </ActionButton>
                     </div>
-                </FadeTransition>
-            </div>
-        </>
+                </div>
+            </FadeTransition>
+        </div>
     );
 };
 

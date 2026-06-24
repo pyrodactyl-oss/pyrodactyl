@@ -3,19 +3,19 @@ import http from '@/api/http';
 export type ServerPowerState = 'offline' | 'starting' | 'running' | 'stopping' | 'installing';
 
 export interface ServerStats {
-    status: ServerPowerState;
-    isSuspended: boolean;
-    isInstalling: boolean;
-    memoryUsageInBytes: number;
     cpuUsagePercent: number;
     diskUsageInBytes: number;
+    isInstalling: boolean;
+    isSuspended: boolean;
+    memoryUsageInBytes: number;
     networkRxInBytes: number;
     networkTxInBytes: number;
+    status: ServerPowerState;
     uptime: number;
 }
 
-export default (server: string): Promise<ServerStats> => {
-    return new Promise((resolve, reject) => {
+export default (server: string): Promise<ServerStats> =>
+    new Promise((resolve, reject) => {
         http.get(`/api/client/servers/${server}/resources`)
             .then(({ data: { attributes } }) =>
                 resolve({
@@ -32,4 +32,3 @@ export default (server: string): Promise<ServerStats> => {
             )
             .catch(reject);
     });
-};

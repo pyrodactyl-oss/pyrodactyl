@@ -48,43 +48,43 @@ type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 export type FeatureLimitKey = 'databases' | 'backups' | 'allocations';
 
 interface RouteDefinition {
-    /**
-     * Route is the path that will be matched against, this field supports wildcards.
-     */
-    route: string;
+    component: ComponentType;
+    end?: boolean;
+    // If undefined is passed this route is still rendered into the router itself
+    // but no navigation link is displayed in the sub-navigation menu.
+    name: string | undefined;
     /**
      * Path is the path that will be used for any navbars or links, do not use wildcards or fancy
      * matchers here. If this field is left undefined, this route will not have a navigation element.
      */
     path?: string;
-    // If undefined is passed this route is still rendered into the router itself
-    // but no navigation link is displayed in the sub-navigation menu.
-    name: string | undefined;
-    component: ComponentType;
-    end?: boolean;
+    /**
+     * Route is the path that will be matched against, this field supports wildcards.
+     */
+    route: string;
 }
 
 export interface ServerRouteDefinition extends RouteDefinition {
-    permission?: string | string[] | null;
-    /**
-     * Icon to display in the sidebar/navigation.
-     * If undefined, the route won't have a navigation element.
-     */
-    icon?: IconComponent;
     /**
      * Feature limit key to check. If the limit is 0, the nav item is hidden.
      * Special value 'network' checks both allocations limit AND subdomain support.
      */
     featureLimit?: FeatureLimitKey | 'network';
     /**
-     * Whether this is a sub-route that shouldn't appear in navigation.
-     */
-    isSubRoute?: boolean;
-    /**
      * Route path patterns that should highlight this nav item.
      * Used for matching nested routes to parent nav items.
      */
     highlightPatterns?: RegExp[];
+    /**
+     * Icon to display in the sidebar/navigation.
+     * If undefined, the route won't have a navigation element.
+     */
+    icon?: IconComponent;
+    /**
+     * Whether this is a sub-route that shouldn't appear in navigation.
+     */
+    isSubRoute?: boolean;
+    permission?: string | string[] | null;
 }
 
 interface Routes {
@@ -270,6 +270,5 @@ export default routes;
  * Get navigation routes (routes that should appear in sidebar/mobile menu).
  * Filters out sub-routes and routes without names or icons.
  */
-export const getServerNavRoutes = (): ServerRouteDefinition[] => {
-    return routes.server.filter((route) => route.name && route.icon && !route.isSubRoute);
-};
+export const getServerNavRoutes = (): ServerRouteDefinition[] =>
+    routes.server.filter((route) => route.name && route.icon && !route.isSubRoute);

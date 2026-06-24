@@ -76,32 +76,28 @@ function getEmptyData(label: string, sets = 1, callback?: ChartDatasetCallback |
     const next = callback || ((value) => value);
 
     return {
-        labels: Array(20)
-            .fill(0)
-            .map((_, index) => index),
-        datasets: Array(sets)
-            .fill(0)
-            .map((_, index) =>
-                next(
-                    {
-                        fill: true,
-                        label,
-                        data: Array(20).fill(-5),
-                        borderColor: '#fa4e49',
-                        backgroundColor: hexToRgba('#fa4e49', 0.09),
-                    },
-                    index,
-                ),
+        labels: new Array(20).fill(0).map((_, index) => index),
+        datasets: new Array(sets).fill(0).map((_, index) =>
+            next(
+                {
+                    fill: true,
+                    label,
+                    data: new Array(20).fill(-5),
+                    borderColor: '#fa4e49',
+                    backgroundColor: hexToRgba('#fa4e49', 0.09),
+                },
+                index,
             ),
+        ),
     };
 }
 
 const merge = deepmergeCustom({ mergeArrays: false });
 
 interface UseChartOptions {
-    sets: number;
-    options?: DeepPartial<ChartOptions<'line'>> | number | undefined;
     callback?: ChartDatasetCallback | undefined;
+    options?: DeepPartial<ChartOptions<'line'>> | number | undefined;
+    sets: number;
 }
 
 function useChart(label: string, opts?: UseChartOptions) {
@@ -128,7 +124,7 @@ function useChart(label: string, opts?: UseChartOptions) {
             merge(state, {
                 datasets: state.datasets.map((value) => ({
                     ...value,
-                    data: Array(20).fill(-5),
+                    data: new Array(20).fill(-5),
                 })),
             }),
         );
@@ -154,4 +150,4 @@ function useChartTickLabel(label: string, max: number, tickLabel: string, roundT
     });
 }
 
-export { useChart, useChartTickLabel, getOptions, getEmptyData };
+export { getEmptyData, getOptions, useChart, useChartTickLabel };

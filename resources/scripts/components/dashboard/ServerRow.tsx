@@ -35,25 +35,27 @@ position: relative;
     box-shadow: ${({ $status }) => {
         if (!$status || $status === 'offline') {
             return '0 0 12px 1px #C74343';
-        } else if ($status === 'running') {
-            return '0 0 12px 1px #43C760';
-        } else if ($status === 'installing') {
-            return '0 0 12px 1px #4381c7';
-        } else {
-            return '0 0 12px 1px #c7aa43';
         }
+        if ($status === 'running') {
+            return '0 0 12px 1px #43C760';
+        }
+        if ($status === 'installing') {
+            return '0 0 12px 1px #4381c7';
+        }
+        return '0 0 12px 1px #c7aa43';
     }};
 
     background: ${({ $status }) => {
         if (!$status || $status === 'offline') {
             return 'linear-gradient(180deg, #C74343 0%, #C74343 100%)';
-        } else if ($status === 'running') {
-            return 'linear-gradient(180deg, #91FFA9 0%, #43C760 100%)';
-        } else if ($status === 'installing') {
-            return 'linear-gradient(180deg, #91c7ff 0%, #4381c7 100%)';
-        } else {
-            return 'linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)';
         }
+        if ($status === 'running') {
+            return 'linear-gradient(180deg, #91FFA9 0%, #43C760 100%)';
+        }
+        if ($status === 'installing') {
+            return 'linear-gradient(180deg, #91c7ff 0%, #4381c7 100%)';
+        }
+        return 'linear-gradient(180deg, #c7aa43 0%, #c7aa43 100%)';
     }}
 `;
 
@@ -84,13 +86,13 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
         if (isSuspended) return;
 
         getStats().then(() => {
-            interval.current = setInterval(() => getStats(), 30000);
+            interval.current = setInterval(() => getStats(), 30_000);
         });
 
         return () => {
             if (interval.current) clearInterval(interval.current);
         };
-    }, [isSuspended]);
+    }, [isSuspended, getStats]);
 
     const alarms = { cpu: false, memory: false, disk: false };
     if (stats) {
@@ -101,20 +103,20 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
 
     return (
         <StatusIndicatorBox
-            as={Link}
-            to={`/server/${server.id}`}
-            className={`{className} bg-mocha-500 hover:bg-mocha-400 border border-[1px] border-mocha-400 hover:border-mocha-400`}
             $status={stats?.status || 'offline'}
+            as={Link}
+            className={
+                '{className} border border-[1px] border-mocha-400 bg-mocha-500 hover:border-mocha-400 hover:bg-mocha-400'
+            }
+            to={`/server/${server.id}`}
         >
-            <div className={`flex items - center`}>
+            <div className={'items - center flex'}>
                 <div className='flex flex-col'>
                     <div className='flex items-center gap-2'>
-                        <p className={`text - xl tracking - tight font - bold truncate max - w - [20vw]`}>
-                            {server.name}
-                        </p>{' '}
+                        <p className={'text - xl tracking tight font bold max w truncate [20vw]'}>{server.name}</p>{' '}
                         <div className={'status-bar'} />
                     </div>
-                    <p className={`text - sm text - [#ffffff66]`}>
+                    <p className={'text - sm [#ffffff66]'}>
                         {server.allocations
                             .filter((alloc) => alloc.isDefault)
                             .map((allocation) => (
@@ -126,55 +128,57 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                 </div>
             </div>
             <div
-                className={`h-full hidden sm:flex items-center justify-center bg-mocha-500 border-[1px] border-[#ffffff11] shadow-xs rounded-md w-fit whitespace-nowrap px-4 py-2 text-sm gap-4`}
+                className={
+                    'hidden h-full w-fit items-center justify-center gap-4 whitespace-nowrap rounded-md border-[#ffffff11] border-[1px] bg-mocha-500 px-4 py-2 text-sm shadow-xs sm:flex'
+                }
             >
                 {!stats || isSuspended || isInstalling ? (
                     isSuspended ? (
-                        <div className={`flex - 1 text - center`}>
-                            <span className={`text - red - 100 text - xs`}>
+                        <div className={'- 1 text center flex'}>
+                            <span className={'text - red 100 xs'}>
                                 {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
                             </span>
                         </div>
                     ) : server.isTransferring || server.status ? (
-                        <div className={`flex - 1 text - center`}>
-                            <span className={`text - zinc - 100 text - xs`}>
+                        <div className={'- 1 text center flex'}>
+                            <span className={'text - zinc 100 xs'}>
                                 {server.isTransferring
                                     ? 'Transferring'
                                     : server.status === 'installing'
-                                        ? 'Installing'
-                                        : server.status === 'restoring_backup'
-                                            ? 'Restoring Backup'
-                                            : 'Unavailable'}
+                                      ? 'Installing'
+                                      : server.status === 'restoring_backup'
+                                        ? 'Restoring Backup'
+                                        : 'Unavailable'}
                             </span>
                         </div>
                     ) : (
                         <div className='text-xs opacity-25'>Sit tight!</div>
                     )
                 ) : (
-                    <Fragment>
-                        <div className={`sm:flex hidden`}>
-                            <div className={`flex justify - center gap - 2 w - fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>CPU:</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>{stats.cpuUsagePercent.toFixed(2)}%</p>
+                    <>
+                        <div className={'hidden sm:flex'}>
+                            <div className={'justify - center gap 2 w fit flex'}>
+                                <p className='w-fit whitespace-nowrap font-bold text-[#ffffff66] text-sm'>CPU:</p>
+                                <p className='w-fit whitespace-nowrap font-bold'>{stats.cpuUsagePercent.toFixed(2)}%</p>
                             </div>
                         </div>
-                        <div className={`sm:flex hidden`}>
-                            <div className={`flex justify - center gap - 2 w - fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>RAM:</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>
+                        <div className={'hidden sm:flex'}>
+                            <div className={'justify - center gap 2 w fit flex'}>
+                                <p className='w-fit whitespace-nowrap font-bold text-[#ffffff66] text-sm'>RAM:</p>
+                                <p className='w-fit whitespace-nowrap font-bold'>
                                     {bytesToString(stats.memoryUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>
-                        <div className={`sm:flex hidden`}>
-                            <div className={`flex justify - center gap - 2 w - fit`}>
-                                <p className='text-sm text-[#ffffff66] font-bold w-fit whitespace-nowrap'>Storage:</p>
-                                <p className='font-bold w-fit whitespace-nowrap'>
+                        <div className={'hidden sm:flex'}>
+                            <div className={'justify - center gap 2 w fit flex'}>
+                                <p className='w-fit whitespace-nowrap font-bold text-[#ffffff66] text-sm'>Storage:</p>
+                                <p className='w-fit whitespace-nowrap font-bold'>
                                     {bytesToString(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>
-                    </Fragment>
+                    </>
                 )}
             </div>
         </StatusIndicatorBox>

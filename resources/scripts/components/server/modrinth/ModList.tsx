@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-
-import ActionButton from '@/components/elements/ActionButton';
 import ContentBox from '@/components/elements/ContentBox';
 import { ModrinthService, useGlobalStateContext } from './config';
 import { ModCard } from './ModCard';
 
 interface ModListProps {
-    showInstalled?: boolean;
     showDependencies?: boolean;
+    showInstalled?: boolean;
 }
 
 export const ModList = ({ showInstalled = false, showDependencies = false }: ModListProps) => {
@@ -52,7 +50,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 
             const { data } = await ModrinthService.searchMods({
                 query: searchQuery || undefined,
-                facets: facets,
+                facets,
                 limit: 20,
                 offset: currentPage,
                 index: 'relevance',
@@ -84,9 +82,16 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
         //     searchQuery,
         // });
         fetchMods(true);
-    }, [selectedLoaders.join(','), selectedVersions.join(','), searchQuery]);
+    }, [
+        // console.log('Filters changed, fetching mods:', {
+        //     selectedLoaders,
+        //     selectedVersions,
+        //     searchQuery,
+        // });
+        fetchMods,
+    ]);
 
-    const handleLoadMore = () => {
+    const _handleLoadMore = () => {
         if (!isLoading && hasMore) {
             setPage((prev) => prev + 20);
             fetchMods(false);
@@ -99,7 +104,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 
     return (
         <div className='space-y-6'>
-            <div className='text-sm text-gray-400 px-2 py-1 bg-gray-800/50 rounded-lg inline-block'>
+            <div className='inline-block rounded-lg bg-gray-800/50 px-2 py-1 text-gray-400 text-sm'>
                 Showing {mods.length} {showInstalled ? 'plugins' : 'mods'}
                 {searchQuery && (
                     <span className='text-gray-300'>
@@ -165,19 +170,19 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
 const LoadingSpinner = () => (
     <ContentBox>
         <div className='flex justify-center py-8'>
-            <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-brand'></div>
+            <div className='h-8 w-8 animate-spin rounded-full border-brand border-t-2 border-b-2' />
         </div>
     </ContentBox>
 );
 
 const ErrorDisplay = ({ message }: { message: string }) => (
     <ContentBox>
-        <div className='text-red-500 p-4'>{message}</div>
+        <div className='p-4 text-red-500'>{message}</div>
     </ContentBox>
 );
 
 const EmptyState = () => (
     <ContentBox>
-        <div className='text-gray-400 p-4 text-center'>No mods found matching your criteria</div>
+        <div className='p-4 text-center text-gray-400'>No mods found matching your criteria</div>
     </ContentBox>
 );

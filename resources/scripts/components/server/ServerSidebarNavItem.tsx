@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { getSubdomainInfo } from '@/api/server/network/subdomain';
 
@@ -8,9 +8,9 @@ import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
 import { ServerContext } from '@/state/server';
 
 interface ServerSidebarNavItemProps {
+    onClick?: () => void;
     route: ServerRouteDefinition;
     serverId: string;
-    onClick?: () => void;
 }
 
 /**
@@ -19,82 +19,85 @@ interface ServerSidebarNavItemProps {
  * - Feature limit visibility (databases, backups, allocations)
  * - Network feature with subdomain support check
  */
-const ServerSidebarNavItem = forwardRef<HTMLAnchorElement, ServerSidebarNavItemProps>(
-    ({ route, serverId, onClick }, ref) => {
-        const { icon: Icon, name, path, permission, featureLimit, end } = route;
+const ServerSidebarNavItem = ({
+    route,
+    serverId,
+    onClick,
+    ref,
+}: ServerSidebarNavItemProps & { ref?: RefObject<HTMLAnchorElement | null> }) => {
+    const { icon: Icon, name, path, permission, featureLimit, end } = route;
 
-        // Feature limits from server state
-        const featureLimits = ServerContext.useStoreState((state) => state.server.data?.featureLimits);
-        const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
+    // Feature limits from server state
+    const featureLimits = ServerContext.useStoreState((state) => state.server.data?.featureLimits);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
 
-        // State for subdomain support check (only for network route)
-        const [subdomainSupported, setSubdomainSupported] = useState(false);
+    // State for subdomain support check (only for network route)
+    const [subdomainSupported, setSubdomainSupported] = useState(false);
 
-        // Check subdomain support for network feature
-        useEffect(() => {
-            if (featureLimit !== 'network' || !uuid) return;
+    // Check subdomain support for network feature
+    useEffect(() => {
+        if (featureLimit !== 'network' || !uuid) return;
 
-            const checkSubdomainSupport = async () => {
-                try {
-                    const data = await getSubdomainInfo(uuid);
-                    setSubdomainSupported(data.supported);
-                } catch {
-                    setSubdomainSupported(false);
-                }
-            };
-
-            checkSubdomainSupport();
-        }, [featureLimit, uuid]);
-
-        // Check if the item should be visible based on feature limits
-        const isVisible = (): boolean => {
-            if (!featureLimit) return true;
-            if (featureLimits?.[featureLimit] === null) return true;
-            if (featureLimit === 'network') {
-                // Network is visible if allocations > 0 OR subdomain is supported
-                if (featureLimits?.allocations === null) return true;
-
-                const allocationLimit = featureLimits?.allocations ?? 0;
-                return allocationLimit > 0 || subdomainSupported;
+        const checkSubdomainSupport = async () => {
+            try {
+                const data = await getSubdomainInfo(uuid);
+                setSubdomainSupported(data.supported);
+            } catch {
+                setSubdomainSupported(false);
             }
-
-            // For other feature limits (databases, backups, allocations)
-            const limitValue = featureLimits?.[featureLimit as FeatureLimitKey] ?? 0;
-            return limitValue !== 0;
         };
 
-        // Don't render if feature limit hides this item
-        if (!isVisible()) return null;
+        checkSubdomainSupport();
+    }, [featureLimit, uuid]);
 
-        // Build the navigation link
-        const to = path ? `/server/${serverId}/${path}` : `/server/${serverId}`;
+    // Check if the item should be visible based on feature limits
+    const isVisible = (): boolean => {
+        if (!featureLimit) return true;
+        if (featureLimits?.[featureLimit] === null) return true;
+        if (featureLimit === 'network') {
+            // Network is visible if allocations > 0 OR subdomain is supported
+            if (featureLimits?.allocations === null) return true;
 
-        const NavContent = (
-            <NavLink
-                ref={ref}
-                to={to}
-                end={end}
-                onClick={onClick}
-                className='flex flex-row items-center transition-colors duration-200 hover:bg-[#ffffff11] rounded-md'
-            >
-                {Icon && <Icon className='ml-3' width={22} height={22} fill='currentColor' />}
-                <p>{name}</p>
-            </NavLink>
-        );
-
-        // If permission is null or undefined, render without permission check
-        if (permission === null || permission === undefined) {
-            return NavContent;
+            const allocationLimit = featureLimits?.allocations ?? 0;
+            return allocationLimit > 0 || subdomainSupported;
         }
 
-        // Wrap with permission check
-        return (
-            <Can action={permission} matchAny>
-                {NavContent}
-            </Can>
-        );
-    },
-);
+        // For other feature limits (databases, backups, allocations)
+        const limitValue = featureLimits?.[featureLimit as FeatureLimitKey] ?? 0;
+        return limitValue !== 0;
+    };
+
+    // Don't render if feature limit hides this item
+    if (!isVisible()) return null;
+
+    // Build the navigation link
+    const to = path ? `/server/${serverId}/${path}` : `/server/${serverId}`;
+
+    const NavContent = (
+        <NavLink
+            className='flex flex-row items-center rounded-md transition-colors duration-200 hover:bg-[#ffffff11]'
+            end={end}
+            onClick={onClick}
+            ref={ref}
+            to={to}
+        >
+            {Icon && <Icon className='ml-3' fill='currentColor' height={22} width={22} />}
+            <p>{name}</p>
+        </NavLink>
+    );
+
+    // If permission is null or undefined, render without permission check
+    if (permission === null || permission === undefined) {
+        return NavContent;
+    }
+
+    // Wrap with permission check
+    return (
+        <Can action={permission} matchAny>
+            {NavContent}
+        </Can>
+    );
+};
 
 ServerSidebarNavItem.displayName = 'ServerSidebarNavItem';
 

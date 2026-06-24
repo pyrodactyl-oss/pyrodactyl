@@ -23,13 +23,13 @@ interface Props {
 }
 
 interface Values {
-    name: string;
-    dayOfWeek: string;
-    month: string;
     dayOfMonth: string;
+    dayOfWeek: string;
+    enabled: boolean;
     hour: string;
     minute: string;
-    enabled: boolean;
+    month: string;
+    name: string;
     onlyWhenOnline: boolean;
 }
 
@@ -71,7 +71,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
         if (absDifferenceHours === Math.floor(absDifferenceHours)) {
             // whole hours
-            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours === 1 ? '' : 's'} ${isAhead ? 'ahead of' : 'behind'}`;
         } else {
             // hours & minutes
             const hours = Math.floor(absDifferenceHours);
@@ -80,7 +80,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
             if (hours > 0) {
                 differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead of' : 'behind'}`;
             } else {
-                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+                differenceDescription = `${minutes} minute${minutes === 1 ? '' : 's'} ${isAhead ? 'ahead of' : 'behind'}`;
             }
         }
     }
@@ -93,9 +93,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
     };
 };
 
-const formatTimezoneDisplay = (timezone: string, offset: string) => {
-    return `${timezone} (${offset})`;
-};
+const formatTimezoneDisplay = (timezone: string, offset: string) => `${timezone} (${offset})`;
 
 const getCronDescription = (
     minute: string,
@@ -130,25 +128,24 @@ const EditScheduleModal = ({ schedule }: Props) => {
     const { addError, clearFlashes } = useFlash();
     const { dismiss, setPropOverrides } = useContext(ModalContext);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
     const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Unknown');
 
-    const timezoneInfo = useMemo(() => {
-        return getTimezoneInfo(serverTimezone);
-    }, [serverTimezone]);
+    const timezoneInfo = useMemo(() => getTimezoneInfo(serverTimezone), [serverTimezone]);
 
     useEffect(() => {
         setPropOverrides({
             title: schedule ? 'Edit schedule' : 'Create new schedule',
         });
-    }, []);
+    }, [schedule, setPropOverrides]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             clearFlashes('schedule:edit');
-        };
-    }, []);
+        },
+        [clearFlashes],
+    );
 
     const submit = (values: Values, { setSubmitting }: FormikHelpers<Values>) => {
         clearFlashes('schedule:edit');
@@ -180,7 +177,6 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     return (
         <Formik
-            onSubmit={submit}
             initialValues={
                 {
                     name: schedule?.name || '',
@@ -193,6 +189,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     onlyWhenOnline: schedule?.onlyWhenOnline ?? true,
                 } as Values
             }
+            onSubmit={submit}
         >
             {({ isSubmitting, values }) => {
                 const cronDescription = getCronDescription(
@@ -207,48 +204,48 @@ const EditScheduleModal = ({ schedule }: Props) => {
                     <Form>
                         <FlashMessageRender byKey={'schedule:edit'} />
                         <Field
-                            name={'name'}
-                            label={'Schedule name'}
                             description={'A human readable identifier for this schedule.'}
+                            label={'Schedule name'}
+                            name={'name'}
                         />
-                        <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
-                            <Field name={'minute'} label={'Minute'} />
-                            <Field name={'hour'} label={'Hour'} />
-                            <Field name={'dayOfWeek'} label={'Day of week'} />
-                            <Field name={'dayOfMonth'} label={'Day of month'} />
-                            <Field name={'month'} label={'Month'} />
+                        <div className={'mt-6 grid grid-cols-2 gap-4 sm:grid-cols-5'}>
+                            <Field label={'Minute'} name={'minute'} />
+                            <Field label={'Hour'} name={'hour'} />
+                            <Field label={'Day of week'} name={'dayOfWeek'} />
+                            <Field label={'Day of month'} name={'dayOfMonth'} />
+                            <Field label={'Month'} name={'month'} />
                         </div>
 
-                        <div className={`mt-3 p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50`}>
-                            <p className={`text-sm text-zinc-200 font-medium`}>{cronDescription}</p>
+                        <div className={'mt-3 rounded-lg border border-zinc-700/50 bg-zinc-800/50 p-3'}>
+                            <p className={'font-medium text-sm text-zinc-200'}>{cronDescription}</p>
                         </div>
 
-                        <p className={`text-zinc-400 text-xs mt-2`}>
+                        <p className={'mt-2 text-xs text-zinc-400'}>
                             The schedule system uses Cronjob syntax when defining when tasks should begin running. Use
                             the fields above to specify when these tasks should begin running.
                         </p>
 
                         {timezoneInfo.isDifferent && (
-                            <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
+                            <div className={'my-2 rounded-lg border border-blue-400/30 bg-blue-900/20 p-4'}>
                                 <div className={'flex items-start gap-3'}>
                                     <TriangleExclamation
-                                        width={22}
-                                        height={22}
+                                        className={'mt-0.5 h-5 w-5 flex-shrink-0 text-blue-400'}
                                         fill='currentColor'
-                                        className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
+                                        height={22}
+                                        width={22}
                                     />
                                     <div className={'text-sm'}>
-                                        <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
-                                        <p className={'text-blue-200/80 text-xs mb-2'}>
+                                        <p className={'mb-1 font-medium text-blue-100'}>Timezone Information</p>
+                                        <p className={'mb-2 text-blue-200/80 text-xs'}>
                                             Times shown here are configured for the server timezone.
                                             {timezoneInfo.difference !== 'same time' && (
-                                                <span className={'text-blue-100 font-medium'}>
+                                                <span className={'font-medium text-blue-100'}>
                                                     {' '}
                                                     The server is {timezoneInfo.difference} your timezone.
                                                 </span>
                                             )}
                                         </p>
-                                        <div className={'mt-2 text-xs space-y-1'}>
+                                        <div className={'mt-2 space-y-1 text-xs'}>
                                             <div className={'text-blue-200/60'}>
                                                 Your timezone:
                                                 <span className={'font-mono'}>
@@ -275,16 +272,16 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             </div>
                         )}
 
-                        <div className='gap-3 my-6 flex flex-col'>
-                            <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
+                        <div className='my-6 flex flex-col gap-3'>
+                            <a href='https://crontab.guru/' rel='noreferrer' target='_blank'>
                                 <ItemContainer
                                     description={'Online editor for cron schedule experessions.'}
-                                    title={'Crontab Guru'}
                                     // defaultChecked={showCheatsheet}
                                     // onChange={() => setShowCheetsheet((s) => !s)}
                                     labelClasses='cursor-pointer'
+                                    title={'Crontab Guru'}
                                 >
-                                    <Link width={22} height={22} fill='currentColor' className={`px-5 h-5 w-5`} />
+                                    <Link className={'h-5 w-5 px-5'} fill='currentColor' height={22} width={22} />
                                 </ItemContainer>
                             </a>
                             {/* This table would be pretty awkward to make look nice
@@ -295,22 +292,22 @@ const EditScheduleModal = ({ schedule }: Props) => {
                             </div>
                         )} */}
                             <FormikSwitchV2
-                                name={'onlyWhenOnline'}
                                 description={'Only execute this schedule when the server is running.'}
                                 label={'Only When Server Is Online'}
+                                name={'onlyWhenOnline'}
                             />
                             <FormikSwitchV2
-                                name={'enabled'}
                                 description={'This schedule will be executed automatically if enabled.'}
                                 label={'Schedule Enabled'}
+                                name={'enabled'}
                             />
                         </div>
-                        <div className={`mb-6 text-right`}>
+                        <div className={'mb-6 text-right'}>
                             <ActionButton
-                                variant='primary'
                                 className={'w-full sm:w-auto'}
-                                type={'submit'}
                                 disabled={isSubmitting}
+                                type={'submit'}
+                                variant='primary'
                             >
                                 {schedule ? 'Save changes' : 'Create schedule'}
                             </ActionButton>

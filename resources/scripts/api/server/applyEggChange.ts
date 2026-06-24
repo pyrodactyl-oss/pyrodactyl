@@ -2,13 +2,13 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface ApplyEggChangeRequest {
-    egg_id: number;
-    nest_id: number;
     docker_image?: string;
-    startup_command?: string;
+    egg_id: number;
     environment?: Record<string, string>;
+    nest_id: number;
     should_backup?: boolean;
     should_wipe?: boolean;
+    startup_command?: string;
 }
 
 export interface ApplyEggChangeResponse {

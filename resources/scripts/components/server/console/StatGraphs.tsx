@@ -17,16 +17,16 @@ import formatUptime from '../UptimeDuration';
 interface StatsData {
     cpu_absolute: number;
     memory_bytes: number;
-    uptime: number;
     network: {
         tx_bytes: number;
         rx_bytes: number;
     };
+    uptime: number;
 }
 
 const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
-    const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
+    const limits = ServerContext.useStoreState((state) => state.server.data?.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
 
     const cpu = useChartTickLabel('CPU', limits.cpu, '%', 2);
@@ -39,7 +39,7 @@ const StatGraphs = () => {
                 y: {
                     ticks: {
                         callback(value) {
-                            return bytesToString(typeof value === 'string' ? parseInt(value, 10) : value);
+                            return bytesToString(typeof value === 'string' ? Number.parseInt(value, 10) : value);
                         },
                     },
                 },
@@ -48,9 +48,9 @@ const StatGraphs = () => {
         callback(opts, index) {
             return {
                 ...opts,
-                label: !index ? 'Network In' : 'Network Out',
-                borderColor: !index ? '#facc15' : '#60a5fa',
-                backgroundColor: hexToRgba(!index ? '#facc15' : '#60a5fa', 0.09),
+                label: index ? 'Network Out' : 'Network In',
+                borderColor: index ? '#60a5fa' : '#facc15',
+                backgroundColor: hexToRgba(index ? '#60a5fa' : '#facc15', 0.09),
             };
         },
     });
@@ -63,7 +63,7 @@ const StatGraphs = () => {
             setUptime(0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [status]);
+    }, [status, network.clear, memory.clear, cpu.clear]);
 
     useWebsocketEvent(SocketEvent.STATS, (data: string) => {
         let values: StatsData;
@@ -88,31 +88,31 @@ const StatGraphs = () => {
     });
 
     const allocation = ServerContext.useStoreState((state) => {
-        const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
+        const match = state.server.data?.allocations.find((allocation) => allocation.isDefault);
 
-        return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
+        return match ? `${match.alias || ip(match.ip)}:${match.port}` : 'n/a';
     });
 
-    const description = ServerContext.useStoreState((state) => state.server.data!.description);
+    const description = ServerContext.useStoreState((state) => state.server.data?.description);
 
     return (
         <TooltipProvider>
-            <div className='flex h-full flex-col gap-4 overflow-y-auto flex-none'>
+            <div className='flex h-full flex-none flex-col gap-4 overflow-y-auto'>
                 <div>
-                    <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] bg-[#110f0d] flex gap-4 text-sm'>
+                    <div className='group relative flex justify-between gap-4 rounded-xl border-[#ffffff11] border-[1px] bg-[#110f0d] p-4 text-sm'>
                         <h3 className='font-extrabold'>IP Address</h3>
                         <div className='font-medium'>{allocation}</div>
                     </div>
                 </div>
                 <div>
-                    <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] bg-[#110f0d] flex gap-4 text-sm'>
+                    <div className='group relative flex justify-between gap-4 rounded-xl border-[#ffffff11] border-[1px] bg-[#110f0d] p-4 text-sm'>
                         <h3 className='font-extrabold'>Uptime</h3>
                         <div className='font-medium'>{formatUptime(uptime)}</div>
                     </div>
                 </div>
                 {description && (
                     <div>
-                        <div className='group p-4 justify-between relative rounded-xl border-[1px] border-[#ffffff11] flex-col bg-[#110f0d] flex gap-4 text-sm'>
+                        <div className='group relative flex flex-col justify-between gap-4 rounded-xl border-[#ffffff11] border-[1px] bg-[#110f0d] p-4 text-sm'>
                             <h3 className='font-extrabold'>Description</h3>
                             <div className='font-medium'>{description}</div>
                         </div>
@@ -130,13 +130,12 @@ const StatGraphs = () => {
                 </div>
                 <div>
                     <ChartBlock
-                        title={'Network Activity'}
                         legend={
                             <div className='flex gap-2'>
                                 <Tooltip delayDuration={200}>
                                     <TooltipTrigger asChild>
-                                        <div className='flex items-center cursor-default'>
-                                            <CloudDownload className='mr-2 w-4 h-4 text-yellow-400' />
+                                        <div className='flex cursor-default items-center'>
+                                            <CloudDownload className='mr-2 h-4 w-4 text-yellow-400' />
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side='top' sideOffset={5}>
@@ -146,8 +145,8 @@ const StatGraphs = () => {
 
                                 <Tooltip delayDuration={200}>
                                     <TooltipTrigger asChild>
-                                        <div className='flex items-center cursor-default'>
-                                            <CloudUpload className='w-4 h-4 text-blue-400' />
+                                        <div className='flex cursor-default items-center'>
+                                            <CloudUpload className='h-4 w-4 text-blue-400' />
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent side='top' sideOffset={5}>
@@ -156,6 +155,7 @@ const StatGraphs = () => {
                                 </Tooltip>
                             </div>
                         }
+                        title={'Network Activity'}
                     >
                         <Line
                             aria-label='Network Activity. Download and upload activity'

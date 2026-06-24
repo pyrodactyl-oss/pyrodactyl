@@ -19,7 +19,7 @@ type OwnProps = RequiredModalProps & {
 };
 
 const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -32,10 +32,10 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
         if (files.length === 1) {
             if (!useMoveTerminology && len === 1) {
                 // Rename the file within this directory.
-                mutate((data) => data!.map((f) => (f.name === files[0] ? { ...f, name } : f)), false);
+                mutate((data) => data?.map((f) => (f.name === files[0] ? { ...f, name } : f)), false);
             } else if (useMoveTerminology || len > 1) {
                 // Remove the file from this directory since they moved it elsewhere.
-                mutate((data) => data!.filter((f) => f.name !== files[0]), false);
+                mutate((data) => data?.filter((f) => f.name !== files[0]), false);
             }
         }
 
@@ -58,7 +58,7 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
     };
 
     return (
-        <Formik onSubmit={submit} initialValues={{ name: files.length > 1 ? '' : files[0] || '' }}>
+        <Formik initialValues={{ name: files.length > 1 ? '' : files[0] || '' }} onSubmit={submit}>
             {({ isSubmitting, values }) => (
                 <Modal
                     {...props}
@@ -66,22 +66,22 @@ const RenameFileModal = ({ files, useMoveTerminology, ...props }: OwnProps) => {
                     showSpinnerOverlay={isSubmitting}
                     title={useMoveTerminology ? 'Moving files/folders' : 'Renaming file/folder'}
                 >
-                    <Form className={`w-full`}>
+                    <Form className={'w-full'}>
                         <div className='w-full'>
-                            <Field type={'string'} id={'file_name'} name={'name'} label={'File Name'} autoFocus />
+                            <Field autoFocus id={'file_name'} label={'File Name'} name={'name'} type={'string'} />
                             {useMoveTerminology && (
-                                <p className={`mt-2 text-xs! break-all`}>
-                                    <strong className={`text-sm text-zinc-200`}>New location: </strong>
+                                <p className={'mt-2 break-all text-xs!'}>
+                                    <strong className={'text-sm text-zinc-200'}>New location: </strong>
                                     <Code>
                                         /root/
-                                        <span className={`text-blue-200`}>
+                                        <span className={'text-blue-200'}>
                                             {join(directory, values.name).replace(/^(\.\.\/|\/)+/, '')}
                                         </span>
                                     </Code>
                                 </p>
                             )}
-                            <div className={`flex justify-end w-full my-6`}>
-                                <ActionButton variant='primary' type='submit'>
+                            <div className={'my-6 flex w-full justify-end'}>
+                                <ActionButton type='submit' variant='primary'>
                                     {useMoveTerminology ? 'Move' : 'Rename'}
                                 </ActionButton>
                             </div>

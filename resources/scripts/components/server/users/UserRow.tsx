@@ -15,9 +15,9 @@ interface Props {
 }
 
 const UserRow = ({ subuser }: Props) => {
-    const uuid = useStoreState((state) => state.user!.data!.uuid);
+    const uuid = useStoreState((state) => state.user?.data?.uuid);
     const navigate = useNavigate();
-    const serverId = ServerContext.useStoreState((state) => state.server.data!.id);
+    const serverId = ServerContext.useStoreState((state) => state.server.data?.id);
 
     const handleEditClick = () => {
         navigate(`/server/${serverId}/users/${subuser.uuid}/edit`);
@@ -25,43 +25,41 @@ const UserRow = ({ subuser }: Props) => {
 
     return (
         <PageListItem>
-            <div className={`w-10 h-10 rounded-full bg-white border-2 border-zinc-800 overflow-hidden hidden md:block`}>
-                <img className={`w-full h-full`} src={`${subuser.image}?s=400`} />
+            <div className={'hidden h-10 w-10 overflow-hidden rounded-full border-2 border-zinc-800 bg-white md:block'}>
+                <img className={'h-full w-full'} src={`${subuser.image}?s=400`} />
             </div>
-            <div className={`sm:ml-4 flex-1 overflow-hidden flex flex-col`}>
-                <p className={`truncate text-lg`}>{subuser.email}</p>
-                <p className={`mt-1 md:mt-0 text-xs text-zinc-400 truncate sm:text-left text-center`}>
+            <div className={'flex flex-1 flex-col overflow-hidden sm:ml-4'}>
+                <p className={'truncate text-lg'}>{subuser.email}</p>
+                <p className={'mt-1 truncate text-center text-xs text-zinc-400 sm:text-left md:mt-0'}>
                     {subuser.twoFactorEnabled ? 'MFA Enabled' : 'MFA Disabled'}
                 </p>
             </div>
 
-            <div className='flex flex-col items-center md:gap-12 gap-4 sm:flex-row'>
+            <div className='flex flex-col items-center gap-4 sm:flex-row md:gap-12'>
                 <div>
-                    <p className={`font-medium text-center`}>
+                    <p className={'text-center font-medium'}>
                         {subuser.permissions.filter((permission) => permission !== 'websocket.connect').length}
                     </p>
-                    <p className={`text-xs text-zinc-500 uppercase`}>Permissions</p>
+                    <p className={'text-xs text-zinc-500 uppercase'}>Permissions</p>
                 </div>
                 {subuser.uuid !== uuid && (
-                    <>
-                        <div className='flex align-middle items-center justify-center gap-2'>
-                            <Can action={'user.update'}>
-                                <ActionButton
-                                    variant='secondary'
-                                    size='sm'
-                                    className='flex items-center gap-2'
-                                    onClick={handleEditClick}
-                                    aria-label='Edit subuser'
-                                >
-                                    <Pencil width={22} height={22} fill='currentColor' />
-                                    Edit
-                                </ActionButton>
-                            </Can>
-                            <Can action={'user.delete'}>
-                                <RemoveSubuserButton subuser={subuser} />
-                            </Can>
-                        </div>
-                    </>
+                    <div className='flex items-center justify-center gap-2 align-middle'>
+                        <Can action={'user.update'}>
+                            <ActionButton
+                                aria-label='Edit subuser'
+                                className='flex items-center gap-2'
+                                onClick={handleEditClick}
+                                size='sm'
+                                variant='secondary'
+                            >
+                                <Pencil fill='currentColor' height={22} width={22} />
+                                Edit
+                            </ActionButton>
+                        </Can>
+                        <Can action={'user.delete'}>
+                            <RemoveSubuserButton subuser={subuser} />
+                        </Can>
+                    </div>
                 )}
             </div>
         </PageListItem>

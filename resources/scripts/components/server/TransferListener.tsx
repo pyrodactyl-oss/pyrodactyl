@@ -3,7 +3,7 @@ import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 import { ServerContext } from '@/state/server';
 
 const TransferListener = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const getServer = ServerContext.useStoreActions((actions) => actions.server.getServer);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 

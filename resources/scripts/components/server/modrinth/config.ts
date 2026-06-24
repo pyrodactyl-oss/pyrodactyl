@@ -1,47 +1,47 @@
 import axios, { AxiosError, type AxiosRequestConfig } from 'axios';
-import React, { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+import React, { createContext, type ReactNode, useContext, useState } from 'react';
 import { toast } from 'sonner';
 
 // ==================== TYPES ====================
-export type ModLoader = {
+export interface ModLoader {
+    icon?: string;
     id: string;
     name: string;
-    icon?: string;
     supportedEnvironments: ('client' | 'server')[];
     supportedProjectTypes: string[];
-};
+}
 
-export type GameVersion = {
+export interface GameVersion {
     id: string;
-    name: string;
-    type: 'release' | 'snapshot' | 'beta';
-    releaseDate?: string;
     isFeatured?: boolean;
-};
+    name: string;
+    releaseDate?: string;
+    type: 'release' | 'snapshot' | 'beta';
+}
 
 export interface Mod {
-    id: string;
-    project_id: string;
-    project_type: string;
-    slug: string;
     author: string;
-    title: string;
-    description: string;
     categories: string[];
-    display_categories: string[];
-    versions: string[];
-    downloads: number;
-    follows: number;
-    icon_url: string;
+    client_side: string;
+    color: number;
     date_created: string;
     date_modified: string;
+    description: string;
+    display_categories: string[];
+    downloads: number;
+    featured_gallery: string | null;
+    follows: number;
+    gallery: string[];
+    icon_url: string;
+    id: string;
     latest_version: string;
     license: string;
-    client_side: string;
+    project_id: string;
+    project_type: string;
     server_side: string;
-    gallery: string[];
-    featured_gallery: string | null;
-    color: number;
+    slug: string;
+    title: string;
+    versions: string[];
 }
 
 export type ModDetail = Mod & {
@@ -80,28 +80,28 @@ export const MODRINTH_CONFIG = {
             Accept: 'application/json',
         };
     },
-    defaultTimeout: 15000,
+    defaultTimeout: 15_000,
     maxRetries: 3,
 };
 
 // ==================== CONTEXT & HOOK ====================
 interface GlobalState {
-    mods: Mod[];
-    loaders: ModLoader[];
     gameVersions: GameVersion[];
+    lastUpdated: number;
+    loaders: ModLoader[];
+    mods: Mod[];
+    searchQuery: string;
     selectedLoaders: string[];
     selectedVersions: string[];
-    searchQuery: string;
-    lastUpdated: number;
 }
 
 interface GlobalStateContextType extends GlobalState {
-    setMods: (mods: Mod[]) => void;
-    setLoaders: (loaders: ModLoader[]) => void;
     setGameVersions: (versions: GameVersion[]) => void;
+    setLoaders: (loaders: ModLoader[]) => void;
+    setMods: (mods: Mod[]) => void;
+    setSearchQuery: (query: string) => void;
     setSelectedLoaders: (loaders: string[]) => void;
     setSelectedVersions: (versions: string[]) => void;
-    setSearchQuery: (query: string) => void;
     updateGameVersions: (versions: GameVersion[]) => void;
     updateLoaders: (loaders: ModLoader[]) => void;
 }
@@ -183,13 +183,14 @@ export const ModrinthService = {
                 };
                 config._retryCount = config._retryCount || 0;
 
-                if (error.response?.status === 429 || error.response?.status >= 500) {
-                    if (config._retryCount < MODRINTH_CONFIG.maxRetries) {
-                        config._retryCount++;
-                        const delay = 2 ** config._retryCount * 1000;
-                        await new Promise((resolve) => setTimeout(resolve, delay));
-                        return this.api(config);
-                    }
+                if (
+                    (error.response?.status === 429 || error.response?.status >= 500) &&
+                    config._retryCount < MODRINTH_CONFIG.maxRetries
+                ) {
+                    config._retryCount++;
+                    const delay = 2 ** config._retryCount * 1000;
+                    await new Promise((resolve) => setTimeout(resolve, delay));
+                    return this.api(config);
                 }
                 return Promise.reject(error);
             });

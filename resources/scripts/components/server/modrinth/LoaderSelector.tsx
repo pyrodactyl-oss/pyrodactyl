@@ -11,8 +11,8 @@ import { getAvailableLoaders, getLoaderType } from './eggfeatures';
 const DEFAULT_LOADERS = ['paper', 'spigot', 'purpur', 'fabric', 'forge', 'quilt', 'bungeecord'];
 
 interface LoaderSelectorProps {
-    maxVisible?: number;
     featuredLoaders?: string[];
+    maxVisible?: number;
 }
 
 function capitalizeFirstLetter(string) {
@@ -25,13 +25,13 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
     const [showAll, setShowAll] = useState(false);
     const eggFeatures = ServerContext.useStoreState((state) => state.server.data?.eggFeatures || []);
     const availableLoaders = getAvailableLoaders(eggFeatures);
-    const loaderType = getLoaderType(eggFeatures);
+    const _loaderType = getLoaderType(eggFeatures);
 
     // selectedLoaders.push(...availableLoaders);
     // setSelectedLoaders([...new Set([...selectedLoaders, ...availableLoaders])]);
     useEffect(() => {
         selectedLoaders.push(...availableLoaders);
-    }, []);
+    }, [selectedLoaders.push, availableLoaders]);
 
     const { featured, other, filtered } = useMemo(() => {
         if (!loaders.length) return { featured: [], other: [], filtered: [] };
@@ -85,7 +85,7 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
     const showCollapseButton = hasMoreLoaders && showAll;
 
     if (loaders.length === 0) {
-        return <p className='text-sm text-gray-500'>No loaders available</p>;
+        return <p className='text-gray-500 text-sm'>No loaders available</p>;
     }
 
     return (
@@ -93,16 +93,16 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             {/* Search Input */}
             <div className='relative'>
                 <Input
-                    type='text'
-                    placeholder='Search loaders...'
-                    value={searchQuery}
+                    className='w-full py-2 pr-8 pl-3 text-sm'
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-                    className='w-full pl-3 pr-8 py-2 text-sm'
+                    placeholder='Search loaders...'
+                    type='text'
+                    value={searchQuery}
                 />
                 {searchQuery && (
                     <button
+                        className='absolute top-1/2 right-2 -translate-y-1/2 transform text-gray-400 text-sm hover:text-gray-600'
                         onClick={() => setSearchQuery('')}
-                        className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm'
                     >
                         ✕
                     </button>
@@ -110,17 +110,17 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             </div>
 
             {/* Loaders List */}
-            <div className='space-y-2 max-h-80 overflow-y-auto'>
+            <div className='max-h-80 space-y-2 overflow-y-auto'>
                 {loadersToShow.length === 0 ? (
-                    <p className='text-sm text-gray-500 text-center py-2'>
+                    <p className='py-2 text-center text-gray-500 text-sm'>
                         No loaders matching &quot;{searchQuery}&quot;
                     </p>
                 ) : (
                     loadersToShow.map((loader) => (
                         <Checkbox
+                            checked={selectedLoaders.includes(loader.id)}
                             key={loader.id}
                             label={capitalizeFirstLetter(loader.name)}
-                            checked={selectedLoaders.includes(loader.id)}
                             onChange={(isChecked) => {
                                 const newSelected = isChecked
                                     ? [...selectedLoaders, loader.id]
@@ -133,13 +133,13 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             </div>
 
             {/* Selection counter and clear search */}
-            <div className='flex justify-between items-center pt-2 border-t border-gray-200'>
-                <span className='text-xs text-gray-500'>{selectedLoaders.length} selected</span>
+            <div className='flex items-center justify-between border-gray-200 border-t pt-2'>
+                <span className='text-gray-500 text-xs'>{selectedLoaders.length} selected</span>
 
                 {searchQuery && (
                     <button
+                        className='font-medium text-gray-600 text-xs hover:text-gray-800'
                         onClick={() => setSearchQuery('')}
-                        className='text-xs text-gray-600 hover:text-gray-800 font-medium'
                     >
                         Clear search
                     </button>
@@ -148,10 +148,10 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
 
             {/* Clean Modern Expand/Collapse Toggle */}
             {showExpandButton && (
-                <div className='pt-2 border-t border-gray-200'>
+                <div className='border-gray-200 border-t pt-2'>
                     <button
+                        className='flex w-full items-center justify-center gap-1.5 rounded-md py-2 text-white text-xs transition-colors duration-150 hover:text-gray-300'
                         onClick={() => setShowAll(true)}
-                        className='w-full text-xs text-white hover:text-gray-300 py-2 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5'
                     >
                         <span className='transform transition-transform duration-200'>▾</span>
                         Show {featured.length + other.length - maxVisible} more loaders
@@ -160,12 +160,12 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             )}
 
             {showCollapseButton && (
-                <div className='pt-2 border-t border-gray-200'>
+                <div className='border-gray-200 border-t pt-2'>
                     <button
+                        className='flex w-full items-center justify-center gap-1.5 rounded-md py-2 text-white text-xs transition-colors duration-150 hover:text-gray-300'
                         onClick={() => setShowAll(false)}
-                        className='w-full text-xs text-white hover:text-gray-300 py-2 rounded-md transition-colors duration-150 flex items-center justify-center gap-1.5'
                     >
-                        <span className='transform transition-transform duration-200 rotate-180'>▾</span>
+                        <span className='rotate-180 transform transition-transform duration-200'>▾</span>
                         Show less
                     </button>
                 </div>
@@ -174,8 +174,8 @@ export const LoaderSelector = ({ maxVisible = 7, featuredLoaders = DEFAULT_LOADE
             {/* Clear search button */}
             {searchQuery && (
                 <button
+                    className='mt-2 w-full border-gray-200 border-t py-1 text-white text-xs hover:text-gray-300'
                     onClick={() => setSearchQuery('')}
-                    className='w-full text-xs text-white hover:text-gray-300 py-1 border-t border-gray-200 mt-2'
                 >
                     Clear search
                 </button>

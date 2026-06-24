@@ -7,7 +7,7 @@ import type { UnifiedBackup } from './BackupItem';
 
 export const useUnifiedBackups = () => {
     const { data: backups, error, isValidating, mutate } = getServerBackups();
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const daemonType = getGlobalDaemonType();
 
     const liveProgress = useContext(LiveProgressContext);
@@ -63,7 +63,7 @@ export const useUnifiedBackups = () => {
             });
             mutate();
         },
-        [uuid, mutate],
+        [uuid, mutate, daemonType],
     );
 
     const toggleBackupLock = useCallback(
@@ -72,7 +72,7 @@ export const useUnifiedBackups = () => {
             await http.post(`/api/client/servers/${daemonType}/${uuid}/backups/${backupUuid}/lock`);
             mutate();
         },
-        [uuid, mutate],
+        [uuid, mutate, daemonType],
     );
 
     const unifiedBackups: UnifiedBackup[] = [];
@@ -95,11 +95,11 @@ export const useUnifiedBackups = () => {
                 createdAt: backup.createdAt,
                 completedAt: backup.completedAt,
                 canRetry: live ? live.canRetry : backup.canRetry,
-                canDelete: live ? false : true,
+                canDelete: !live,
                 canDownload: backup.isSuccessful && !live,
                 canRestore: backup.isSuccessful && !live,
                 isLiveOnly: false,
-                isDeletion: live?.isDeletion || false,
+                isDeletion: live?.isDeletion,
             });
         }
     }
@@ -108,7 +108,7 @@ export const useUnifiedBackups = () => {
     for (const [backupUuid, live] of Object.entries(liveProgress)) {
         const existsInSwr = unifiedBackups.some((b) => b.uuid === backupUuid);
 
-        if (!existsInSwr && !live.isDeletion) {
+        if (!(existsInSwr || live.isDeletion)) {
             unifiedBackups.push({
                 uuid: backupUuid,
                 name: live.backupName || live.message || 'Processing...',

@@ -6,11 +6,11 @@ import Input from '@/components/elements/Input';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 
 interface Props {
-    isEditable?: boolean;
-    title: string;
-    permissions: string[];
-    className?: string;
     children: React.ReactNode;
+    className?: string;
+    isEditable?: boolean;
+    permissions: string[];
+    title: string;
 }
 
 const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissions, className, children }) => {
@@ -24,24 +24,24 @@ const PermissionTitleBox: React.FC<Props> = memo(({ isEditable, title, permissio
                 setValue(value.filter((p) => !permissions.includes(p)));
             }
         },
-        [permissions, value],
+        [permissions, value, setValue],
     );
 
     return (
         <TitledGreyBox
+            className={className}
             title={
-                <div className={`flex items-center justify-between w-full`}>
-                    <p className={`text-sm capitalize`}>{title}</p>
+                <div className={'flex w-full items-center justify-between'}>
+                    <p className={'text-sm capitalize'}>{title}</p>
                     {isEditable && (
                         <Input
-                            type={'checkbox'}
                             checked={permissions.every((p) => value.includes(p))}
                             onChange={onCheckboxClicked}
+                            type={'checkbox'}
                         />
                     )}
                 </div>
             }
-            className={className}
         >
             {children}
         </TitledGreyBox>

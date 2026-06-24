@@ -21,20 +21,20 @@ export class NullProvider extends BaseCaptchaProvider {
         return Promise.resolve();
     }
 
-    async render(container: HTMLElement, config: CaptchaRenderConfig): Promise<string> {
+    async render(_container: HTMLElement, _config: CaptchaRenderConfig): Promise<string> {
         // No-op for disabled captcha
         return '';
     }
 
-    getResponse(widgetId?: string): string | null {
+    getResponse(_widgetId?: string): string | null {
         return null;
     }
 
-    reset(widgetId?: string): void {
+    reset(_widgetId?: string): void {
         // No-op for disabled captcha
     }
 
-    remove(widgetId?: string): void {
+    remove(_widgetId?: string): void {
         // No-op for disabled captcha
     }
 }

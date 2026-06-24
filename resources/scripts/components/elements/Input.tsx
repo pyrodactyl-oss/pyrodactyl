@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components';
 
 export interface Props {
-    isLight?: boolean;
     hasError?: boolean;
+    isLight?: boolean;
 }
 
 const checkboxStyle = css<Props>`

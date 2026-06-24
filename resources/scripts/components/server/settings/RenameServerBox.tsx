@@ -12,25 +12,23 @@ import type { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 interface Values {
-    name: string;
     description: string;
+    name: string;
 }
 
-const RenameServerForm = () => {
-    return (
-        <TitledGreyBox title={'Server Details'}>
-            <Form className='flex flex-col gap-4'>
-                <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
-                <div className={`mt-6 text-right`}>
-                    <ActionButton variant='primary' type={'submit'}>
-                        Save
-                    </ActionButton>
-                </div>
-            </Form>
-        </TitledGreyBox>
-    );
-};
+const RenameServerForm = () => (
+    <TitledGreyBox title={'Server Details'}>
+        <Form className='flex flex-col gap-4'>
+            <Field id={'name'} label={'Server Name'} name={'name'} type={'text'} />
+            <Field id={'description'} label={'Server Description'} name={'description'} type={'text'} />
+            <div className={'mt-6 text-right'}>
+                <ActionButton type={'submit'} variant='primary'>
+                    Save
+                </ActionButton>
+            </div>
+        </Form>
+    </TitledGreyBox>
+);
 
 const RenameServerBox = () => {
     const server = ServerContext.useStoreState((state) => state.server.data!);
@@ -51,11 +49,11 @@ const RenameServerBox = () => {
 
     return (
         <Formik
-            onSubmit={submit}
             initialValues={{
                 name: server.name,
                 description: server.description,
             }}
+            onSubmit={submit}
             validationSchema={object().shape({
                 name: string().required().min(1),
                 description: string().nullable(),

@@ -85,10 +85,10 @@
     }
 }
 .bounce {
-    -webkit-animation-name: bounce;
-    animation-name: bounce;
     -webkit-transform-origin: center bottom;
     transform-origin: center bottom;
+    -webkit-animation-name: bounce;
+    animation-name: bounce;
 }
 @-webkit-keyframes flash {
     50%,
@@ -301,10 +301,10 @@
     }
 }
 .headShake {
-    -webkit-animation-timing-function: ease-in-out;
-    animation-timing-function: ease-in-out;
     -webkit-animation-name: headShake;
     animation-name: headShake;
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
 }
 @-webkit-keyframes swing {
     20% {
@@ -541,10 +541,10 @@
     }
 }
 .jello {
-    -webkit-animation-name: jello;
-    animation-name: jello;
     -webkit-transform-origin: center;
     transform-origin: center;
+    -webkit-animation-name: jello;
+    animation-name: jello;
 }
 @-webkit-keyframes bounceIn {
     20%,
@@ -1754,9 +1754,9 @@
     }
 }
 .flipOutX {
+    backface-visibility: visible !important;
     -webkit-animation-name: flipOutX;
     animation-name: flipOutX;
-    backface-visibility: visible !important;
 }
 @-webkit-keyframes flipOutY {
     from {

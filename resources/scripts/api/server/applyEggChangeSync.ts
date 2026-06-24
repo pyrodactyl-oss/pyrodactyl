@@ -4,13 +4,13 @@ import { getGlobalDaemonType } from '@/api/server/getServer';
 // NOTE: This is Specific to wings, it should also work for elytra, but I haven't actually tested
 
 interface ApplyEggChangeData {
-    egg_id: number;
-    nest_id: number;
     docker_image?: string;
-    startup_command?: string;
+    egg_id: number;
     environment?: Record<string, string>;
+    nest_id: number;
     should_backup?: boolean;
     should_wipe?: boolean;
+    startup_command?: string;
 }
 
 export default async (uuid: string, data: ApplyEggChangeData): Promise<void> => {

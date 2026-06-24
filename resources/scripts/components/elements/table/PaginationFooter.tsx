@@ -5,8 +5,8 @@ import ActionButton from '@/components/elements/ActionButton';
 
 interface Props {
     className?: string;
-    pagination: PaginationDataSet;
     onPageSelect: (page: number) => void;
+    pagination: PaginationDataSet;
 }
 
 const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
@@ -30,7 +30,7 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
     }
 
     return (
-        <div className={clsx('flex items-center justify-between my-2', className)}>
+        <div className={clsx('my-2 flex items-center justify-between', className)}>
             <p className={'text-sm text-zinc-500'}>
                 Showing&nbsp;
                 <span className={'font-semibold text-zinc-400'}>{Math.max(start, Math.min(pagination.total, 1))}</span>
@@ -41,52 +41,52 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>
                     <ActionButton
-                        variant='secondary'
-                        size='sm'
-                        onClick={() => onPageSelect(current - 1)}
+                        className='flex items-center justify-center p-0'
                         disabled={current <= 1}
-                        className=' p-0 flex items-center justify-center'
+                        onClick={() => onPageSelect(current - 1)}
+                        size='sm'
+                        variant='secondary'
                     >
-                        <ChevronLeft width={22} height={22} fill='currentColor' />
+                        <ChevronLeft fill='currentColor' height={22} width={22} />
                     </ActionButton>
                     {pages.previous.reverse().map((value) => (
                         <ActionButton
+                            className='flex h-8 w-8 items-center justify-center p-0'
                             key={`previous-${value}`}
-                            variant='secondary'
-                            size='sm'
                             onClick={() => onPageSelect(value)}
-                            className='w-8 h-8 p-0 flex items-center justify-center'
+                            size='sm'
+                            variant='secondary'
                         >
                             {value}
                         </ActionButton>
                     ))}
                     <ActionButton
-                        variant='primary'
-                        size='sm'
-                        className='w-8 h-8 p-0 flex items-center justify-center'
+                        className='flex h-8 w-8 items-center justify-center p-0'
                         disabled
+                        size='sm'
+                        variant='primary'
                     >
                         {current}
                     </ActionButton>
                     {pages.next.map((value) => (
                         <ActionButton
+                            className='flex h-8 w-8 items-center justify-center p-0'
                             key={`next-${value}`}
-                            variant='secondary'
-                            size='sm'
                             onClick={() => onPageSelect(value)}
-                            className='w-8 h-8 p-0 flex items-center justify-center'
+                            size='sm'
+                            variant='secondary'
                         >
                             {value}
                         </ActionButton>
                     ))}
                     <ActionButton
-                        variant='secondary'
-                        size='sm'
-                        onClick={() => onPageSelect(current + 1)}
+                        className='flex items-center justify-center p-0'
                         disabled={current >= total}
-                        className='p-0 flex items-center justify-center'
+                        onClick={() => onPageSelect(current + 1)}
+                        size='sm'
+                        variant='secondary'
                     >
-                        <ChevronRight width={22} height={22} fill='currentColor' />
+                        <ChevronRight fill='currentColor' height={22} width={22} />
                     </ActionButton>
                 </div>
             )}

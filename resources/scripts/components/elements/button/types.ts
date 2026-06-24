@@ -1,17 +1,17 @@
 export enum Shape {
-    Default,
-    IconSquare,
+    Default = 0,
+    IconSquare = 1,
 }
 
 export enum Size {
-    Default,
-    Small,
-    Large,
+    Default = 0,
+    Small = 1,
+    Large = 2,
 }
 
 export enum Variant {
-    Primary,
-    Secondary,
+    Primary = 0,
+    Secondary = 1,
 }
 
 export const Options = { Shape, Size, Variant };

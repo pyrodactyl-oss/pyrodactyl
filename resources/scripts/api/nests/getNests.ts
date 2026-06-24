@@ -1,17 +1,16 @@
 import http from '@/api/http';
 
 interface Egg {
-    object: string;
     attributes: {
         id: number;
         uuid: string;
         name: string;
         description: string;
     };
+    object: string;
 }
 
 interface Nest {
-    object: string;
     attributes: {
         id: number;
         uuid: string;
@@ -27,12 +26,12 @@ interface Nest {
             };
         };
     };
+    object: string;
 }
 
-export default (): Promise<Nest[]> => {
-    return new Promise((resolve, reject) => {
+export default (): Promise<Nest[]> =>
+    new Promise((resolve, reject) => {
         http.get('/api/client/nests')
             .then(({ data }) => resolve(data.data))
             .catch(reject);
     });
-};

@@ -1,7 +1,6 @@
-import { Activity02Icon } from '@hugeicons/core-free-icons';
 import { type Actions, useStoreActions } from 'easy-peasy';
 import { Field, Form, Formik, type FormikHelpers } from 'formik';
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { object, string } from 'yup';
 import createApiKey from '@/api/account/createApiKey';
 import type { ApiKey } from '@/api/account/getApiKeys';
@@ -11,15 +10,14 @@ import ActionButton from '@/components/elements/ActionButton';
 import ContentBox from '@/components/elements/ContentBox';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 import Input from '@/components/elements/Input';
-import PageContentBlock from '@/components/elements/PageContentBlock';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import FlashMessageRender from '@/components/FlashMessageRender';
 
 import type { ApplicationStore } from '@/state';
 
 interface Values {
-    description: string;
     allowedIps: string;
+    description: string;
 }
 
 const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => void }) => {
@@ -49,13 +47,13 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
             <FlashMessageRender byKey='account' />
 
             {/* Modal for API Key */}
-            <ApiKeyModal visible={apiKey.length > 0} onModalDismissed={() => setApiKey('')} apiKey={apiKey} />
+            <ApiKeyModal apiKey={apiKey} onModalDismissed={() => setApiKey('')} visible={apiKey.length > 0} />
 
             {/* Form for creating API key */}
             <ContentBox>
                 <Formik
-                    onSubmit={submit}
                     initialValues={{ description: '', allowedIps: '' }}
+                    onSubmit={submit}
                     validationSchema={object().shape({
                         allowedIps: string(),
                         description: string().required().min(4),
@@ -68,25 +66,25 @@ const CreateApiKeyForm = ({ onKeyCreated }: { onKeyCreated: (key: ApiKey) => voi
 
                             {/* Description Field */}
                             <FormikFieldWrapper
+                                description='A description of this API key.'
                                 label='Description'
                                 name='description'
-                                description='A description of this API key.'
                             >
-                                <Field name='description' as={Input} className='w-full' />
+                                <Field as={Input} className='w-full' name='description' />
                             </FormikFieldWrapper>
 
                             {/* Allowed IPs Field */}
                             <FormikFieldWrapper
+                                description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.'
                                 label='Allowed IPs'
                                 name='allowedIps'
-                                description='Leave blank to allow any IP address to use this API key, otherwise provide each IP address on a new line.'
                             >
-                                <Field name='allowedIps' as={Input} className='w-full' />
+                                <Field as={Input} className='w-full' name='allowedIps' />
                             </FormikFieldWrapper>
 
                             {/* Submit Button below form fields */}
-                            <div className='flex justify-end mt-6'>
-                                <ActionButton type='submit' disabled={isSubmitting}>
+                            <div className='mt-6 flex justify-end'>
+                                <ActionButton disabled={isSubmitting} type='submit'>
                                     {isSubmitting ? 'Creating...' : 'Create API Key'}
                                 </ActionButton>
                             </div>

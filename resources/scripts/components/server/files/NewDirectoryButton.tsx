@@ -42,18 +42,19 @@ const schema = object().shape({
 const NewDirectoryDialog = asDialog({
     title: 'New Folder',
 })(() => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
     const { mutate } = useFileManagerSwr();
     const { close } = useContext(DialogWrapperContext);
     const { clearAndAddHttpError } = useFlashKey('files:directory-modal');
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             clearAndAddHttpError();
-        };
-    }, []);
+        },
+        [clearAndAddHttpError],
+    );
 
     const submit = ({ directoryName }: Values, { setSubmitting }: FormikHelpers<Values>) => {
         createDirectory(uuid, directory, directoryName)
@@ -67,27 +68,27 @@ const NewDirectoryDialog = asDialog({
     };
 
     return (
-        <Formik onSubmit={submit} validationSchema={schema} initialValues={{ directoryName: '' }}>
+        <Formik initialValues={{ directoryName: '' }} onSubmit={submit} validationSchema={schema}>
             {({ submitForm, values }) => (
                 <>
                     <FlashMessageRender byKey='files:directory-modal' />
-                    <Form className={`m-0`}>
-                        <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
-                        <p className={`mt-2 text-xs! break-all`}>
-                            <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
+                    <Form className={'m-0'}>
+                        <Field autoFocus id={'directoryName'} label={'Name'} name={'directoryName'} />
+                        <p className={'mt-2 break-all text-xs!'}>
+                            <span className={'text-zinc-200'}>This folder will be created as&nbsp;</span>
                             <Code>
                                 /root/
-                                <span className={`text-blue-200`}>
+                                <span className={'text-blue-200'}>
                                     {join(directory, values.directoryName).replace(/^(\.\.\/|\/)+/, '')}
                                 </span>
                             </Code>
                         </p>
                     </Form>
                     <Dialog.Footer>
-                        <ActionButton variant='secondary' className={'w-full sm:w-auto'} onClick={close}>
+                        <ActionButton className={'w-full sm:w-auto'} onClick={close} variant='secondary'>
                             Cancel
                         </ActionButton>
-                        <ActionButton variant='primary' className={'w-full sm:w-auto'} onClick={submitForm}>
+                        <ActionButton className={'w-full sm:w-auto'} onClick={submitForm} variant='primary'>
                             Create
                         </ActionButton>
                     </Dialog.Footer>
@@ -102,11 +103,11 @@ const NewDirectoryButton = () => {
 
     return (
         <>
-            <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
+            <NewDirectoryDialog onClose={setOpen.bind(this, false)} open={open} />
             <ActionButton
-                variant='secondary'
+                className='rounded-r-none border-r-cream-600'
                 onClick={setOpen.bind(this, true)}
-                className='border-r-cream-600 rounded-r-none'
+                variant='secondary'
             >
                 New Folder
             </ActionButton>

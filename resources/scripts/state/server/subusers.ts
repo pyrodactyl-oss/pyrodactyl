@@ -31,22 +31,21 @@ export type SubuserPermission =
     | 'schedule.delete';
 
 export interface Subuser {
-    uuid: string;
-    username: string;
+    can(permission: SubuserPermission): boolean;
+    createdAt: Date;
     email: string;
     image: string;
-    twoFactorEnabled: boolean;
-    createdAt: Date;
     permissions: SubuserPermission[];
-
-    can(permission: SubuserPermission): boolean;
+    twoFactorEnabled: boolean;
+    username: string;
+    uuid: string;
 }
 
 export interface ServerSubuserStore {
-    data: Subuser[];
-    setSubusers: Action<ServerSubuserStore, Subuser[]>;
     appendSubuser: Action<ServerSubuserStore, Subuser>;
+    data: Subuser[];
     removeSubuser: Action<ServerSubuserStore, string>;
+    setSubusers: Action<ServerSubuserStore, Subuser[]>;
 }
 
 const subusers: ServerSubuserStore = {

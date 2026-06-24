@@ -5,9 +5,10 @@ import { ServerContext } from '@/state/server';
 type Context = string | string[] | (string | number | null | object)[];
 
 function useSWRKey(context: Context, prefix: string | null = null): string {
-    const key = useDeepCompareMemo((): string => {
-        return (Array.isArray(context) ? context : [context]).map((value) => JSON.stringify(value)).join(':');
-    }, [context]);
+    const key = useDeepCompareMemo(
+        (): string => (Array.isArray(context) ? context : [context]).map((value) => JSON.stringify(value)).join(':'),
+        [context],
+    );
 
     if (!key.trim().length) {
         throw new Error('Must provide a valid context key to "useSWRKey".');

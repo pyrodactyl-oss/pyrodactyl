@@ -17,13 +17,13 @@ const GSLTokenModalFeature = () => {
     const [visible, setVisible] = useState(false);
     const [loading, setLoading] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
 
     useEffect(() => {
-        if (!connected || !instance || status === 'running') return;
+        if (!(connected && instance) || status === 'running') return;
 
         const errors = ['(gsl token expired)', '(account not found)'];
 
@@ -62,34 +62,34 @@ const GSLTokenModalFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:gslToken');
-    }, []);
+    }, [clearFlashes]);
 
     return (
-        <Formik onSubmit={updateGSLToken} initialValues={{ gslToken: '' }}>
+        <Formik initialValues={{ gslToken: '' }} onSubmit={updateGSLToken}>
             <Modal
-                visible={visible}
-                onDismissed={() => setVisible(false)}
                 closeOnBackground={false}
+                onDismissed={() => setVisible(false)}
                 showSpinnerOverlay={loading}
                 title='Invalid GSL token!'
+                visible={visible}
             >
                 <FlashMessageRender key={'feature:gslToken'} />
                 <Form>
                     <p>It seems like your Gameserver Login Token (GSL token) is invalid or has expired.</p>
-                    <p className={`mt-3`}>
+                    <p className={'mt-3'}>
                         You can either generate a new one and enter it below or leave the field blank to remove it
                         completely.
                     </p>
-                    <div className={`sm:flex items-center mt-6`}>
+                    <div className={'mt-6 items-center sm:flex'}>
                         <Field
-                            name={'gslToken'}
-                            label={'GSL Token'}
-                            description={'Visit https://steamcommunity.com/dev/managegameservers to generate a token.'}
                             autoFocus
+                            description={'Visit https://steamcommunity.com/dev/managegameservers to generate a token.'}
+                            label={'GSL Token'}
+                            name={'gslToken'}
                         />
                     </div>
-                    <div className={`my-6 sm:flex items-center justify-end`}>
-                        <ActionButton variant='primary' type={'submit'}>
+                    <div className={'my-6 items-center justify-end sm:flex'}>
+                        <ActionButton type={'submit'} variant='primary'>
                             Update GSL Token
                         </ActionButton>
                     </div>

@@ -22,7 +22,7 @@ import routes from '@/routers/routes';
 
 const DashboardRouter = () => {
     const location = useLocation();
-    const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const rootAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     // Mobile menu state
     const [isMobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -43,7 +43,7 @@ const DashboardRouter = () => {
     };
 
     const onSelectAdminPanel = () => {
-        window.open(`/admin`);
+        window.open('/admin');
     };
 
     // Define refs for navigation buttons.
@@ -63,8 +63,8 @@ const DashboardRouter = () => {
         // Height of navigation links (56) minus highlight height (40) equals 16. 16 devided by 2 is 8.
         const HighlightOffset: number = 8;
 
-        if (pathname.endsWith(`/`) && ButtonHome != null) return (ButtonHome as any).offsetTop + HighlightOffset;
-        if (pathname.endsWith(`/account`) && ButtonSettings != null)
+        if (pathname.endsWith('/') && ButtonHome != null) return (ButtonHome as any).offsetTop + HighlightOffset;
+        if (pathname.endsWith('/account') && ButtonSettings != null)
             return (ButtonSettings as any).offsetTop + HighlightOffset;
         if (pathname.endsWith('/api') && ButtonApi != null) return (ButtonApi as any).offsetTop + HighlightOffset;
         if (pathname.endsWith('/ssh') && ButtonSSH != null) return (ButtonSSH as any).offsetTop + HighlightOffset;
@@ -79,26 +79,26 @@ const DashboardRouter = () => {
         setHeight('34px');
         const timeoutId = setTimeout(() => setHeight('40px'), 200);
         return () => clearTimeout(timeoutId);
-    }, [top]);
+    }, []);
 
     return (
         <Fragment key={'dashboard-router'}>
             {/* Mobile Top Bar */}
             <MobileTopBar
                 onMenuToggle={toggleMobileMenu}
-                onTriggerLogout={onTriggerLogout}
                 onSelectAdminPanel={onSelectAdminPanel}
+                onTriggerLogout={onTriggerLogout}
                 rootAdmin={rootAdmin}
             />
 
             {/* Mobile Full Screen Menu */}
             <DashboardMobileMenu isVisible={isMobileMenuVisible} onClose={closeMobileMenu} />
 
-            <div className='flex flex-row w-full lg:pt-0 pt-16'>
+            <div className='flex w-full flex-row pt-16 lg:pt-0'>
                 {/* Desktop Sidebar */}
-                <MainSidebar className='hidden lg:flex lg:relative lg:shrink-0 w-[300px] bg-[#1a1a1a]'>
+                <MainSidebar className='hidden w-[300px] bg-[#1a1a1a] lg:relative lg:flex lg:shrink-0'>
                     <div
-                        className='absolute bg-brand w-[3px] h-10 left-0 rounded-full pointer-events-none '
+                        className='pointer-events-none absolute left-0 h-10 w-[3px] rounded-full bg-brand'
                         style={{
                             top,
                             height,
@@ -108,7 +108,7 @@ const DashboardRouter = () => {
                         }}
                     />
                     <div
-                        className='absolute bg-brand w-12 h-10 blur-2xl left-0 rounded-full pointer-events-none'
+                        className='pointer-events-none absolute left-0 h-10 w-12 rounded-full bg-brand blur-2xl'
                         style={{
                             top,
                             opacity: top === '0' ? 0 : 0.5,
@@ -116,23 +116,23 @@ const DashboardRouter = () => {
                                 'top linear(0,0.006,0.025 2.8%,0.101 6.1%,0.539 18.9%,0.721 25.3%,0.849 31.5%,0.937 38.1%,0.968 41.8%,0.991 45.7%,1.006 50.1%,1.015 55%,1.017 63.9%,1.001) 390ms',
                         }}
                     />
-                    <div className='relative flex flex-row items-center justify-between h-8'>
-                        <NavLink to={'/'} className='flex shrink-0 h-8 w-fit'>
+                    <div className='relative flex h-8 flex-row items-center justify-between'>
+                        <NavLink className='flex h-8 w-fit shrink-0' to={'/'}>
                             <Logo uniqueId='desktop-sidebar' />
                             {/* <h1 className='text-[35px] font-semibold leading-[98%] tracking-[-0.05rem] mb-8'>Panel</h1> */}
                         </NavLink>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className='w-10 h-10 flex items-center justify-center rounded-md text-white hover:bg-white/10 p-2 cursor-pointer'>
+                                <button className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-md p-2 text-white hover:bg-white/10'>
                                     {' '}
-                                    <Ellipsis fill='currentColor' width={26} height={22} />
+                                    <Ellipsis fill='currentColor' height={22} width={26} />
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='z-99999' sideOffset={8}>
                                 {rootAdmin && (
                                     <DropdownMenuItem onSelect={onSelectAdminPanel}>
                                         Admin Panel
-                                        <span className='ml-2 z-10 rounded-full bg-brand px-2 py-1 text-xs text-white'>
+                                        <span className='z-10 ml-2 rounded-full bg-brand px-2 py-1 text-white text-xs'>
                                             Staff
                                         </span>
                                     </DropdownMenuItem>
@@ -142,22 +142,22 @@ const DashboardRouter = () => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <div aria-hidden className='mt-8 mb-4 bg-[#ffffff33] min-h-[1px] w-6'></div>
-                    <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
-                        <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
-                            <House width={22} height={22} fill='currentColor' />
+                    <div aria-hidden className='mt-8 mb-4 min-h-[1px] w-6 bg-[#ffffff33]' />
+                    <ul className='pyro-subnav-routes-wrapper' data-pyro-subnav-routes-wrapper=''>
+                        <NavLink className='flex flex-row items-center' end ref={NavigationHome} to={'/'}>
+                            <House fill='currentColor' height={22} width={22} />
                             <p>Servers</p>
                         </NavLink>
-                        <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
-                            <Lock width={22} height={22} fill='currentColor' />
+                        <NavLink className='flex flex-row items-center' end ref={NavigationApi} to={'/account/api'}>
+                            <Lock fill='currentColor' height={22} width={22} />
                             <p>API Keys</p>
                         </NavLink>
-                        <NavLink to={'/account/ssh'} end className='flex flex-row items-center' ref={NavigationSSH}>
-                            <Key width={22} height={22} fill='currentColor' />
+                        <NavLink className='flex flex-row items-center' end ref={NavigationSSH} to={'/account/ssh'}>
+                            <Key fill='currentColor' height={22} width={22} />
                             <p>SSH Keys</p>
                         </NavLink>
-                        <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
-                            <Gear width={22} height={22} fill='currentColor' />
+                        <NavLink className='flex flex-row items-center' end ref={NavigationSettings} to={'/account'}>
+                            <Gear fill='currentColor' height={22} width={22} />
                             <p>Settings</p>
                         </NavLink>
                     </ul>
@@ -166,22 +166,22 @@ const DashboardRouter = () => {
                 <Suspense fallback={null}>
                     <MainWrapper className='w-full'>
                         <main
+                            className='relative inset-[1px] h-full w-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                             data-pyro-main=''
                             data-pyro-transitionrouter=''
-                            className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                         >
                             <Routes>
-                                <Route path='' element={<DashboardContainer />} />
+                                <Route element={<DashboardContainer />} path='' />
 
                                 {routes.account.map(({ route, component: Component }) => (
                                     <Route
+                                        element={<Component />}
                                         key={route}
                                         path={`/account/${route}`.replace('//', '/')}
-                                        element={<Component />}
                                     />
                                 ))}
 
-                                <Route path='*' element={<NotFound />} />
+                                <Route element={<NotFound />} path='*' />
                             </Routes>
                         </main>
                     </MainWrapper>

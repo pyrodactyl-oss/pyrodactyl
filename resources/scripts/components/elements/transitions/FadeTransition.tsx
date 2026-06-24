@@ -4,12 +4,12 @@ import type { ElementType, ReactNode } from 'react';
 type Duration = `duration-${number}`;
 
 interface Props {
-    as?: ElementType;
-    duration?: Duration | [Duration, Duration];
     appear?: boolean;
-    unmount?: boolean;
-    show: boolean;
+    as?: ElementType;
     children: ReactNode;
+    duration?: Duration | [Duration, Duration];
+    show: boolean;
+    unmount?: boolean;
 }
 
 function FadeTransition({ children, duration, ...props }: Props) {

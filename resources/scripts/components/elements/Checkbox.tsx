@@ -3,9 +3,9 @@ import { Field, type FieldProps } from 'formik';
 import Input from '@/components/elements/Input';
 
 interface Props {
+    className?: string;
     name: string;
     value: string;
-    className?: string;
 }
 
 type OmitFields = 'ref' | 'name' | 'value' | 'type' | 'checked' | 'onClick' | 'onChange';
@@ -25,10 +25,8 @@ const Checkbox = ({ name, value, className, ...props }: Props & InputProps) => (
                 <Input
                     {...field}
                     {...props}
-                    className={className}
-                    type={'checkbox'}
                     checked={(field.value || []).includes(value)}
-                    onClick={() => form.setFieldTouched(field.name, true)}
+                    className={className}
                     onChange={(e) => {
                         const set = new Set(field.value);
                         if (set.has(value)) {
@@ -40,6 +38,8 @@ const Checkbox = ({ name, value, className, ...props }: Props & InputProps) => (
                         field.onChange(e);
                         form.setFieldValue(field.name, Array.from(set));
                     }}
+                    onClick={() => form.setFieldTouched(field.name, true)}
+                    type={'checkbox'}
                 />
             );
         }}

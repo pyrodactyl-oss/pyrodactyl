@@ -2479,9 +2479,7 @@
                                 i > 1 &&
                                     toSelector(
                                         // If the preceding token was a descendant combinator, insert an implicit any-element `*`
-                                        tokens
-                                            .slice(0, i - 1)
-                                            .concat({ value: tokens[i - 2].type === ' ' ? '*' : '' }),
+                                        tokens.slice(0, i - 1).concat({ value: tokens[i - 2].type === ' ' ? '*' : '' }),
                                     ).replace(rtrim, '$1'),
                                 matcher,
                                 i < j && matcherFromTokens(tokens.slice(i, j)),
@@ -9472,9 +9470,7 @@
                         selector
                             ? // If a selector was specified, locate the right elements in a dummy div
                               // Exclude scripts to avoid IE 'Permission Denied' errors
-                              jQuery('<div>')
-                                  .append(jQuery.parseHTML(responseText))
-                                  .find(selector)
+                              jQuery('<div>').append(jQuery.parseHTML(responseText)).find(selector)
                             : // Otherwise use the full result
                               responseText,
                     );

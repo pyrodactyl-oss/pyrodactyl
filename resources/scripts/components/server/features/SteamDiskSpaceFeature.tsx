@@ -13,10 +13,10 @@ const SteamDiskSpaceFeature = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const isAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const isAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     useEffect(() => {
-        if (!connected || !instance || status === 'running') return;
+        if (!(connected && instance) || status === 'running') return;
 
         const errors = ['steamcmd needs 250mb of free disk space to update', '0x202 after update job'];
 
@@ -35,20 +35,20 @@ const SteamDiskSpaceFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:steamDiskSpace');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Modal
-            visible={visible}
+            closeButton={true}
+            closeOnBackground={false}
+            dismissable={false}
             onDismissed={() => setVisible(false)}
             showSpinnerOverlay={loading}
-            dismissable={false}
-            closeOnBackground={false}
-            closeButton={true}
             title='Out of available disk space'
+            visible={visible}
         >
             <FlashMessageRender key={'feature:steamDiskSpace'} />
-            <div className={`flex-col`}>
+            <div className={'flex-col'}>
                 {isAdmin ? (
                     <>
                         <p>
@@ -57,17 +57,15 @@ const SteamDiskSpaceFeature = () => {
                         </p>
                         <p className='mt-3'>
                             Ensure the machine has enough disk space by typing{' '}
-                            <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>df -h</code> on the machine
+                            <code className={'rounded-sm bg-zinc-900 px-2 py-1 font-mono'}>df -h</code> on the machine
                             hosting this server. Delete files or increase the available disk space to resolve the issue.
                         </p>
                     </>
                 ) : (
-                    <>
-                        <p className={`mt-4`}>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
-                        </p>
-                    </>
+                    <p className={'mt-4'}>
+                        This server has run out of available disk space and cannot complete the install or update
+                        process. Please get in touch with the administrator(s) and inform them of disk space issues.
+                    </p>
                 )}
             </div>
         </Modal>

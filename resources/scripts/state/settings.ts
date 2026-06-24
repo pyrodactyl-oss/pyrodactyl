@@ -1,8 +1,8 @@
 import { type Action, action } from 'easy-peasy';
 
 export interface SiteSettings {
-    name: string;
     locale: string;
+    name: string;
     timezone: string;
 }
 

@@ -11,14 +11,15 @@ import type { ApplicationStore } from '@/state';
 const ConfigureTwoFactorForm = () => {
     const [tokens, setTokens] = useState<string[]>([]);
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
-    const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
+    const isEnabled = useStoreState((state: ApplicationStore) => state.user.data?.useTotp);
     const { clearFlashes } = useFlash();
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             clearFlashes('account:two-step');
-        };
-    }, [visible]);
+        },
+        [clearFlashes],
+    );
 
     const onTokens = (tokens: string[]) => {
         setTokens(tokens);
@@ -27,21 +28,21 @@ const ConfigureTwoFactorForm = () => {
 
     return (
         <div className='contents'>
-            <SetupTOTPDialog open={visible === 'enable'} onClose={() => setVisible(null)} onTokens={onTokens} />
-            <RecoveryTokensDialog tokens={tokens} open={tokens.length > 0} onClose={() => setTokens([])} />
-            <DisableTOTPDialog open={visible === 'disable'} onClose={() => setVisible(null)} />
-            <p className={`text-sm`}>
+            <SetupTOTPDialog onClose={() => setVisible(null)} onTokens={onTokens} open={visible === 'enable'} />
+            <RecoveryTokensDialog onClose={() => setTokens([])} open={tokens.length > 0} tokens={tokens} />
+            <DisableTOTPDialog onClose={() => setVisible(null)} open={visible === 'disable'} />
+            <p className={'text-sm'}>
                 {isEnabled
                     ? 'Your account is protected by an authenticator app.'
                     : 'You have not configured an authenticator app.'}
             </p>
-            <div className={`mt-6`}>
+            <div className={'mt-6'}>
                 {isEnabled ? (
-                    <ActionButton variant='danger' onClick={() => setVisible('disable')}>
+                    <ActionButton onClick={() => setVisible('disable')} variant='danger'>
                         Remove Authenticator App
                     </ActionButton>
                 ) : (
-                    <ActionButton variant='secondary' onClick={() => setVisible('enable')}>
+                    <ActionButton onClick={() => setVisible('enable')} variant='secondary'>
                         Enable Authenticator App
                     </ActionButton>
                 )}

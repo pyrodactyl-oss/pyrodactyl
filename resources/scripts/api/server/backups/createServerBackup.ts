@@ -4,9 +4,9 @@ import type { ServerBackup } from '@/api/server/types';
 import { rawDataToServerBackup } from '@/api/transformers';
 
 interface RequestParameters {
-    name?: string;
     ignored?: string;
     isLocked: boolean;
+    name?: string;
 }
 
 interface CreateBackupResponse {

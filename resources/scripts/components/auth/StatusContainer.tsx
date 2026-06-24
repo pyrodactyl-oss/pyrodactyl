@@ -20,13 +20,13 @@ const StatusContainer = ({ text, type }: { text: string; type?: FlashMessageType
     const getIcon = () => {
         switch (type) {
             case 'error':
-                return <HugeiconsIcon icon={CancelCircleIcon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={CancelCircleIcon} />;
             case 'warning':
-                return <HugeiconsIcon icon={Alert02Icon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={Alert02Icon} />;
             case 'success':
-                return <HugeiconsIcon icon={CheckmarkCircle02Icon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={CheckmarkCircle02Icon} />;
             case 'info':
-                return <HugeiconsIcon icon={InformationCircleIcon} className='size-5' />;
+                return <HugeiconsIcon className='size-5' icon={InformationCircleIcon} />;
             default:
                 return null;
         }
@@ -60,16 +60,14 @@ const FlashStatusContainer = ({ byKey }: Props) => {
         state.flashes.items.filter((flash) => (byKey ? flash.key === byKey : true)),
     );
 
-    return flashes.length ? (
-        <>
-            {flashes.map((flash, index) => (
-                <Fragment key={flash.id || flash.type + flash.message}>
-                    {index > 0 && <></>}
-                    <StatusContainer type={flash.type} text={flash.message}></StatusContainer>
-                </Fragment>
-            ))}
-        </>
-    ) : null;
+    return flashes.length
+        ? flashes.map((flash, index) => (
+              <Fragment key={flash.id || flash.type + flash.message}>
+                  {index > 0 && <></>}
+                  <StatusContainer text={flash.message} type={flash.type} />
+              </Fragment>
+          ))
+        : null;
 };
 
 export default FlashStatusContainer;

@@ -50,12 +50,12 @@ const SelectFileCheckbox = ({ name }: { name: string }) => {
 
     return (
         <Checkbox
-            ref={checkboxRef}
+            checked={isChecked}
             className='ml-4'
             name={'selectedFiles'}
-            value={name}
-            checked={isChecked}
             onCheckedChange={handleCheckboxChange}
+            ref={checkboxRef}
+            value={name}
         />
     );
 };

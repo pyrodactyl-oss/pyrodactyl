@@ -48,12 +48,7 @@ export const isCrashLine = (line: string): boolean => {
     return CRASH_REGEX.some((r) => r.test(line));
 };
 
-export const extractRelevantLogs = (
-    logs: string[],
-    maxLines: number = 150,
-    linesBefore: number = 75,
-    linesAfter: number = 75,
-): string => {
+export const extractRelevantLogs = (logs: string[], maxLines = 150, linesBefore = 75, linesAfter = 75): string => {
     if (!logs.length) return '';
 
     // find index of last crash-looking line

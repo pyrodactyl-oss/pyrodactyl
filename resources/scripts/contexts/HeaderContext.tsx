@@ -2,9 +2,9 @@ import type React from 'react';
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
 
 interface HeaderContextType {
+    clearHeaderActions: () => void;
     headerActions: ReactNode;
     setHeaderActions: (actions: ReactNode) => void;
-    clearHeaderActions: () => void;
 }
 
 const HeaderContext = createContext<HeaderContextType | undefined>(undefined);

@@ -1,8 +1,6 @@
-import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
-import { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { object, string } from 'yup';
 import login from '@/api/auth/login';
 import LoginFormContainer, { TitleSection } from '@/components/auth/LoginFormContainer';
@@ -16,17 +14,16 @@ import useFlash from '@/plugins/useFlash';
 import SecondaryLink from '../ui/secondary-link';
 
 interface Values {
-    user: string;
     password: string;
+    user: string;
 }
 
 interface ErrorResponse {
-    response: string;
-    message: string;
-    detail: string;
     code: string;
+    detail: string;
+    message: string;
+    response: string;
 }
-
 
 function LoginContainer() {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
@@ -56,7 +53,8 @@ function LoginContainer() {
                     return;
                 }
             }
-        } else { }
+        } else {
+        }
 
         login(loginData)
             .then((response) => {
@@ -88,33 +86,33 @@ function LoginContainer() {
 
     return (
         <Formik
-            onSubmit={onSubmit}
             initialValues={{ user: '', password: '' }}
+            onSubmit={onSubmit}
             validationSchema={object().shape({
                 user: string().required('A username or email must be provided.'),
                 password: string().required('Please enter your account password.'),
             })}
         >
             {({ isSubmitting }) => (
-                <LoginFormContainer className={`flex flex-col gap-6`}>
+                <LoginFormContainer className={'flex flex-col gap-6'}>
                     <TitleSection title='Login' />
                     <div className=''>
                         <Field
+                            disabled={isSubmitting}
                             id='user'
-                            type={'text'}
                             label={'Username or Email'}
                             name={'user'}
-                            disabled={isSubmitting}
+                            type={'text'}
                         />
                     </div>
 
-                    <div className={`relative mt-6`}>
+                    <div className={'relative mt-6'}>
                         <Field
+                            disabled={isSubmitting}
                             id='password'
-                            type={'password'}
                             label={'Password'}
                             name={'password'}
-                            disabled={isSubmitting}
+                            type={'password'}
                         />
                     </div>
 
@@ -128,13 +126,15 @@ function LoginContainer() {
                         }}
                     />
 
-                    <div className='flex w-full justify-between items-center'>
+                    <div className='flex w-full items-center justify-between'>
                         <Button
-                            className={`bg-mocha-100 rounded-full p-2 px-4 text-black hover:cursor-pointer hover:bg-mocha-200 hover:scale-102 ease-in-out`}
-                            type={'submit'}
-                            size={'xlarge'}
-                            isLoading={isSubmitting}
+                            className={
+                                'rounded-full bg-mocha-100 p-2 px-4 text-black ease-in-out hover:scale-102 hover:cursor-pointer hover:bg-mocha-200'
+                            }
                             disabled={isSubmitting}
+                            isLoading={isSubmitting}
+                            size={'xlarge'}
+                            type={'submit'}
                         >
                             Sign in
                         </Button>

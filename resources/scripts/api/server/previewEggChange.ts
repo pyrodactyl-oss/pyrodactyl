@@ -2,6 +2,8 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface EggPreview {
+    default_docker_image: string | null;
+    docker_images: Record<string, string>;
     egg: {
         id: number;
         name: string;
@@ -18,8 +20,6 @@ export interface EggPreview {
         user_editable: boolean;
         rules: string;
     }>;
-    docker_images: Record<string, string>;
-    default_docker_image: string | null;
     warnings?: Array<{
         type: string;
         message: string;

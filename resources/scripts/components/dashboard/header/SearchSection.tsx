@@ -1,16 +1,16 @@
 import { Search01Icon } from '@hugeicons/core-free-icons';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { memo, useState, useEffect, useRef } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { KeyboardShortcut } from '@/components/ui/keyboard-shortcut';
 
 const SearchIcon = memo(() => (
     <HugeiconsIcon
+        className='absolute top-1/2 left-4 -translate-y-1/2 transform text-cream-500/30'
+        icon={Search01Icon}
         size={16}
         strokeWidth={2}
-        icon={Search01Icon}
-        className='absolute top-1/2 left-4 -translate-y-1/2 transform text-cream-500/30'
     />
 ));
 SearchIcon.displayName = 'SearchIcon';
@@ -40,22 +40,22 @@ const SearchSection = memo(({ className }: SearchSectionProps) => {
     }, []);
 
     return (
-        <div className={`flex items-center gap-2 h-full group ${className || ''}`}>
-            <div className='relative w-3/4 transition-all duration-200 ease-out group group-focus-within:w-full mx-auto'>
+        <div className={`group flex h-full items-center gap-2 ${className || ''}`}>
+            <div className='group relative mx-auto w-3/4 transition-all duration-200 ease-out group-focus-within:w-full'>
                 <Input
+                    className='mx-auto w-full pr-16 pl-10 transition-all duration-200 ease-out group-focus-within:w-full'
                     id='header-search'
-                    ref={inputRef}
-                    type='text'
-                    placeholder='Search servers...'
-                    value={searchValue}
                     onChange={(e) => {
                         setSearchValue(e.target.value);
                     }}
-                    className='pl-10 pr-16 mx-auto w-full group-focus-within:w-full transition-all duration-200 ease-out '
+                    placeholder='Search servers...'
+                    ref={inputRef}
+                    type='text'
+                    value={searchValue}
                 />
                 <SearchIcon />
                 {!searchValue && (
-                    <div className='absolute top-1/2 right-4 -translate-y-1/2 transform flex align-middle pointer-events-none group-focus-within:opacity-0 transition-all duration-200 ease-out '>
+                    <div className='pointer-events-none absolute top-1/2 right-4 flex -translate-y-1/2 transform align-middle transition-all duration-200 ease-out group-focus-within:opacity-0'>
                         <KeyboardShortcut keys={['cmd', 'k']} variant='faded' />
                     </div>
                 )}

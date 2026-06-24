@@ -3,10 +3,10 @@ import { type Action, action } from 'easy-peasy';
 import type { Websocket } from '@/plugins/Websocket';
 
 export interface SocketStore {
-    instance: Websocket | null;
     connected: boolean;
-    setInstance: Action<SocketStore, Websocket | null>;
+    instance: Websocket | null;
     setConnectionState: Action<SocketStore, boolean>;
+    setInstance: Action<SocketStore, Websocket | null>;
 }
 
 const socket: SocketStore = {

@@ -1,10 +1,13 @@
-import * as React from 'react';
+import type * as React from 'react';
 
 // import { cn } from '@/lib/utils';
 
-const ModBox = React.forwardRef<React.ElementRef<'div'>, React.ComponentPropsWithoutRef<'div'>>(({ ...props }, ref) => {
-    return <div ref={ref} className='mb-4 w-full text-nowrap select-none' {...props}></div>;
-});
+const ModBox = ({
+    ref,
+    ...props
+}: React.ComponentPropsWithoutRef<'div'> & { ref?: React.RefObject<React.ElementRef<'div'> | null> }) => (
+    <div className='mb-4 w-full select-none text-nowrap' ref={ref} {...props} />
+);
 
 ModBox.displayName = 'ModBox';
 

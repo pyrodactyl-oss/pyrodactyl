@@ -1,4 +1,4 @@
-@import '../../../assets/tailwind.css';
+@import "../../../assets/tailwind.css";
 
 .icons {
     @apply mx-2 flex space-x-1 text-zinc-400 transition-colors duration-100;

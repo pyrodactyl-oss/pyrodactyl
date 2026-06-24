@@ -3,29 +3,29 @@ import { action } from 'easy-peasy';
 import { cleanDirectoryPath } from '@/helpers';
 
 interface FileUploadData {
-    loaded: number;
     readonly abort: AbortController;
+    loaded: number;
     readonly total: number;
 }
 
 interface ServerFileStore {
-    directory: string;
-    selectedFiles: string[];
-    lastSelectedFile: string | null;
-    uploads: Record<string, FileUploadData>;
-
-    setDirectory: Action<ServerFileStore, string>;
-    setSelectedFiles: Action<ServerFileStore, string[]>;
     appendSelectedFile: Action<ServerFileStore, string>;
-    removeSelectedFile: Action<ServerFileStore, string>;
-    selectFileRange: Action<ServerFileStore, { from: string; to: string; files: string[] }>;
-    setLastSelectedFile: Action<ServerFileStore, string>;
+    cancelFileUpload: Action<ServerFileStore, string>;
+    clearFileUploads: Action<ServerFileStore>;
+    directory: string;
+    lastSelectedFile: string | null;
 
     pushFileUpload: Action<ServerFileStore, { name: string; data: FileUploadData }>;
-    setUploadProgress: Action<ServerFileStore, { name: string; loaded: number }>;
-    clearFileUploads: Action<ServerFileStore>;
     removeFileUpload: Action<ServerFileStore, string>;
-    cancelFileUpload: Action<ServerFileStore, string>;
+    removeSelectedFile: Action<ServerFileStore, string>;
+    selectedFiles: string[];
+    selectFileRange: Action<ServerFileStore, { from: string; to: string; files: string[] }>;
+
+    setDirectory: Action<ServerFileStore, string>;
+    setLastSelectedFile: Action<ServerFileStore, string>;
+    setSelectedFiles: Action<ServerFileStore, string[]>;
+    setUploadProgress: Action<ServerFileStore, { name: string; loaded: number }>;
+    uploads: Record<string, FileUploadData>;
 }
 
 const files: ServerFileStore = {

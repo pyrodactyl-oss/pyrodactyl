@@ -55,7 +55,7 @@ export class Websocket extends EventEmitter {
         });
 
         this.timer = setTimeout(() => {
-            this.backoff = this.backoff + 2500 >= 20000 ? 20000 : this.backoff + 2500;
+            this.backoff = this.backoff + 2500 >= 20_000 ? 20_000 : this.backoff + 2500;
             if (this.socket) this.socket.close();
             clearTimeout(this.timer);
 

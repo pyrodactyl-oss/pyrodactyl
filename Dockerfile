@@ -26,7 +26,7 @@ RUN if [ "$DEV" = "false" ]; then \
     fi
 
 # Stage 1: Build the actual container with all of the needed PHP dependencies
-FROM --platform=$TARGETOS/$TARGETARCH php:8.4-fpm-alpine AS php
+FROM --platform=$TARGETOS/$TARGETARCH php:8.5-fpm-alpine AS php
 
 ARG DEV=false
 WORKDIR /app

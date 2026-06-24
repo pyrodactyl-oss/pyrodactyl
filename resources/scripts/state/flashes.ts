@@ -3,19 +3,19 @@ import { httpErrorToHuman } from '@/api/http';
 import type { FlashMessageType } from '@/components/MessageBox';
 
 export interface FlashStore {
-    items: FlashMessage[];
-    addFlash: Action<FlashStore, FlashMessage>;
     addError: Action<FlashStore, { message: string; key?: string }>;
+    addFlash: Action<FlashStore, FlashMessage>;
     clearAndAddHttpError: Action<FlashStore, { error?: Error | any | null; key?: string }>;
-    clearFlashes: Action<FlashStore, string | void>;
+    clearFlashes: Action<FlashStore, string | undefined>;
+    items: FlashMessage[];
 }
 
 export interface FlashMessage {
     id?: string;
     key?: string;
-    type: FlashMessageType;
-    title?: string;
     message: string;
+    title?: string;
+    type: FlashMessageType;
 }
 
 const flashes: FlashStore = {
@@ -30,9 +30,7 @@ const flashes: FlashStore = {
     }),
 
     clearAndAddHttpError: action((state, payload) => {
-        if (!payload.error) {
-            state.items = [];
-        } else {
+        if (payload.error) {
             console.error(payload.error);
 
             state.items = [
@@ -43,6 +41,8 @@ const flashes: FlashStore = {
                     message: httpErrorToHuman(payload.error),
                 },
             ];
+        } else {
+            state.items = [];
         }
     }),
 

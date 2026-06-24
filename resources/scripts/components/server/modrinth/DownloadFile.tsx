@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface DownloadProps {
-    url: string;
-    serverUuid: string;
     directory?: string;
+    serverUuid: string;
+    url: string;
 }
 
 const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory = 'mods' }) => {
@@ -66,9 +66,9 @@ const DownloadModrinth: React.FC<DownloadProps> = ({ url, serverUuid, directory 
     return (
         <div className='p-4'>
             <button
-                onClick={downloadAndUploadFile}
+                className='cursor-pointer rounded-lg bg-blue-500 px-4 py-2 text-white'
                 disabled={loading}
-                className='px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer'
+                onClick={downloadAndUploadFile}
             >
                 {loading ? 'Processing...' : 'Download & Upload'}
             </button>

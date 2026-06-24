@@ -33,7 +33,7 @@ const HeaderActions = memo(() => {
 HeaderActions.displayName = 'HeaderActions';
 
 const LogoSection = memo(() => (
-    <NavLink to={'/'} className='flex items-center shrink-0 h-4 w-fit pyro-logo' aria-label='Home page'>
+    <NavLink aria-label='Home page' className='pyro-logo flex h-4 w-fit shrink-0 items-center' to={'/'}>
         <Logo />
     </NavLink>
 ));
@@ -44,26 +44,24 @@ const ToggleButton = memo(() => {
 
     return (
         <Button
-            variant={'secondary'}
-            size={'sm'}
-            className='p-1 gap-1 rounded-full size-8'
             aria-label='Toggle sidebar'
+            className='size-8 gap-1 rounded-full p-1'
             onClick={toggleMinimized}
+            size={'sm'}
+            variant={'secondary'}
         >
-            <LayoutSideContent width={16} height={16} />
+            <LayoutSideContent height={16} width={16} />
         </Button>
     );
 });
 ToggleButton.displayName = 'ToggleButton';
 
-const SidebarLogo = memo(() => {
-    return (
-        <div className='sidebar-logo-container h-[48px] items-center justify-between mx-8 flex flex-none'>
-            <LogoSection />
-            <ToggleButton />
-        </div>
-    );
-});
+const SidebarLogo = memo(() => (
+    <div className='sidebar-logo-container mx-8 flex h-[48px] flex-none items-center justify-between'>
+        <LogoSection />
+        <ToggleButton />
+    </div>
+));
 SidebarLogo.displayName = 'SidebarLogo';
 
 const StaticButtons = memo<{ serverId?: string }>(({ serverId }) => {
@@ -82,16 +80,14 @@ const StaticButtons = memo<{ serverId?: string }>(({ serverId }) => {
 
 StaticButtons.displayName = 'StaticButtons';
 
-const AppHeader = ({ serverId }: AppHeaderProps) => {
-    return (
-        <div className='h-[64px] w-full py-4 pr-2 flex align-middle items-center justify-between'>
-            <SidebarLogo />
-            <div className='flex items-center gap-2 h-full w-full justify-end'>
-                <HeaderActions />
-                <StaticButtons serverId={serverId} />
-            </div>
+const AppHeader = ({ serverId }: AppHeaderProps) => (
+    <div className='flex h-[64px] w-full items-center justify-between py-4 pr-2 align-middle'>
+        <SidebarLogo />
+        <div className='flex h-full w-full items-center justify-end gap-2'>
+            <HeaderActions />
+            <StaticButtons serverId={serverId} />
         </div>
-    );
-};
+    </div>
+);
 
 export default AppHeader;

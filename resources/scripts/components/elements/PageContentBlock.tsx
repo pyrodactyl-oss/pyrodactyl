@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import FlashMessageRender from '@/components/FlashMessageRender';
 
 export interface PageContentBlockProps {
-    title: string;
-    className?: string;
-    showFlashKey?: string;
     background?: boolean;
     children?: React.ReactNode;
+    className?: string;
+    showFlashKey?: string;
+    title: string;
 }
 
 const PageContentBlock: React.FC<PageContentBlockProps> = ({
@@ -19,19 +19,17 @@ const PageContentBlock: React.FC<PageContentBlockProps> = ({
 }) => {
     useEffect(() => {
         if (title) {
-            document.title = title + ' | Pyrodactyl';
+            document.title = `${title} | Pyrodactyl`;
         }
     }, [title]);
 
     return (
-        <>
-            <div
-                className={`${className || ''} max-w-[120rem] overflow-y-auto w-full mx-auto flex flex-col flex-1 h-full relative rounded-2xl ${background ? 'bg-bg-raised border border-mocha-400 p-7' : ''}`}
-            >
-                {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
-                {children}
-            </div>
-        </>
+        <div
+            className={`${className || ''} relative mx-auto flex h-full w-full max-w-[120rem] flex-1 flex-col overflow-y-auto rounded-2xl ${background ? 'border border-mocha-400 bg-bg-raised p-7' : ''}`}
+        >
+            {showFlashKey && <FlashMessageRender byKey={showFlashKey} />}
+            {children}
+        </div>
     );
 };
 

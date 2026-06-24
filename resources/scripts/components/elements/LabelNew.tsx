@@ -1,9 +1,9 @@
-import * as React from 'react';
+import type * as React from 'react';
 import styled from 'styled-components';
 
 interface CheckboxProps {
-    label?: string;
     checked: boolean;
+    label?: string;
     onChange: () => void;
 }
 
@@ -24,18 +24,21 @@ const StyledLabel = styled.label`
     cursor: pointer;
 `;
 
-const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(({ label, checked, onChange }, ref) => {
-    return (
-        <CheckboxWrapper>
-            {label && (
-                <StyledLabel>
-                    <StyledInput type='checkbox' checked={checked} onChange={onChange} ref={ref} />
-                    <span>{label}</span>
-                </StyledLabel>
-            )}
-        </CheckboxWrapper>
-    );
-});
+const Checkbox = ({
+    label,
+    checked,
+    onChange,
+    ref,
+}: CheckboxProps & { ref?: React.RefObject<HTMLInputElement | null> }) => (
+    <CheckboxWrapper>
+        {label && (
+            <StyledLabel>
+                <StyledInput checked={checked} onChange={onChange} ref={ref} type='checkbox' />
+                <span>{label}</span>
+            </StyledLabel>
+        )}
+    </CheckboxWrapper>
+);
 
 Checkbox.displayName = 'Checkbox';
 

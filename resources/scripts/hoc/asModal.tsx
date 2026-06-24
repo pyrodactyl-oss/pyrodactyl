@@ -3,16 +3,16 @@ import PortaledModal, { type ModalProps } from '@/components/elements/Modal';
 import ModalContext, { type ModalContextValues } from '@/context/ModalContext';
 
 export interface AsModalProps {
-    visible: boolean;
     onModalDismissed?: () => void;
+    visible: boolean;
 }
 
 export type SettableModalProps = Omit<ModalProps, 'appear' | 'visible' | 'onDismissed'>;
 
 interface State {
+    propOverrides: Partial<SettableModalProps>;
     render: boolean;
     visible: boolean;
-    propOverrides: Partial<SettableModalProps>;
 }
 
 function asModal<P extends object>(
@@ -58,7 +58,7 @@ function asModal<P extends object>(
 
             setPropOverrides: ModalContextValues['setPropOverrides'] = (value) =>
                 this.setState((state) => ({
-                    propOverrides: !value ? {} : typeof value === 'function' ? value(state.propOverrides) : value,
+                    propOverrides: value ? (typeof value === 'function' ? value(state.propOverrides) : value) : {},
                 }));
 
             override render() {

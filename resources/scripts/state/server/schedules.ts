@@ -3,10 +3,10 @@ import { type Action, action } from 'easy-peasy';
 import type { Schedule } from '@/api/server/schedules/getServerSchedules';
 
 export interface ServerScheduleStore {
-    data: Schedule[];
-    setSchedules: Action<ServerScheduleStore, Schedule[]>;
     appendSchedule: Action<ServerScheduleStore, Schedule>;
+    data: Schedule[];
     removeSchedule: Action<ServerScheduleStore, number>;
+    setSchedules: Action<ServerScheduleStore, Schedule[]>;
 }
 
 const schedules: ServerScheduleStore = {

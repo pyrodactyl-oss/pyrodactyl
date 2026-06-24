@@ -11,7 +11,7 @@ export default () => {
             .reduce((obj, str) => {
                 const [key = '', value = ''] = str.split('=');
 
-                return !str.trim() ? obj : { ...obj, [key]: value };
+                return str.trim() ? { ...obj, [key]: value } : obj;
             }, {});
 
     const pathTo = (params: Record<string, string>): string => {
@@ -26,7 +26,7 @@ export default () => {
             .join('&');
     };
 
-    const hash = useMemo((): Record<string, string> => getHashObject(location.hash), [location.hash]);
+    const hash = useMemo((): Record<string, string> => getHashObject(location.hash), [location.hash, getHashObject]);
 
     return { hash, pathTo };
 };

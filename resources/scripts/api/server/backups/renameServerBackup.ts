@@ -5,7 +5,7 @@ import { getGlobalDaemonType } from '../getServer';
 
 export default async (uuid: string, backup: string, name: string): Promise<ServerBackup> => {
     const { data } = await http.post(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/backups/${backup}/rename`, {
-        name: name,
+        name,
     });
 
     return rawDataToServerBackup(data);

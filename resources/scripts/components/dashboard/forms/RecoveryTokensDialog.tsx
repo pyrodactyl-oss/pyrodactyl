@@ -17,20 +17,20 @@ const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProp
 
     return (
         <Dialog
-            open={open}
-            onClose={onClose}
-            title={'Authenticator App Enabled'}
             description={
                 'Store the codes below somewhere safe. If you lose access to your authenticator app you can use these backup codes to sign in.'
             }
             hideCloseIcon
+            onClose={onClose}
+            open={open}
             preventExternalClose
+            title={'Authenticator App Enabled'}
         >
             <Dialog.Icon position={'container'} type={'success'} />
-            <CopyOnClick text={tokens.join('\n')} showInNotification={false}>
-                <pre className={'bg-zinc-800 rounded-sm p-2 mt-6'}>
+            <CopyOnClick showInNotification={false} text={tokens.join('\n')}>
+                <pre className={'mt-6 rounded-sm bg-zinc-800 p-2'}>
                     {grouped.map((value) => (
-                        <span key={value.join('_')} className={'block'}>
+                        <span className={'block'} key={value.join('_')}>
                             {value[0]}
                             <span className={'mx-2 selection:bg-zinc-800'}>&nbsp;</span>
                             {value[1]}
@@ -39,11 +39,11 @@ const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProp
                     ))}
                 </pre>
             </CopyOnClick>
-            <Alert type={'danger'} className={'mt-3'}>
+            <Alert className={'mt-3'} type={'danger'}>
                 These codes will not be shown again.
             </Alert>
             <Dialog.Footer>
-                <ActionButton variant='primary' onClick={onClose}>
+                <ActionButton onClick={onClose} variant='primary'>
                     Done
                 </ActionButton>
             </Dialog.Footer>

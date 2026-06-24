@@ -3,21 +3,21 @@ import type { FormikErrors, FormikTouched } from 'formik';
 import { capitalize } from '@/lib/strings';
 
 interface Props {
-    errors: FormikErrors<any>;
-    touched: FormikTouched<any>;
-    name: string;
     children?: string | number | null | undefined;
+    errors: FormikErrors<any>;
+    name: string;
+    touched: FormikTouched<any>;
 }
 
 const InputError = ({ errors, touched, name, children }: Props) =>
     touched[name] && errors[name] ? (
-        <p className={`text-xs text-red-400 pt-2`}>
+        <p className={'pt-2 text-red-400 text-xs'}>
             {typeof errors[name] === 'string'
                 ? capitalize(errors[name] as string)
                 : capitalize((errors[name] as unknown as string[])[0] ?? '')}
         </p>
-    ) : (
-        <>{children ? <p className={`text-xs text-zinc-400 pt-2`}>{children}</p> : null}</>
-    );
+    ) : children ? (
+        <p className={'pt-2 text-xs text-zinc-400'}>{children}</p>
+    ) : null;
 
 export default InputError;

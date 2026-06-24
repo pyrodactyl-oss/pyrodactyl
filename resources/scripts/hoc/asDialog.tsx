@@ -11,7 +11,7 @@ function asDialog(
 
             return (
                 <DialogWrapperContext.Provider value={{ props, setProps, close: onClose }}>
-                    <Dialog {...props} open={open} onClose={onClose}>
+                    <Dialog {...props} onClose={onClose} open={open}>
                         <Component {...(rest as unknown as React.ComponentProps<typeof Component>)} />
                     </Dialog>
                 </DialogWrapperContext.Provider>

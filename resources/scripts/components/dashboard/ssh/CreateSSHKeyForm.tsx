@@ -19,7 +19,7 @@ interface Values {
 }
 
 const CreateSSHKeyForm = () => {
-    const [sshKey, setSshKey] = useState('');
+    const [_sshKey, setSshKey] = useState('');
     const { addError, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
     const { mutate } = useSSHKeys();
 
@@ -50,8 +50,8 @@ const CreateSSHKeyForm = () => {
             {/* Form for creating SSH key */}
             <ContentBox>
                 <Formik
-                    onSubmit={submit}
                     initialValues={{ name: '', publicKey: '' }}
+                    onSubmit={submit}
                     validationSchema={object().shape({
                         name: string().required('SSH Key Name is required'),
                         publicKey: string().required('Public Key is required'),
@@ -64,25 +64,25 @@ const CreateSSHKeyForm = () => {
 
                             {/* SSH Key Name Field */}
                             <FormikFieldWrapper
+                                description='A name to identify this SSH key.'
                                 label='SSH Key Name'
                                 name='name'
-                                description='A name to identify this SSH key.'
                             >
-                                <Field name='name' as={Input} className='w-full' />
+                                <Field as={Input} className='w-full' name='name' />
                             </FormikFieldWrapper>
 
                             {/* Public Key Field */}
                             <FormikFieldWrapper
+                                description='Enter your public SSH key.'
                                 label='Public Key'
                                 name='publicKey'
-                                description='Enter your public SSH key.'
                             >
-                                <Field name='publicKey' as={Input} className='w-full' />
+                                <Field as={Input} className='w-full' name='publicKey' />
                             </FormikFieldWrapper>
 
                             {/* Submit Button below form fields */}
-                            <div className='flex justify-end mt-6'>
-                                <ActionButton type='submit' disabled={isSubmitting}>
+                            <div className='mt-6 flex justify-end'>
+                                <ActionButton disabled={isSubmitting} type='submit'>
                                     {isSubmitting ? 'Creating...' : 'Create SSH Key'}
                                 </ActionButton>
                             </div>

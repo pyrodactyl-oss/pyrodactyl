@@ -19,12 +19,12 @@ import {
 import { ServerContext } from '@/state/server';
 
 interface Props {
-    visible: boolean;
-    operationId: string | null;
-    operationType: string;
     onClose: () => void;
     onComplete?: (operation: ServerOperation) => void;
     onError?: (error: Error) => void;
+    operationId: string | null;
+    operationType: string;
+    visible: boolean;
 }
 
 /**
@@ -39,14 +39,14 @@ const WingsOperationProgressModal: React.FC<Props> = ({
     onComplete,
     onError,
 }) => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const [operation, setOperation] = useState<ServerOperation | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [autoCloseTimer, setAutoCloseTimer] = useState<NodeJS.Timeout | null>(null);
     const { startPolling, stopPolling } = useOperationPolling();
 
     useEffect(() => {
-        if (!visible || !operationId) {
+        if (!(visible && operationId)) {
             stopPolling(operationId || '');
             setOperation(null);
             setError(null);
@@ -104,13 +104,13 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                 return <Spinner size={'small'} />;
             case 'success':
                 return (
-                    <div className='w-5 h-5 rounded-full bg-green-400 flex items-center justify-center'>
-                        <div className='w-2 h-2 rounded-full bg-white' />
+                    <div className='flex h-5 w-5 items-center justify-center rounded-full bg-green-400'>
+                        <div className='h-2 w-2 rounded-full bg-white' />
                     </div>
                 );
             case 'error':
                 return (
-                    <TriangleExclamation width={22} height={22} fill='currentColor' className='w-5 h-5 text-red-400' />
+                    <TriangleExclamation className='h-5 w-5 text-red-400' fill='currentColor' height={22} width={22} />
                 );
             default:
                 return <Spinner size={'small'} />;
@@ -130,18 +130,18 @@ const WingsOperationProgressModal: React.FC<Props> = ({
 
     return (
         <Dialog
-            open={visible}
-            onClose={canClose ? handleClose : () => {}}
-            preventExternalClose={!canClose}
             hideCloseIcon={!canClose}
+            onClose={canClose ? handleClose : () => {}}
+            open={visible}
+            preventExternalClose={!canClose}
             title={operationType}
         >
             <div className='space-y-4'>
                 {/* Operation ID */}
                 {operationId && (
                     <div className='flex justify-center'>
-                        <div className='px-3 py-1.5 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
-                            <p className='text-xs text-zinc-400 font-mono'>ID: {formatOperationId(operationId)}</p>
+                        <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff11] px-3 py-1.5'>
+                            <p className='font-mono text-xs text-zinc-400'>ID: {formatOperationId(operationId)}</p>
                         </div>
                     </div>
                 )}
@@ -151,15 +151,15 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                     <div className='space-y-4'>
                         <div className='flex items-center justify-center space-x-3'>
                             <TriangleExclamation
-                                width={22}
-                                height={22}
+                                className='h-6 w-6 text-red-400'
                                 fill='currentColor'
-                                className='w-6 h-6 text-red-400'
+                                height={22}
+                                width={22}
                             />
-                            <span className='text-red-400 font-semibold text-lg'>Error</span>
+                            <span className='font-semibold text-lg text-red-400'>Error</span>
                         </div>
-                        <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
-                            <p className='text-sm text-red-300'>{error}</p>
+                        <div className='rounded-lg border border-red-500/20 bg-red-500/10 p-4'>
+                            <p className='text-red-300 text-sm'>{error}</p>
                         </div>
                     </div>
                 ) : operation ? (
@@ -169,27 +169,27 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                         <div className='flex items-center justify-center space-x-3'>
                             {renderStatusIcon(operation.status)}
                             <span
-                                className={`font-semibold capitalize text-lg ${statusStyling?.color || 'text-zinc-300'}`}
+                                className={`font-semibold text-lg capitalize ${statusStyling?.color || 'text-zinc-300'}`}
                             >
                                 {operation.status}
                             </span>
                         </div>
 
                         {/* Message Box */}
-                        <div className='p-4 bg-[#ffffff11] border border-[#ffffff12] rounded-lg'>
-                            <p className='text-sm text-zinc-300 text-center'>{operation.message || 'Processing...'}</p>
+                        <div className='rounded-lg border border-[#ffffff12] bg-[#ffffff11] p-4'>
+                            <p className='text-center text-sm text-zinc-300'>{operation.message || 'Processing...'}</p>
                         </div>
 
                         {/* Progress Bar for Active Operations */}
                         {isActiveStatus(operation.status) && (
                             <div className='space-y-3'>
-                                <div className='w-full bg-[#ffffff11] rounded-full h-2 border border-[#ffffff12]'>
+                                <div className='h-2 w-full rounded-full border border-[#ffffff12] bg-[#ffffff11]'>
                                     <div
-                                        className='bg-brand h-2 rounded-full animate-pulse transition-all duration-500 ease-out'
+                                        className='h-2 animate-pulse rounded-full bg-brand transition-all duration-500 ease-out'
                                         style={{ width: `${UI_CONFIG.ESTIMATED_PROGRESS_WIDTH}%` }}
                                     />
                                 </div>
-                                <p className='text-xs text-zinc-500 text-center'>
+                                <p className='text-center text-xs text-zinc-500'>
                                     This window will close automatically when complete
                                 </p>
                             </div>
@@ -197,17 +197,17 @@ const WingsOperationProgressModal: React.FC<Props> = ({
 
                         {/* Success State */}
                         {isCompletedStatus(operation.status) && (
-                            <div className='p-4 bg-green-500/10 border border-green-500/20 rounded-lg'>
-                                <div className='flex items-center justify-center space-x-2 mb-2'>
-                                    <div className='w-5 h-5 rounded-full bg-green-400 flex items-center justify-center'>
-                                        <div className='w-2 h-2 rounded-full bg-white' />
+                            <div className='rounded-lg border border-green-500/20 bg-green-500/10 p-4'>
+                                <div className='mb-2 flex items-center justify-center space-x-2'>
+                                    <div className='flex h-5 w-5 items-center justify-center rounded-full bg-green-400'>
+                                        <div className='h-2 w-2 rounded-full bg-white' />
                                     </div>
-                                    <p className='text-sm text-green-300 font-medium'>
+                                    <p className='font-medium text-green-300 text-sm'>
                                         Operation completed successfully
                                     </p>
                                 </div>
                                 {autoCloseTimer && (
-                                    <p className='text-xs text-green-200 text-center'>
+                                    <p className='text-center text-green-200 text-xs'>
                                         Closing automatically in 3 seconds
                                     </p>
                                 )}
@@ -216,18 +216,18 @@ const WingsOperationProgressModal: React.FC<Props> = ({
 
                         {/* Failed State */}
                         {isFailedStatus(operation.status) && (
-                            <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
-                                <div className='flex items-center justify-center space-x-2 mb-2'>
+                            <div className='rounded-lg border border-red-500/20 bg-red-500/10 p-4'>
+                                <div className='mb-2 flex items-center justify-center space-x-2'>
                                     <TriangleExclamation
-                                        width={22}
-                                        height={22}
+                                        className='h-5 w-5 text-red-400'
                                         fill='currentColor'
-                                        className='w-5 h-5 text-red-400'
+                                        height={22}
+                                        width={22}
                                     />
-                                    <p className='text-sm text-red-300 font-medium'>Operation failed</p>
+                                    <p className='font-medium text-red-300 text-sm'>Operation failed</p>
                                 </div>
                                 {operation.message && (
-                                    <p className='text-xs text-red-200 text-center'>{operation.message}</p>
+                                    <p className='text-center text-red-200 text-xs'>{operation.message}</p>
                                 )}
                             </div>
                         )}
@@ -236,14 +236,14 @@ const WingsOperationProgressModal: React.FC<Props> = ({
                     /* Loading State */
                     <div className='flex items-center justify-center space-x-3 py-4'>
                         <Spinner size={'small'} />
-                        <span className='text-zinc-400 font-medium'>Initializing...</span>
+                        <span className='font-medium text-zinc-400'>Initializing...</span>
                     </div>
                 )}
             </div>
 
             {canClose && (
                 <Dialog.Footer>
-                    <ActionButton onClick={handleClose} variant='secondary' className='mr-3'>
+                    <ActionButton className='mr-3' onClick={handleClose} variant='secondary'>
                         Cancel
                     </ActionButton>
                     <ActionButton onClick={handleClose} variant='primary'>

@@ -5,8 +5,8 @@ import Code from './elements/Code';
 export type FlashMessageType = 'success' | 'info' | 'warning' | 'error';
 
 interface Props {
-    title?: string;
     children: string;
+    title?: string;
     type?: FlashMessageType;
 }
 
@@ -15,8 +15,8 @@ Container.displayName = 'MessageBox.Container';
 
 const MessageBox = ({ title, children, type }: Props) => (
     <Container
-        className='flex flex-col gap-2 bg-black border-[2px] border-brand/70 p-4 rounded-2xl mb-4'
         $type={type}
+        className='mb-4 flex flex-col gap-2 rounded-2xl border-[2px] border-brand/70 bg-black p-4'
         role={'alert'}
     >
         {title && <h2 className='font-bold text-xl'>{title}</h2>}

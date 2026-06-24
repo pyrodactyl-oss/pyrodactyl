@@ -1,4 +1,4 @@
-import { File, FolderOpenFill, FileZipper } from '@gravity-ui/icons';
+import { File, FileZipper, FolderOpenFill } from '@gravity-ui/icons';
 import { differenceInHours, format, formatDistanceToNow } from 'date-fns';
 import { join } from 'pathe';
 import { memo, type ReactNode } from 'react';
@@ -20,10 +20,10 @@ import styles from './style.module.css';
 function Clickable({ file, children }: { file: FileObject; children: ReactNode }) {
     const [canRead] = usePermissions(['file.read']);
     const [canReadContents] = usePermissions(['file.read-content']);
-    const id = ServerContext.useStoreState((state) => state.server.data!.id);
+    const id = ServerContext.useStoreState((state) => state.server.data?.id);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
 
-    return (file.isFile && (!file.isEditable() || !canReadContents)) || (!file.isFile && !canRead) ? (
+    return (file.isFile && !(file.isEditable() && canReadContents)) || !(file.isFile || canRead) ? (
         <div className={styles.details}>{children}</div>
     ) : (
         <NavLink
@@ -39,10 +39,10 @@ const icon = (fileName: string) => {
     const extension = fileName.split('.').pop()?.toLowerCase();
 
     if (['zip'].includes(extension || '')) {
-        return <FileZipper width={22} height={22} />;
+        return <FileZipper height={22} width={22} />;
     }
 
-    return <File width={22} height={22} />;
+    return <File height={22} width={22} />;
 };
 
 const MemoizedClickable = memo(Clickable, isEqual);
@@ -53,20 +53,20 @@ const FileObjectRow = ({ file }: { file: FileObject }) => (
             <div className={styles.file_row} key={file.name}>
                 <SelectFileCheckbox name={file.name} />
                 <MemoizedClickable file={file}>
-                    <div className={`flex-none text-zinc-400 mr-4 text-lg pl-3 mb-0.5`}>
+                    <div className={'mr-4 mb-0.5 flex-none pl-3 text-lg text-zinc-400'}>
                         {file.isFile ? (
                             <div>{icon(file.name)}</div>
                         ) : (
                             <div>
-                                <FolderOpenFill width={22} height={22} />
+                                <FolderOpenFill height={22} width={22} />
                             </div>
                         )}
                     </div>
                     <div className='flex-1 truncate font-bold text-sm'>{file.name}</div>
                     {file.isFile && (
-                        <div className='w-1/6 text-right mr-4 hidden sm:block text-xs'>{bytesToString(file.size)}</div>
+                        <div className='mr-4 hidden w-1/6 text-right text-xs sm:block'>{bytesToString(file.size)}</div>
                     )}
-                    <div className='w-1/5 text-right mr-4 hidden md:block text-xs' title={file.modifiedAt.toString()}>
+                    <div className='mr-4 hidden w-1/5 text-right text-xs md:block' title={file.modifiedAt.toString()}>
                         {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
                             ? format(file.modifiedAt, 'MMM do, yyyy h:mma')
                             : formatDistanceToNow(file.modifiedAt, { addSuffix: true })}

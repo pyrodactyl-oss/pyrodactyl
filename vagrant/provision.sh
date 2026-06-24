@@ -41,7 +41,7 @@ log Installing Redis
 apt-get install -y redis-server
 systemctl enable --now redis-server
 
-log Adding PHP 8.4 repository
+log Adding PHP 8.5 repository
 if [ ! -f /var/lib/pterodactyl-provision/php-repo-added ]; then
   add-apt-repository -y ppa:ondrej/php
   apt-get update -y
@@ -50,14 +50,14 @@ else
   log "PHP repository already added, skipping"
 fi
 
-log Installing PHP 8.4 + extensions
+log Installing PHP 8.5 + extensions
 apt-get install -y \
-  php8.4 php8.4-cli php8.4-fpm php8.4-gd php8.4-mysql php8.4-mbstring \
-  php8.4-bcmath php8.4-xml php8.4-curl php8.4-zip php8.4-readline php8.4-redis \
-  php8.4-simplexml php8.4-dom
+  php8.5 php8.5-cli php8.5-fpm php8.5-gd php8.5-mysql php8.5-mbstring \
+  php8.5-bcmath php8.5-xml php8.5-curl php8.5-zip php8.5-readline php8.5-redis \
+  php8.5-simplexml php8.5-dom
 
 log Configuring PHP-FPM pool
-cat >/etc/php/8.4/fpm/pool.d/pterodactyl.conf <<EOF
+cat >/etc/php/8.5/fpm/pool.d/pterodactyl.conf <<EOF
 [pterodactyl]
 user = vagrant
 group = vagrant
@@ -72,29 +72,29 @@ pm.max_requests = 500
 chdir = /
 EOF
 
-phpenmod -v 8.4 dom xml simplexml mbstring
+phpenmod -v 8.5 dom xml simplexml mbstring
 usermod -a -G www-data vagrant
 
-systemctl enable --now php8.4-fpm
+systemctl enable --now php8.5-fpm
 
 # ensure CLI sees correct php version
-if ! php -v | grep -q "PHP 8.4"; then
-  warn "CLI PHP is not 8.4 — forcing PHP 8.4 as system default"
+if ! php -v | grep -q "PHP 8.5"; then
+  warn "CLI PHP is not 8.5 — forcing PHP 8.5 as system default"
 
-  update-alternatives --set php /usr/bin/php8.4
-  update-alternatives --set phar /usr/bin/phar8.4
-  update-alternatives --set phar.phar /usr/bin/phar.phar8.4
+  update-alternatives --set php /usr/bin/php8.5
+  update-alternatives --set phar /usr/bin/phar8.5
+  update-alternatives --set phar.phar /usr/bin/phar.phar8.5
 
   # re-check
-  if ! php -v | grep -q "PHP 8.4"; then
-    err "Failed to force PHP 8.4 as CLI default"
+  if ! php -v | grep -q "PHP 8.5"; then
+    err "Failed to force PHP 8.5 as CLI default"
     php -v
     exit 1
   fi
 
-  log "PHP CLI successfully set to 8.4"
+  log "PHP CLI successfully set to 8.5"
 else
-  log "PHP CLI using 8.4"
+  log "PHP CLI using 8.5"
 fi
 
 
@@ -202,7 +202,7 @@ chown -R vagrant:vagrant storage bootstrap/cache
 # helper (append --no-interaction automatically; avoid quoted, spaced values)
 artisan() {
   sudo -u vagrant -H bash -lc \
-    "cd /home/vagrant/pyrodactyl && /usr/bin/php8.4 artisan $* --no-interaction"
+    "cd /home/vagrant/pyrodactyl && /usr/bin/php8.5 artisan $* --no-interaction"
 }
 
 
@@ -329,7 +329,7 @@ else
 fi
 
 if [ ! -f /etc/pterodactyl/config.yml ]; then
-  sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && /usr/bin/php8.4 artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
+  sudo -u vagrant -H bash -lc 'cd /home/vagrant/pyrodactyl && /usr/bin/php8.5 artisan p:node:configuration 1' >/etc/pterodactyl/config.yml || true
 else
   log "Elytra config already exists, skipping"
 fi
@@ -502,7 +502,7 @@ echo 'phpmyadmin phpmyadmin/mysql/admin-pass password ptero' | debconf-set-selec
 echo 'phpmyadmin phpmyadmin/mysql/app-pass password ptero' | debconf-set-selections
 echo 'phpmyadmin phpmyadmin/reconfigure-webserver multiselect' | debconf-set-selections
 
-apt install -y phpmyadmin php8.4-mbstring php8.4-zip php8.4-gd php8.4-curl
+apt install -y phpmyadmin php8.5-mbstring php8.5-zip php8.5-gd php8.5-curl
 
 mysql -u pterodactyl -ppassword -D panel -e "
 CREATE USER IF NOT EXISTS 'phpmyadmin'@'localhost' IDENTIFIED BY 'phpmyadmin';
@@ -539,7 +539,7 @@ server {
     location ~ \.php$ {
         include fastcgi_params;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.5-fpm.sock;
         fastcgi_read_timeout 300;
     }
 
@@ -641,18 +641,18 @@ else
   log "Mailpit already installed, skipping"
 fi
 
-log "Forcing PHP 8.4 as system default"
+log "Forcing PHP 8.5 as system default"
 
-update-alternatives --set php /usr/bin/php8.4
-update-alternatives --set phar /usr/bin/phar8.4
-update-alternatives --set phar.phar /usr/bin/phar.phar8.4
+update-alternatives --set php /usr/bin/php8.5
+update-alternatives --set phar /usr/bin/phar8.5
+update-alternatives --set phar.phar /usr/bin/phar.phar8.5
 
-systemctl restart php8.4-fpm
+systemctl restart php8.5-fpm
 systemctl reload nginx || systemctl restart nginx || true
 
 log Generating Application API Key
 pushd /home/vagrant/pyrodactyl >/dev/null
-API_KEY_RESULT=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.4 artisan tinker --execute="
+API_KEY_RESULT=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.5 artisan tinker --execute="
 use Pterodactyl\Models\ApiKey;
 use Pterodactyl\Models\User;
 use Pterodactyl\Services\Api\KeyCreationService;
@@ -725,7 +725,7 @@ EOF
 
     # Check if a Minecraft server already exists using Laravel
     pushd /home/vagrant/pyrodactyl >/dev/null
-    EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.4 artisan tinker --execute="
+    EXISTING_SERVER_CHECK=$(sudo -u vagrant -H bash -lc '/usr/bin/php8.5 artisan tinker --execute="
 use Pterodactyl\Models\Server;
 \$server = Server::where(\"name\", \"Minecraft Vanilla Dev Server\")->first();
 if (\$server) {

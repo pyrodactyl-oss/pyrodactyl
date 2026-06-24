@@ -1,5 +1,5 @@
 import { ComponentType, ReactElement } from 'react';
-import styledImport, { CSSProp, StyledComponentProps, css as cssImport } from 'styled-components';
+import styledImport, { CSSProp, css as cssImport, StyledComponentProps } from 'styled-components';
 
 declare module 'react' {
     interface Attributes {

@@ -14,7 +14,7 @@ interface Props {
 const DeleteAllocationButton = ({ allocation }: Props) => {
     const [confirm, setConfirm] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const setServerFromState = ServerContext.useStoreActions((actions) => actions.server.setServerFromState);
 
     const { mutate } = getServerAllocations();
@@ -40,21 +40,21 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
     return (
         <>
             <Dialog.Confirm
-                open={confirm}
-                onClose={() => setConfirm(false)}
-                title={'Remove Allocation'}
                 confirm={'Delete'}
+                onClose={() => setConfirm(false)}
                 onConfirmed={deleteAllocation}
+                open={confirm}
+                title={'Remove Allocation'}
             >
                 This allocation will be immediately removed from your server.
             </Dialog.Confirm>
             <ActionButton
-                variant='danger'
-                size='sm'
-                onClick={() => setConfirm(true)}
                 className='flex items-center gap-2'
+                onClick={() => setConfirm(true)}
+                size='sm'
+                variant='danger'
             >
-                <TrashBin width={22} height={22} fill='currentColor' />
+                <TrashBin fill='currentColor' height={22} width={22} />
                 <span className='hidden sm:inline'>Delete</span>
             </ActionButton>
         </>

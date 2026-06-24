@@ -8,9 +8,9 @@ const HeaderWrapper = styled.div``;
 interface MainPageHeaderProps {
     children?: React.ReactNode;
     direction?: 'row' | 'column';
-    titleChildren?: JSX.Element;
-    title?: string;
     headChildren?: JSX.Element;
+    title?: string;
+    titleChildren?: JSX.Element;
 }
 
 export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
@@ -19,22 +19,20 @@ export const MainPageHeader: React.FC<MainPageHeaderProps> = ({
     titleChildren,
     title,
     direction = 'row',
-}) => {
-    return (
-        <HeaderWrapper
-            className={cn(
-                'flex',
-                direction === 'row' ? 'items-center flex-col md:flex-row' : 'items-start flex-col',
-                'justify-between',
-                'mb-8 gap-8 mt-8 md:mt-0 select-none',
-            )}
-        >
-            <div className='flex items-center gap-4 flex-wrap'>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>{title}</h1>
-                <div className=''>{headChildren}</div>
-                {titleChildren}
-            </div>
-            {children}
-        </HeaderWrapper>
-    );
-};
+}) => (
+    <HeaderWrapper
+        className={cn(
+            'flex',
+            direction === 'row' ? 'flex-col items-center md:flex-row' : 'flex-col items-start',
+            'justify-between',
+            'mt-8 mb-8 select-none gap-8 md:mt-0',
+        )}
+    >
+        <div className='flex flex-wrap items-center gap-4'>
+            <h1 className='font-extrabold text-[52px] leading-[98%] tracking-[-0.14rem]'>{title}</h1>
+            <div className=''>{headChildren}</div>
+            {titleChildren}
+        </div>
+        {children}
+    </HeaderWrapper>
+);

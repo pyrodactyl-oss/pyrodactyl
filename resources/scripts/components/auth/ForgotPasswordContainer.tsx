@@ -1,20 +1,14 @@
-import { useStoreState } from 'easy-peasy';
 import type { FormikHelpers } from 'formik';
 import { Formik } from 'formik';
-import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { object, string } from 'yup';
 import http, { httpErrorToHuman } from '@/api/http';
-import LoginFormContainer, { ReturnToLogin, TitleSection } from '@/components/auth/LoginFormContainer';
+import LoginFormContainer, { TitleSection } from '@/components/auth/LoginFormContainer';
 import Button from '@/components/elements/Button';
 import Captcha, { getCaptchaResponse } from '@/components/elements/Captcha';
-import ContentBox from '@/components/elements/ContentBox';
 import Field from '@/components/elements/Field';
 import CaptchaManager from '@/lib/captcha';
-
-import SecondaryLink from '../ui/secondary-link';
 import useFlash from '@/plugins/useFlash';
-
+import SecondaryLink from '../ui/secondary-link';
 
 interface Values {
     email: string;
@@ -61,27 +55,27 @@ const ForgotPasswordContainer = () => {
 
     return (
         <Formik
-            onSubmit={handleSubmission}
             initialValues={{ email: '' }}
+            onSubmit={handleSubmission}
             validationSchema={object().shape({
                 email: string().email('Enter a valid email address.').required('Email is required.'),
             })}
         >
             {({ isSubmitting }) => (
-                <LoginFormContainer className={`w-full flex flex-col`}>
+                <LoginFormContainer className={'flex w-full flex-col'}>
                     <TitleSection title='Forgot Password' />
-                    <div className='text-sm mb-6'>
-                        We&apos;ll send you an email with a link to reset your password.
-                    </div>
+                    <div className='mb-6 text-sm'>We&apos;ll send you an email with a link to reset your password.</div>
                     <Field id='email' label={'Email'} name={'email'} type={'email'} />
 
-                    <div className='flex w-full justify-between items-center'>
+                    <div className='flex w-full items-center justify-between'>
                         <Button
-                            className={`bg-mocha-100 text-black p-2 px-4 mt-4 rounded-full border-0 ring-0 outline-hidden capitalize`}
-                            type='submit'
-                            size='xlarge'
-                            isLoading={isSubmitting}
+                            className={
+                                'mt-4 rounded-full border-0 bg-mocha-100 p-2 px-4 text-black capitalize outline-hidden ring-0'
+                            }
                             disabled={isSubmitting}
+                            isLoading={isSubmitting}
+                            size='xlarge'
+                            type='submit'
                         >
                             Send Email
                         </Button>
@@ -100,7 +94,6 @@ const ForgotPasswordContainer = () => {
                             });
                         }}
                     />
-
                 </LoginFormContainer>
             )}
         </Formik>

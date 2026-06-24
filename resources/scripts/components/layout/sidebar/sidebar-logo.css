@@ -1,7 +1,12 @@
 .pyro-logo {
-    mask-image: linear-gradient(60deg, black 25%, rgba(0, 0, 0, 0.2) 50%, black 75%);
-    mask-size: 400%;
+    mask-image: linear-gradient(
+        60deg,
+        black 25%,
+        rgba(0, 0, 0, 0.2) 50%,
+        black 75%
+    );
     mask-position: 0%;
+    mask-size: 400%;
 }
 
 .pyro-logo:hover {

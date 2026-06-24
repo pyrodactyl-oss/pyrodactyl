@@ -5,15 +5,15 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
 interface CopyOnClickProps {
-    text: string | number | null | undefined;
-    showInNotification?: boolean;
     children: React.ReactNode;
+    showInNotification?: boolean;
+    text: string | number | null | undefined;
 }
 
 const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) => {
     const [copied, setCopied] = useState(false);
     let truncatedText;
-    if (showInNotification == false) {
+    if (showInNotification === false) {
         truncatedText = '';
     } else {
         const length = 80;
@@ -32,25 +32,25 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
         return () => {
             clearTimeout(timeout);
         };
-    }, [copied]);
+    }, [copied, truncatedText]);
 
     if (!React.isValidElement(children)) {
         throw new Error('Component passed to <CopyOnClick/> must be a valid React element.');
     }
 
-    const child = !text
-        ? React.Children.only(children)
-        : React.cloneElement(React.Children.only(children), {
-            // @ts-expect-error - Props type inference issue with React.cloneElement
-            className: clsx(children.props.className || '', 'cursor-pointer'),
-            onClick: (e: React.MouseEvent<HTMLElement>) => {
-                copy(String(text));
-                setCopied(true);
-                if (typeof children.props.onClick === 'function') {
-                    children.props.onClick(e);
-                }
-            },
-        });
+    const child = text
+        ? React.cloneElement(React.Children.only(children), {
+              // @ts-expect-error - Props type inference issue with React.cloneElement
+              className: clsx(children.props.className || '', 'cursor-pointer'),
+              onClick: (e: React.MouseEvent<HTMLElement>) => {
+                  copy(String(text));
+                  setCopied(true);
+                  if (typeof children.props.onClick === 'function') {
+                      children.props.onClick(e);
+                  }
+              },
+          })
+        : React.Children.only(children);
 
     return <>{child}</>;
 };

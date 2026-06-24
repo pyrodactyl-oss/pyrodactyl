@@ -11,20 +11,15 @@ const SecondaryLink = ({
     children: React.ReactNode;
     className?: string;
     to: string;
-}) => {
-    return (
-        <Link
-            {...props}
-            to={to}
-            className={cn(
-                className,
-                'text-sm text-secondary tracking-wide underline hover:text-primary transition-colors',
-            )}
-        >
-            {children}
-        </Link>
-    );
-};
+}) => (
+    <Link
+        {...props}
+        className={cn(className, 'text-secondary text-sm tracking-wide underline transition-colors hover:text-primary')}
+        to={to}
+    >
+        {children}
+    </Link>
+);
 SecondaryLink.displayName = 'SecondaryLink';
 
 export default SecondaryLink;

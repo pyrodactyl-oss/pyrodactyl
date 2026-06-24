@@ -1,4 +1,4 @@
-@import '../../../assets/tailwind.css';
+@import "../../../assets/tailwind.css";
 
 .manager_actions {
     @apply mb-4 grid w-full grid-cols-2 gap-4 sm:grid-cols-3;
@@ -28,11 +28,11 @@
         }
     }
 
-    &[data-state='open'] {
+    &[data-state="open"] {
         @apply bg-zinc-800/50 border-zinc-700/50;
     }
 
-    &:has(button[data-state='checked']) {
+    &:has(button[data-state="checked"]) {
         @apply bg-brand-700/20 border-brand-500/30;
     }
 }

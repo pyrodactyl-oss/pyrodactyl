@@ -39,7 +39,7 @@ function findLanguageByFilename(filename: string): LanguageDescription | undefin
         return language;
     }
 
-    return undefined;
+    return;
 }
 
 const defaultExtensions: Extension = [
@@ -81,22 +81,22 @@ const defaultExtensions: Extension = [
 export interface EditorProps {
     // DOM
     className?: string;
-    style?: CSSProperties;
 
     // CodeMirror Config
     extensions?: Extension[];
-    language?: LanguageDescription;
-
-    // Options
-    filename?: string;
-    initialContent?: string;
 
     // ?
     fetchContent?: (callback: () => Promise<string>) => void;
 
+    // Options
+    filename?: string;
+    initialContent?: string;
+    language?: LanguageDescription;
+
     // Events
     onContentSaved?: () => void;
     onLanguageChanged?: (language: LanguageDescription | undefined) => void;
+    style?: CSSProperties;
 }
 
 export default function Editor(props: EditorProps) {
@@ -146,7 +146,7 @@ export default function Editor(props: EditorProps) {
             view.destroy();
             setView(undefined);
         };
-    }, [ref, view, props.initialContent]);
+    }, [view, createEditorState]);
 
     useEffect(() => {
         if (view === undefined) {
@@ -165,7 +165,7 @@ export default function Editor(props: EditorProps) {
         if (props.onLanguageChanged !== undefined) {
             props.onLanguageChanged(language);
         }
-    }, [view, props.filename, props.language]);
+    }, [view, props.filename, props.language, props.onLanguageChanged]);
 
     useEffect(() => {
         if (languageSupport === undefined || view === undefined) {
@@ -175,7 +175,7 @@ export default function Editor(props: EditorProps) {
         view.dispatch({
             effects: languageConfig.reconfigure(languageSupport),
         });
-    }, [view, languageSupport]);
+    }, [view, languageSupport, languageConfig.reconfigure]);
 
     useEffect(() => {
         if (props.fetchContent === undefined) {
@@ -224,7 +224,7 @@ export default function Editor(props: EditorProps) {
         }
 
         props.fetchContent(async () => view.state.doc.toJSON().join('\n'));
-    }, [view, props.fetchContent, props.onContentSaved]);
+    }, [view, props.fetchContent, props.onContentSaved, props, keybindings.reconfigure]);
 
-    return <div ref={ref} className={props.className} style={props.style} />;
+    return <div className={props.className} ref={ref} style={props.style} />;
 }

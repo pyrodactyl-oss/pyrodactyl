@@ -31,7 +31,7 @@ const getActionDetails = (action: string): [string, any, boolean?] => {
 };
 
 const ScheduleTaskRow = ({ schedule, task }: Props) => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { clearFlashes, addError } = useFlash();
     const [visible, setVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -59,28 +59,28 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
 
     return (
         <ItemContainer
-            title={title}
+            copyDescription={copyOnClick}
             description={
                 task.payload && task.payload.length > 100 ? `${task.payload.substring(0, 100)}...` : task.payload
             }
+            descriptionClasses={'whitespace-nowrap overflow-hidden text-ellipsis'}
+            divClasses={'mb-2 gap-6'}
             icon={icon}
-            divClasses={`mb-2 gap-6`}
-            copyDescription={copyOnClick}
-            descriptionClasses={`whitespace-nowrap overflow-hidden text-ellipsis`}
+            title={title}
         >
-            <SpinnerOverlay visible={isLoading} fixed size={'large'} />
+            <SpinnerOverlay fixed size={'large'} visible={isLoading} />
             <TaskDetailsModal
+                onModalDismissed={() => setIsEditing(false)}
                 schedule={schedule}
                 task={task}
                 visible={isEditing}
-                onModalDismissed={() => setIsEditing(false)}
             />
             <ConfirmationModal
-                title={'Confirm task deletion'}
                 buttonText={'Delete Task'}
                 onConfirmed={onConfirmDeletion}
-                visible={visible}
                 onModalDismissed={() => setVisible(false)}
+                title={'Confirm task deletion'}
+                visible={visible}
             >
                 Are you sure you want to delete this task? This action cannot be undone.
             </ConfirmationModal>
@@ -102,38 +102,38 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                     </div>
                 )}
             </div> */}
-            <div className={`flex flex-none items-end sm:items-center flex-col sm:flex-row gap-2`}>
+            <div className={'flex flex-none flex-col items-end gap-2 sm:flex-row sm:items-center'}>
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
-                        <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
+                        <div className={'rounded-full bg-yellow-500 px-2 py-1 text-sm text-yellow-800'}>
                             Continues on Failure
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
-                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{task.timeOffset}s later</div>
+                        <div className={'rounded-full bg-zinc-500 px-2 py-1 text-sm'}>{task.timeOffset}s later</div>
                     )}
                 </div>
                 <Can action={'schedule.update'}>
                     <ActionButton
-                        variant='secondary'
-                        size='sm'
-                        className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
-                        onClick={() => setIsEditing(true)}
                         aria-label='Edit scheduled task'
+                        className='ml-auto flex flex-row items-center gap-2 sm:ml-0'
+                        onClick={() => setIsEditing(true)}
+                        size='sm'
+                        variant='secondary'
                     >
-                        <PencilToLine width={22} height={22} fill='currentColor' />
+                        <PencilToLine fill='currentColor' height={22} width={22} />
                         Edit
                     </ActionButton>
                 </Can>
                 <Can action={'schedule.update'}>
                     <ActionButton
-                        variant='danger'
-                        size='sm'
-                        onClick={() => setVisible(true)}
-                        className='flex items-center gap-2'
                         aria-label='Delete scheduled task'
+                        className='flex items-center gap-2'
+                        onClick={() => setVisible(true)}
+                        size='sm'
+                        variant='danger'
                     >
-                        <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
+                        <TrashBin className='h-4 w-4' fill='currentColor' height={22} width={22} />
                         <span className='hidden sm:inline'>Delete</span>
                     </ActionButton>
                 </Can>

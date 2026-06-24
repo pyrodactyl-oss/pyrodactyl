@@ -26,7 +26,7 @@ function transform<T, M>(
 function transform<T>(
     data: FractalResponseData | FractalResponseList | FractalPaginatedResponse | null | undefined,
     transformer: TransformerFunc<T>,
-    missing = undefined,
+    missing,
 ) {
     if (data === undefined || data === null) {
         return missing;
@@ -36,7 +36,7 @@ function transform<T>(
         return data.data.map(transformer);
     }
 
-    if (!data || !data.attributes || data.object === 'null_resource') {
+    if (!data?.attributes || data.object === 'null_resource') {
         return missing;
     }
 
@@ -53,4 +53,4 @@ function toPaginatedSet<T extends TransformerFunc<Model>>(
     };
 }
 
-export { transform, toPaginatedSet };
+export { toPaginatedSet, transform };

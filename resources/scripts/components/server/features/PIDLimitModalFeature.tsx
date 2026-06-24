@@ -13,10 +13,10 @@ const PIDLimitModalFeature = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const { clearFlashes } = useFlash();
     const { connected, instance } = ServerContext.useStoreState((state) => state.socket);
-    const isAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const isAdmin = useStoreState((state) => state.user.data?.rootAdmin);
 
     useEffect(() => {
-        if (!connected || !instance || status === 'running') return;
+        if (!(connected && instance) || status === 'running') return;
 
         const errors = [
             'pthread_create failed',
@@ -42,26 +42,26 @@ const PIDLimitModalFeature = () => {
 
     useEffect(() => {
         clearFlashes('feature:pidLimit');
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <Modal
-            visible={visible}
+            closeButton={true}
+            closeOnBackground={false}
+            dismissable={false}
             onDismissed={() => setVisible(false)}
             showSpinnerOverlay={loading}
-            dismissable={false}
-            closeOnBackground={false}
-            closeButton={true}
             title={isAdmin ? 'Memory or process limit reached' : 'Possible resource limit reached'}
+            visible={visible}
         >
             <FlashMessageRender key={'feature:pidLimit'} />
-            <div className={`flex-col`}>
+            <div className={'flex-col'}>
                 {isAdmin ? (
                     <>
                         <p>
                             This server has reached the maximum process, thread, or memory limit. Increasing{' '}
-                            <code className={`font-mono bg-zinc-900`}>container_pid_limit</code> in the Wings
-                            configuration, <code className={`font-mono bg-zinc-900`}>config.yml</code>, might help
+                            <code className={'bg-zinc-900 font-mono'}>container_pid_limit</code> in the Wings
+                            configuration, <code className={'bg-zinc-900 font-mono'}>config.yml</code>, might help
                             resolve this issue.
                         </p>
                         <p className='mt-3'>
@@ -75,7 +75,7 @@ const PIDLimitModalFeature = () => {
                             administrator and give them the error below.
                         </p>
                         <p className='mt-3'>
-                            <code className={`font-mono bg-zinc-900`}>
+                            <code className={'bg-zinc-900 font-mono'}>
                                 pthread_create failed, Possibly out of memory or process/resource limits reached
                             </code>
                         </p>

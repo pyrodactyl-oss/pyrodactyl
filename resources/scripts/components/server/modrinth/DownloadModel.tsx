@@ -4,40 +4,40 @@ import { useEffect, useRef, useState } from 'react';
 import Button from '../../elements/ButtonV2';
 
 interface ApiFile {
+    file_type: string | null;
+    filename: string;
     hashes: {
         sha512: string;
         sha1: string;
     };
-    url: string;
-    filename: string;
     primary: boolean;
     size: number;
-    file_type: string | null;
+    url: string;
 }
 
 interface Version {
-    id: string;
-    project_id: string;
     author_id: string;
-    featured: boolean;
-    name: string;
-    version_number: string;
     changelog: string;
     changelog_url: string | null;
     date_published: string;
     downloads: number;
-    version_type: string;
-    status: string;
-    requested_status: string | null;
+    featured: boolean;
     files: ApiFile[];
     game_versions: string[];
+    id: string;
     loaders: string[];
+    name: string;
+    project_id: string;
+    requested_status: string | null;
+    status: string;
+    version_number: string;
+    version_type: string;
 }
 
 interface DropdownButtonProps {
-    versions: Version[];
-    onVersionSelect?: (version: Version) => void;
     className?: string;
+    onVersionSelect?: (version: Version) => void;
+    versions: Version[];
 }
 
 const formatFileSize = (bytes: number): string => {
@@ -95,11 +95,11 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
             <div className={`relative flex justify-center ${className}`}>
                 <div className='relative w-full max-w-md'>
                     <Button
-                        variant='outline'
-                        className='flex items-center justify-between w-full px-4 py-3 text-left bg-gray-900 border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50'
+                        className='flex w-full items-center justify-between border-gray-700 bg-gray-900 px-4 py-3 text-left transition-colors hover:bg-gray-800 disabled:opacity-50'
                         disabled
+                        variant='outline'
                     >
-                        <span className='font-medium truncate'>No versions available</span>
+                        <span className='truncate font-medium'>No versions available</span>
                     </Button>
                 </div>
             </div>
@@ -110,42 +110,41 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
         <div className={`relative flex justify-center ${className}`} ref={dropdownRef}>
             <div className='relative w-full max-w-md'>
                 <Button
+                    aria-expanded={isOpen}
+                    aria-haspopup='listbox'
+                    className='flex w-full items-center justify-between border-gray-700 bg-gray-900 px-4 py-3 text-left transition-colors hover:bg-gray-800 disabled:opacity-50'
+                    disabled={isLoading || !selectedVersion}
+                    onClick={() => setIsOpen(!isOpen)}
                     ref={buttonRef}
                     variant='outline'
-                    className='flex items-center justify-between w-full px-4 py-3 text-left bg-gray-900 border-gray-700 hover:bg-gray-800 transition-colors disabled:opacity-50'
-                    onClick={() => setIsOpen(!isOpen)}
-                    aria-haspopup='listbox'
-                    aria-expanded={isOpen}
-                    disabled={isLoading || !selectedVersion}
                 >
                     <div className='flex flex-col'>
-                        <span className='font-medium truncate'>
+                        <span className='truncate font-medium'>
                             Version: {selectedVersion?.version_number || 'Select a version'}
                         </span>
                         {selectedVersion?.files?.[0]?.size && (
-                            <span className='text-xs text-gray-400'>
+                            <span className='text-gray-400 text-xs'>
                                 ({formatFileSize(selectedVersion.files[0].size)})
                             </span>
                         )}
                     </div>
                     <ChevronDownIcon
-                        className={`w-5 h-5 ml-2 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                        className={`ml-2 h-5 w-5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
                     />
                 </Button>
 
                 {isOpen && (
                     <div
-                        className='absolute z-20 w-full mt-2 bg-gray-800 border border-gray-700 rounded-lg shadow-xl max-h-96 overflow-y-auto'
+                        className='absolute z-20 mt-2 max-h-96 w-full overflow-y-auto rounded-lg border border-gray-700 bg-gray-800 shadow-xl'
                         role='listbox'
                     >
                         {versions.map((version) => (
                             <div
-                                key={version.id}
-                                role='option'
                                 aria-selected={version.id === selectedVersion?.id}
-                                className={`px-4 py-3 cursor-pointer transition-colors ${
+                                className={`cursor-pointer px-4 py-3 transition-colors ${
                                     version.id === selectedVersion?.id ? 'bg-brand text-white' : 'hover:bg-gray-700'
-                                } focus:outline-none focus:bg-gray-700`}
+                                } focus:bg-gray-700 focus:outline-none`}
+                                key={version.id}
                                 onClick={() => handleSelect(version)}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' || e.key === ' ') {
@@ -153,19 +152,20 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                                         handleSelect(version);
                                     }
                                 }}
+                                role='option'
                                 tabIndex={0}
                             >
                                 <div className='flex flex-col'>
-                                    <div className='flex justify-between items-center'>
+                                    <div className='flex items-center justify-between'>
                                         <span className='font-medium'>{version.version_number}</span>
-                                        <span className='text-xs text-gray-400'>
+                                        <span className='text-gray-400 text-xs'>
                                             {new Date(version.date_published).toLocaleDateString()}
                                         </span>
                                     </div>
                                     {version.name && (
-                                        <span className='text-sm text-gray-300 truncate'>{version.name}</span>
+                                        <span className='truncate text-gray-300 text-sm'>{version.name}</span>
                                     )}
-                                    <div className='flex gap-2 mt-1 text-xs text-gray-400'>
+                                    <div className='mt-1 flex gap-2 text-gray-400 text-xs'>
                                         {version.files?.[0]?.file_type && (
                                             <span>Type: {version.files[0].file_type}</span>
                                         )}
@@ -183,8 +183,8 @@ const DropdownButton = ({ versions, onVersionSelect, className = '' }: DropdownB
                 )}
             </div>
             {isLoading && (
-                <div className='absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded-lg'>
-                    <div className='w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin' />
+                <div className='absolute inset-0 flex items-center justify-center rounded-lg bg-gray-900/50'>
+                    <div className='h-6 w-6 animate-spin rounded-full border-2 border-brand border-t-transparent' />
                 </div>
             )}
         </div>

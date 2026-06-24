@@ -11,8 +11,8 @@ export interface PanelPermissions {
 
 export interface GloablPermissionsStore {
     data: PanelPermissions;
-    setPermissions: Action<GloablPermissionsStore, PanelPermissions>;
     getPermissions: Thunk<GloablPermissionsStore, void, Record<string, unknown>, any, Promise<void>>;
+    setPermissions: Action<GloablPermissionsStore, PanelPermissions>;
 }
 
 const permissions: GloablPermissionsStore = {

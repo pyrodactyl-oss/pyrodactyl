@@ -2,8 +2,8 @@ import http from '@/api/http';
 
 interface DeleteBackupResponse {
     job_id: string;
-    status: string;
     message: string;
+    status: string;
 }
 
 export default async (uuid: string, backup: string): Promise<{ jobId: string; status: string; message: string }> => {

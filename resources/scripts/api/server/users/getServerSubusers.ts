@@ -14,10 +14,9 @@ export const rawDataToServerSubuser = (data: FractalResponseData): Subuser => ({
     can: (permission) => (data.attributes.permissions || []).indexOf(permission) >= 0,
 });
 
-export default (uuid: string): Promise<Subuser[]> => {
-    return new Promise((resolve, reject) => {
+export default (uuid: string): Promise<Subuser[]> =>
+    new Promise((resolve, reject) => {
         http.get(`/api/client/servers/${getGlobalDaemonType()}/${uuid}/users`)
             .then(({ data }) => resolve((data.data || []).map(rawDataToServerSubuser)))
             .catch(reject);
     });
-};

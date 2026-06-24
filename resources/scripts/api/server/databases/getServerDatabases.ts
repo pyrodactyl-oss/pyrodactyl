@@ -2,12 +2,12 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
 export interface ServerDatabase {
+    allowConnectionsFrom: string;
+    connectionString: string;
     id: string;
     name: string;
-    username: string;
-    connectionString: string;
-    allowConnectionsFrom: string;
     password?: string;
+    username: string;
 }
 
 export const rawDataToServerDatabase = (data: any): ServerDatabase => ({

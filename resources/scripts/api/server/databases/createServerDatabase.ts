@@ -2,8 +2,8 @@ import http from '@/api/http';
 import { rawDataToServerDatabase, type ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 
-export default (uuid: string, data: { connectionsFrom: string; databaseName: string }): Promise<ServerDatabase> => {
-    return new Promise((resolve, reject) => {
+export default (uuid: string, data: { connectionsFrom: string; databaseName: string }): Promise<ServerDatabase> =>
+    new Promise((resolve, reject) => {
         http.post(
             `/api/client/servers/${getGlobalDaemonType()}/${uuid}/databases`,
             {
@@ -17,4 +17,3 @@ export default (uuid: string, data: { connectionsFrom: string; databaseName: str
             .then((response) => resolve(rawDataToServerDatabase(response.data.attributes)))
             .catch(reject);
     });
-};

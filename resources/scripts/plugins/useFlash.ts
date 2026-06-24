@@ -5,13 +5,11 @@ import type { FlashStore } from '@/state/flashes';
 
 interface KeyedFlashStore {
     addError: (message: string, title?: string) => void;
-    clearFlashes: () => void;
     clearAndAddHttpError: (error?: Error | string | null) => void;
+    clearFlashes: () => void;
 }
 
-const useFlash = (): Actions<FlashStore> => {
-    return useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
-};
+const useFlash = (): Actions<FlashStore> => useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
 const useFlashKey = (key: string): KeyedFlashStore => {
     const { addFlash, clearFlashes, clearAndAddHttpError } = useFlash();

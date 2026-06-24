@@ -2,9 +2,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import ChevronDown from './icons/ChevronDown';
 
 interface DropdownLink {
-    label: string;
-    href: string;
     external?: boolean;
+    href: string;
+    label: string;
 }
 
 interface DropdownNodeItem {
@@ -32,43 +32,41 @@ const GeneralDropdown = ({
         }
     };
 
-    const isDropdownLink = (item: React.ReactNode | DropdownLink | DropdownNodeItem): item is DropdownLink => {
-        return typeof item === 'object' && item !== null && 'label' in item && 'href' in item;
-    };
+    const isDropdownLink = (item: React.ReactNode | DropdownLink | DropdownNodeItem): item is DropdownLink =>
+        typeof item === 'object' && item !== null && 'label' in item && 'href' in item;
 
-    const isDropdownNodeItem = (item: React.ReactNode | DropdownLink | DropdownNodeItem): item is DropdownNodeItem => {
-        return typeof item === 'object' && item !== null && 'content' in item;
-    };
+    const isDropdownNodeItem = (item: React.ReactNode | DropdownLink | DropdownNodeItem): item is DropdownNodeItem =>
+        typeof item === 'object' && item !== null && 'content' in item;
 
     return (
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger>
-                <div className='flex items-center gap-2 rounded-xl border border-cream-400/20 bg-mocha-300/50 px-3 py-1 text-sm font-medium text-cream-400 shadow-sm hover:bg-mocha-300/70 focus:outline-none hover:active:bg-mocha-300/90'>
+                <div className='flex items-center gap-2 rounded-xl border border-cream-400/20 bg-mocha-300/50 px-3 py-1 font-medium text-cream-400 text-sm shadow-sm hover:bg-mocha-300/70 focus:outline-none hover:active:bg-mocha-300/90'>
                     {trigger}
                     <ChevronDown />
                 </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent sideOffset={offset} side={side} className='z-[9999]'>
+            <DropdownMenuContent className='z-[9999]' side={side} sideOffset={offset}>
                 {items.map((item, idx) => {
                     if (isDropdownLink(item)) {
                         return (
                             <DropdownMenuItem
+                                className={item.external ? 'cursor-pointer' : undefined}
                                 key={idx}
                                 onSelect={() => handleItemClick(item)}
-                                className={item.external ? 'cursor-pointer' : undefined}
                             >
                                 {item.label}
                             </DropdownMenuItem>
                         );
-                    } else if (isDropdownNodeItem(item)) {
+                    }
+                    if (isDropdownNodeItem(item)) {
                         return (
                             <DropdownMenuItem key={idx} onSelect={item.onClick}>
                                 {item.content}
                             </DropdownMenuItem>
                         );
-                    } else {
-                        return <DropdownMenuItem key={idx}>{item}</DropdownMenuItem>;
                     }
+                    return <DropdownMenuItem key={idx}>{item}</DropdownMenuItem>;
                 })}
             </DropdownMenuContent>
         </DropdownMenu>

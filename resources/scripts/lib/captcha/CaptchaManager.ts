@@ -5,8 +5,8 @@ import './types';
 
 export class CaptchaManager {
     private static instance: CaptchaManager;
-    private config: CaptchaConfig;
-    private provider: CaptchaProviderInterface;
+    private readonly config: CaptchaConfig;
+    private readonly provider: CaptchaProviderInterface;
     private widgetId: string | null = null;
 
     private constructor() {
@@ -108,7 +108,7 @@ export class CaptchaManager {
             }
 
             return widgetId;
-        } catch (error) {
+        } catch {
             return null;
         }
     }
@@ -128,7 +128,7 @@ export class CaptchaManager {
      * Reset the widget
      */
     public resetWidget(): void {
-        if (!this.isEnabled() || !this.widgetId) {
+        if (!(this.isEnabled() && this.widgetId)) {
             return;
         }
 

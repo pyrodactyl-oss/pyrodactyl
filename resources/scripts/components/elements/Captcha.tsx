@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import CaptchaManager from '@/lib/captcha';
 
 interface CaptchaProps {
-    onSuccess?: (token: string) => void;
+    className?: string;
     onError?: (error: any) => void;
     onExpired?: () => void;
-    className?: string;
-    theme?: 'light' | 'dark' | 'auto';
+    onSuccess?: (token: string) => void;
     size?: 'normal' | 'compact' | 'invisible' | 'flexible';
+    theme?: 'light' | 'dark' | 'auto';
 }
 
 export default function Captcha({
@@ -93,7 +93,7 @@ export default function Captcha({
                 if (mounted) {
                     setWidgetId(id);
                 }
-            } catch (err) {
+            } catch {
                 if (mounted) {
                     setError('Failed to load captcha');
                 }
@@ -112,19 +112,19 @@ export default function Captcha({
                 CaptchaManager.removeWidget();
             }
         };
-    }, [theme, size]);
+    }, [theme, size, widgetId, handleSuccess, handleExpired, handleError]);
 
     // Set up event listeners for captcha events
     useEffect(() => {
-        const handleSuccess = (event: CustomEvent) => {
+        const handleSuccess = (_event: CustomEvent) => {
             setError(null);
         };
 
-        const handleError = (event: CustomEvent) => {
+        const handleError = (_event: CustomEvent) => {
             setError('Captcha verification failed');
         };
 
-        const handleExpired = (event: CustomEvent) => {
+        const handleExpired = (_event: CustomEvent) => {
             setError('Captcha expired');
         };
 
@@ -147,8 +147,8 @@ export default function Captcha({
     return (
         <div className={className}>
             <div ref={containerRef} />
-            {isLoading && <div className='text-sm text-gray-500 mt-2'>Loading captcha...</div>}
-            {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
+            {isLoading && <div className='mt-2 text-gray-500 text-sm'>Loading captcha...</div>}
+            {error && <div className='mt-2 text-red-500 text-sm'>{error}</div>}
         </div>
     );
 }

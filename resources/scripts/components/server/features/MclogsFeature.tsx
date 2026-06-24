@@ -24,7 +24,7 @@ const useLogAnalysis = () => {
     const [error, setError] = useState<string | null>(null);
     const [showCard, setShowCard] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const status = ServerContext.useStoreState((state) => state.status.value);
 
     const consoleBufferRef = useRef<string[]>([]);
@@ -207,20 +207,20 @@ export const CrashAnalysisCard = () => {
 
     return (
         <>
-            <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-3 sm:p-4 hover:border-[#ffffff20] transition-all duration-150 shadow-sm'>
+            <div className='rounded-xl border-[#ffffff12] border-[1px] bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] p-3 shadow-sm transition-all duration-150 hover:border-[#ffffff20] sm:p-4'>
                 <Alert type={getCardType()}>
                     <div className='flex items-center justify-between gap-3'>
                         <div className='flex-1'>
                             <p className='font-medium text-sm'>Crash Analysis</p>
-                            <p className='text-sm mt-1'>{getCardMessage()}</p>
+                            <p className='mt-1 text-sm'>{getCardMessage()}</p>
                         </div>
-                        <div className='flex items-center gap-2 flex-shrink-0'>
+                        <div className='flex flex-shrink-0 items-center gap-2'>
                             {canViewAnalysis && (
-                                <ActionButton variant='secondary' onClick={() => setModalVisible(true)} size='sm'>
+                                <ActionButton onClick={() => setModalVisible(true)} size='sm' variant='secondary'>
                                     View Details
                                 </ActionButton>
                             )}
-                            <ActionButton variant='secondary' onClick={dismissCard} size='sm'>
+                            <ActionButton onClick={dismissCard} size='sm' variant='secondary'>
                                 Dismiss
                             </ActionButton>
                         </div>
@@ -231,11 +231,11 @@ export const CrashAnalysisCard = () => {
             {/* Analysis Modal */}
             {modalVisible && (
                 <AnalysisModal
-                    visible={modalVisible}
-                    onClose={() => setModalVisible(false)}
                     analysis={analysis}
-                    error={error}
                     analyzing={analyzing}
+                    error={error}
+                    onClose={() => setModalVisible(false)}
+                    visible={modalVisible}
                 />
             )}
         </>
@@ -265,10 +265,10 @@ const AnalysisModal = ({
 
     // Render loading state
     const renderLoadingState = () => (
-        <div className='flex flex-col items-center justify-center py-12' aria-busy='true'>
+        <div aria-busy='true' className='flex flex-col items-center justify-center py-12'>
             <Spinner size='large' />
-            <h3 className='text-lg font-medium text-neutral-200 mt-4'>Analyzing Server Logs</h3>
-            <p className='text-neutral-400 mt-2 text-center max-w-md'>
+            <h3 className='mt-4 font-medium text-lg text-neutral-200'>Analyzing Server Logs</h3>
+            <p className='mt-2 max-w-md text-center text-neutral-400'>
                 We&apos;re analyzing your server logs with mclo.gs to identify potential issues and provide solutions.
             </p>
         </div>
@@ -277,19 +277,19 @@ const AnalysisModal = ({
     // Render error state
     const renderErrorState = () => (
         <div className='space-y-6'>
-            <div className='bg-red-500/10 border border-red-500/20 rounded-lg p-4'>
+            <div className='rounded-lg border border-red-500/20 bg-red-500/10 p-4'>
                 <div className='flex items-start gap-3'>
                     <TriangleExclamation
-                        width={22}
-                        height={22}
-                        className='w-6 h-6 text-red-400 flex-shrink-0 mt-0.5'
+                        className='mt-0.5 h-6 w-6 flex-shrink-0 text-red-400'
                         fill='currentColor'
+                        height={22}
+                        width={22}
                     />
                     <div className='flex-1'>
-                        <h3 className='font-semibold text-red-400 text-lg'>Analysis Failed</h3>
-                        <p className='text-neutral-300 mt-2'>{error}</p>
+                        <h3 className='font-semibold text-lg text-red-400'>Analysis Failed</h3>
+                        <p className='mt-2 text-neutral-300'>{error}</p>
                         {(/latest\.log/i.test(error!) || /no log content/i.test(error!)) && (
-                            <p className='text-neutral-400 mt-3 text-sm'>
+                            <p className='mt-3 text-neutral-400 text-sm'>
                                 This usually means the log file doesn&apos;t exist yet. Try starting your server to
                                 generate logs first.
                             </p>
@@ -309,46 +309,46 @@ const AnalysisModal = ({
         const serverType = analysis.title;
 
         return (
-            <div className='bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6'>
-                <div className='flex items-center justify-between mb-3'>
-                    <h3 className='text-lg font-semibold text-blue-400'>Server Information</h3>
+            <div className='mb-6 rounded-lg border border-blue-500/20 bg-blue-500/10 p-4'>
+                <div className='mb-3 flex items-center justify-between'>
+                    <h3 className='font-semibold text-blue-400 text-lg'>Server Information</h3>
                     <a
+                        className='flex items-center gap-1.5 text-blue-400 text-sm transition-colors hover:text-blue-300'
                         href='https://mclo.gs'
-                        target='_blank'
                         rel='noopener noreferrer'
-                        className='text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1.5 transition-colors'
+                        target='_blank'
                     >
-                        <Link width={22} height={22} className='w-4 h-4' />
+                        <Link className='h-4 w-4' height={22} width={22} />
                         Powered by mclo.gs
                     </a>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                    <div className='bg-blue-500/5 rounded-lg p-3'>
-                        <p className='text-blue-400 font-medium text-sm mb-1'>Server Type</p>
+                <div className='grid grid-cols-1 gap-3 md:grid-cols-2'>
+                    <div className='rounded-lg bg-blue-500/5 p-3'>
+                        <p className='mb-1 font-medium text-blue-400 text-sm'>Server Type</p>
                         <p className='text-neutral-200'>
                             {serverType} {serverVersion}
                         </p>
                     </div>
 
                     {information.slice(0, 3).map((info, idx) => (
-                        <div key={idx} className='bg-blue-500/5 rounded-lg p-3'>
-                            <p className='text-blue-400 font-medium text-sm mb-1'>{info.label}</p>
-                            <p className='text-neutral-200 break-all'>{info.value}</p>
+                        <div className='rounded-lg bg-blue-500/5 p-3' key={idx}>
+                            <p className='mb-1 font-medium text-blue-400 text-sm'>{info.label}</p>
+                            <p className='break-all text-neutral-200'>{info.value}</p>
                         </div>
                     ))}
                 </div>
 
                 {information.length > 3 && (
                     <details className='mt-3'>
-                        <summary className='text-blue-400 text-sm cursor-pointer hover:text-blue-300 transition-colors'>
+                        <summary className='cursor-pointer text-blue-400 text-sm transition-colors hover:text-blue-300'>
                             Show {information.length - 3} more details
                         </summary>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mt-3'>
+                        <div className='mt-3 grid grid-cols-1 gap-3 md:grid-cols-2'>
                             {information.slice(3).map((info, idx) => (
-                                <div key={idx} className='bg-blue-500/5 rounded-lg p-3'>
-                                    <p className='text-blue-400 font-medium text-sm mb-1'>{info.label}</p>
-                                    <p className='text-neutral-200 break-all'>{info.value}</p>
+                                <div className='rounded-lg bg-blue-500/5 p-3' key={idx}>
+                                    <p className='mb-1 font-medium text-blue-400 text-sm'>{info.label}</p>
+                                    <p className='break-all text-neutral-200'>{info.value}</p>
                                 </div>
                             ))}
                         </div>
@@ -366,17 +366,17 @@ const AnalysisModal = ({
 
         if (problems.length === 0) {
             return (
-                <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6'>
+                <div className='mb-6 rounded-lg border border-green-500/20 bg-green-500/10 p-4'>
                     <div className='flex items-start gap-3'>
                         <Check
-                            width={22}
-                            height={22}
-                            className='w-6 h-6 text-green-400 flex-shrink-0 mt-0.5'
+                            className='mt-0.5 h-6 w-6 flex-shrink-0 text-green-400'
                             fill='currentColor'
+                            height={22}
+                            width={22}
                         />
                         <div>
                             <h3 className='font-semibold text-green-400 text-lg'>No Issues Detected</h3>
-                            <p className='text-neutral-300 mt-2'>
+                            <p className='mt-2 text-neutral-300'>
                                 No specific issues were found in your server logs. The crash may be due to configuration
                                 problems or resource limitations.
                             </p>
@@ -387,33 +387,33 @@ const AnalysisModal = ({
         }
 
         return (
-            <div className='space-y-4 mb-6'>
-                <h3 className='text-lg font-semibold text-red-400'>Issues Found ({problems.length})</h3>
+            <div className='mb-6 space-y-4'>
+                <h3 className='font-semibold text-lg text-red-400'>Issues Found ({problems.length})</h3>
 
                 <div className='space-y-3'>
                     {problems.map((problem, idx) => (
-                        <div key={idx} className='bg-red-500/10 border border-red-500/20 rounded-lg overflow-hidden'>
+                        <div className='overflow-hidden rounded-lg border border-red-500/20 bg-red-500/10' key={idx}>
                             <div className='p-4'>
                                 <div className='flex items-start gap-3'>
                                     <TriangleExclamation
-                                        width={22}
-                                        height={22}
-                                        className='w-5 h-5 text-red-400 flex-shrink-0 mt-0.5'
+                                        className='mt-0.5 h-5 w-5 flex-shrink-0 text-red-400'
                                         fill='currentColor'
+                                        height={22}
+                                        width={22}
                                     />
                                     <div className='flex-1'>
-                                        <h4 className='font-medium text-red-400 mb-2'>{problem.message}</h4>
+                                        <h4 className='mb-2 font-medium text-red-400'>{problem.message}</h4>
 
                                         {!!problem.entry?.lines?.length && (
-                                            <div className='bg-red-500/5 border border-red-500/10 rounded-lg p-3 mb-3'>
-                                                <p className='text-red-400/70 text-sm mb-2 font-medium'>Error Log:</p>
-                                                <div className='max-h-40 overflow-y-auto font-mono text-sm space-y-1'>
+                                            <div className='mb-3 rounded-lg border border-red-500/10 bg-red-500/5 p-3'>
+                                                <p className='mb-2 font-medium text-red-400/70 text-sm'>Error Log:</p>
+                                                <div className='max-h-40 space-y-1 overflow-y-auto font-mono text-sm'>
                                                     {problem.entry.lines.map((line, lineIdx) => (
-                                                        <div key={lineIdx} className='flex'>
-                                                            <span className='text-red-500/50 mr-3 select-none w-10 text-right flex-shrink-0'>
+                                                        <div className='flex' key={lineIdx}>
+                                                            <span className='mr-3 w-10 flex-shrink-0 select-none text-right text-red-500/50'>
                                                                 {line.number}
                                                             </span>
-                                                            <span className='text-red-300/90 break-all'>
+                                                            <span className='break-all text-red-300/90'>
                                                                 {line.content}
                                                             </span>
                                                         </div>
@@ -442,18 +442,18 @@ const AnalysisModal = ({
 
         return (
             <div className='space-y-4'>
-                <h3 className='text-lg font-semibold text-green-400'>Recommended Solutions ({allSolutions.length})</h3>
+                <h3 className='font-semibold text-green-400 text-lg'>Recommended Solutions ({allSolutions.length})</h3>
 
-                <div className='bg-green-500/10 border border-green-500/20 rounded-lg p-4'>
+                <div className='rounded-lg border border-green-500/20 bg-green-500/10 p-4'>
                     <div className='space-y-3'>
                         {allSolutions.map((solution, idx) => (
-                            <div key={idx} className='flex items-start gap-3'>
-                                <div className='bg-green-500/20 rounded-full p-1 flex-shrink-0 mt-0.5'>
+                            <div className='flex items-start gap-3' key={idx}>
+                                <div className='mt-0.5 flex-shrink-0 rounded-full bg-green-500/20 p-1'>
                                     <Check
-                                        width={22}
-                                        height={22}
-                                        className='w-4 h-4 text-green-400'
+                                        className='h-4 w-4 text-green-400'
                                         fill='currentColor'
+                                        height={22}
+                                        width={22}
                                     />
                                 </div>
                                 <div className='flex-1'>
@@ -473,7 +473,7 @@ const AnalysisModal = ({
         if (error) return renderErrorState();
         if (!analysis) {
             return (
-                <div className='text-center py-12'>
+                <div className='py-12 text-center'>
                     <p className='text-neutral-400'>No analysis data available</p>
                 </div>
             );
@@ -490,20 +490,20 @@ const AnalysisModal = ({
 
     return (
         <Modal
-            visible={visible}
-            onDismissed={closeModal}
             closeOnBackground={!analyzing}
-            title='Server Log Analysis'
+            onDismissed={closeModal}
             showSpinnerOverlay={false}
+            title='Server Log Analysis'
+            visible={visible}
         >
             <div className='w-full max-w-4xl'>
                 {renderContent()}
 
-                <div className='flex justify-center gap-3 mt-8 pt-4 border-t border-neutral-700'>
-                    <ActionButton variant='secondary' onClick={manualAnalyze} disabled={analyzing}>
+                <div className='mt-8 flex justify-center gap-3 border-neutral-700 border-t pt-4'>
+                    <ActionButton disabled={analyzing} onClick={manualAnalyze} variant='secondary'>
                         {analyzing ? 'Analyzing...' : 'Analyze Again'}
                     </ActionButton>
-                    <ActionButton variant='primary' onClick={closeModal} disabled={analyzing}>
+                    <ActionButton disabled={analyzing} onClick={closeModal} variant='primary'>
                         Close
                     </ActionButton>
                 </div>

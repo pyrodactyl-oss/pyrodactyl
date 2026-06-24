@@ -9,7 +9,7 @@ const Dialog = Object.assign(DialogComponent, {
     Icon: DialogIcon,
 });
 
-export { Dialog };
 export * from './context';
 export { default as styles } from './style.module.css';
 export * from './types.d';
+export { Dialog };

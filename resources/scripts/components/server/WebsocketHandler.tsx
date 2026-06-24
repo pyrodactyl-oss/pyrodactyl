@@ -88,11 +88,12 @@ function WebsocketHandler() {
         if (connected) setError('');
     }, [connected]);
 
-    useEffect(() => {
-        return () => {
+    useEffect(
+        () => () => {
             if (instance) instance.close();
-        };
-    }, [instance]);
+        },
+        [instance],
+    );
 
     useEffect(() => {
         // If there is already an instance or there is no server, just exit out of this process
@@ -102,22 +103,24 @@ function WebsocketHandler() {
         }
 
         connect(uuid);
-    }, [uuid]);
+    }, [uuid, instance, connect]);
 
     return error ? (
         <FadeTransition duration='duration-150' show>
             <div
-                className={`flex items-center px-4 rounded-full fixed w-fit mx-auto left-0 right-0 top-4 bg-red-500 py-2 z-9999`}
+                className={
+                    'fixed top-4 right-0 left-0 z-9999 mx-auto flex w-fit items-center rounded-full bg-red-500 px-4 py-2'
+                }
             >
                 {error === 'connecting' ? (
                     <>
                         <Spinner size={'small'} />
-                        <p className={`ml-2 text-sm text-red-100`}>
+                        <p className={'ml-2 text-red-100 text-sm'}>
                             We&apos;re having some trouble connecting to your server, please wait...
                         </p>
                     </>
                 ) : (
-                    <p className={`ml-2 text-sm text-white`}>{error}</p>
+                    <p className={'ml-2 text-sm text-white'}>{error}</p>
                 )}
             </div>
         </FadeTransition>

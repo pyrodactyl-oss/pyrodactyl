@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { forwardRef } from 'react';
 
 import styles from './styles.module.css';
 
@@ -8,11 +7,15 @@ type Props = Omit<React.ComponentProps<'input'>, 'type'> & {
     inputField?: boolean; // Optional flag to display an input field
 };
 
-const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputField, ...props }, ref) => (
+const CheckBox = ({
+    className,
+    label,
+    inputField,
+    ref,
+    ...props
+}: Props & { ref?: RefObject<HTMLInputElement | null> }) => (
     <div className={clsx('flex items-center', className)}>
         <input
-            ref={ref}
-            type='checkbox'
             className={clsx(
                 'form-input',
                 styles.checkbox_input,
@@ -21,12 +24,14 @@ const CheckBox = forwardRef<HTMLInputElement, Props>(({ className, label, inputF
                     [styles.with_input]: inputField, // Add custom styles when the input field is enabled
                 },
             )}
+            ref={ref}
+            type='checkbox'
             {...props}
         />
         {label && <label className={clsx('ml-2', styles.label)}>{label}</label>}
-        {inputField && <input type='text' className={clsx('ml-2', 'form-input', styles.input_field, 'border-brand')} />}
+        {inputField && <input className={clsx('ml-2', 'form-input', styles.input_field, 'border-brand')} type='text' />}
     </div>
-));
+);
 
 CheckBox.displayName = 'CheckBox';
 

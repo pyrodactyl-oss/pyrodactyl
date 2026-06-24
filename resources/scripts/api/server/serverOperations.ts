@@ -29,16 +29,16 @@ export const POLLING_CONFIG = {
 };
 
 export interface ServerOperation {
-    operation_id: string;
-    type: string;
-    status: OperationStatus;
-    message: string;
     created_at: string;
-    updated_at: string;
-    parameters?: Record<string, unknown>;
+    has_failed: boolean;
     is_active: boolean;
     is_completed: boolean;
-    has_failed: boolean;
+    message: string;
+    operation_id: string;
+    parameters?: Record<string, unknown>;
+    status: OperationStatus;
+    type: string;
+    updated_at: string;
 }
 
 export interface ApplyEggChangeAsyncResponse {
@@ -135,12 +135,13 @@ export const pollOperationStatus = (
 export const useOperationPolling = () => {
     const activePollers = React.useRef(new Map<string, () => void>()).current;
 
-    React.useEffect(() => {
-        return () => {
+    React.useEffect(
+        () => () => {
             activePollers.forEach((cleanup) => cleanup());
             activePollers.clear();
-        };
-    }, [activePollers]);
+        },
+        [activePollers],
+    );
 
     const startPolling = React.useCallback(
         (
@@ -154,7 +155,7 @@ export const useOperationPolling = () => {
             const cleanup = pollOperationStatus(uuid, operationId, onUpdate, onComplete, onError);
             activePollers.set(operationId, cleanup);
         },
-        [activePollers],
+        [activePollers, stopPolling],
     );
 
     const stopPolling = React.useCallback(

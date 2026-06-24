@@ -10,7 +10,7 @@ import type { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
 const ReinstallServerBox = () => {
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const [modalVisible, setModalVisible] = useState(false);
     const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
@@ -43,31 +43,31 @@ const ReinstallServerBox = () => {
 
     useEffect(() => {
         clearFlashes();
-    }, []);
+    }, [clearFlashes]);
 
     return (
         <TitledGreyBox title={'Reinstall Server'}>
             <Dialog.Confirm
-                open={modalVisible}
-                title={'Confirm server reinstallation'}
                 confirm={'Yes, reinstall server'}
+                loading={loading}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
-                loading={loading}
+                open={modalVisible}
+                title={'Confirm server reinstallation'}
             >
                 Your server will be stopped and some files may be deleted or modified during this process, are you sure
                 you wish to continue?
             </Dialog.Confirm>
-            <p className={`text-sm`}>
+            <p className={'text-sm'}>
                 Reinstalling your server will stop it, and then re-run the installation script that initially set it
                 up.&nbsp;
-                <strong className={`font-medium`}>
+                <strong className={'font-medium'}>
                     Some files may be deleted or modified during this process, please back up your data before
                     continuing.
                 </strong>
             </p>
-            <div className={`mt-6 text-right`}>
-                <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
+            <div className={'mt-6 text-right'}>
+                <ActionButton onClick={() => setModalVisible(true)} variant='danger'>
                     Reinstall Server
                 </ActionButton>
             </div>

@@ -19,7 +19,7 @@ const DisableTOTPDialog = () => {
 
     useEffect(() => {
         setProps((state) => ({ ...state, preventExternalClose: submitting }));
-    }, [submitting]);
+    }, [submitting, setProps]);
 
     const submit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -39,20 +39,20 @@ const DisableTOTPDialog = () => {
     };
 
     return (
-        <form id={'disable-totp-form'} className={'mt-6'} onSubmit={submit}>
+        <form className={'mt-6'} id={'disable-totp-form'} onSubmit={submit}>
             <FlashMessageRender byKey={'account:two-step'} />
             <label className={'block pb-1'} htmlFor={'totp-password'}>
                 Password
             </label>
             <Input.Text
                 id={'totp-password'}
-                type={'password'}
-                variant={Input.Text.Variants.Loose}
-                value={password}
                 onChange={(e) => setPassword(e.currentTarget.value)}
+                type={'password'}
+                value={password}
+                variant={Input.Text.Variants.Loose}
             />
             <Dialog.Footer>
-                <ActionButton variant='secondary' onClick={close}>
+                <ActionButton onClick={close} variant='secondary'>
                     Cancel
                 </ActionButton>
                 {/* <Tooltip
@@ -61,10 +61,10 @@ const DisableTOTPDialog = () => {
                     content={'You must enter your account password to continue.'}
                 > */}
                 <ActionButton
-                    variant='danger'
-                    type={'submit'}
-                    form={'disable-totp-form'}
                     disabled={submitting || !password.length}
+                    form={'disable-totp-form'}
+                    type={'submit'}
+                    variant='danger'
                 >
                     Disable
                 </ActionButton>

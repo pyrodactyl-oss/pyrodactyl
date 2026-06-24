@@ -5,10 +5,9 @@ export interface TwoFactorTokenData {
     secret: string;
 }
 
-export default (): Promise<TwoFactorTokenData> => {
-    return new Promise((resolve, reject) => {
+export default (): Promise<TwoFactorTokenData> =>
+    new Promise((resolve, reject) => {
         http.get('/api/client/account/two-factor')
             .then(({ data }) => resolve(data.data))
             .catch(reject);
     });
-};

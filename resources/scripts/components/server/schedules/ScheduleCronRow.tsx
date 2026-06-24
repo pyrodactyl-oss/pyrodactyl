@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import type { Schedule } from '@/api/server/schedules/getServerSchedules';
 
 interface Props {
-    cron: Schedule['cron'];
     className?: string;
+    cron: Schedule['cron'];
 }
 
 const ScheduleCronRow = ({ cron, className }: Props) => (
-    <div className={clsx('flex flex-wrap gap-4 justify-center m-auto', className)}>
+    <div className={clsx('m-auto flex flex-wrap justify-center gap-4', className)}>
         <div className={'text-center'}>
             <p className={'font-medium'}>{cron.minute}</p>
             <p className={'text-xs text-zinc-500 uppercase'}>Minute</p>

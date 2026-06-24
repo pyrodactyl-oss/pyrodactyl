@@ -31,4 +31,4 @@ function ip(value: string): string {
     return /([a-f0-9:]+:+)+[a-f0-9]+/.test(value) ? `[${value}]` : value;
 }
 
-export { ip, mbToBytes, bytesToString };
+export { bytesToString, ip, mbToBytes };

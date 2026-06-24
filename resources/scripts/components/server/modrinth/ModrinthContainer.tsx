@@ -38,7 +38,7 @@ const ModrinthContainerInner = () => {
         debounce((value: string) => {
             setSearchQuery(value);
         }, 500),
-        [setSearchQuery],
+        [],
     );
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,24 +102,24 @@ const ModrinthContainerInner = () => {
     return (
         <PageContentBlock title={'Mods/Plugins'}>
             <Toaster />
-            <ContentBox className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl mb-5'>
+            <ContentBox className='mb-5 rounded-xl border-[#ffffff11] border-[1px] bg-[#ffffff09] p-8 shadow-xs'>
                 {/* TODO: Add a navbar to cycle between Downloaded, Download, and Dependency resolver */}
             </ContentBox>
             <div className='flex flex-wrap gap-4'>
                 <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-1/6'
+                    className='w-full rounded-xl border-[#ffffff11] border-[1px] bg-[#ffffff09] p-8 shadow-xs md:w-1/6'
                     title='Settings'
                 >
                     <Can action={'modrinth.loader'}>
                         <ModBox>
-                            <ContentBox title='Loader' className=''>
+                            <ContentBox className='' title='Loader'>
                                 {isLoadingLoader ? <p>Loading loaders...</p> : <LoaderSelector />}
                             </ContentBox>
                         </ModBox>
                     </Can>
                     <Can action={'modrinth.version'}>
                         <ModBox>
-                            <ContentBox title='Version' className='scrollbar-thumb-red-700'>
+                            <ContentBox className='scrollbar-thumb-red-700' title='Version'>
                                 {isLoadingVersion ? <p>Loading versions...</p> : <GameVersionSelector />}
                             </ContentBox>
                         </ModBox>
@@ -127,30 +127,30 @@ const ModrinthContainerInner = () => {
                 </ContentBox>
 
                 <ContentBox
-                    className='p-8 bg-[#ffffff09] border-[1px] border-[#ffffff11] shadow-xs rounded-xl w-full md:w-4/5'
+                    className='w-full rounded-xl border-[#ffffff11] border-[1px] bg-[#ffffff09] p-8 shadow-xs md:w-4/5'
                     title='Downloader'
                 >
-                    <div className='relative w-full h-full mb-4'>
+                    <div className='relative mb-4 h-full w-full'>
                         <svg
-                            xmlns='http://www.w3.org/2000/svg'
+                            className='absolute top-1/2 left-5 h-5 w-5 -translate-y-1/2 opacity-40'
                             fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
                             stroke='currentColor'
-                            className='w-5 h-5 absolute top-1/2 -translate-y-1/2 left-5 opacity-40'
+                            strokeWidth={1.5}
+                            viewBox='0 0 24 24'
+                            xmlns='http://www.w3.org/2000/svg'
                         >
                             <path
+                                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
                                 strokeLinecap='round'
                                 strokeLinejoin='round'
-                                d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
                             />
                         </svg>
                         <input
-                            className='pl-14 pr-4 py-4 w-full rounded-lg bg-[#ffffff11] text-sm font-bold'
-                            type='text'
-                            placeholder='Search'
-                            value={searchTerm}
+                            className='w-full rounded-lg bg-[#ffffff11] py-4 pr-4 pl-14 font-bold text-sm'
                             onChange={handleInputChange}
+                            placeholder='Search'
+                            type='text'
+                            value={searchTerm}
                         />
                     </div>
                     <ModList />
@@ -160,12 +160,10 @@ const ModrinthContainerInner = () => {
     );
 };
 
-const ModrinthContainer = () => {
-    return (
-        <GlobalStateProvider>
-            <ModrinthContainerInner />
-        </GlobalStateProvider>
-    );
-};
+const ModrinthContainer = () => (
+    <GlobalStateProvider>
+        <ModrinthContainerInner />
+    </GlobalStateProvider>
+);
 
 export default ModrinthContainer;

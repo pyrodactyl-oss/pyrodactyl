@@ -1,9 +1,9 @@
 import http from '@/api/http';
 
 interface Data {
-    token: string;
     password: string;
     passwordConfirmation: string;
+    token: string;
     [key: string]: string;
 }
 
@@ -12,8 +12,8 @@ interface PasswordResetResponse {
     sendToLogin: boolean;
 }
 
-export default (email: string, data: Data): Promise<PasswordResetResponse> => {
-    return new Promise((resolve, reject) => {
+export default (email: string, data: Data): Promise<PasswordResetResponse> =>
+    new Promise((resolve, reject) => {
         http.post('/auth/password/reset', {
             email,
             ...data,
@@ -26,4 +26,3 @@ export default (email: string, data: Data): Promise<PasswordResetResponse> => {
             )
             .catch(reject);
     });
-};

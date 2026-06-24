@@ -24,7 +24,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const [modal, setModal] = useState<ModalType | null>(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
+    const uuid = ServerContext.useStoreState((state) => state.server.data?.uuid);
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError, clearFlashes } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -32,7 +32,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const doDeletion = async () => {
         clearFlashes('files');
 
-        await mutate((files) => files!.filter((f) => f.key !== file.key), false);
+        await mutate((files) => files?.filter((f) => f.key !== file.key), false);
 
         deleteFiles(uuid, directory, [file.name]).catch((error) => {
             mutate();
@@ -86,11 +86,11 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     return (
         <>
             <Dialog.Confirm
-                open={showConfirmation}
-                onClose={() => setShowConfirmation(false)}
-                title={`Delete ${file.isFile ? 'File' : 'Directory'}`}
                 confirm={'Delete'}
+                onClose={() => setShowConfirmation(false)}
                 onConfirmed={doDeletion}
+                open={showConfirmation}
+                title={`Delete ${file.isFile ? 'File' : 'Directory'}`}
             >
                 You will not be able to recover the contents of
                 <span className={'font-semibold text-zinc-50'}> {file.name}</span> once deleted.
@@ -98,18 +98,18 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
             {modal ? (
                 modal === 'chmod' ? (
                     <ChmodFileModal
-                        visible
                         appear
                         files={[{ file: file.name, mode: file.modeBits }]}
                         onDismissed={() => setModal(null)}
+                        visible
                     />
                 ) : (
                     <RenameFileModal
-                        visible
                         appear
                         files={[file.name]}
-                        useMoveTerminology={modal === 'move'}
                         onDismissed={() => setModal(null)}
+                        useMoveTerminology={modal === 'move'}
+                        visible
                     />
                 )
             ) : null}

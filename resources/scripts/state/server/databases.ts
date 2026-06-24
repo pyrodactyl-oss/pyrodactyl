@@ -3,10 +3,10 @@ import { type Action, action } from 'easy-peasy';
 import type { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 
 export interface ServerDatabaseStore {
-    data: ServerDatabase[];
-    setDatabases: Action<ServerDatabaseStore, ServerDatabase[]>;
     appendDatabase: Action<ServerDatabaseStore, ServerDatabase>;
+    data: ServerDatabase[];
     removeDatabase: Action<ServerDatabaseStore, string>;
+    setDatabases: Action<ServerDatabaseStore, ServerDatabase[]>;
 }
 
 const databases: ServerDatabaseStore = {
