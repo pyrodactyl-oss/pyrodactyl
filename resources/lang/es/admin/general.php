@@ -616,6 +616,8 @@ return [
     'mail_smtp_host_desc' => 'Introduce la dirección del servidor SMTP a través del cual se debe enviar el correo.',
     'mail_smtp_port_desc' => 'Introduce el puerto del servidor SMTP a través del cual se debe enviar el correo.',
     'mail_encryption_desc' => 'Selecciona el tipo de cifrado a usar al enviar correo.',
+    'mail_encryption_tls' => 'Transport Layer Security (TLS)',
+    'mail_encryption_ssl' => 'Secure Sockets Layer (SSL)',
     'mail_username_desc' => 'El nombre de usuario a usar al conectarse al servidor SMTP.',
     'mail_password_desc' => 'La contraseña a usar junto con el nombre de usuario SMTP. Dejar en blanco para continuar usando la contraseña existente. Para establecer la contraseña a un valor vacío introduce <code>!e</code> en el campo.',
     'mail_from_desc' => 'Introduce una dirección de correo electrónico desde la que se originarán todos los correos salientes.',
@@ -763,4 +765,36 @@ return [
     'env_only_notice' => 'Tu Panel está configurado actualmente para leer la configuración solo desde el entorno. Deberás establecer <code>APP_ENVIRONMENT_ONLY=false</code> en tu archivo de entorno para cargar la configuración dinámicamente.',
     'others' => 'otro(s)',
     'startup_not_defined' => '¡Inicio no definido!',
+
+    // Mensajes de subdominio
+    'subdomain_created' => 'Subdominio creado exitosamente.',
+    'subdomain_replaced' => 'Subdominio reemplazado exitosamente.',
+    'subdomains_deleted' => 'Subdominio(s) eliminado(s) exitosamente.',
+    'subdomain_check_failed' => 'No se pudo verificar la disponibilidad del subdominio.',
+
+    // Mensajes de dominio
+    'domain_created' => 'Dominio creado exitosamente.',
+    'domain_create_failed' => 'Error al crear el dominio: :error',
+    'domain_remove_default' => 'No se puede eliminar el estado predeterminado: Al menos un dominio debe ser el predeterminado.',
+    'domain_updated' => 'Dominio actualizado exitosamente.',
+    'domain_update_failed' => 'Error al actualizar el dominio: :error',
+    'domain_delete_active_subdomains' => 'No se puede eliminar el dominio con :count subdominios activos.',
+    'domain_delete_only_default' => 'No se puede eliminar el único dominio predeterminado. Establece otro dominio como predeterminado primero.',
+    'domain_deleted' => 'Dominio eliminado exitosamente.',
+    'domain_delete_failed' => 'Error al eliminar el dominio: :error',
+    'domain_connection_successful' => 'Conexión exitosa.',
+    'domain_connection_failed' => 'Error de conexión: :error',
+    'domain_unsupported_provider' => 'Proveedor DNS no soportado: :provider',
+
+    // Mensajes de trabajos
+    'job_not_found' => 'Trabajo no encontrado',
+    'bulk_delete_submitted' => 'Trabajos de eliminación masiva enviados exitosamente',
+
+    // Mensajes de conexión a base de datos
+    'db_connection_success' => 'Conexión exitosa al servidor MySQL (Versión: :version).',
+    'db_connection_warning' => 'Advertencia: El usuario parece no tener el permiso GRANT OPTION necesario para crear bases de datos y usuarios.',
+    'db_connection_failed' => 'Error de conexión: :error',
+
+    // Mensajes del sistema
+    'system_metrics_failed' => 'Error al recuperar las métricas del sistema',
 ];

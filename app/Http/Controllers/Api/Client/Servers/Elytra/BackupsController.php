@@ -431,7 +431,7 @@ class BackupsController extends ClientApiController
             ->log();
 
         return new JsonResponse([
-            'message' => 'Bulk delete jobs submitted successfully',
+            'message' => trans('admin/general.bulk_delete_submitted'),
             'job_count' => count($jobIds),
             'backup_count' => count($backupUuids),
         ]);

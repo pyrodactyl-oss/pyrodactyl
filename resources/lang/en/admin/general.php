@@ -612,6 +612,8 @@ return [
     'mail_smtp_host_desc' => 'Enter the SMTP server address that mail should be sent through.',
     'mail_smtp_port_desc' => 'Enter the SMTP server port that mail should be sent through.',
     'mail_encryption_desc' => 'Select the type of encryption to use when sending mail.',
+    'mail_encryption_tls' => 'Transport Layer Security (TLS)',
+    'mail_encryption_ssl' => 'Secure Sockets Layer (SSL)',
     'mail_username_desc' => 'The username to use when connecting to the SMTP server.',
     'mail_password_desc' => 'The password to use in conjunction with the SMTP username. Leave blank to continue using the existing password. To set the password to an empty value enter <code>!e</code> into the field.',
     'mail_from_desc' => 'Enter an email address that all outgoing emails will originate from.',
@@ -763,4 +765,36 @@ return [
     'env_only_notice' => 'Your Panel is currently configured to read settings from the environment only. You will need to set <code>APP_ENVIRONMENT_ONLY=false</code> in your environment file in order to load settings dynamically.',
     'others' => 'other(s)',
     'startup_not_defined' => 'Startup Not Defined!',
+
+    // Subdomain messages
+    'subdomain_created' => 'Subdomain created successfully.',
+    'subdomain_replaced' => 'Subdomain replaced successfully.',
+    'subdomains_deleted' => 'Subdomain(s) deleted successfully.',
+    'subdomain_check_failed' => 'Unable to check subdomain availability.',
+
+    // Domain messages
+    'domain_created' => 'Domain created successfully.',
+    'domain_create_failed' => 'Failed to create domain: :error',
+    'domain_remove_default' => 'Cannot remove default status: At least one domain must be set as default.',
+    'domain_updated' => 'Domain updated successfully.',
+    'domain_update_failed' => 'Failed to update domain: :error',
+    'domain_delete_active_subdomains' => 'Cannot delete domain with :count active subdomains.',
+    'domain_delete_only_default' => 'Cannot delete the only default domain. Please set another domain as default first.',
+    'domain_deleted' => 'Domain deleted successfully.',
+    'domain_delete_failed' => 'Failed to delete domain: :error',
+    'domain_connection_successful' => 'Connection successful.',
+    'domain_connection_failed' => 'Connection failed: :error',
+    'domain_unsupported_provider' => 'Unsupported DNS provider: :provider',
+
+    // Job messages
+    'job_not_found' => 'Job not found',
+    'bulk_delete_submitted' => 'Bulk delete jobs submitted successfully',
+
+    // Database connection messages
+    'db_connection_success' => 'Successfully connected to MySQL server (Version: :version).',
+    'db_connection_warning' => 'Warning: The user appears to lack GRANT OPTION permission which is required for creating databases and users.',
+    'db_connection_failed' => 'Connection failed: :error',
+
+    // System messages
+    'system_metrics_failed' => 'Failed to retrieve system metrics',
 ];

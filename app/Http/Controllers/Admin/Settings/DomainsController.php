@@ -77,11 +77,11 @@ class DomainsController extends Controller
             });
 
             return redirect()->route('admin.settings.domains.index')
-                ->with('success', 'Domain created successfully.');
+                ->with('success', trans('admin/general.domain_created'));
         } catch (DnsProviderException $e) {
             return back()->withInput()->withErrors(['dns_config' => $e->getMessage()]);
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['general' => 'Failed to create domain: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['general' => trans('admin/general.domain_create_failed', ['error' => $e->getMessage()])]);
         }
     }
 
@@ -125,7 +125,7 @@ class DomainsController extends Controller
                     // Don't allow removing default status if this is the only default domain
                     $defaultCount = Domain::where('is_default', true)->count();
                     if ($defaultCount <= 1) {
-                        throw new \Exception('Cannot remove default status: At least one domain must be set as default.');
+                        throw new \Exception(trans('admin/general.domain_remove_default'));
                     }
                 }
 
@@ -140,11 +140,11 @@ class DomainsController extends Controller
             });
 
             return redirect()->route('admin.settings.domains.index')
-                ->with('success', 'Domain updated successfully.');
+                ->with('success', trans('admin/general.domain_updated'));
         } catch (DnsProviderException $e) {
             return back()->withInput()->withErrors(['dns_config' => $e->getMessage()]);
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['general' => 'Failed to update domain: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['general' => trans('admin/general.domain_update_failed', ['error' => $e->getMessage()])]);
         }
     }
 
@@ -157,23 +157,23 @@ class DomainsController extends Controller
             // Check if domain has active subdomains
             $activeSubdomains = $domain->activeSubdomains()->count();
             if ($activeSubdomains > 0) {
-                return back()->withErrors(['general' => "Cannot delete domain with {$activeSubdomains} active subdomains."]);
+                return back()->withErrors(['general' => trans('admin/general.domain_delete_active_subdomains', ['count' => $activeSubdomains])]);
             }
 
             // Don't allow deleting the only default domain
             if ($domain->is_default) {
                 $defaultCount = Domain::where('is_default', true)->count();
                 if ($defaultCount <= 1) {
-                    return back()->withErrors(['general' => 'Cannot delete the only default domain. Please set another domain as default first.']);
+                    return back()->withErrors(['general' => trans('admin/general.domain_delete_only_default')]);
                 }
             }
 
             $domain->delete();
 
             return redirect()->route('admin.settings.domains.index')
-                ->with('success', 'Domain deleted successfully.');
+                ->with('success', trans('admin/general.domain_deleted'));
         } catch (\Exception $e) {
-            return back()->withErrors(['general' => 'Failed to delete domain: ' . $e->getMessage()]);
+            return back()->withErrors(['general' => trans('admin/general.domain_delete_failed', ['error' => $e->getMessage()])]);
         }
     }
 
@@ -192,11 +192,11 @@ class DomainsController extends Controller
             $provider = new $providerClass($request->input('dns_config'));
             $provider->testConnection();
 
-            return response()->json(['success' => true, 'message' => 'Connection successful.']);
+            return response()->json(['success' => true, 'message' => trans('admin/general.domain_connection_successful')]);
         } catch (DnsProviderException $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Connection failed: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => trans('admin/general.domain_connection_failed', ['error' => $e->getMessage()])], 500);
         }
     }
 
@@ -232,7 +232,7 @@ class DomainsController extends Controller
         $providers = Providers::all();
 
         if (!isset($providers[$provider])) {
-            throw new \Exception("Unsupported DNS provider: {$provider}");
+            throw new \Exception(trans('admin/general.domain_unsupported_provider', ['provider' => $provider]));
         }
 
         return $providers[$provider];

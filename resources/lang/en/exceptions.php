@@ -84,6 +84,11 @@ return [
         'no_backups_to_delete' => 'No backups to delete.',
         'no_backups_specified' => 'No backups specified for deletion.',
         'backups_not_found' => 'One or more backups not found or do not belong to this server.',
+        'egg_change_backup_failed' => 'Failed to create backup before egg change: :error',
+        'backup_job_not_found' => 'Backup job not found',
+        'backup_failed_with_error' => 'Backup failed: :error',
+        'backup_timed_out' => 'Backup creation timed out after :minutes minutes.',
+        'file_wipe_failed_no_backup' => 'File wipe failed and no backup was created. Aborting operation to prevent data loss.',
     ],
     'server' => [
         'failed_install' => 'This server is in a failed install state and cannot be recovered. Please delete and re-create the server.',
@@ -138,6 +143,7 @@ return [
         'empty' => 'Subdomain cannot be empty.',
         'too_long' => 'Subdomain cannot be longer than 63 characters.',
         'invalid_chars' => 'Subdomain contains invalid characters.',
+        'availability_check_failed' => 'Unable to check subdomain availability.',
     ],
     'database' => [
         'too_many' => 'Operation aborted: creating a new database would put this server over the defined limit.',
@@ -164,5 +170,8 @@ return [
         'url_not_allowed' => 'The Egg import URL is not from an allowed host.',
         'url_scheme_invalid' => 'The Egg import URL scheme is invalid.',
         'fetch_failed' => 'Fetching the Egg from the URL failed.',
+    ],
+    'daemon' => [
+        'wrong_daemon_type' => "This endpoint requires daemon type ':required', but server is using ':actual'.",
     ],
 ];

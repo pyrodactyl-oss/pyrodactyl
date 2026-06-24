@@ -59,8 +59,8 @@
       @endphp
         <select name="mail:mailers:smtp:encryption" class="form-control">
         <option value="" @if($encryption === '') selected @endif>{{ trans('strings.none') }}</option>
-        <option value="tls" @if($encryption === 'tls') selected @endif>Transport Layer Security (TLS)</option>
-        <option value="ssl" @if($encryption === 'ssl') selected @endif>Secure Sockets Layer (SSL)</option>
+         <option value="tls" @if($encryption === 'tls') selected @endif>{{ trans('admin/general.mail_encryption_tls') }}</option>
+         <option value="ssl" @if($encryption === 'ssl') selected @endif>{{ trans('admin/general.mail_encryption_ssl') }}</option>
         </select>
         <p class="text-muted small">{{ trans('admin/general.mail_encryption_desc') }}</p>
         </div>

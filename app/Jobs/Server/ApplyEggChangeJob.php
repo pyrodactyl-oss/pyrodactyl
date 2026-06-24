@@ -159,7 +159,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             return $result['job_id'];
         } catch (\Exception $e) {
-            throw new BackupFailedException('Failed to create backup before egg change: ' . $e->getMessage());
+            throw new BackupFailedException(trans('exceptions.backup.egg_change_backup_failed', ['error' => $e->getMessage()]));
         }
     }
 
@@ -178,7 +178,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             $jobStatus = $elytraJobService->getJobStatus($this->server, $jobId);
 
             if (!$jobStatus) {
-                throw new BackupFailedException('Backup job not found');
+                throw new BackupFailedException(trans('exceptions.backup.backup_job_not_found'));
             }
 
             if ($jobStatus['status'] === 'completed') {
@@ -187,7 +187,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             }
 
             if (in_array($jobStatus['status'], ['failed', 'cancelled'])) {
-                throw new BackupFailedException('Backup failed: ' . ($jobStatus['error'] ?? 'Unknown error'));
+                throw new BackupFailedException(trans('exceptions.backup.backup_failed_with_error', ['error' => $jobStatus['error'] ?? 'Unknown error']));
             }
 
             $elapsed = Carbon::now()->diffInSeconds($startTime);
@@ -200,7 +200,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             sleep(5);
         }
 
-        throw new BackupFailedException('Backup creation timed out after ' . $timeoutMinutes . ' minutes.');
+        throw new BackupFailedException(trans('exceptions.backup.backup_timed_out', ['minutes' => $timeoutMinutes]));
     }
 
     /**
@@ -249,7 +249,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             // If file wipe failed and we don't have a backup, this is dangerous
             if (!$this->shouldBackup) {
-                throw new \RuntimeException('File wipe failed and no backup was created. Aborting operation to prevent data loss.');
+                throw new \RuntimeException(trans('exceptions.backup.file_wipe_failed_no_backup'));
             }
 
             // If we have a backup, log the wipe failure but continue

@@ -170,9 +170,9 @@ class DatabaseController extends Controller
                 }
             }
 
-            $message = "Successfully connected to MySQL server (Version: {$version}).";
+            $message = trans('admin/general.db_connection_success', ['version' => $version]);
             if (!$hasGrantOption) {
-                $message .= " Warning: The user appears to lack GRANT OPTION permission which is required for creating databases and users.";
+                $message .= ' ' . trans('admin/general.db_connection_warning');
             }
 
             return response()->json([
@@ -184,12 +184,12 @@ class DatabaseController extends Controller
         } catch (PDOException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Connection failed: ' . $e->getMessage()
+                'message' => trans('admin/general.db_connection_failed', ['error' => $e->getMessage()])
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => trans('admin/general.db_connection_failed', ['error' => $e->getMessage()])
             ], 422);
         }
     }

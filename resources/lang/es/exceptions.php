@@ -84,6 +84,11 @@ return [
         'no_backups_to_delete' => 'No hay copias de seguridad para eliminar.',
         'no_backups_specified' => 'No se especificaron copias de seguridad para eliminar.',
         'backups_not_found' => 'Una o más copias de seguridad no se encontraron o no pertenecen a este servidor.',
+        'egg_change_backup_failed' => 'Error al crear la copia de seguridad antes del cambio de huevo: :error',
+        'backup_job_not_found' => 'Trabajo de copia de seguridad no encontrado',
+        'backup_failed_with_error' => 'Error en la copia de seguridad: :error',
+        'backup_timed_out' => 'La creación de la copia de seguridad expiró después de :minutes minutos.',
+        'file_wipe_failed_no_backup' => 'Falló el borrado de archivos y no se creó ninguna copia de seguridad. Abortando la operación para evitar la pérdida de datos.',
     ],
     'server' => [
         'failed_install' => 'Este servidor está en un estado de instalación fallida y no se puede recuperar. Elimina y vuelve a crear el servidor.',
@@ -138,6 +143,7 @@ return [
         'empty' => 'El subdominio no puede estar vacío.',
         'too_long' => 'El subdominio no puede tener más de 63 caracteres.',
         'invalid_chars' => 'El subdominio contiene caracteres no válidos.',
+        'availability_check_failed' => 'No se pudo verificar la disponibilidad del subdominio.',
     ],
     'database' => [
         'too_many' => 'Operación cancelada: crear una nueva base de datos superaría el límite definido del servidor.',
@@ -164,5 +170,8 @@ return [
         'url_not_allowed' => 'La URL de importación del huevo no es de un host permitido.',
         'url_scheme_invalid' => 'El esquema de la URL de importación del huevo no es válido.',
         'fetch_failed' => 'Error al obtener el huevo desde la URL.',
+    ],
+    'daemon' => [
+        'wrong_daemon_type' => "Este endpoint requiere el tipo de daemon ':required', pero el servidor está usando ':actual'.",
     ],
 ];
