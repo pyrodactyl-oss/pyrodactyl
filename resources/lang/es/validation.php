@@ -81,7 +81,7 @@ return [
     ],
     'string' => 'El campo :attribute debe ser una cadena de texto.',
     'timezone' => 'El campo :attribute debe ser una zona válida.',
-    'unique' => 'El campo :attribute ya ha sido tomado.',
+    'unique' => 'Ya existe una cuenta asociada a este :attribute.',
     'uploaded' => 'El campo :attribute falló al subirse.',
     'url' => 'El formato del campo :attribute es inválido.',
 

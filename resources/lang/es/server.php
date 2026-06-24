@@ -395,7 +395,7 @@ return [
         'schedule_name_desc' => 'Un identificador legible para esta programación.',
         'minute' => 'Minuto',
         'hour' => 'Hora',
-        'day_of_week' => 'Día de la semana',
+        'day_of_week' => 'Día semana',
         'day_of_month' => 'Día del mes',
         'month' => 'Mes',
         'cron_description' => 'El sistema de programación usa sintaxis Cronjob para definir cuándo deben comenzar a ejecutarse las tareas. Usa los campos de arriba para especificar cuándo deben comenzar.',

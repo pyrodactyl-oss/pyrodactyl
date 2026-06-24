@@ -2,6 +2,7 @@ import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
 import { Link, TriangleExclamation } from '@gravity-ui/icons';
 import { toString } from 'cronstrue';
+import { es as cronstrueEs } from 'cronstrue/locales/es';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -118,6 +119,7 @@ const getCronDescription = (
         const description = toString(cronExpression, {
             throwExceptionOnParseError: false,
             verbose: true,
+            locale: i18n.language === 'es' ? cronstrueEs : undefined,
         });
 
         // Check if cronstrue returned an error message
