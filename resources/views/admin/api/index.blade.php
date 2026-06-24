@@ -37,12 +37,12 @@
                                 <td>{{ $key->memo }}</td>
                                 <td>
                                     @if(!is_null($key->last_used_at))
-                                        {{ $key->last_used_at->locale(app()->getLocale())->isoFormat('LLL') }}
+                                        {{ $key->last_used_at->locale(app()->getLocale())->isoFormat('LL') }}, {{ $key->last_used_at->locale(app()->getLocale())->isoFormat('LT') }}
                                     @else
                                         &mdash;
                                     @endif
                                 </td>
-                                    <td>{{ $key->created_at->locale(app()->getLocale())->isoFormat('LLL') }}</td>
+                                    <td>{{ $key->created_at->locale(app()->getLocale())->isoFormat('LL') }}, {{ $key->created_at->locale(app()->getLocale())->isoFormat('LT') }}</td>
                                 <td>
                                     <a href="#" data-action="revoke-key" data-attr="{{ $key->identifier }}">
                                         <i class="fa fa-trash-o text-danger"></i>
