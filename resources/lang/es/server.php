@@ -405,7 +405,7 @@ return [
         'cron_description' => 'El sistema de programación usa sintaxis Cronjob para definir cuándo deben comenzar a ejecutarse las tareas. Usa los campos de arriba para especificar cuándo deben comenzar.',
         'timezone_note' => 'Las horas mostradas aquí están configuradas para la zona horaria del servidor.',
         'server_is' => 'El servidor está',
-        'your_timezone' => 'tu zona horaria:',
+        'your_timezone' => 'Tu zona horaria:',
         'server_timezone' => 'Zona horaria del servidor:',
         'crontab_guru_desc' => 'Editor en línea para expresiones cron.',
         'crontab_guru' => 'Crontab Guru',
