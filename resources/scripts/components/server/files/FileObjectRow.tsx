@@ -74,9 +74,9 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
                             title={file.modifiedAt.toString()}
                         >
                             {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
-                                ? format(file.modifiedAt, 'MMM do, yyyy h:mma', {
-                                      locale: i18n.language === 'es' ? es : undefined,
-                                  })
+                                ? i18n.language === 'es'
+                                    ? format(file.modifiedAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: es })
+                                    : format(file.modifiedAt, 'MMM do, yyyy h:mma')
                                 : formatDistanceToNow(file.modifiedAt, {
                                       addSuffix: true,
                                       locale: i18n.language === 'es' ? es : undefined,

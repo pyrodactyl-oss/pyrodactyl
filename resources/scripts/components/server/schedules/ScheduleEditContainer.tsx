@@ -115,9 +115,9 @@ const ScheduleEditContainer = () => {
                             <p className={`mt-1 text-sm`}>
                                 <strong>{i18n.t('server:schedules.last_run')}&nbsp;</strong>
                                 {schedule.lastRunAt ? (
-                                    format(schedule.lastRunAt, "MMM do 'at' h:mma", {
-                                        locale: i18n.language === 'es' ? es : undefined,
-                                    })
+                                    i18n.language === 'es'
+                                        ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                        : format(schedule.lastRunAt, "MMM do 'at' h:mma")
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>
                                 )}
@@ -127,9 +127,9 @@ const ScheduleEditContainer = () => {
 
                                 <strong>{i18n.t('server:schedules.next_run')}&nbsp;</strong>
                                 {schedule.nextRunAt ? (
-                                    format(schedule.nextRunAt, "MMM do 'at' h:mma", {
-                                        locale: i18n.language === 'es' ? es : undefined,
-                                    })
+                                    i18n.language === 'es'
+                                        ? format(schedule.nextRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                        : format(schedule.nextRunAt, "MMM do 'at' h:mma")
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>
                                 )}

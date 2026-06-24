@@ -231,9 +231,10 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     <p className='text-xs text-zinc-500 uppercase tracking-wide mb-1'>{i18n.t('strings:created')}</p>
                     <p
                         className='text-sm text-zinc-300 font-medium'
-                        title={format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss', {
-                            locale: i18n.language === 'es' ? es : undefined,
-                        })}
+                        title={i18n.language === 'es'
+                            ? format(backup.createdAt, "d 'de' MMMM 'de' yyyy, HH:mm:ss", { locale: es })
+                            : format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')
+                        }
                     >
                         {formatDistanceToNow(backup.createdAt, {
                             includeSeconds: true,

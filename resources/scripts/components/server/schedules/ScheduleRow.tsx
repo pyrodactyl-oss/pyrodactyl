@@ -20,9 +20,9 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
                     <p className={`text-xs text-zinc-400`}>
                         {i18n.t('server:schedules.last_run')}{' '}
                         {schedule.lastRunAt
-                            ? format(schedule.lastRunAt, "MMM do 'at' h:mma", {
-                                  locale: i18n.language === 'es' ? es : undefined,
-                              })
+                            ? i18n.language === 'es'
+                                ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                : format(schedule.lastRunAt, "MMM do 'at' h:mma")
                             : i18n.t('server:schedules.not_applicable')}
                     </p>
                 </div>
