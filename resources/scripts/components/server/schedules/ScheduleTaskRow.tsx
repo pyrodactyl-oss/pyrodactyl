@@ -10,8 +10,6 @@ import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
 import i18n from '@/lib/i18n';
 
-import i18n from '@/lib/i18n';
-
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
 import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
@@ -35,6 +33,29 @@ const getActionDetails = (action: string): [string, any, boolean?] => {
             return [i18n.t('server:schedules.create_backup'), CloudArrowUpIn];
         default:
             return [i18n.t('server:schedules.unknown_action'), CircleQuestion];
+    }
+};
+
+const getPayloadDisplay = (action: string, payload: string | null): string | null => {
+    if (!payload) return null;
+
+    switch (action) {
+        case 'power': {
+            switch (payload) {
+                case 'start':
+                    return i18n.t('server:schedules.start_server');
+                case 'restart':
+                    return i18n.t('server:schedules.restart_server');
+                case 'stop':
+                    return i18n.t('server:schedules.stop_server');
+                case 'kill':
+                    return i18n.t('server:schedules.terminate_server');
+                default:
+                    return payload;
+            }
+        }
+        default:
+            return payload.length > 100 ? `${payload.substring(0, 100)}...` : payload;
     }
 };
 
@@ -68,9 +89,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
     return (
         <ItemContainer
             title={title}
-            description={
-                task.payload && task.payload.length > 100 ? `${task.payload.substring(0, 100)}...` : task.payload
-            }
+            description={getPayloadDisplay(task.action, task.payload)}
             icon={icon}
             divClasses={`mb-2 gap-6`}
             copyDescription={copyOnClick}
