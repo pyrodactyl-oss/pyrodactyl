@@ -2,6 +2,7 @@ import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
 import { Link, TriangleExclamation } from '@gravity-ui/icons';
 import { toString } from 'cronstrue';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { es as cronstrueEs } from 'cronstrue/locales/es';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
@@ -119,7 +120,7 @@ const getCronDescription = (
         const description = toString(cronExpression, {
             throwExceptionOnParseError: false,
             verbose: true,
-            locale: i18n.language === 'es' ? cronstrueEs : undefined,
+            locale: i18n.language === 'es' ? 'es' : undefined,
         });
 
         // Check if cronstrue returned an error message
