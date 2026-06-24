@@ -64,14 +64,14 @@
             <form action="{{ route('admin.nests.egg.import') }}" enctype="multipart/form-data" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label" for="pImportFile">{{ trans('admin/general.egg_file') }} <span class="field-required"></span></label>
+                        <label class="control-label" for="pImportFile">{{ trans('admin/general.egg_file') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
                             <input id="pImportFile" type="file" name="import_file" class="form-control" accept="application/json" />
                             <p class="small text-muted">{!! trans('admin/general.egg_import_file_desc') !!}</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="pImportToNest">{{ trans('admin/general.associated_nest') }} <span class="field-required"></span></label>
+                        <label class="control-label" for="pImportToNest">{{ trans('admin/general.associated_nest') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
                             <select id="pImportToNest" name="import_to_nest">
                                 @foreach($nests as $nest)
@@ -101,14 +101,14 @@
             <form action="{{ route('admin.nests.egg.import_url') }}" enctype="multipart/form-data" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label" for="pImportFileUrl">{{ trans('admin/general.egg_url') }} <span class="field-required"></span></label>
+                        <label class="control-label" for="pImportFileUrl">{{ trans('admin/general.egg_url') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
                             <input id="pImportFileUrl" type="url" name="import_file_url" class="form-control" accept="application/json" />
                             <p class="small text-muted">{{ trans('admin/general.egg_import_url_desc') }}</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label" for="pImportToNestUrl">{{ trans('admin/general.associated_nest') }} <span class="field-required"></span></label>
+                        <label class="control-label" for="pImportToNestUrl">{{ trans('admin/general.associated_nest') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
                             <select id="pImportToNestUrl" name="import_to_nest">
                                 @foreach($nests as $nest)

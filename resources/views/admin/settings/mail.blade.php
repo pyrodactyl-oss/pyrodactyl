@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="form-group col-md-6">
-        <label class="control-label">{{ trans('strings.username') }} <span class="field-optional"></span></label>
+        <label class="control-label">{{ trans('strings.username') }} <span class="field-optional">{{ __('strings.optional') }}</span></label>
         <div>
         <input type="text" class="form-control" name="mail:mailers:smtp:username"
         value="{{ old('mail:mailers:smtp:username', config('mail.mailers.smtp.username')) }}" />
@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="form-group col-md-6">
-        <label class="control-label">{{ trans('strings.password') }} <span class="field-optional"></span></label>
+        <label class="control-label">{{ trans('strings.password') }} <span class="field-optional">{{ __('strings.optional') }}</span></label>
         <div>
         <input type="password" class="form-control" name="mail:mailers:smtp:password" />
         <p class="text-muted small">{!! trans('admin/general.mail_password_desc') !!}</p>
@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="form-group col-md-6">
-        <label class="control-label">{{ trans('admin/general.mail_from_name') }} <span class="field-optional"></span></label>
+        <label class="control-label">{{ trans('admin/general.mail_from_name') }} <span class="field-optional">{{ __('strings.optional') }}</span></label>
         <div>
         <input type="text" class="form-control" name="mail:from:name"
         value="{{ old('mail:from:name', config('mail.from.name')) }}" />

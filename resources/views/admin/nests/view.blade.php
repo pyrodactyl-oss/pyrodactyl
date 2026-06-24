@@ -20,7 +20,7 @@
             <div class="box">
                 <div class="box-body">
                     <div class="form-group">
-                        <label class="control-label">{{ trans('strings.name') }} <span class="field-required"></span></label>
+                        <label class="control-label">{{ trans('strings.name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
                             <input type="text" name="name" class="form-control" value="{{ old('name', $nest->name) }}" />
                             <p class="text-muted"><small>{{ trans('admin/general.nest_name_help') }}</small></p>

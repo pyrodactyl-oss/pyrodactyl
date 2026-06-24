@@ -48,7 +48,7 @@
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="control-label" for="memoField">{{ trans('strings.description') }} <span class="field-required"></span></label>
+                            <label class="control-label" for="memoField">{{ trans('strings.description') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                             <input id="memoField" type="text" name="memo" class="form-control">
                         </div>
                         <p class="text-muted">{{ trans('admin/general.api_created_desc') }}</p>

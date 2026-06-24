@@ -26,7 +26,7 @@
             <form action="{{ route('admin.servers.view.details', $server->id) }}" method="POST">
                 <div class="box-body">
                     <div class="form-group">
-                        <label for="name" class="control-label">{{ trans('admin/general.server_name') }} <span class="field-required"></span></label>
+                        <label for="name" class="control-label">{{ trans('admin/general.server_name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <input type="text" name="name" value="{{ old('name', $server->name) }}" class="form-control" />
                         <p class="text-muted small">{{ trans('admin/general.server_name_short_desc') }}</p>
                     </div>
@@ -36,7 +36,7 @@
                         <p class="text-muted small">{{ trans('admin/general.external_id_desc') }}</p>
                     </div>
                     <div class="form-group">
-                        <label for="pUserId" class="control-label">{{ trans('admin/general.server_owner') }} <span class="field-required"></span></label>
+                        <label for="pUserId" class="control-label">{{ trans('admin/general.server_owner') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <select name="owner_id" class="form-control" id="pUserId">
                             <option value="{{ $server->owner_id }}" selected>{{ $server->user->email }}</option>
                         </select>

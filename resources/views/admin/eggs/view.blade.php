@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="pName" class="control-label">{{ trans('strings.name') }} <span class="field-required"></span></label>
+                                <label for="pName" class="control-label">{{ trans('strings.name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                                 <input type="text" id="pName" name="name" value="{{ $egg->name }}" class="form-control" />
                                 <p class="text-muted small">{{ trans('admin/general.egg_name_desc') }}</p>
                             </div>
@@ -77,7 +77,7 @@
                                 <p class="text-muted small">{{ trans('admin/general.egg_author_desc') }}</p>
                             </div>
                             <div class="form-group">
-                                <label for="pDockerImage" class="control-label">{{ trans('admin/general.docker_images') }} <span class="field-required"></span></label>
+                                <label for="pDockerImage" class="control-label">{{ trans('admin/general.docker_images') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                                 <textarea id="pDockerImages" name="docker_images" class="form-control" rows="4">{{ implode(PHP_EOL, $images) }}</textarea>
                                 <p class="text-muted small">
                                     {!! trans('admin/general.docker_images_desc') !!}
@@ -105,7 +105,7 @@
                                 <p class="text-muted small">{{ trans('admin/general.egg_desc_desc') }}</p>
                             </div>
                             <div class="form-group">
-                                <label for="pStartup" class="control-label">{{ trans('admin/general.startup_command') }} <span class="field-required"></span></label>
+                                <label for="pStartup" class="control-label">{{ trans('admin/general.startup_command') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                                 <textarea id="pStartup" name="startup" class="form-control" rows="8">{{ $egg->startup }}</textarea>
                                 <p class="text-muted small">{{ trans('admin/general.egg_startup_desc') }}</p>
                             </div>

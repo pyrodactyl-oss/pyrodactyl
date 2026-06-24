@@ -27,7 +27,7 @@
           <div class="box-body">
             <div class="row">
               <div class="form-group col-md-6">
-                <label for="name" class="control-label">{{ trans('admin/general.domain_name') }} <span class="field-required"></span></label>
+                <label for="name" class="control-label">{{ trans('admin/general.domain_name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                 <div>
                   <input type="text" name="name" id="name" class="form-control"
                          value="{{ old('name', $domain->name) }}" placeholder="example.com" required />
@@ -35,7 +35,7 @@
                 </div>
               </div>
               <div class="form-group col-md-6">
-                <label for="dns_provider" class="control-label">{{ trans('admin/general.dns_provider') }} <span class="field-required"></span></label>
+                <label for="dns_provider" class="control-label">{{ trans('admin/general.dns_provider') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                 <div>
                   <select name="dns_provider" id="dns_provider" class="form-control" required>
                     <option value="">{{ trans('admin/general.select_dns_provider') }}</option>
@@ -235,7 +235,7 @@
             <div class="form-group col-md-6">
               <label for="dns_config_${key}" class="control-label">
                 ${field.description || key}
-                ${field.required ? '<span class="field-required"></span>' : ''}
+                ${field.required ? '<span class="field-required">{{ __('strings.required') }}</span>' : ''}
               </label>
               <div>
                 <input type="${field.sensitive ? 'password' : 'text'}"

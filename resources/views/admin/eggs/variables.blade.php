@@ -99,7 +99,7 @@
             <form action="{{ route('admin.nests.egg.variables', $egg->id) }}" method="POST">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label">{{ trans('strings.name') }} <span class="field-required"></span></label>
+                        <label class="control-label">{{ trans('strings.name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <input type="text" name="name" class="form-control" value="{{ old('name') }}"/>
                     </div>
                     <div class="form-group">
@@ -108,7 +108,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label class="control-label">{{ trans('admin/general.environment_variable') }} <span class="field-required"></span></label>
+                            <label class="control-label">{{ trans('admin/general.environment_variable') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                             <input type="text" name="env_variable" class="form-control" value="{{ old('env_variable') }}" />
                         </div>
                         <div class="form-group col-md-6">
@@ -127,7 +127,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">{{ trans('admin/general.input_rules') }} <span class="field-required"></span></label>
+                        <label class="control-label">{{ trans('admin/general.input_rules') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <input type="text" name="rules" class="form-control" value="{{ old('rules', 'required|string|max:20') }}" placeholder="required|string|max:20" />
                         <p class="text-muted small">{!! trans('admin/general.input_rules_desc') !!}</p>
                     </div>
