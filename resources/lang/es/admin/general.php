@@ -797,4 +797,15 @@ return [
 
     // Mensajes del sistema
     'system_metrics_failed' => 'Error al recuperar las métricas del sistema',
+
+    // DNS provider field descriptions
+    'dns_field_cloudflare_api_token' => 'Token de API de Cloudflare con permisos Zone:Edit',
+    'dns_field_cloudflare_zone_id' => 'ID de zona de Cloudflare',
+    'dns_field_hetzner_api_token' => 'Token de API de Hetzner Cloud con permisos de lectura/escritura',
+    'dns_field_aws_access_key' => 'Access Key ID de AWS con permisos Route53',
+    'dns_field_aws_secret_key' => 'Secret Access Key de AWS',
+    'dns_field_aws_zone_id' => 'ID de zona alojada de Route53',
+    'dns_field_aws_region' => 'Región de AWS (por defecto: us-east-1)',
+    'dns_field_dnsimple_api_token' => 'Token de API de DNSimple',
+    'dns_field_dnsimple_account_id' => 'ID de cuenta de DNSimple (Opcional, se detectará automáticamente si no se proporciona)',
 ];

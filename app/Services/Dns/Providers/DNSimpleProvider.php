@@ -156,13 +156,13 @@ class DNSimpleProvider implements DnsProviderInterface
             'api_token' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'DNSimple API Access Token',
+                'description' => __('admin/general.dns_field_dnsimple_api_token'),
                 'sensitive' => true,
             ],
             'account_id' => [
                 'type' => 'string',
                 'required' => false,
-                'description' => 'DNSimple Account ID (Optional, will be auto-detected if not provided)',
+                'description' => __('admin/general.dns_field_dnsimple_account_id'),
                 'sensitive' => false,
             ],
         ];
