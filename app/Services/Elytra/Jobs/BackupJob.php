@@ -119,7 +119,7 @@ class BackupJob implements Job
             'has_repository_size' => isset($statusData['repository_size']),
         ]);
 
-        $errorMessage = $successful ? null : ($statusData['error_message'] ?? 'Unknown error');
+        $errorMessage = $successful ? null : ($statusData['error_message'] ?? trans('exceptions.elytra.unknown_error'));
         if ($errorMessage) {
             $errorMessage = $this->sanitizeBackupError($errorMessage);
         }
@@ -127,7 +127,7 @@ class BackupJob implements Job
         $job->update([
             'status' => $successful ? ElytraJob::STATUS_COMPLETED : ElytraJob::STATUS_FAILED,
             'progress' => $successful ? 100 : $job->progress,
-            'status_message' => $statusData['message'] ?? ($successful ? 'Completed successfully' : 'Failed'),
+            'status_message' => $statusData['message'] ?? ($successful ? trans('exceptions.elytra.completed_successfully') : trans('exceptions.elytra.failed')),
             'error_message' => $errorMessage,
             'completed_at' => CarbonImmutable::now(),
         ]);
@@ -570,7 +570,7 @@ class BackupJob implements Job
      */
     private function sanitizeBackupError(string $errorMessage): string
     {
-        return 'Backup operation failed. Please contact an administrator for details.'; // todo: better sanitization - elllie
+        return trans('exceptions.backup.operation_failed');
     }
 }
 

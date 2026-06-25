@@ -30,7 +30,7 @@
                 <label for="name" class="control-label">{{ trans('admin/general.domain_name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                 <div>
                   <input type="text" name="name" id="name" class="form-control"
-                         value="{{ old('name', $domain->name) }}" placeholder="example.com" required />
+                         value="{{ old('name', $domain->name) }}"                     placeholder="{{ trans('admin/general.domain_name_example') }}" required />
                   <p class="text-muted small">{{ trans('admin/general.domain_name_desc') }}</p>
                 </div>
               </div>

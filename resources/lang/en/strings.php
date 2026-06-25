@@ -212,4 +212,6 @@ return [
     'pagination_showing' => 'Showing {{start}} to {{end}} of {{total}} results',
     'server' => 'Server',
     'invalid_server_response' => 'Invalid server response format',
+    'startup_not_defined' => 'ERROR: Startup Not Defined!',
+    'unexpected_error' => 'An unexpected error occurred.',
 ];

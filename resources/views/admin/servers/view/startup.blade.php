@@ -142,7 +142,7 @@
             }
 
             if (!_.get(objectChain, 'startup', false)) {
-                $('#pDefaultStartupCommand').val(_.get(parentChain, 'startup', 'ERROR: Startup Not Defined!'));
+                $('#pDefaultStartupCommand').val(_.get(parentChain, 'startup', '{{ trans('strings.startup_not_defined') }}'));
             } else {
                 $('#pDefaultStartupCommand').val(_.get(objectChain, 'startup'));
             }

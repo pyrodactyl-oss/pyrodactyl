@@ -701,6 +701,7 @@ return [
     'update_domain' => 'Update Domain',
     'domain_information' => 'Domain Information',
     'domain_name' => 'Domain Name',
+    'domain_name_example' => 'example.com',
     'dns_provider' => 'DNS Provider',
     'dns_provider_config' => 'DNS Provider Configuration',
     'additional_settings' => 'Additional Settings',

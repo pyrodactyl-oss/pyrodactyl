@@ -455,6 +455,7 @@ return [
         'validation_offset_required' => 'A time offset value must be provided.',
         'validation_offset_min' => 'The time offset must be at least 0 seconds.',
         'validation_offset_max' => 'The time offset must be less than 900 seconds.',
+        'task_limit_exceeded' => 'Schedules may not have more than :limit tasks associated with them. Creating this task would put this schedule over the limit.',
     ],
 
     'startup' => [
@@ -615,6 +616,8 @@ return [
         'op_started' => 'Operation started...',
         'op_queued' => 'Operation queued for processing...',
         'op_completed' => 'Operation completed successfully',
+        'op_failed' => 'Operation failed: ',
+        'egg_change_completed' => 'Software configuration applied successfully. Server installation completed.',
         'dm_generating_archive' => 'Generating backup archive...',
         'dm_calculating_size' => 'Calculating repository size...',
         'dm_verifying_integrity' => 'Verifying backup integrity...',

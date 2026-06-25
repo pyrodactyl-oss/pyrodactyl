@@ -705,6 +705,7 @@ return [
     'update_domain' => 'Actualizar dominio',
     'domain_information' => 'Información del dominio',
     'domain_name' => 'Nombre del dominio',
+    'domain_name_example' => 'ejemplo.com',
     'dns_provider' => 'Proveedor DNS',
     'dns_provider_config' => 'Configuración del proveedor DNS',
     'additional_settings' => 'Configuración adicional',

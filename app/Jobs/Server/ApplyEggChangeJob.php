@@ -104,7 +104,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             $this->logSuccessfulChange();
 
-            $operation->markAsCompleted('Software configuration applied successfully. Server installation completed.');
+            $operation->markAsCompleted(trans('server:shell.egg_change_completed'));
         } catch (Exception $e) {
             $this->handleJobFailure($e, $operation);
             throw $e;
@@ -384,7 +384,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         ]);
 
         if ($operation) {
-            $operation->markAsFailed('Operation failed: ' . $exception->getMessage());
+            $operation->markAsFailed(trans('server:shell.op_failed') . $exception->getMessage());
         }
 
         Activity::actor($this->user)->event('server:software.change-failed')

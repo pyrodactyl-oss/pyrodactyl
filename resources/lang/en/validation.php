@@ -300,4 +300,7 @@ return [
     'egg_docker_image_not_allowed' => 'The selected Docker image is not allowed for this egg.',
     'egg_env_invalid' => 'This environment variable is not valid for the selected egg.',
     'ip_invalid' => '":ip" is not a valid IP address or CIDR range.',
+    'username_format' => 'The :attribute must start and end with alpha-numeric characters and contain only letters, numbers, dashes, underscores, and periods.',
+    'fqdn_not_ip' => 'The :attribute must not be an IP address when HTTPS is enabled.',
+    'fqdn_not_resolvable' => 'The :attribute could not be resolved to a valid IP address.',
 ];

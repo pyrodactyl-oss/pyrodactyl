@@ -186,11 +186,11 @@ class EggChangeService
                 'error' => $e->getMessage(),
             ]);
             
-            throw new \RuntimeException('Failed to queue egg change operation. Please try again.');
+            throw new \RuntimeException(trans('exceptions.server_operations.failed_queue_egg_change'));
         }
         
         return [
-            'message' => 'Egg change operation has been queued for processing.',
+            'message' => trans('exceptions.server_operations.egg_change_queued'),
             'operation_id' => $operation->operation_id,
             'status' => 'pending',
         ];

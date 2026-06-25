@@ -19,7 +19,7 @@ class DnsProviderException extends Exception
      */
     public static function connectionFailed(string $provider, string $reason = ''): self
     {
-        $message = "Failed to connect to DNS provider '{$provider}'";
+        $message = trans('exceptions.dns.connection_failed', ['provider' => $provider]);
         if ($reason) {
             $message .= ": {$reason}";
         }
@@ -32,7 +32,7 @@ class DnsProviderException extends Exception
      */
     public static function authenticationFailed(string $provider): self
     {
-        return new self("Authentication failed for DNS provider '{$provider}'. Please check your credentials.");
+        return new self(trans('exceptions.dns.authentication_failed', ['provider' => $provider]));
     }
 
     /**
@@ -40,7 +40,7 @@ class DnsProviderException extends Exception
      */
     public static function invalidConfiguration(string $provider, string $field): self
     {
-        return new self("Invalid configuration for DNS provider '{$provider}': missing or invalid field '{$field}'.");
+        return new self(trans('exceptions.dns.invalid_configuration', ['provider' => $provider, 'field' => $field]));
     }
 
     /**
@@ -48,7 +48,7 @@ class DnsProviderException extends Exception
      */
     public static function recordCreationFailed(string $domain, string $subdomain, string $reason = ''): self
     {
-        $message = "Failed to create DNS record for '{$subdomain}.{$domain}'";
+        $message = trans('exceptions.dns.record_creation_failed', ['subdomain' => $subdomain, 'domain' => $domain]);
         if ($reason) {
             $message .= ": {$reason}";
         }
@@ -62,7 +62,7 @@ class DnsProviderException extends Exception
     public static function recordUpdateFailed(string $domain, array $recordIds, string $reason = ''): self
     {
         $recordList = implode(', ', $recordIds);
-        $message = "Failed to update DNS records [{$recordList}] for domain '{$domain}'";
+        $message = trans('exceptions.dns.record_update_failed', ['records' => $recordList, 'domain' => $domain]);
         if ($reason) {
             $message .= ": {$reason}";
         }
@@ -76,7 +76,7 @@ class DnsProviderException extends Exception
     public static function recordDeletionFailed(string $domain, array $recordIds, string $reason = ''): self
     {
         $recordList = implode(', ', $recordIds);
-        $message = "Failed to delete DNS records [{$recordList}] for domain '{$domain}'";
+        $message = trans('exceptions.dns.record_deletion_failed', ['records' => $recordList, 'domain' => $domain]);
         if ($reason) {
             $message .= ": {$reason}";
         }
@@ -89,6 +89,6 @@ class DnsProviderException extends Exception
      */
     public static function unsupportedRecordType(string $provider, string $recordType): self
     {
-        return new self("DNS provider '{$provider}' does not support record type '{$recordType}'.");
+        return new self(trans('exceptions.dns.unsupported_record_type', ['provider' => $provider, 'recordType' => $recordType]));
     }
 }

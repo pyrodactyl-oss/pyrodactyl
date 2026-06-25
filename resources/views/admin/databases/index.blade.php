@@ -170,7 +170,7 @@
                     }
                 },
                 error: function(xhr) {
-                    let message = 'An unexpected error occurred.';
+                    let message = '{{ trans('strings.unexpected_error') }}';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         message = xhr.responseJSON.message;
                     } else if (xhr.statusText) {

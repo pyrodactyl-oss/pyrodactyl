@@ -48,7 +48,7 @@ class FindAssignableAllocationService
             // If gethostbyname fails, it returns the original hostname
             if ($resolvedIp === $allocationIp || !filter_var($resolvedIp, FILTER_VALIDATE_IP)) {
                 throw new \Pterodactyl\Exceptions\DisplayException(
-                    "Cannot resolve allocation IP/hostname '{$allocationIp}' to a valid IP address"
+                    trans('exceptions.allocations.cannot_resolve', ['ip' => $allocationIp])
                 );
             }
             

@@ -212,4 +212,6 @@ return [
     'pagination_showing' => 'Mostrando {{start}} a {{end}} de {{total}} resultados',
     'server' => 'Servidor',
     'invalid_server_response' => 'Formato de respuesta del servidor inválido',
+    'startup_not_defined' => 'ERROR: Inicio no definido!',
+    'unexpected_error' => 'Ocurrió un error inesperado.',
 ];

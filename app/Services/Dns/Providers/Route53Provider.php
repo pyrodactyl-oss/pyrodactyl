@@ -120,7 +120,7 @@ class Route53Provider implements DnsProviderInterface
                 'domain' => $domain,
                 'name' => $name
             ]);
-            throw DnsProviderException::recordCreationFailed($domain, $name, 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordCreationFailed($domain, $name, trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -318,7 +318,7 @@ class Route53Provider implements DnsProviderInterface
                 }
             }
 
-            throw new \Exception("Domain zone not found for: $domain");
+            throw new \Exception(trans('exceptions.dns.zone_not_found'));
         } catch (AwsException $e) {
             throw DnsProviderException::connectionFailed('route53', $e->getAwsErrorMessage());
         }

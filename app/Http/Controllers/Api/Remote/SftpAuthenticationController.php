@@ -41,7 +41,7 @@ class SftpAuthenticationController extends Controller
         if ($this->hasTooManyLoginAttempts($request)) {
             $seconds = $this->limiter()->availableIn($this->throttleKey($request));
 
-            throw new TooManyRequestsHttpException($seconds, "Too many login attempts for this account, please try again in $seconds seconds.");
+            throw new TooManyRequestsHttpException($seconds, trans('exceptions.sftp.too_many_attempts', ['seconds' => $seconds]));
         }
 
         $user = $this->getUser($request, $connection['username']);

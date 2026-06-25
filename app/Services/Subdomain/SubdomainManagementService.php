@@ -290,21 +290,21 @@ class SubdomainManagementService
         if (in_array($subdomain, $this->getReservedSubdomains())) {
             return [
                 'available' => false,
-                'message' => 'This subdomain is reserved and cannot be used.',
+                'message' => trans('exceptions.subdomain.reserved'),
             ];
         }
 
         if (empty($subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain cannot be empty.',
+                'message' => trans('exceptions.subdomain.empty'),
             ];
         }
 
         if (strlen($subdomain) > 63) {
             return [
                 'available' => false,
-                'message' => 'Subdomain cannot be longer than 63 characters.',
+                'message' => trans('exceptions.subdomain.too_long'),
             ];
         }
 
@@ -312,14 +312,14 @@ class SubdomainManagementService
         if (!preg_match('/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/', $subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain contains invalid characters.',
+                'message' => trans('exceptions.subdomain.invalid_chars'),
             ];
         }
 
         if (preg_match('/[<>"\']/', $subdomain)) {
             return [
                 'available' => false,
-                'message' => 'Subdomain contains invalid characters.',
+                'message' => trans('exceptions.subdomain.invalid_chars'),
             ];
         }
 

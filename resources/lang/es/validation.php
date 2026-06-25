@@ -300,4 +300,7 @@ return [
     'egg_docker_image_not_allowed' => 'La imagen Docker seleccionada no está permitida para este huevo.',
     'egg_env_invalid' => 'Esta variable de entorno no es válida para el huevo seleccionado.',
     'ip_invalid' => '":ip" no es una dirección IP o rango CIDR válido.',
+    'username_format' => 'El campo :attribute debe empezar y terminar con caracteres alfanuméricos y contener solo letras, números, guiones, guiones bajos y puntos.',
+    'fqdn_not_ip' => 'El campo :attribute no debe ser una dirección IP cuando HTTPS está habilitado.',
+    'fqdn_not_resolvable' => 'El campo :attribute no se pudo resolver a una dirección IP válida.',
 ];

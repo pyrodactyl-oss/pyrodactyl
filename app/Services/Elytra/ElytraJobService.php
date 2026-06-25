@@ -71,7 +71,7 @@ class ElytraJobService
                 'job_id' => $job->uuid,
                 'elytra_job_id' => $elytraJobId,
                 'status' => 'submitted',
-                'message' => 'Job submitted to Elytra successfully',
+                'message' => trans('exceptions.elytra.job_submitted'),
                 'data' => $handler->formatJobResponse($job),
             ];
 
@@ -145,7 +145,7 @@ class ElytraJobService
             return [
                 'job_id' => $job->uuid,
                 'status' => 'cancelled',
-                'message' => 'Job cancelled successfully',
+                'message' => trans('exceptions.elytra.job_cancelled'),
             ];
 
         } catch (\Exception $e) {
@@ -208,7 +208,7 @@ class ElytraJobService
 
         $errorMessage = $statusData['error_message'] ?? null;
         if ($errorMessage && str_starts_with($job->job_type, 'backup_')) {
-            $errorMessage = 'Backup operation failed. Please contact an administrator for details.';
+            $errorMessage = trans('exceptions.backup.operation_failed');
         }
 
         $job->update([

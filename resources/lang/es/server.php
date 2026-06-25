@@ -455,6 +455,7 @@ return [
         'validation_offset_max' => 'El desfase de tiempo debe ser menor que 900 segundos.',
         'send_power_action' => 'Enviar acción de energía',
         'unknown_action' => 'Acción desconocida',
+        'task_limit_exceeded' => 'Las programaciones no pueden tener más de :limit tareas asociadas. Crear esta tarea superaría el límite de la programación.',
     ],
 
     'startup' => [
@@ -615,6 +616,8 @@ return [
         'op_started' => 'Operación iniciada...',
         'op_queued' => 'Operación en cola para procesar...',
         'op_completed' => 'Operación completada exitosamente',
+        'op_failed' => 'Operación fallida: ',
+        'egg_change_completed' => 'Configuración de software aplicada exitosamente. Instalación del servidor completada.',
         'dm_generating_archive' => 'Generando archivo de copia de seguridad...',
         'dm_calculating_size' => 'Calculando tamaño del repositorio...',
         'dm_verifying_integrity' => 'Verificando integridad de la copia...',
