@@ -226,7 +226,7 @@ class EggChangeService
         if (!$newSupportsSubdomain) {
             return [
                 'type' => 'subdomain_incompatible',
-                'message' => "Warning: The new egg does not support subdomains. Your current subdomain ({$activeSubdomain->full_domain}) will be deleted when you apply this change.",
+                'message' => trans('server:shell.egg_subdomain_warning', ['domain' => $activeSubdomain->full_domain]),
                 'severity' => 'warning',
             ];
         }

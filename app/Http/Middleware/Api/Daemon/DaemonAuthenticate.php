@@ -62,6 +62,6 @@ class DaemonAuthenticate
             // Do nothing, we don't want to expose a node not existing at all.
         }
 
-        throw new AccessDeniedHttpException('You are not authorized to access this resource.');
+        throw new AccessDeniedHttpException(trans('exceptions.daemon.unauthorized'));
     }
 }

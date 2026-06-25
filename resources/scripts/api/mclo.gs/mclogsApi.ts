@@ -90,7 +90,7 @@ export const getInsights = async (logId: string): Promise<MclogsInsight> => {
     const data = await response.json();
 
     if ('success' in data && data.success === false) {
-        throw new Error(data.error || 'Log not found');
+        throw new Error(data.error || i18n.t('strings:log_not_found'));
     }
 
     return data as MclogsInsight;

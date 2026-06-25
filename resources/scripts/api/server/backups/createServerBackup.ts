@@ -2,6 +2,7 @@ import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
 import { ServerBackup } from '@/api/server/types';
 import { rawDataToServerBackup } from '@/api/transformers';
+import i18n from '@/lib/i18n';
 
 interface RequestParameters {
     name?: string;
@@ -31,7 +32,7 @@ export default async (
     });
 
     if (!response.data) {
-        throw new Error('Invalid response: missing data');
+        throw new Error(i18n.t('strings:backup_invalid_response'));
     }
 
     if (response.data.data && response.data.meta) {
@@ -88,9 +89,9 @@ export default async (
                 message: backupData.jobMessage || '',
             };
         } catch (transformError) {
-            throw new Error(`Failed to process backup response: ${transformError.message}`);
+            throw new Error(`${i18n.t('strings:backup_process_failed')}: ${(transformError as Error).message}`);
         }
     }
 
-    throw new Error('Invalid response: unknown structure');
+    throw new Error(i18n.t('strings:backup_unknown_structure'));
 };

@@ -484,7 +484,7 @@ const SoftwareContainer = () => {
             const validationErrors = validateEnvironmentVariables(eggPreview.variables, pendingVariables);
 
             if (validationErrors.length > 0) {
-                throw new Error(`Validation failed:\n${validationErrors.join('\n')}`);
+                throw new Error(`${i18n.t('strings:validation_failed_prefix')}\n${validationErrors.join('\n')}`);
             }
 
             // Convert display name back to actual image for backend

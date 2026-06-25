@@ -58,7 +58,7 @@ class EggImporterService
         /** @var array $parsed */
         $decoded = json_decode($json_string, true, 512, JSON_THROW_ON_ERROR);
         if (!in_array(Arr::get($decoded, 'meta.version') ?? '', ['PTDL_v1', 'PTDL_v2'])) {
-            throw new InvalidFileUploadException('The JSON file provided is not in a format that can be recognized.');
+            throw new InvalidFileUploadException(trans('exceptions.eggs.invalid_json'));
         }
 
         $parsed =  $this->parser->convertToV2($decoded);

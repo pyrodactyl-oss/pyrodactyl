@@ -34,7 +34,7 @@ class ResourceBelongsToServer
 
         /** @var Server $server */
         $server = $request->route()->parameter('server');
-        $exception = new NotFoundHttpException('The requested resource was not found for this server.');
+        $exception = new NotFoundHttpException(trans('exceptions.api.resource_not_found'));
         foreach ($params as $key => $model) {
             // Specifically skip the server, we're just trying to see if all of the
             // other resources are assigned to this server. Also skip anything that

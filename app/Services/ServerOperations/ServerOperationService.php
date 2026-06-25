@@ -73,7 +73,7 @@ class ServerOperationService
             ->firstOrFail();
 
         if ($operation->hasTimedOut()) {
-            $operation->markAsFailed('Operation timed out');
+            $operation->markAsFailed(trans('server:shell.op_timed_out'));
         }
 
         return $operation;
@@ -105,7 +105,7 @@ class ServerOperationService
             $timedOutOperations = ServerOperation::forServer($server)->timedOut()->get();
             
             foreach ($timedOutOperations as $operation) {
-                $operation->markAsFailed('Operation timed out');
+                $operation->markAsFailed(trans('server:shell.op_timed_out'));
             }
 
             return $timedOutOperations->count();

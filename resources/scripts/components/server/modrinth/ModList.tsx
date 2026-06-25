@@ -72,13 +72,13 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
             setHasMore(data.length >= 20);
         } catch (err) {
             setError(
-                i18n.t('server:modrinth.failed_load', { defaultValue: 'Failed to load mods. Please try again later.' }),
+                i18n.t('server:modrinth.failed_load'),
             );
             console.error('Mod fetch error:', err);
             toast.error(
                 err instanceof Error
                     ? err.message
-                    : i18n.t('server:modrinth.failed_fetch', { defaultValue: 'Failed to fetch mods' }),
+                    : i18n.t('server:modrinth.failed_fetch'),
             );
         } finally {
             setIsLoading(false);

@@ -202,7 +202,7 @@ class SubdomainManagementService
             } catch (\Exception $e) {
                 // Attempt rollback of DNS changes
                 $this->rollbackDnsChanges($dnsProvider, $domain->name, $rollbackData, $updatedRecordIds);
-                throw new \Exception('Failed to update subdomain DNS records.');
+                throw new \Exception(trans('exceptions.subdomain.update_failed'));
             }
         });
     }
@@ -248,7 +248,7 @@ class SubdomainManagementService
                 $serverSubdomain->delete();
             } catch (\Exception $e) {
                 Log::error("Failed to delete subdomain {$serverSubdomain->full_domain}: {$e->getMessage()}");
-                throw new \Exception('Failed to delete subdomain completely.');
+                throw new \Exception(trans('exceptions.subdomain.delete_failed'));
             }
         });
     }

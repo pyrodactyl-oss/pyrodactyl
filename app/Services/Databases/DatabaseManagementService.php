@@ -166,7 +166,7 @@ class DatabaseManagementService
             ->exists();
 
         if ($exists) {
-            throw new DuplicateDatabaseNameException('A database with that name already exists for this server.');
+            throw new DuplicateDatabaseNameException(trans('exceptions.database.duplicate_name'));
         }
 
         $database = (new Database())->forceFill($data);

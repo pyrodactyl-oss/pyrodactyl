@@ -143,6 +143,7 @@ return [
         'empty' => 'El subdominio no puede estar vacío.',
         'too_long' => 'El subdominio no puede tener más de 63 caracteres.',
         'invalid_chars' => 'El subdominio contiene caracteres no válidos.',
+        'update_failed' => 'Error al actualizar los registros DNS del subdominio.',
         'availability_check_failed' => 'No se pudo verificar la disponibilidad del subdominio.',
     ],
     'database' => [
@@ -176,6 +177,7 @@ return [
         'connection_failed' => 'No se pudo establecer conexión con la máquina que ejecuta este servidor. Inténtalo de nuevo.',
         'communication_error' => 'Hubo un error al comunicarse con la máquina que ejecuta este servidor. El error ha sido registrado. Inténtalo de nuevo. (código: %s) (request_id: %s)',
         'remote_error' => 'Ocurrió un error en el host remoto: %s. (request id: %s)',
+        'unauthorized' => 'No estás autorizado para acceder a este recurso.',
     ],
     'dns' => [
         'connection_failed' => "Error al conectar con el proveedor DNS ':provider'",
@@ -210,6 +212,8 @@ return [
     'backup' => [
         'too_many_backups' => 'No se puede crear una nueva copia de seguridad, este servidor ha alcanzado su límite de :limit copias.',
         'operation_failed' => 'La operación de copia de seguridad falló. Contacta al administrador para más detalles.',
+        'rate_limit' => 'Solo se pueden generar :limit copias de seguridad en un lapso de :period segundos.',
+        'default_name' => 'Copia de seguridad del :time',
     ],
     'elytra' => [
         'job_submitted' => 'Trabajo enviado a Elytra exitosamente',
@@ -223,13 +227,22 @@ return [
         's3_bucket_not_configured' => 'Bucket S3 no configurado para copias rustic',
         's3_bucket_required' => 'El campo download_url es obligatorio cuando el adaptador de copia está configurado como S3.',
     ],
-    'subdomain' => [
-        'reserved' => 'Este subdominio está reservado y no puede usarse.',
-        'empty' => 'El subdominio no puede estar vacío.',
-        'too_long' => 'El subdominio no puede tener más de 63 caracteres.',
-        'invalid_chars' => 'El subdominio contiene caracteres no válidos.',
-    ],
     'sftp' => [
         'too_many_attempts' => 'Demasiados intentos de inicio de sesión para esta cuenta. Inténtalo de nuevo en :seconds segundos.',
+    ],
+    'database' => [
+        'duplicate_name' => 'Ya existe una base de datos con ese nombre para este servidor.',
+    ],
+    'eggs' => [
+        'invalid_file' => 'El archivo seleccionado no es válido y no puede ser importado.',
+        'invalid_json' => 'El archivo JSON proporcionado no está en un formato reconocible.',
+        'protected_variable' => 'No se puede usar el nombre protegido :name para esta variable de entorno.',
+    ],
+    'api' => [
+        'no_permission' => 'Esta cuenta no tiene permiso para acceder a la API.',
+        'ip_not_allowed' => 'La dirección IP (:ip) no tiene permiso para acceder a la API con estas credenciales.',
+        'wrong_key_type' => 'Estás intentando usar una clave de API de aplicación en un endpoint que requiere una clave de API de cliente.',
+        'resource_not_found' => 'El recurso solicitado no fue encontrado para este servidor.',
+        'acl_resource_required' => 'Se debe definir un recurso ACL en las solicitudes de API.',
     ],
 ];

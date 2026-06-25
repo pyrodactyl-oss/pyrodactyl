@@ -143,6 +143,7 @@ return [
         'empty' => 'Subdomain cannot be empty.',
         'too_long' => 'Subdomain cannot be longer than 63 characters.',
         'invalid_chars' => 'Subdomain contains invalid characters.',
+        'update_failed' => 'Failed to update subdomain DNS records.',
         'availability_check_failed' => 'Unable to check subdomain availability.',
     ],
     'database' => [
@@ -176,6 +177,7 @@ return [
         'connection_failed' => 'Could not establish a connection to the machine running this server. Please try again.',
         'communication_error' => 'There was an error while communicating with the machine running this server. This error has been logged, please try again. (code: %s) (request_id: %s)',
         'remote_error' => 'An error occurred on the remote host: %s. (request id: %s)',
+        'unauthorized' => 'You are not authorized to access this resource.',
     ],
     'dns' => [
         'connection_failed' => "Failed to connect to DNS provider ':provider'",
@@ -210,6 +212,8 @@ return [
     'backup' => [
         'too_many_backups' => 'Cannot create a new backup, this server has reached its limit of :limit backups.',
         'operation_failed' => 'Backup operation failed. Please contact an administrator for details.',
+        'rate_limit' => 'Only :limit backups may be generated within a :period second span of time.',
+        'default_name' => 'Backup at :time',
     ],
     'elytra' => [
         'job_submitted' => 'Job submitted to Elytra successfully',
@@ -223,13 +227,22 @@ return [
         's3_bucket_not_configured' => 'S3 bucket not configured for rustic backups',
         's3_bucket_required' => 'The download_url field is required when the backup adapter is set to S3.',
     ],
-    'subdomain' => [
-        'reserved' => 'This subdomain is reserved and cannot be used.',
-        'empty' => 'Subdomain cannot be empty.',
-        'too_long' => 'Subdomain cannot be longer than 63 characters.',
-        'invalid_chars' => 'Subdomain contains invalid characters.',
-    ],
     'sftp' => [
         'too_many_attempts' => 'Too many login attempts for this account, please try again in :seconds seconds.',
+    ],
+    'database' => [
+        'duplicate_name' => 'A database with that name already exists for this server.',
+    ],
+    'eggs' => [
+        'invalid_file' => 'The selected file is not valid and cannot be imported.',
+        'invalid_json' => 'The JSON file provided is not in a format that can be recognized.',
+        'protected_variable' => 'Cannot use the protected name :name for this environment variable.',
+    ],
+    'api' => [
+        'no_permission' => 'This account does not have permission to access the API.',
+        'ip_not_allowed' => 'This IP address (:ip) does not have permission to access the API using these credentials.',
+        'wrong_key_type' => 'You are attempting to use an application API key on an endpoint that requires a client API key.',
+        'resource_not_found' => 'The requested resource was not found for this server.',
+        'acl_resource_required' => 'An ACL resource must be defined on API requests.',
     ],
 ];

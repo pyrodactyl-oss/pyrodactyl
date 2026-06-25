@@ -221,7 +221,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Loader fetch error:', error);
-            throw new EnhancedError('Failed to fetch loaders', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_loaders'), error);
         }
     },
 
@@ -243,7 +243,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Version fetch error:', error);
-            throw new EnhancedError('Failed to fetch game versions', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_versions'), error);
         }
     },
 
@@ -338,7 +338,7 @@ export const ModrinthService = {
                     config: error.config,
                 });
             }
-            throw new EnhancedError('Failed to search mods', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_search'), error);
         }
     },
 
@@ -362,7 +362,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Mod details error:', error);
-            throw new EnhancedError('Failed to get mod details', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_details'), error);
         }
     },
 };
