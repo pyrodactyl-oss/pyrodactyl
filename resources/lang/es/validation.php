@@ -96,7 +96,19 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'nombre',
+        'description' => 'descripción',
+        'memo' => 'descripción',
+        'host' => 'servidor',
+        'port' => 'puerto',
+        'username' => 'usuario',
+        'password' => 'contraseña',
+        'email' => 'correo electrónico',
+        'first_name' => 'nombre',
+        'last_name' => 'apellidos',
+        'password_confirmation' => 'confirmación de contraseña',
+    ],
 
     // Logica interna de validacion para Pyrodactyl
     'internal' => [

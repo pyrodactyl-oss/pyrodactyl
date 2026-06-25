@@ -96,7 +96,19 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'name' => 'name',
+        'description' => 'description',
+        'memo' => 'description',
+        'host' => 'host',
+        'port' => 'port',
+        'username' => 'username',
+        'password' => 'password',
+        'email' => 'email',
+        'first_name' => 'first name',
+        'last_name' => 'last name',
+        'password_confirmation' => 'password confirmation',
+    ],
 
     // Internal validation logic for Pterodactyl
     'internal' => [
