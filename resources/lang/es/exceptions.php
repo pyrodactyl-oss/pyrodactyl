@@ -48,7 +48,7 @@ return [
         'subuser_exists' => 'Un usuario con esa dirección de correo electrónico ya está asignado como subusuario para este servidor.',
     ],
     'databases' => [
-        'delete_has_databases' => 'No se puede eliminar un servidor host de bases de datos que tiene bases de datos activas vinculadas.',
+        'delete_has_databases' => 'No se puede eliminar un servidor de base de datos que tiene bases de datos activas vinculadas.',
     ],
     'tasks' => [
         'chain_interval_too_long' => 'El intervalo máximo de tiempo para una tarea encadenada es de 15 minutos.',

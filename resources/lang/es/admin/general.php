@@ -85,7 +85,7 @@ return [
     'overhead_memory' => 'Memoria adicional',
     'swap' => 'Swap',
     'swap_space' => 'Espacio Swap',
-    'block_io_weight' => 'Peso de IO de bloque',
+    'block_io_weight' => 'Peso de E/S de bloque',
     'enable_oom_killer' => 'Habilitar OOM Killer',
     'exclude_from_resource_calculation' => 'Excluir del cálculo de recursos',
     'start_server_when_installed' => 'Iniciar servidor al instalar',
@@ -162,8 +162,8 @@ return [
     'egg_file' => 'Archivo de huevo',
     'egg_url' => 'URL del huevo',
     'associated_nest' => 'Nido asociado',
-    'database_host' => 'Host de base de datos',
-    'host' => 'Host',
+    'database_host' => 'Servidor de base de datos',
+    'host' => 'Servidor',
     'max_connections' => 'Conexiones máximas',
     'connections' => 'Conexiones',
     'connections_from' => 'Conexiones desde',
@@ -326,7 +326,7 @@ return [
     'active_databases' => 'Bases de datos activas',
     'connections_desc' => 'Esto debe reflejar la dirección IP desde la que se permiten las conexiones. Usa notación estándar de MySQL. Si no estás seguro, déjalo como %.',
     'concurrent_connections_desc' => 'Esto debe reflejar el número máximo de conexiones concurrentes desde este usuario a la base de datos. Dejar vacío para ilimitado.',
-    'database_host_desc' => 'Selecciona el servidor host de base de datos en el que se debe crear esta base de datos.',
+    'database_host_desc' => 'Selecciona el servidor de base de datos en el que se debe crear esta base de datos.',
     'database_desc' => 'Se generarán aleatoriamente un nombre de usuario y contraseña para esta base de datos después de enviar el formulario.',
     'database_passwords_visible' => 'Las contraseñas de las bases de datos se pueden ver al visitar este servidor en el front-end.',
     'delete_database_confirm' => '¿Estás seguro de que deseas eliminar esta base de datos? No hay vuelta atrás, todos los datos se eliminarán inmediatamente.',
@@ -542,25 +542,25 @@ return [
     'users_can_view' => 'Los usuarios pueden ver',
     'users_can_edit' => 'Los usuarios pueden editar',
 
-    // Hosts de bases de datos extendido
-    'database_hosts' => 'Hosts de bases de datos',
-    'database_hosts_desc' => 'Hosts de bases de datos en los que los servidores pueden tener bases de datos creadas.',
-    'host_list' => 'Lista de hosts',
-    'create_new_database_host' => 'Crear nuevo host de base de datos',
-    'host_details' => 'Detalles del host',
+    // Servidores de bases de datos extendido
+    'database_hosts' => 'Servidores de bases de datos',
+    'database_hosts_desc' => 'Servidores de bases de datos en los que los servidores pueden tener bases de datos creadas.',
+    'host_list' => 'Lista de servidores',
+    'create_new_database_host' => 'Crear nuevo servidor de base de datos',
+    'host_details' => 'Detalles del servidor',
     'user_details' => 'Detalles del usuario',
     'linked_node' => 'Nodo vinculado',
-    'linked_node_desc' => 'Esta configuración no hace nada más que predeterminar este host de base de datos al agregar una base de datos a un servidor en el nodo seleccionado.',
+    'linked_node_desc' => 'Esta configuración no hace nada más que predeterminar este servidor de base de datos al agregar una base de datos a un servidor en el nodo seleccionado.',
     'database_name' => 'Nombre de la base de datos',
     'test_database' => 'Probar base de datos',
     'testing' => 'Probando...',
-    'viewing_databases' => 'Viendo bases de datos asociadas y detalles para este host de base de datos.',
-    'mysql_connect_desc' => 'La dirección IP o FQDN que debe usarse al intentar conectarse a este host MySQL <em>desde el panel</em> para agregar nuevas bases de datos.',
-    'mysql_port_desc' => 'El puerto en el que MySQL se está ejecutando para este host.',
+    'viewing_databases' => 'Viendo bases de datos asociadas y detalles para este servidor de base de datos.',
+    'mysql_connect_desc' => 'La dirección IP o FQDN que debe usarse al intentar conectarse a este servidor MySQL <em>desde el panel</em> para agregar nuevas bases de datos.',
+    'mysql_port_desc' => 'El puerto en el que MySQL se está ejecutando para este servidor.',
     'mysql_username_desc' => 'El nombre de usuario de una cuenta que tenga suficientes permisos para crear nuevos usuarios y bases de datos en el sistema.',
     'mysql_password_desc' => 'La contraseña de la cuenta definida.',
     'mysql_leave_blank' => 'Dejar en blanco para continuar usando la contraseña asignada.',
-    'mysql_grant_warning' => 'La cuenta definida para este host de base de datos <strong>debe</strong> tener el permiso <code>WITH GRANT OPTION</code>. Si la cuenta definida no tiene este permiso, las solicitudes para crear bases de datos <em>fallarán</em>. <strong>No uses los mismos detalles de cuenta para MySQL que has definido para este panel.</strong>',
+    'mysql_grant_warning' => 'La cuenta definida para este servidor de base de datos <strong>debe</strong> tener el permiso <code>WITH GRANT OPTION</code>. Si la cuenta definida no tiene este permiso, las solicitudes para crear bases de datos <em>fallarán</em>. <strong>No uses los mismos detalles de cuenta para MySQL que has definido para este panel.</strong>',
 
     // API extendido
     'application_api_title' => 'API de aplicación',
@@ -735,8 +735,8 @@ return [
     // Montajes extra
     'user_mountable' => 'Montable por usuario',
 
-    // Hosts de bases de datos extra
-    'database_host_name_desc' => 'Un nombre corto utilizado para identificar este host de base de datos.',
+    // Servidores de bases de datos extra
+    'database_host_name_desc' => 'Un nombre corto utilizado para identificar este servidor de base de datos.',
 
     // Descripciones de Captcha
     'turnstile_site_key_desc' => 'Introduce tu clave de sitio de Turnstile.',
