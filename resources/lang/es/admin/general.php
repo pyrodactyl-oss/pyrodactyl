@@ -468,8 +468,8 @@ return [
     'something_went_wrong' => 'Algo salió mal',
 
     // Ubicaciones extendido
-    'memory_alloc_percent' => 'Memoria Asig%',
-    'disk_alloc_percent' => 'Disco Asig%',
+    'memory_alloc_percent' => '% Memoria asign.',
+    'disk_alloc_percent' => '% Disco asign.',
     'location_short_desc' => 'Un identificador corto usado para distinguir esta ubicación de otras. Debe tener entre 1 y 60 caracteres, por ejemplo, <code>us.nyc.lvl3</code>.',
     'location_long_desc' => 'Una descripción más larga de esta ubicación. Debe tener menos de 191 caracteres.',
 
@@ -636,7 +636,7 @@ return [
     'mount_removed' => 'El montaje se eliminó correctamente.',
     'db_host_created' => 'Se creó correctamente un nuevo servidor de base de datos en el sistema.',
     'db_host_updated' => 'El servidor de base de datos se actualizó correctamente.',
-    'db_host_deleted' => 'El servidor de base de datos solicitado se ha eliminado del sistema.',
+    'db_host_deleted' => 'El servidor de base de datos se ha eliminado correctamente.',
     'db_connection_error' => 'Hubo un error al intentar conectarse al servidor o al ejecutar una consulta: \'%s\'',
     'api_key_generated' => 'Se ha generado una nueva clave API de aplicación para tu cuenta.',
     'egg_import_url_not_allowed' => 'La URL de importación del huevo no es de un host permitido.',
