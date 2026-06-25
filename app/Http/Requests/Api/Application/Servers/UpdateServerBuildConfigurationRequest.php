@@ -80,23 +80,6 @@ class UpdateServerBuildConfigurationRequest extends ServerWriteRequest
     }
 
     /**
-     * Custom attributes to use in error message responses.
-     */
-    public function attributes(): array
-    {
-        return [
-            'add_allocations' => 'allocations to add',
-            'remove_allocations' => 'allocations to remove',
-            'add_allocations.*' => 'allocation to add',
-            'remove_allocations.*' => 'allocation to remove',
-            'feature_limits.databases' => 'Database Limit',
-            'feature_limits.allocations' => 'Allocation Limit',
-            'feature_limits.backups' => 'Backup Limit',
-            'feature_limits.backup_storage_mb' => 'Backup Storage Limit (MB)',
-        ];
-    }
-
-    /**
      * Converts existing rules for certain limits into a format that maintains backwards
      * compatability with the old API endpoint while also supporting a more correct API
      * call.

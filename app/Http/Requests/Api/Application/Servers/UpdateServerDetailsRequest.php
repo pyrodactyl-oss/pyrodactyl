@@ -35,15 +35,4 @@ class UpdateServerDetailsRequest extends ServerWriteRequest
         ];
     }
 
-    /**
-     * Rename some attributes in error messages to clarify the field
-     * being discussed.
-     */
-    public function attributes(): array
-    {
-        return [
-            'user' => 'User ID',
-            'name' => 'Server Name',
-        ];
-    }
 }

@@ -26,7 +26,7 @@ class StoreTaskRequest extends ViewScheduleRequest
                 'nullable',
                 function ($attribute, $value, $fail) {
                     if ($this->input('action') === 'power' && !in_array($value, ['start', 'stop', 'restart', 'kill'])) {
-                        $fail('The power action must be one of: start, stop, restart, kill.');
+                        $fail(trans('validation.task_invalid_power_action'));
                     }
                 },
             ],

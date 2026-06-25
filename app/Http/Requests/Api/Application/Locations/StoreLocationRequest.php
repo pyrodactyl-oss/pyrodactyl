@@ -23,14 +23,4 @@ class StoreLocationRequest extends ApplicationApiRequest
         ])->toArray();
     }
 
-    /**
-     * Rename fields to be more clear in error messages.
-     */
-    public function attributes(): array
-    {
-        return [
-            'long' => 'Location Description',
-            'short' => 'Location Identifier',
-        ];
-    }
 }

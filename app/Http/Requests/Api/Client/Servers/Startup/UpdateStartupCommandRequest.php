@@ -19,10 +19,4 @@ class UpdateStartupCommandRequest extends ClientApiRequest
         ];
     }
 
-    public function attributes(): array
-    {
-        return [
-            'startup' => 'startup command',
-        ];
-    }
 }

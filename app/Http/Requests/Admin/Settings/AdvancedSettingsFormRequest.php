@@ -32,15 +32,4 @@ class AdvancedSettingsFormRequest extends AdminFormRequest
         ];
     }
 
-    public function attributes(): array
-    {
-        return [
-            'pterodactyl:guzzle:timeout' => 'HTTP Request Timeout',
-            'pterodactyl:guzzle:connect_timeout' => 'HTTP Connection Timeout',
-            'pterodactyl:client_features:allocations:enabled' => 'Auto Create Allocations Enabled',
-            'pterodactyl:client_features:allocations:range_start' => 'Starting Port',
-            'pterodactyl:client_features:allocations:range_end' => 'Ending Port',
-            'pterodactyl:trash:retention_days' => 'File Trash Retention Days',
-        ];
-    }
 }

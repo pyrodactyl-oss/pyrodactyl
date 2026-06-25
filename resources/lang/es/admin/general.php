@@ -474,7 +474,7 @@ return [
     'location_long_desc' => 'Una descripción más larga de esta ubicación. Debe tener menos de 191 caracteres.',
 
     // Nidos y Huevos extendido
-    'eggs_warning' => 'Los Huevos son una característica poderosa de Pterodactyl Panel que permite una flexibilidad y configuración extremas. Ten en cuenta que, aunque son potentes, modificar un huevo incorrectamente puede fácilmente bloquear tus servidores y causar más problemas. Evita editar nuestros huevos predeterminados — aquellos proporcionados por <code>support@pterodactyl.io</code> — a menos que estés absolutamente seguro de lo que estás haciendo.',
+    'eggs_warning' => 'Los huevos son una funcionalidad avanzada que permite gran flexibilidad y personalización. Modificar un huevo de forma incorrecta puede bloquear tus servidores. Evita editar los huevos predeterminados — los proporcionados por <code>support@pterodactyl.io</code> — a menos que estés completamente seguro de lo que haces.',
     'new_nest_desc' => 'Configurar un nuevo nido para desplegar en todos los nodos.',
     'nest_name_desc' => 'Este debe ser un nombre de categoría descriptivo que abarque todos los huevos dentro del nido.',
     'nest_name_help' => 'Este debe ser un nombre de categoría descriptivo que abarque todas las opciones dentro del servicio.',
