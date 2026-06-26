@@ -228,4 +228,7 @@ return [
     'modrinth_failed_details' => 'Error al obtener los detalles del mod',
     'modrinth_load_error' => 'Error al cargar los mods. Inténtalo de nuevo más tarde.',
     'modrinth_fetch_error' => 'Error al obtener los mods',
+    'user_image' => 'Imagen de usuario',
+    'more_others' => ', y :count más',
+    'console' => 'Consola',
 ];

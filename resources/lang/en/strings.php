@@ -228,4 +228,7 @@ return [
     'modrinth_failed_details' => 'Failed to get mod details',
     'modrinth_load_error' => 'Failed to load mods. Please try again later.',
     'modrinth_fetch_error' => 'Failed to fetch mods',
+    'user_image' => 'User Image',
+    'more_others' => ', and :count other(s)',
+    'console' => 'Console',
 ];

@@ -3,12 +3,12 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Lineas de idioma para el restablecimiento de contrasena
+    | Líneas de idioma para el restablecimiento de contraseña
     |--------------------------------------------------------------------------
     |
-    | Las siguientes lineas de idioma son los mensajes predeterminados que
-    | coinciden con los motivos dados por el gestor de contrasenas cuando
-    | un intento de actualizacion ha fallado, como un token invalido o una nueva contrasena no valida.
+    | Las siguientes líneas de idioma son los mensajes predeterminados que
+    | coinciden con los motivos dados por el gestor de contraseñas cuando
+    | un intento de actualización ha fallado, como un token inválido o una nueva contraseña no válida.
     |
     */
     'password' => 'Las contraseñas deben tener al menos seis caracteres y coincidir con la confirmación.',

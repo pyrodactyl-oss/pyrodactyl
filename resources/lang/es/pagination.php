@@ -3,11 +3,11 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Lineas de idioma para la paginacion
+    | Líneas de idioma para la paginación
     |--------------------------------------------------------------------------
     |
-    | Las siguientes lineas de idioma son usadas por la libreria de
-    | paginacion para crear los enlaces de paginacion simples. Eres libre
+    | Las siguientes líneas de idioma son usadas por la librería de
+    | paginación para crear los enlaces de paginación simples. Eres libre
     | de cambiarlas para personalizar tus vistas.
     |
      */

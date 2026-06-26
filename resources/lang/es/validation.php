@@ -3,12 +3,12 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Lineas de idioma para validacion
+    | Líneas de idioma para validación
     |--------------------------------------------------------------------------
     |
-    | Las siguientes lineas de idioma contienen los mensajes de error
+    | Las siguientes líneas de idioma contienen los mensajes de error
     | predeterminados usados por la clase validadora. Algunas de estas
-    | reglas tienen multiples versiones como las reglas de tamano. Sientete libre de modificar cada uno de estos mensajes aqui.
+    | reglas tienen múltiples versiones como las reglas de tamaño. Siéntete libre de modificar cada uno de estos mensajes aquí.
     |
     */
 
@@ -87,12 +87,12 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Atributos de validacion personalizados
+    | Atributos de validación personalizados
     |--------------------------------------------------------------------------
     |
-    | Las siguientes lineas de idioma se usan para intercambiar los
-    | marcadores de atributos con algo mas legible como "Direccion
-    | de correo electronico" en lugar de "email". Esto ayuda a hacer los mensajes mas claros.
+    | Las siguientes líneas de idioma se usan para intercambiar los
+    | marcadores de atributos con algo más legible como "Dirección
+    | de correo electrónico" en lugar de "email". Esto ayuda a hacer los mensajes más claros.
     |
     */
 
@@ -285,7 +285,7 @@ return [
         ],
     ],
 
-    // Logica interna de validacion para Pyrodactyl
+    // Lógica interna de validación para Pyrodactyl
     'internal' => [
         'variable_value' => 'variable :env',
         'invalid_password' => 'La contraseña proporcionada es inválida para esta cuenta.',

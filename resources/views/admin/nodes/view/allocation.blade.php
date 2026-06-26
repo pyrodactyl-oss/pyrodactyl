@@ -299,7 +299,7 @@
 
             formattedItems = formattedItems.slice(0, -2);
             if (selectedItems.length > 5) {
-                formattedItems += ', and ' + (selectedItems.length - 5) + ' other(s)';
+                formattedItems += '{{ trans('strings.more_others', ['count' => '__COUNT__']) }}'.replace('__COUNT__', selectedItems.length - 5);
             }
 
             swal({

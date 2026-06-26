@@ -799,7 +799,7 @@ return [
     // Mensajes del sistema
     'system_metrics_failed' => 'Error al recuperar las métricas del sistema',
 
-    // DNS provider field descriptions
+    // Descripciones de campos del proveedor DNS
     'dns_field_cloudflare_api_token' => 'Token de API de Cloudflare con permisos Zone:Edit',
     'dns_field_cloudflare_zone_id' => 'ID de zona de Cloudflare',
     'dns_field_hetzner_api_token' => 'Token de API de Hetzner Cloud con permisos de lectura/escritura',
