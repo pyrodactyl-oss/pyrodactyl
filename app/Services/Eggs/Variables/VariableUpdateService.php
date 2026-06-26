@@ -42,7 +42,7 @@ class VariableUpdateService
     {
         if (!is_null(array_get($data, 'env_variable'))) {
             if (in_array(strtoupper(array_get($data, 'env_variable')), explode(',', EggVariable::RESERVED_ENV_NAMES))) {
-                throw new ReservedVariableNameException(trans('exceptions.service.variables.reserved_name', ['name' => array_get($data, 'env_variable')]));
+                throw new ReservedVariableNameException(trans('exceptions.nest.variables.reserved_name', ['name' => array_get($data, 'env_variable')]));
             }
 
             $search = $this->repository->setColumns('id')->findCountWhere([
@@ -52,7 +52,7 @@ class VariableUpdateService
             ]);
 
             if ($search > 0) {
-                throw new DisplayException(trans('exceptions.service.variables.env_not_unique', ['name' => array_get($data, 'env_variable')]));
+                throw new DisplayException(trans('exceptions.nest.variables.env_not_unique', ['name' => array_get($data, 'env_variable')]));
             }
         }
 

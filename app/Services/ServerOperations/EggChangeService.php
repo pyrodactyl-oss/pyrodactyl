@@ -226,7 +226,7 @@ class EggChangeService
         if (!$newSupportsSubdomain) {
             return [
                 'type' => 'subdomain_incompatible',
-                'message' => trans('server:shell.egg_subdomain_warning', ['domain' => $activeSubdomain->full_domain]),
+                'message' => trans('server.shell.egg_subdomain_warning', ['domain' => $activeSubdomain->full_domain]),
                 'severity' => 'warning',
             ];
         }

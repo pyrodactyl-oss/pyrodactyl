@@ -98,4 +98,8 @@ return [
         'line' => 'Esto es una prueba del sistema de correo de Pyrodactyl. ¡Todo funciona correctamente!',
     ],
     'label_value' => ':label: :value',
+    'two_factor' => [
+        'checkpoint_failed' => 'El punto de control de autenticación de dos factores falló. Inténtalo de nuevo.',
+    ],
+    '2fa_must_be_enabled' => 'Debes tener la autenticación de dos factores activada en tu cuenta para acceder a este servidor.',
 ];

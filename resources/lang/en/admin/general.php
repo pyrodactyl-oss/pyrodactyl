@@ -819,4 +819,8 @@ return [
     'dns_field_aws_region' => 'AWS Region (default: us-east-1)',
     'dns_field_dnsimple_api_token' => 'DNSimple API Access Token',
     'dns_field_dnsimple_account_id' => 'DNSimple Account ID (Optional, will be auto-detected if not provided)',
+    'key' => 'Key',
+    'input_rules' => 'Input Rules',
+    'input_rules_desc' => 'Define the validation rules for this variable. Use Laravel validation rule syntax (e.g., required|string|max:20).',
+    'read_only' => 'Read Only',
 ];

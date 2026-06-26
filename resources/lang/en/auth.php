@@ -98,4 +98,8 @@ return [
         'line' => 'This is a test of the Pyrodactyl mail system. You\'re good to go!',
     ],
     'label_value' => ':label: :value',
+    'two_factor' => [
+        'checkpoint_failed' => 'Two-factor authentication checkpoint failed. Please try again.',
+    ],
+    '2fa_must_be_enabled' => 'You must have two-factor authentication enabled on your account in order to access this server.',
 ];
