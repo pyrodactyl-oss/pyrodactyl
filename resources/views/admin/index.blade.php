@@ -24,6 +24,7 @@
       @lang('admin/general.you_are_running') <code>{{ config('app.version') }}</code>.
       </div>
 
+      {{-- FIXME: Legacy system metrics dashboard — not yet internationalized. Kept for potential future reimplementation. --}}
       <!-- <div aria-hidden="true"
       style="background-color: #ffffff33; position: absolute; height: 1px; width: 100%; margin-top: 20px;"></div>
       <div class="row" style="margin-top: 20px;">
