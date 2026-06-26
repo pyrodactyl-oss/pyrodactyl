@@ -94,7 +94,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
             const minutes = Math.abs(offsetDifferenceMinutes % 60);
 
             if (hours > 0) {
-                differenceDescription = `${hours}${i18n.t('server:schedules.hours_short')} ${minutes}${i18n.t('server:schedules.minutes_short')} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
+                differenceDescription = `${hours}${i18n.t('server:console.hours_short')} ${minutes}${i18n.t('server:console.minutes_short')} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
             } else {
                 const unit =
                     minutes === 1
