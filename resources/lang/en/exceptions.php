@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contains all of the exception and error message translation
+ * strings used by the panel, including daemon API, DNS,
+ * server operations, backups, subusers, and more.
+ */
 return [
     'daemon_connection_failed' => 'There was an exception while attempting to communicate with the daemon resulting in a HTTP/:code response code. This exception has been logged.',
     'node' => [

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contains all of the general administration panel translation
+ * strings including settings, servers, nodes, locations,
+ * databases, domains, mounts, and more.
+ */
 return [
     'index' => 'Index',
     'overview' => 'Overview',

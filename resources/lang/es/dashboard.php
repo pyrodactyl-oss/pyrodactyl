@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contiene todas las cadenas de traducción del panel de control
+ * incluyendo gestión de cuenta, claves API, claves SSH,
+ * configuración de seguridad y listado de servidores.
+ */
 return [
     'your_settings' => 'Tu configuración',
     'two_factor_required' => 'Se requiere 2FA',

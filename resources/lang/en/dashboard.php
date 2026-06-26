@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contains all of the dashboard translation strings
+ * including account management, API keys, SSH keys,
+ * security settings, and server listings.
+ */
 return [
     'your_settings' => 'Your Settings',
     'two_factor_required' => '2-Factor Required',

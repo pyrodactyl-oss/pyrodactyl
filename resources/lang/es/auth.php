@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contiene todas las cadenas de traducción de autenticación
+ * y notificaciones por correo electrónico del panel.
+ */
 return [
     'login' => 'Iniciar sesión',
     'username_or_email' => 'Usuario o correo electrónico',

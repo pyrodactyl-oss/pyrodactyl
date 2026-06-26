@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contiene las cadenas de traducción de administración de nidos
+ * y huevos para las vistas de gestión del panel de administración.
+ */
 return [
     'notices' => [
         'created' => 'Un nuevo nido, :name, ha sido creado exitosamente.',

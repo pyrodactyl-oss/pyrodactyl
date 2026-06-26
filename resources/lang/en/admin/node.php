@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contains node-specific administration translation strings
+ * for the admin panel node management views.
+ */
 return [
     'validation' => [
         'fqdn_not_resolvable' => 'The FQDN or IP address provided does not resolve to a valid IP address.',

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contains nest and egg administration translation strings
+ * for the admin panel nest and egg management views.
+ */
 return [
     'notices' => [
         'created' => 'A new nest, :name, has been successfully created.',

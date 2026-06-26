@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contains all of the general-purpose translation strings
+ * used throughout the panel interface and forms.
+ */
 return [
     'email' => 'Email',
     'email_address' => 'Email address',

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contiene todas las cadenas de traducción de excepciones
+ * y mensajes de error utilizados por el panel, incluyendo
+ * API del daemon, DNS, operaciones, copias y subusuarios.
+ */
 return [
     'daemon_connection_failed' => 'Hubo una excepción al intentar comunicarse con el daemon, resultando en un código de respuesta HTTP/:code. Esta excepción ha sido registrada.',
     'node' => [

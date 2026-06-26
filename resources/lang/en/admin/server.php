@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Contains server-specific administration translation strings
+ * for the admin panel server management views.
+ */
 return [
     'exceptions' => [
         'no_new_default_allocation' => 'You are attempting to delete the default allocation for this server but there is no fallback allocation to use.',

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Contains all of the server management translation strings
+ * including shell messages, schedules, backups, users,
+ * settings, startup, network, subdomains, and Modrinth.
+ */
 return [
     'console' => [
         'title' => 'Home',
