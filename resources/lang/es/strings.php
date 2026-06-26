@@ -1,9 +1,14 @@
 <?php
 
-/**
- * Contiene todas las cadenas de traducción de uso general
- * utilizadas en toda la interfaz y formularios del panel.
- */
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para cadenas generales
+|--------------------------------------------------------------------------
+|
+| Contiene todas las cadenas de traducción de uso general
+| utilizadas en toda la interfaz y formularios del panel.
+|
+*/
 return [
     'email' => 'Correo electrónico',
     'email_address' => 'Dirección de correo electrónico',

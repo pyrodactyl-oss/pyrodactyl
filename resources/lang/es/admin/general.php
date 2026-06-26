@@ -1,10 +1,15 @@
 <?php
 
-/**
- * Contiene todas las cadenas de traducción generales del panel
- * de administración incluyendo configuración, servidores, nodos,
- * ubicaciones, bases de datos, dominios, montajes y más.
- */
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para administración general
+|--------------------------------------------------------------------------
+|
+| Contiene todas las cadenas de traducción generales del panel
+| de administración incluyendo configuración, servidores, nodos,
+| ubicaciones, bases de datos, dominios, montajes y más.
+|
+*/
 return [
     'index' => 'Índice',
     'overview' => 'Vista general',

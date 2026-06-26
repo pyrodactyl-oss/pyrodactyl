@@ -1,9 +1,14 @@
 <?php
 
-/**
- * Contiene las cadenas de traducción de administración específicas
- * de servidores para las vistas de gestión del panel de administración.
- */
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para administración de servidores
+|--------------------------------------------------------------------------
+|
+| Contiene las cadenas de traducción de administración específicas
+| de servidores para las vistas de gestión del panel de administración.
+|
+*/
 return [
     'exceptions' => [
         'no_new_default_allocation' => 'Está intentando eliminar la asignación predeterminada para este servidor pero no hay una asignación alternativa disponible.',

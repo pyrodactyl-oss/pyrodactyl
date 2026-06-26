@@ -1,10 +1,15 @@
 <?php
 
-/**
- * Contiene todas las cadenas de traducción de gestión de servidores
- * incluyendo mensajes de shell, programaciones, copias de seguridad,
- * usuarios, configuración, inicio, red, subdominios y Modrinth.
- */
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para gestión de servidores
+|--------------------------------------------------------------------------
+|
+| Contiene todas las cadenas de traducción de gestión de servidores
+| incluyendo mensajes de shell, programaciones, copias de seguridad,
+| usuarios, configuración, inicio, red, subdominios y Modrinth.
+|
+*/
 return [
     'console' => [
         'title' => 'Inicio',

@@ -1,9 +1,14 @@
 <?php
 
-/**
- * Contiene las cadenas de traducción de administración específicas
- * de nodos para las vistas de gestión del panel de administración.
- */
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para administración de nodos
+|--------------------------------------------------------------------------
+|
+| Contiene las cadenas de traducción de administración específicas
+| de nodos para las vistas de gestión del panel de administración.
+|
+*/
 return [
     'validation' => [
         'fqdn_not_resolvable' => 'El FQDN o dirección IP proporcionada no resuelve a una dirección IP válida.',

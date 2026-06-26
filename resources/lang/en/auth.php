@@ -1,9 +1,14 @@
 <?php
 
-/**
- * Contains all of the authentication and email notification
- * translation strings for the panel.
- */
+/*
+|--------------------------------------------------------------------------
+| Authentication Language Lines
+|--------------------------------------------------------------------------
+|
+| Contains all of the authentication and email notification
+| translation strings for the panel.
+|
+*/
 return [
     'login' => 'Login',
     'username_or_email' => 'Username or Email',

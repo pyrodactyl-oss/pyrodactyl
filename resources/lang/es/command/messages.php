@@ -1,5 +1,14 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Líneas de idioma para comandos de consola
+|--------------------------------------------------------------------------
+|
+| Contiene todas las cadenas de traducción de comandos
+| de consola para los comandos Artisan CLI.
+|
+*/
 return [
     'location' => [
         'no_location_found' => 'No se pudo encontrar un registro que coincida con el código corto proporcionado.',
