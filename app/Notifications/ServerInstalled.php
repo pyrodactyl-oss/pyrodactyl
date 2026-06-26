@@ -69,7 +69,7 @@ class ServerInstalled extends Notification implements ShouldQueue, ReceivesEvent
             ->subject(__('auth.email_server_installed.subject'))
             ->greeting(__('auth.email_server_installed.greeting', ['name' => $this->user->username]))
             ->line(__('auth.email_server_installed.line'))
-            ->line(__('auth.email_server_installed.server_name') . ': ' . $this->server->name)
+            ->line(__('auth.label_value', ['label' => __('auth.email_server_installed.server_name'), 'value' => $this->server->name]))
             ->action(__('auth.email_server_installed.action'), route('index'));
     }
 }

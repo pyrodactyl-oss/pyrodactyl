@@ -39,8 +39,8 @@ class AccountCreated extends Notification implements ShouldQueue
             ->subject(__('auth.email_account_created.subject'))
             ->greeting(__('auth.email_account_created.greeting', ['name' => $this->user->name]))
             ->line(__('auth.email_account_created.line', ['app' => config('app.name', 'Pyrodactyl')]))
-            ->line(__('auth.email_account_created.username') . ': ' . $this->user->username)
-            ->line(__('auth.email_account_created.email') . ': ' . $this->user->email);
+            ->line(__('auth.label_value', ['label' => __('auth.email_account_created.username'), 'value' => $this->user->username]))
+            ->line(__('auth.label_value', ['label' => __('auth.email_account_created.email'), 'value' => $this->user->email]));
 
         if (!is_null($this->token)) {
             return $message->action(

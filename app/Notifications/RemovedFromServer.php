@@ -42,7 +42,7 @@ class RemovedFromServer extends Notification implements ShouldQueue
             ->error()
             ->greeting(__('auth.email_subuser_removed.greeting', ['name' => $this->server->user]))
             ->line(__('auth.email_subuser_removed.line'))
-            ->line(__('auth.email_subuser_removed.server_name') . ': ' . $this->server->name)
+            ->line(__('auth.label_value', ['label' => __('auth.email_subuser_removed.server_name'), 'value' => $this->server->name]))
             ->action(__('auth.email_subuser_removed.visit'), route('index'));
     }
 

@@ -97,4 +97,5 @@ return [
         'greeting' => 'Hello :name!',
         'line' => 'This is a test of the Pyrodactyl mail system. You\'re good to go!',
     ],
+    'label_value' => ':label: :value',
 ];

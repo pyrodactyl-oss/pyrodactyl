@@ -41,7 +41,7 @@ class AddedToServer extends Notification implements ShouldQueue
             ->subject(__('auth.email_subuser_added.subject'))
             ->greeting(__('auth.email_subuser_added.greeting', ['name' => $this->server->user]))
             ->line(__('auth.email_subuser_added.line'))
-            ->line(__('auth.email_subuser_added.server_name') . ': ' . $this->server->name)
+            ->line(__('auth.label_value', ['label' => __('auth.email_subuser_added.server_name'), 'value' => $this->server->name]))
             ->action(__('auth.email_subuser_added.visit'), url('/server/' . $this->server->uuidShort));
     }
 
