@@ -624,7 +624,6 @@ return [
         'op_reinstalling' => 'Reinstalling server...',
         'op_finalizing' => 'Finalizing installation...',
         'op_started' => 'Operation started...',
-        'op_console_server_marked' => 'Server marked as :state...',
         'op_queued' => 'Operation queued for processing...',
         'op_completed' => 'Operation completed successfully',
         'op_failed' => 'Operation failed: ',
