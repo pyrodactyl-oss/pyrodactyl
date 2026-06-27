@@ -53,6 +53,7 @@ A community member has built an automated installer to get Pyrodactyl up and run
 | **RAM** | 4+ GB |
 | **Storage** | 50+ GB SSD |
 | **Network** | Both IPv4 and IPv6 |
+| **OS** | Ubuntu 24.04 |
 
 ## License & Legal
 
