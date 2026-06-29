@@ -27,7 +27,7 @@ class LocaleController extends Controller
     public function languages(): JsonResponse
     {
         return new JsonResponse($this->getAvailableLanguages(true), 200, [
-            'Cache-Control' => 'max-age=60, must-revalidate',
+            'Cache-Control' => 'public, max-age=3600',
         ]);
     }
 

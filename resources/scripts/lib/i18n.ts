@@ -13,7 +13,7 @@ export let supportedLanguages: string[] = [...SUPPORTED_LANGUAGES];
 
 export async function fetchSupportedLanguages(): Promise<void> {
     try {
-        const res = await fetch('/locales/languages.json');
+        const res = await fetch('/locales/languages.json', { cache: 'no-cache' });
         if (!res.ok) {
             return;
         }
