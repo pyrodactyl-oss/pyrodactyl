@@ -180,7 +180,7 @@ const UploadButton = () => {
 
             const uploads = regularFiles.map((file) => {
                 const conflict = existing.includes(file.name);
-                const name = conflict ? `${file.name} (replace)` : file.name;
+                const name = conflict ? `${file.name} (${i18n.t('strings:replace')})` : file.name;
                 return () => uploadFile(file, directory);
             });
             const conflicts = regularFiles.filter((f) => existing.includes(f.name));

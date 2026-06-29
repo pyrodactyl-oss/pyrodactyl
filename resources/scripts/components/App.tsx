@@ -16,6 +16,7 @@ import { NotFound } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
 
 import i18n, { fetchSupportedLanguages, loadTranslations } from '@/lib/i18n';
+import { loadLocaleForLanguage } from '@/lib/localeMap';
 
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';
@@ -71,6 +72,7 @@ const App = () => {
         fetchSupportedLanguages().then(() => {
             loadTranslations(userLang).then(() => {
                 i18n.changeLanguage(userLang);
+                loadLocaleForLanguage(userLang);
                 setI18nReady(true);
             });
         });

@@ -126,11 +126,11 @@ class ElytraJobService
             ->first();
 
         if (!$job) {
-            throw new \Exception('Job not found');
+            throw new \Exception(trans('exceptions.elytra.job_not_found'));
         }
 
         if (!in_array($job->status, [ElytraJob::STATUS_PENDING, ElytraJob::STATUS_SUBMITTED, ElytraJob::STATUS_RUNNING])) {
-            throw new \Exception('Job cannot be cancelled in current status');
+            throw new \Exception(trans('exceptions.elytra.job_cannot_cancel'));
         }
 
         $handler = $this->getJobHandler($job->job_type);

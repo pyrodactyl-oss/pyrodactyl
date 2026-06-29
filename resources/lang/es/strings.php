@@ -240,4 +240,7 @@ return [
     'user_image' => 'Imagen de usuario',
     'more_others' => ', y :count más',
     'console' => 'Consola',
+    'replace' => 'reemplazar',
+    'for_query' => 'para',
+    'minecraft_eula' => 'Minecraft EULA',
 ];

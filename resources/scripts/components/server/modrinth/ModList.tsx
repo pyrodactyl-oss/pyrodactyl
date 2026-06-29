@@ -116,7 +116,7 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
                 {searchQuery && (
                     <span className='text-gray-300'>
                         {' '}
-                        for &quot;<span className='text-blue-400'>{searchQuery}</span>&quot;
+                        {i18n.t('strings:for_query')}&nbsp;<span className='text-blue-400'>&quot;{searchQuery}&quot;</span>
                     </span>
                 )}
                 {/* TODO: Make this have a tooltip with selected Filters  */}

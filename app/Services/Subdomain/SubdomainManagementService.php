@@ -41,7 +41,7 @@ class SubdomainManagementService
         // Check if server supports subdomains
         $feature = $this->getServerSubdomainFeature($server);
         if (!$feature) {
-            throw new \Exception('Server does not support subdomains.');
+            throw new \Exception(trans('exceptions.subdomain.not_supported_service'));
         }
 
         // Validate subdomain
@@ -52,7 +52,7 @@ class SubdomainManagementService
         try {
             $dnsProvider = $this->getDnsProvider($domain);
         } catch (\Exception $e) {
-            throw new \Exception('DNS service temporarily unavailable.');
+            throw new \Exception(trans('exceptions.subdomain.dns_unavailable'));
         }
 
         // Get DNS records to create
@@ -72,7 +72,7 @@ class SubdomainManagementService
                 ->first();
 
             if ($existingServerSubdomain) {
-                throw new \Exception('Server already has an active subdomain. Please delete it first.');
+                throw new \Exception(trans('exceptions.subdomain.already_exists'));
             }
 
             // Double-check subdomain availability within transaction
@@ -82,7 +82,7 @@ class SubdomainManagementService
                 ->first();
 
             if ($existing) {
-                throw new \Exception('Subdomain is not available.');
+                throw new \Exception(trans('exceptions.subdomain.subdomain_unavailable'));
             }
 
             // Create DNS records first
@@ -138,13 +138,13 @@ class SubdomainManagementService
 
         $feature = $this->getServerSubdomainFeature($server);
         if (!$feature) {
-            throw new \Exception('Server no longer supports subdomains.');
+            throw new \Exception(trans('exceptions.subdomain.no_longer_supports'));
         }
 
         try {
             $dnsProvider = $this->getDnsProvider($domain);
         } catch (\Exception $e) {
-            throw new \Exception('DNS service temporarily unavailable.');
+            throw new \Exception(trans('exceptions.subdomain.dns_unavailable'));
         }
 
         $newDnsRecords = $feature->getDnsRecords($server, $serverSubdomain->subdomain, $domain->name);
@@ -335,7 +335,7 @@ class SubdomainManagementService
 
         return [
             'available' => !$existing,
-            'message' => $existing ? 'Subdomain is not available.' : 'Subdomain is available.',
+            'message' => $existing ? trans('exceptions.subdomain.subdomain_unavailable') : trans('exceptions.subdomain.subdomain_available'),
         ];
     }
 
@@ -566,7 +566,7 @@ class SubdomainManagementService
         $providerName = $domain->dns_provider;
 
         if (!isset($this->dnsProviders[$providerName])) {
-            throw new \Exception("Unsupported DNS provider: {$providerName}");
+            throw new \Exception(trans('exceptions.subdomain.provider_unsupported', ['provider' => $providerName]));
         }
 
         $providerClass = $this->dnsProviders[$providerName];

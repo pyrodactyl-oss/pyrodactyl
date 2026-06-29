@@ -508,7 +508,7 @@ return [
     'egg_features_desc' => 'Características adicionales pertenecientes al huevo. Útil para configurar modificaciones adicionales del panel.',
     'egg_process_warning' => 'Las siguientes opciones de configuración no deben editarse a menos que entiendas cómo funciona este sistema. Si se modifican incorrectamente, es posible que el daemon se rompa.',
     'egg_process_warning_2' => 'Todos los campos son obligatorios a menos que selecciones una opción separada del menú desplegable \'Copiar configuración de\', en cuyo caso los campos pueden dejarse en blanco para usar los valores de ese Huevo.',
-    'nest_description_help' => 'Piensa en un Nido como una categoría. Puedes poner múltiples Huevos en un nido, pero considera poner solo Huevos que estén relacionados entre sí en cada Nido.',
+    'nest_description_help' => 'Piensa en un nido como una categoría. Puedes poner múltiples huevos en un nido, pero considera poner solo huevos que estén relacionados entre sí en cada nido.',
     'docker_images' => 'Imágenes Docker',
     'docker_images_desc' => 'Las imágenes Docker disponibles para los servidores que usan este huevo. Introduce una por línea. Los usuarios podrán seleccionar de esta lista de imágenes si se proporciona más de un valor. Opcionalmente, se puede proporcionar un nombre visible prefijando la imagen con el nombre seguido de un carácter de tubería, y luego la URL de la imagen. Ejemplo: <code>Nombre Visible|ghcr.io/my/egg</code>',
     'docker_images_desc_short' => 'Las imágenes Docker disponibles para los servidores que usan este huevo. Introduce una por línea. Los usuarios podrán seleccionar de esta lista de imágenes si se proporciona más de un valor.',

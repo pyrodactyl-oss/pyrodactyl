@@ -36,7 +36,7 @@ class FindAssignableAllocationService
 
         // Validate that the server has a valid primary allocation IP
         if (!$server->allocation) {
-            throw new \Pterodactyl\Exceptions\DisplayException("Server has no primary allocation");
+            throw new \Pterodactyl\Exceptions\DisplayException(trans('exceptions.allocations.no_primary'));
         }
         
         $allocationIp = $server->allocation->ip;

@@ -80,7 +80,7 @@ const EulaModalFeature = () => {
                         rel={'noreferrer noopener'}
                         href='https://www.aka.ms/MinecraftEULA'
                     >
-                        Minecraft EULA
+                        {i18n.t('strings:minecraft_eula')}
                     </a>
                     .
                 </p>

@@ -18,6 +18,7 @@ import {
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
 import i18n, { LANGUAGE_NAMES, loadTranslations, supportedLanguages } from '@/lib/i18n';
+import { loadLocaleForLanguage } from '@/lib/localeMap';
 
 import updateAccountLanguage from '@/api/account/updateAccountLanguage';
 
@@ -40,6 +41,7 @@ const AccountOverviewContainer = () => {
             .then(() => {
                 updateUserData({ language: newLang });
                 i18n.changeLanguage(newLang);
+                loadLocaleForLanguage(newLang);
             })
             .then(() => {
                 toast.success(i18n.t('dashboard:language.updated'));
