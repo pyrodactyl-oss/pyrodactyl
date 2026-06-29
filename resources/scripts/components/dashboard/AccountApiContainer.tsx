@@ -18,6 +18,7 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import createApiKey from '@/api/account/createApiKey';
 import deleteApiKey from '@/api/account/deleteApiKey';
@@ -112,7 +113,7 @@ const AccountApiContainer = () => {
                         initialValues={{ description: '', allowedIps: '' }}
                         validationSchema={object().shape({
                             allowedIps: string(),
-                            description: string().required(i18n.t('strings.validation.required')),
+                            description: string().required(i18n.t('strings:validation.required')),
                         })}
                     >
                         {({ isSubmitting }) => (
@@ -225,7 +226,7 @@ const AccountApiContainer = () => {
                                                             {i18n.t('dashboard:api_keys.last_used')}{' '}
                                                             {key.lastUsedAt
                                                                 ? format(key.lastUsedAt, 'MMM d, yyyy HH:mm', {
-                                                                      locale: i18n.language === 'es' ? es : undefined,
+                                                                      locale: getDateLocale(),
                                                                   })
                                                                 : i18n.t('dashboard:api_keys.never')}
                                                         </span>

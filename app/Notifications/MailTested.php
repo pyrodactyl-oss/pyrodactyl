@@ -27,11 +27,16 @@ class MailTested extends Notification
 
     public function toMail(): MailMessage
     {
+        $previousLocale = app()->getLocale();
         app()->setLocale($this->locale ?: config('app.locale', 'en'));
 
-        return (new MailMessage())
-            ->subject(__('auth.email_mail_tested.subject'))
-            ->greeting(__('auth.email_mail_tested.greeting', ['name' => $this->user->name]))
-            ->line(__('auth.email_mail_tested.line'));
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_mail_tested.subject'))
+                ->greeting(__('auth.email_mail_tested.greeting', ['name' => $this->user->name]))
+                ->line(__('auth.email_mail_tested.line'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
     }
 }

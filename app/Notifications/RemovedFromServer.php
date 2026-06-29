@@ -35,15 +35,20 @@ class RemovedFromServer extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
+        $previousLocale = app()->getLocale();
         app()->setLocale($this->locale ?: config('app.locale', 'en'));
 
-        return (new MailMessage())
-            ->subject(__('auth.email_subuser_removed.subject'))
-            ->error()
-            ->greeting(__('auth.email_subuser_removed.greeting', ['name' => $this->server->user]))
-            ->line(__('auth.email_subuser_removed.line'))
-            ->line(__('auth.label_value', ['label' => __('auth.email_subuser_removed.server_name'), 'value' => $this->server->name]))
-            ->action(__('auth.email_subuser_removed.visit'), route('index'));
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_subuser_removed.subject'))
+                ->error()
+                ->greeting(__('auth.email_subuser_removed.greeting', ['name' => $this->server->user]))
+                ->line(__('auth.email_subuser_removed.line'))
+                ->line(__('auth.label_value', ['label' => __('auth.email_subuser_removed.server_name'), 'value' => $this->server->name]))
+                ->action(__('auth.email_subuser_removed.visit'), route('index'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
     }
 
     /**

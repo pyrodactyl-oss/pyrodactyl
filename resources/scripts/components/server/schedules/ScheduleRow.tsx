@@ -5,6 +5,7 @@ import { es } from 'date-fns/locale';
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
@@ -21,7 +22,7 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
                         {i18n.t('server:schedules.last_run')}{' '}
                         {schedule.lastRunAt
                             ? i18n.language === 'es'
-                                ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: getDateLocale() })
                                 : format(schedule.lastRunAt, "MMM do 'at' h:mma")
                             : i18n.t('server:schedules.not_applicable')}
                     </p>

@@ -63,13 +63,18 @@ class ServerInstalled extends Notification implements ShouldQueue, ReceivesEvent
      */
     public function toMail(): MailMessage
     {
+        $previousLocale = app()->getLocale();
         app()->setLocale($this->locale ?: config('app.locale', 'en'));
 
-        return (new MailMessage())
-            ->subject(__('auth.email_server_installed.subject'))
-            ->greeting(__('auth.email_server_installed.greeting', ['name' => $this->user->username]))
-            ->line(__('auth.email_server_installed.line'))
-            ->line(__('auth.label_value', ['label' => __('auth.email_server_installed.server_name'), 'value' => $this->server->name]))
-            ->action(__('auth.email_server_installed.action'), route('index'));
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_server_installed.subject'))
+                ->greeting(__('auth.email_server_installed.greeting', ['name' => $this->user->username]))
+                ->line(__('auth.email_server_installed.line'))
+                ->line(__('auth.label_value', ['label' => __('auth.email_server_installed.server_name'), 'value' => $this->server->name]))
+                ->action(__('auth.email_server_installed.action'), route('index'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
     }
 }

@@ -1,6 +1,5 @@
 import { File, FolderOpenFill } from '@gravity-ui/icons';
 import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { memo, useCallback, useMemo, useState } from 'react';
 
 import { Checkbox } from '@/components/elements/CheckboxNew';

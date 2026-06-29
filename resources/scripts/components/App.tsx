@@ -6,7 +6,6 @@ import GlobalStylesheet from '@/assets/css/GlobalStylesheet';
 import '@/assets/tailwind.css';
 import '@preact/signals-react';
 import { StoreProvider } from 'easy-peasy';
-import i18n from 'i18next';
 import { lazy, useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -16,7 +15,7 @@ import AuthenticatedRoute from '@/components/elements/AuthenticatedRoute';
 import { NotFound } from '@/components/elements/ScreenBlock';
 import Spinner from '@/components/elements/Spinner';
 
-import { fetchSupportedLanguages, loadTranslations } from '@/lib/i18n';
+import i18n, { fetchSupportedLanguages, loadTranslations } from '@/lib/i18n';
 
 import { store } from '@/state';
 import { ServerContext } from '@/state/server';

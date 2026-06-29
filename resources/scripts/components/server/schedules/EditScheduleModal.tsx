@@ -131,7 +131,7 @@ const getCronDescription = (
         const description = toString(cronExpression, {
             throwExceptionOnParseError: false,
             verbose: true,
-            locale: i18n.language === 'es' ? 'es' : undefined,
+            locale: getCronstrueLocale(),
         });
 
         // Check if cronstrue returned an error message

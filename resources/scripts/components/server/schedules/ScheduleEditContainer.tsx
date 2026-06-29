@@ -17,6 +17,7 @@ import ScheduleTaskRow from '@/components/server/schedules/ScheduleTaskRow';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import getServerSchedule from '@/api/server/schedules/getServerSchedule';
 import triggerScheduleExecution from '@/api/server/schedules/triggerScheduleExecution';
@@ -116,7 +117,7 @@ const ScheduleEditContainer = () => {
                                 <strong>{i18n.t('server:schedules.last_run')}&nbsp;</strong>
                                 {schedule.lastRunAt ? (
                                     i18n.language === 'es'
-                                        ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                        ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: getDateLocale() })
                                         : format(schedule.lastRunAt, "MMM do 'at' h:mma")
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>
@@ -128,7 +129,7 @@ const ScheduleEditContainer = () => {
                                 <strong>{i18n.t('server:schedules.next_run')}&nbsp;</strong>
                                 {schedule.nextRunAt ? (
                                     i18n.language === 'es'
-                                        ? format(schedule.nextRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: es })
+                                        ? format(schedule.nextRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: getDateLocale() })
                                         : format(schedule.nextRunAt, "MMM do 'at' h:mma")
                                 ) : (
                                     <span>{i18n.t('server:schedules.not_applicable')}</span>

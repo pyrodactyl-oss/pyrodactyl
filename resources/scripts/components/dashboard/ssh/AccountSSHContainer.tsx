@@ -17,6 +17,7 @@ import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import { createSSHKey, deleteSSHKey, useSSHKeys } from '@/api/account/ssh-keys';
 import { httpErrorToHuman } from '@/api/http';
@@ -222,7 +223,7 @@ const AccountSSHContainer = () => {
                                                         <span>
                                                             {i18n.t('dashboard:ssh_keys.added_label')}{' '}
                                                             {format(key.createdAt, 'MMM d, yyyy HH:mm', {
-                                                                locale: i18n.language === 'es' ? es : undefined,
+                                                                locale: getDateLocale(),
                                                             })}
                                                         </span>
                                                         <div className='flex items-center gap-2'>

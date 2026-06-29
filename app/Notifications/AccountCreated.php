@@ -33,23 +33,28 @@ class AccountCreated extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
+        $previousLocale = app()->getLocale();
         app()->setLocale($this->locale ?: config('app.locale', 'en'));
 
-        $message = (new MailMessage())
-            ->subject(__('auth.email_account_created.subject'))
-            ->greeting(__('auth.email_account_created.greeting', ['name' => $this->user->name]))
-            ->line(__('auth.email_account_created.line', ['app' => config('app.name', 'Pyrodactyl')]))
-            ->line(__('auth.label_value', ['label' => __('auth.email_account_created.username'), 'value' => $this->user->username]))
-            ->line(__('auth.label_value', ['label' => __('auth.email_account_created.email'), 'value' => $this->user->email]));
+        try {
+            $message = (new MailMessage())
+                ->subject(__('auth.email_account_created.subject'))
+                ->greeting(__('auth.email_account_created.greeting', ['name' => $this->user->name]))
+                ->line(__('auth.email_account_created.line', ['app' => config('app.name', 'Pyrodactyl')]))
+                ->line(__('auth.label_value', ['label' => __('auth.email_account_created.username'), 'value' => $this->user->username]))
+                ->line(__('auth.label_value', ['label' => __('auth.email_account_created.email'), 'value' => $this->user->email]));
 
-        if (!is_null($this->token)) {
-            return $message->action(
-                __('auth.email_account_created.setup_button'),
-                url('/auth/password/reset/' . $this->token . '?email=' . urlencode($this->user->email))
-            );
+            if (!is_null($this->token)) {
+                return $message->action(
+                    __('auth.email_account_created.setup_button'),
+                    url('/auth/password/reset/' . $this->token . '?email=' . urlencode($this->user->email))
+                );
+            }
+
+            return $message;
+        } finally {
+            app()->setLocale($previousLocale);
         }
-
-        return $message;
     }
 
     /**

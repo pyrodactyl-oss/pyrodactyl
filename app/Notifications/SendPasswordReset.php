@@ -32,16 +32,21 @@ class SendPasswordReset extends Notification implements ShouldQueue
      */
     public function toMail(mixed $notifiable): MailMessage
     {
+        $previousLocale = app()->getLocale();
         app()->setLocale($this->locale ?: config('app.locale', 'en'));
 
-        return (new MailMessage())
-            ->subject(__('auth.email_password_reset.subject'))
-            ->line(__('auth.email_password_reset.line'))
-            ->action(
-                __('auth.email_password_reset.action'),
-                url('/auth/password/reset/' . $this->token . '?email=' . urlencode($notifiable->email))
-            )
-            ->line(__('auth.email_password_reset.no_action'));
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_password_reset.subject'))
+                ->line(__('auth.email_password_reset.line'))
+                ->action(
+                    __('auth.email_password_reset.action'),
+                    url('/auth/password/reset/' . $this->token . '?email=' . urlencode($notifiable->email))
+                )
+                ->line(__('auth.email_password_reset.no_action'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
     }
 
     /**

@@ -1,5 +1,4 @@
 import { ChevronDown, Globe } from '@gravity-ui/icons';
-import i18n from 'i18next';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -18,7 +17,7 @@ import {
 } from '@/components/elements/DropdownMenu';
 import PageContentBlock from '@/components/elements/PageContentBlock';
 
-import { LANGUAGE_NAMES, loadTranslations, supportedLanguages } from '@/lib/i18n';
+import i18n, { LANGUAGE_NAMES, loadTranslations, supportedLanguages } from '@/lib/i18n';
 
 import updateAccountLanguage from '@/api/account/updateAccountLanguage';
 

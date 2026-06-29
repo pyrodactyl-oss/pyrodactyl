@@ -8,6 +8,7 @@ import Spinner from '@/components/elements/Spinner';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import useFlash from '@/plugins/useFlash';
 import useFormatBytes from '@/plugins/useFormatBytes';
@@ -323,14 +324,14 @@ const BackupItem = ({ backup, isSelected = false, onToggleSelect, isSelectable =
                     <p
                         className='text-sm text-zinc-300 font-medium'
                         title={i18n.language === 'es'
-                            ? format(backup.createdAt, "d 'de' MMMM 'de' yyyy, HH:mm:ss", { locale: es })
+                            ? format(backup.createdAt, "d 'de' MMMM 'de' yyyy, HH:mm:ss", { locale: getDateLocale() })
                             : format(backup.createdAt, 'ddd, MMMM do, yyyy HH:mm:ss')
                         }
                     >
                         {formatDistanceToNow(backup.createdAt, {
                             includeSeconds: true,
                             addSuffix: true,
-                            locale: i18n.language === 'es' ? es : undefined,
+                            locale: getDateLocale(),
                         })}
                     </p>
                 </div>

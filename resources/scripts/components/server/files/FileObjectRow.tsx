@@ -11,6 +11,7 @@ import { ContextMenu, ContextMenuTrigger } from '@/components/elements/ContextMe
 import SelectFileCheckbox from '@/components/server/files/SelectFileCheckbox';
 
 import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import { FileObject } from '@/api/server/files/loadDirectory';
 
@@ -75,11 +76,11 @@ const FileObjectRow = ({ file }: { file: FileObject }) => {
                         >
                             {Math.abs(differenceInHours(file.modifiedAt, new Date())) > 48
                                 ? i18n.language === 'es'
-                                    ? format(file.modifiedAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: es })
+                                    ? format(file.modifiedAt, "d 'de' MMMM 'de' yyyy, HH:mm", { locale: getDateLocale() })
                                     : format(file.modifiedAt, 'MMM do, yyyy h:mma')
                                 : formatDistanceToNow(file.modifiedAt, {
                                       addSuffix: true,
-                                      locale: i18n.language === 'es' ? es : undefined,
+                                      locale: getDateLocale(),
                                   })}
                         </div>
                     </MemoizedClickable>

@@ -85,7 +85,7 @@ const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
                     <span>
                         {formatDistanceToNowStrict(activity.timestamp, {
                             addSuffix: true,
-                            locale: i18n.language === 'es' ? es : undefined,
+                            locale: getDateLocale(),
                         })}
                     </span>
 

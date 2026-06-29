@@ -3,6 +3,7 @@
 namespace Pterodactyl\Http\Controllers\Base;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Translation\Translator;
 use Illuminate\Contracts\Translation\Loader;
 use Pterodactyl\Http\Controllers\Controller;
@@ -25,7 +26,9 @@ class LocaleController extends Controller
      */
     public function languages(): JsonResponse
     {
-        return new JsonResponse($this->getAvailableLanguages(true));
+        return new JsonResponse($this->getAvailableLanguages(true), 200, [
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
     }
 
     /**
@@ -35,7 +38,13 @@ class LocaleController extends Controller
     {
         $locale = $request->input('locale');
         $namespace = $request->input('namespace');
-        $response[$locale][$namespace] = $this->i18n($this->loader->load($locale, $namespace));
+
+        try {
+            $response[$locale][$namespace] = $this->i18n($this->loader->load($locale, $namespace));
+        } catch (\Exception $e) {
+            Log::warning("Failed to load locale data for {$locale}/{$namespace}: {$e->getMessage()}");
+            $response[$locale][$namespace] = [];
+        }
 
         return new JsonResponse($response, 200, [
             'Cache-Control' => 'public, max-age=60, must-revalidate',
