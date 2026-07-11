@@ -73,6 +73,19 @@ const App = () => {
                                 unstyled: true,
                                 classNames: {
                                     toast: 'p-4 bg-[#ffffff09] border border-[#ffffff12] rounded-2xl shadow-lg backdrop-blur-2xl flex items-center w-full gap-2',
+                                    // Without explicit width/padding on
+                                    // the action button, Sonner's default
+                                    // flex layout shrinks it to ~14px and
+                                    // multi-letter labels like "Reset"
+                                    // wrap to "Re / se / t" on three
+                                    // lines. shrink-0 + whitespace-nowrap
+                                    // keeps the label on one line; the
+                                    // padding/colour match the other
+                                    // secondary buttons in the app.
+                                    actionButton:
+                                        'shrink-0 whitespace-nowrap rounded-md bg-[#ffffff14] px-3 py-1 text-xs font-semibold text-zinc-100 hover:bg-[#ffffff22] transition',
+                                    cancelButton:
+                                        'shrink-0 whitespace-nowrap rounded-md bg-transparent px-3 py-1 text-xs font-semibold text-zinc-400 hover:text-white transition',
                                 },
                             }}
                         />

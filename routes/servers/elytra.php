@@ -37,6 +37,8 @@ Route::group([
     Route::post('/command', [Elytra\CommandController::class, 'index']);
     Route::post('/power', [Elytra\PowerController::class, 'index']);
 
+    Route::get('/mods/scan', Elytra\ModScanController::class)->middleware(['throttle:20,1']);
+
     Route::group(['prefix' => '/databases'], function () {
         Route::get('/', [Elytra\DatabaseController::class, 'index']);
         Route::post('/', [Elytra\DatabaseController::class, 'store']);
