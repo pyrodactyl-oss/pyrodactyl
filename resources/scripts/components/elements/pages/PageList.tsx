@@ -24,7 +24,14 @@ const PageListItem = ({ className, children }: Props) => {
         <div
             className={clsx(
                 className,
-                'bg-linear-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff15] px-5 py-4 rounded-xl hover:border-[#ffffff20] transition-all flex items-center gap-3 flex-col sm:flex-row',
+                // "Spotlight" hover — instant brighten when the cursor
+                // arrives (`hover:duration-0`), gentle 150 ms decay back
+                // to rest when it leaves. Same pattern the home-screen
+                // ServerRow uses, applied here so every page that
+                // renders rows through PageListItem (schedules,
+                // databases, network) shares the idiom.
+                'flex flex-col sm:flex-row items-center gap-3 rounded-xl border-[1px] border-[#ffffff15] bg-linear-to-b from-[#ffffff08] to-[#ffffff05] px-5 py-4 transition',
+                'hover:duration-0 hover:border-[#ffffff28] hover:from-[#ffffff14] hover:to-[#ffffff0a]',
             )}
         >
             {children}

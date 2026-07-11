@@ -129,16 +129,44 @@ const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemPr
         checkSubdomainSupport();
     }, [featureLimit, uuid]);
 
-    // Check if the item should be visible based on feature limits
+    // Check if the item should be visible based on feature limits.
+    // The hamburger menu mounts its children fresh every time the user
+    // opens it (parent does `if (!isVisible) return null`), so this
+    // function gets re-evaluated on each open with `subdomainSupported`
+    // freshly reset to `false`. Any path that DOESN'T return true
+    // synchronously results in the corresponding nav entry being hidden
+    // until the async subdomain probe resolves — i.e. it "pops into
+    // existence" half a second after the menu opens, which is what
+    // the user reported for the Networking entry.
+    //
+    // Fix: treat a `null` (unlimited) allocations limit as "show
+    // immediately" the same way the desktop sidebar does, instead of
+    // letting the previous `?? 0` rule collapse it to `0 > 0 → false`
+    // and force a wait on the subdomain probe.
     const isVisible = (): boolean => {
         if (!featureLimit) return true;
 
         if (featureLimit === 'network') {
-            const allocationLimit = featureLimits?.allocations ?? 0;
-            return allocationLimit > 0 || subdomainSupported;
+            // null = unlimited allocations → always show without waiting
+            // for the subdomain probe. This is the common case for the
+            // standard Pyrodactyl install and was the source of the
+            // hamburger-menu pop-in: `null ?? 0` evaluates to 0, so the
+            // old `allocationLimit > 0` check fell through to
+            // `subdomainSupported` (initially false) and hid the link
+            // until the async probe came back.
+            const allocs = featureLimits?.allocations;
+            if (allocs === null) return true;
+            if (typeof allocs === 'number' && allocs > 0) return true;
+            return subdomainSupported;
         }
 
-        const limitValue = featureLimits?.[featureLimit as FeatureLimitKey] ?? 0;
+        // null = unlimited for the other feature gates too. Same
+        // reasoning: `null ?? 0` would otherwise mask Databases /
+        // Backups behind a never-passing limit check on configs that
+        // grant unlimited.
+        const raw = featureLimits?.[featureLimit as FeatureLimitKey];
+        if (raw === null) return true;
+        const limitValue = raw ?? 0;
         return limitValue !== 0;
     };
 
