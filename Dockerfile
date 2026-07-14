@@ -1,5 +1,3 @@
-# TODO: Refactor Docker with stricter permissions & modernized tooling
-
 # Stage 0:
 # Build the frontend (only if not in dev mode)
 FROM --platform=$TARGETOS/$TARGETARCH node:lts-alpine AS frontend
@@ -24,7 +22,7 @@ RUN if [ "$DEV" = "false" ]; then \
 
 # Stage 1:
 # Build the actual container with all of the needed PHP dependencies that will run the application
-FROM --platform=$TARGETOS/$TARGETARCH php:8.4-fpm-alpine AS php
+FROM --platform=$TARGETOS/$TARGETARCH php:8.5-fpm-alpine AS php
 ARG DEV=false
 WORKDIR /app
 
@@ -40,7 +38,7 @@ RUN apk add --no-cache --virtual .build-deps \
 # Runtime packages
 RUN apk add --no-cache \
     ca-certificates curl git supervisor nginx dcron \
-    tar unzip certbot certbot-nginx mysql-client postgresql18-client \
+    tar unzip mysql-client postgresql18-client \
     && ln -s /bin/ash /bin/bash
 
 # Copy frontend build
@@ -83,9 +81,7 @@ RUN mkdir -p bootstrap/cache storage/logs storage/framework/sessions storage/fra
 RUN rm /usr/local/etc/php-fpm.conf \
     && { \
     echo "* * * * * /usr/local/bin/php /app/artisan schedule:run >> /dev/null 2>&1"; \
-    echo "0 23 * * * certbot renew --nginx --quiet"; \
     } > /var/spool/cron/crontabs/root \
-    && sed -i 's/ssl_session_cache/#ssl_session_cache/' /etc/nginx/nginx.conf \
     && mkdir -p /var/run/php /var/run/nginx
 
 # Configs
@@ -96,6 +92,10 @@ COPY --chown=nginx:nginx .github/docker/supervisord.conf /etc/supervisord.conf
 RUN rm -rf bootstrap/cache/*.php \
     && rm -rf storage/framework/* || true
 
-EXPOSE 80 443
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=3s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:80/ || exit 1
+
 ENTRYPOINT [ "/bin/ash", ".github/docker/entrypoint.sh" ]
 CMD [ "supervisord", "-n", "-c", "/etc/supervisord.conf" ]

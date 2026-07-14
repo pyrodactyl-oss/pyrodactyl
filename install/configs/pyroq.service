@@ -1,0 +1,38 @@
+[Unit]
+Description=Pyrodactyl Queue Worker
+After=redis-server.service mariadb.service
+Requires=redis-server.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=<user>
+Group=<user>
+Restart=always
+RestartSec=5s
+StartLimitInterval=180
+StartLimitBurst=30
+
+# Timeout settings
+TimeoutStartSec=0
+TimeoutStopSec=120
+KillSignal=SIGTERM
+KillMode=process
+
+# Memory leak prevention: restart worker after 1 hour or 1000 jobs
+# This prevents memory leaks from long-running PHP processes
+ExecStart=/usr/bin/php /var/www/pyrodactyl/artisan queue:work --queue=high,standard,low --sleep=3 --tries=3 --max-time=3600 --max-jobs=1000 --memory=512
+
+# Make this process less likely to be killed by OOM killer
+OOMScoreAdjust=-100
+
+# Graceful shutdown handling
+ExecStop=/bin/kill -TERM $MAINPID
+SendSIGKILL=yes
+
+# Resource limits to prevent excessive resource usage
+LimitAS=1G
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

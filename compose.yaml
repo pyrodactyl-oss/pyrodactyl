@@ -1,0 +1,71 @@
+name: pyrodactyl
+
+services:
+  panel:
+    image: ghcr.io/${REPOSITORY_OWNER:-pyrodactyl-oss}/pyrodactyl:latest
+    restart: always
+    networks:
+      - dokploy-network
+    volumes:
+      - panel_var:/app/var
+      - panel_storage:/app/storage
+    environment:
+      APP_URL: ${APP_URL:-https://panel.example.com}
+      APP_ENV: production
+      APP_ENVIRONMENT_ONLY: "false"
+      APP_TIMEZONE: ${APP_TIMEZONE:-UTC}
+      APP_KEY: ${APP_KEY}
+      DB_CONNECTION: mariadb
+      DB_HOST: mariadb
+      DB_PORT: "3306"
+      DB_DATABASE: panel
+      DB_USERNAME: pyrodactyl
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-null}
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+      HASHIDS_LENGTH: ${HASHIDS_LENGTH:-8}
+      HASHIDS_SALT: ${HASHIDS_SALT}
+      TRUSTED_PROXIES: "*"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.pyrodactyl.rule=Host(`${DOMAIN}`)
+      - traefik.http.routers.pyrodactyl.entrypoints=websecure
+      - traefik.http.routers.pyrodactyl.tls=true
+      - traefik.http.services.pyrodactyl.loadbalancer.server.port=80
+
+  mariadb:
+    image: mariadb:10.11
+    restart: always
+    networks:
+      - dokploy-network
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: panel
+      MYSQL_USER: pyrodactyl
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    command: --default-authentication-plugin=mysql_native_password
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - dokploy-network
+    volumes:
+      - redis_data:/data
+
+volumes:
+  panel_var:
+  panel_storage:
+  mariadb_data:
+  redis_data:
+
+networks:
+  dokploy-network:
+    external: true

@@ -1,0 +1,23 @@
+[Unit]
+Description=Pyrodactyl Elytra Daemon
+Documentation=https://github.com/pyrohost/elytra
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/etc/elytra
+LimitNOFILE=4096
+PIDFile=/run/elytra.pid
+ExecStart=/usr/local/bin/elytra
+ExecStop=/bin/kill -s QUIT $MAINPID
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+RestartSec=5s
+StartLimitInterval=60s
+StartLimitBurst=3
+
+[Install]
+WantedBy=multi-user.target
