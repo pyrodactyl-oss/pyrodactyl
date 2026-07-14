@@ -10,6 +10,7 @@ import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain'
 
 import { ServerContext } from '@/state/server';
 
+import useFormatBytes from '@/plugins/useFormatBytes';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
@@ -41,14 +42,15 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
+    const formatBytes = useFormatBytes();
 
     const textLimits = useMemo(
         () => ({
             cpu: limits?.cpu ? `${limits.cpu}%` : null,
-            memory: limits?.memory ? bytesToString(mbToBytes(limits.memory)) : null,
-            disk: limits?.disk ? bytesToString(mbToBytes(limits.disk)) : null,
+            memory: limits?.memory ? formatBytes(mbToBytes(limits.memory)) : null,
+            disk: limits?.disk ? formatBytes(mbToBytes(limits.disk)) : null,
         }),
-        [limits],
+        [limits, formatBytes],
     );
 
     const allocation = ServerContext.useStoreState((state) => {
@@ -150,7 +152,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                     {status === 'offline' ? (
                         <span className={'text-zinc-400'}>Offline</span>
                     ) : (
-                        <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                        <Limit limit={textLimits.memory}>{formatBytes(stats.memory)}</Limit>
                     )}
                 </StatBlock>
             </div>
@@ -163,7 +165,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                 }}
             >
                 <StatBlock title={'Storage'}>
-                    <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
+                    <Limit limit={textLimits.disk}>{formatBytes(stats.disk)}</Limit>
                 </StatBlock>
             </div>
         </div>

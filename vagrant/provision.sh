@@ -688,7 +688,7 @@ if [ -n "${API_KEY:-}" ]; then
     "description": "Development Minecraft Vanilla Server with 4GB RAM, 32GB storage, 4 cores",
     "user": 1,
     "egg": 8,
-    "docker_image": "ghcr.io/pterodactyl/yolks:java_17",
+    "docker_image": "ghcr.io/pterodactyl/yolks:java_21",
     "startup": "java -Xms128M -Xmx4096M -jar {{SERVER_JARFILE}}",
     "environment": {
         "SERVER_JARFILE": "server.jar",

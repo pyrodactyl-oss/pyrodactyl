@@ -574,4 +574,26 @@ class Server extends Model
             throw new ServerStateConflictException($this);
         }
     }
+
+    /**
+     * Returns the appropriate file repository instance based on the server's daemon type.
+     */
+    public function trashedFiles(): HasMany
+    {
+        return $this->hasMany(TrashedFile::class);
+    }
+
+    /**
+     * Returns the appropriate file repository instance based on the server's daemon type.
+     */
+    public function getFileRepository(): \Pterodactyl\Repositories\Wings\DaemonFileRepository|\Pterodactyl\Repositories\Elytra\DaemonFileRepository
+    {
+        $type = strtolower($this->node->daemonType);
+
+        if ($type === 'wings') {
+            return new \Pterodactyl\Repositories\Wings\DaemonFileRepository(app());
+        }
+
+        return new \Pterodactyl\Repositories\Elytra\DaemonFileRepository(app());
+    }
 }

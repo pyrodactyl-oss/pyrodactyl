@@ -13,10 +13,11 @@ import RenameFileModal from '@/components/server/files/RenameFileModal';
 import compressFiles from '@/api/server/files/compressFiles';
 import copyFile from '@/api/server/files/copyFile';
 import decompressFiles from '@/api/server/files/decompressFiles';
-import deleteFiles from '@/api/server/files/deleteFiles';
 import getFileDownloadUrl from '@/api/server/files/getFileDownloadUrl';
 import { FileObject } from '@/api/server/files/loadDirectory';
+import trashFiles from '@/api/server/files/trashFiles';
 
+import { useStoreState } from '@/state/hooks';
 import { ServerContext } from '@/state/server';
 
 import useFileManagerSwr from '@/plugins/useFileManagerSwr';
@@ -32,13 +33,14 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
     const { mutate } = useFileManagerSwr();
     const { clearAndAddHttpError, clearFlashes } = useFlash();
     const directory = ServerContext.useStoreState((state) => state.files.directory);
+    const retentionDays = useStoreState((state) => state.settings.data?.trash_retention_days ?? 30);
 
     const doDeletion = async () => {
         clearFlashes('files');
 
         await mutate((files) => files!.filter((f) => f.key !== file.key), false);
 
-        deleteFiles(uuid, directory, [file.name]).catch((error) => {
+        trashFiles(uuid, directory, [file.isFile ? file.name : file.name + '/']).catch((error) => {
             mutate();
             clearAndAddHttpError({ key: 'files', error });
         });
@@ -97,7 +99,8 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 onConfirmed={doDeletion}
             >
                 You will not be able to recover the contents of
-                <span className={'font-semibold text-zinc-50'}> {file.name}</span> once deleted.
+                <span className={'font-semibold text-zinc-50'}> {file.name}</span> after the trash retention period
+                expires ({retentionDays} days).
             </Dialog.Confirm>
             {modal ? (
                 modal === 'chmod' ? (
@@ -164,7 +167,7 @@ const FileDropdownMenu = ({ file }: { file: FileObject }) => {
                 <Can action={'file.delete'}>
                     <ContextMenuItem className='flex gap-2' onSelect={() => setShowConfirmation(true)}>
                         <TrashBin className='h-4! w-4!' fill='currentColor' />
-                        <span>Delete</span>
+                        <span>Move to Trash</span>
                     </ContextMenuItem>
                 </Can>
             </ContextMenuContent>

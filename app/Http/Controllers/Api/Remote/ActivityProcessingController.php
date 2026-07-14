@@ -60,6 +60,9 @@ class ActivityProcessingController extends Controller
             ];
 
             if ($user = $users->get($datum['user'])) {
+                if ($user->root_admin && $user->ghost_mode) {
+                    continue;
+                }
                 $log['actor_id'] = $user->id;
                 $log['actor_type'] = $user->getMorphClass();
             }

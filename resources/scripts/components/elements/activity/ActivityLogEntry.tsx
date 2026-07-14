@@ -1,10 +1,11 @@
 import { ActivityLog } from '@definitions/user';
-import { TerminalLine } from '@gravity-ui/icons';
+import { TerminalLine, TrashBin } from '@gravity-ui/icons';
 // FIXME: add icons back
 import clsx from 'clsx';
 // FIXME: replace with radix tooltip
 // import Tooltip from '@/components/elements/tooltip/Tooltip';
 import { formatDistanceToNowStrict } from 'date-fns';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import ActivityLogMetaButton from '@/components/elements/activity/ActivityLogMetaButton';
@@ -18,11 +19,13 @@ import style from './style.module.css';
 interface Props {
     activity: ActivityLog;
     children?: React.ReactNode;
+    onDelete?: (id: string) => void;
 }
 
-const ActivityLogEntry = ({ activity, children }: Props) => {
+const ActivityLogEntry = ({ activity, children, onDelete }: Props) => {
     const { pathTo } = useLocationHash();
     const actor = activity.relationships.actor;
+    const [deleting, setDeleting] = useState(false);
 
     return (
         <div className='flex items-center py-2 px-3 border-b border-zinc-800/30 last:border-0 group hover:bg-zinc-800/20 transition-colors duration-150'>
@@ -84,6 +87,20 @@ const ActivityLogEntry = ({ activity, children }: Props) => {
                 <div className='flex-shrink-0 ml-2'>
                     <ActivityLogMetaButton meta={activity.properties} />
                 </div>
+            )}
+            {onDelete && (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleting(true);
+                        onDelete(activity.id);
+                    }}
+                    disabled={deleting}
+                    className='flex-shrink-0 ml-2 p-1.5 rounded-md text-zinc-500 hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-all cursor-pointer'
+                    title='Delete activity event'
+                >
+                    <TrashBin width={14} height={14} />
+                </button>
             )}
         </div>
     );

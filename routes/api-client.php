@@ -25,6 +25,9 @@ Route::get('/version', function () {
     return response()->json(['version' => config('app.version')]);
 });
 
+Route::post('/ghost-mode', [Client\GhostModeController::class, 'toggle']);
+Route::get('/ghost-mode', [Client\GhostModeController::class, 'status']);
+
 Route::prefix('/nests')->group(function () {
     Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
     Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');

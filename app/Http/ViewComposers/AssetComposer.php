@@ -28,6 +28,7 @@ class AssetComposer
       'name' => config('app.name') ?? 'Pyrodactyl',
       'locale' => config('app.locale') ?? 'en',
       'timezone' => config('app.timezone') ?? '',
+      'trash_retention_days' => (int) ($this->settings->get('settings::pterodactyl:trash:retention_days', 30) ?? 30),
       'captcha' => [
         'enabled' => $this->captcha->getDefaultDriver() !== 'none',
         'provider' => $this->captcha->getDefaultDriver(),

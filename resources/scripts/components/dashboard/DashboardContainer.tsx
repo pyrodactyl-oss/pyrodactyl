@@ -1,5 +1,4 @@
-import { Bars, ChevronDown, House, LayoutCellsLarge, SlidersVertical } from '@gravity-ui/icons';
-import { useStoreState } from 'easy-peasy';
+import { Bars, ChevronDown, Ghost, House, LayoutCellsLarge, SlidersVertical } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
@@ -16,9 +15,12 @@ import Pagination from '@/components/elements/Pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 
+import { toggleGhostMode } from '@/api/account/ghostMode';
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
+
+import { useStoreActions, useStoreState } from '@/state/hooks';
 
 import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
@@ -39,6 +41,9 @@ const DashboardContainer = () => {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const uuid = useStoreState((state) => state.user.data!.uuid);
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const ghostMode = useStoreState((state) => state.user.data!.ghostMode);
+    const sizeDisplay = useStoreState((state) => state.user.data!.sizeDisplay);
+    const updateUserData = useStoreActions((actions) => actions.user.updateUserData);
     // const showOnlyAdmin = usePersistedState(`${uuid}:show_all_servers`, false);
 
     const [serverViewMode, setServerViewMode] = usePersistedState<'owner' | 'admin-all' | 'all'>(
@@ -147,6 +152,55 @@ const DashboardContainer = () => {
                                             <LayoutCellsLarge width={20} height={20} color='white' />
                                         </TabsTrigger>
                                     </TabsList>
+                                    <div className='inline-flex h-9 items-center justify-center rounded-lg bg-[#ffffff11] p-1 text-[#ffffff88]'>
+                                        <button
+                                            type='button'
+                                            aria-label='Display sizes in MiB (binary)'
+                                            className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                sizeDisplay === 'mib' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
+                                            }`}
+                                            onClick={() => {
+                                                updateUserData({ sizeDisplay: 'mib' });
+                                                localStorage.setItem(`${uuid}:size_display`, 'mib');
+                                            }}
+                                        >
+                                            MiB
+                                        </button>
+                                        <button
+                                            type='button'
+                                            aria-label='Display sizes in MB (decimal)'
+                                            className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                sizeDisplay === 'mb' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
+                                            }`}
+                                            onClick={() => {
+                                                updateUserData({ sizeDisplay: 'mb' });
+                                                localStorage.setItem(`${uuid}:size_display`, 'mb');
+                                            }}
+                                        >
+                                            MB
+                                        </button>
+                                    </div>
+                                    {rootAdmin && (
+                                        <button
+                                            className={`inline-flex h-9 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                ghostMode
+                                                    ? 'bg-emerald-500/30 text-emerald-300 hover:bg-emerald-500/40 shadow-sm'
+                                                    : 'bg-[#ffffff11] text-[#ffffff88] hover:bg-[#ffffff23] hover:text-[#ffffff]'
+                                            }`}
+                                            onClick={() =>
+                                                toggleGhostMode()
+                                                    .then((enabled) => updateUserData({ ghostMode: enabled }))
+                                                    .catch(() => {})
+                                            }
+                                            title={
+                                                ghostMode
+                                                    ? 'Ghost mode active - actions not logged'
+                                                    : 'Enable ghost mode'
+                                            }
+                                        >
+                                            <Ghost width={18} height={18} />
+                                        </button>
+                                    )}
                                 </div>
                             }
                         />

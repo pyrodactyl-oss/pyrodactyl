@@ -32,6 +32,7 @@ interface ExtendedWindow extends Window {
         email: string;
 
         root_admin: boolean;
+        ghostMode: boolean;
         use_totp: boolean;
         language: string;
         updated_at: string;
@@ -48,6 +49,8 @@ const App = () => {
             email: PterodactylUser.email,
             language: PterodactylUser.language,
             rootAdmin: PterodactylUser.root_admin,
+            ghostMode: PterodactylUser.ghostMode,
+            sizeDisplay: (localStorage.getItem(`${PterodactylUser.uuid}:size_display`) as 'mib' | 'mb') || 'mib',
             useTotp: PterodactylUser.use_totp,
             createdAt: new Date(PterodactylUser.created_at),
             updatedAt: new Date(PterodactylUser.updated_at),
