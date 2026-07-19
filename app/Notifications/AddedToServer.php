@@ -19,6 +19,7 @@ class AddedToServer extends Notification implements ShouldQueue
     public function __construct(array $server)
     {
         $this->server = (object) $server;
+        $this->locale = config('app.locale', 'en');
     }
 
     /**
@@ -34,10 +35,28 @@ class AddedToServer extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
-        return (new MailMessage())
-            ->greeting('Hello ' . $this->server->user . '!')
-            ->line('You have been added as a subuser for the following server, allowing you certain control over the server.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Visit Server', url('/server/' . $this->server->uuidShort));
+        $previousLocale = app()->getLocale();
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_subuser_added.subject'))
+                ->greeting(__('auth.email_subuser_added.greeting', ['name' => $this->server->user]))
+                ->line(__('auth.email_subuser_added.line'))
+                ->line(__('auth.label_value', ['label' => __('auth.email_subuser_added.server_name'), 'value' => $this->server->name]))
+                ->action(__('auth.email_subuser_added.visit'), url('/server/' . $this->server->uuidShort));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
+    }
+
+    /**
+     * Set the locale for the notification based on panel default.
+     */
+    public function locale(mixed $locale): static
+    {
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
     }
 }

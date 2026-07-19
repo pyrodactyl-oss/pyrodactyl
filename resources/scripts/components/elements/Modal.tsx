@@ -8,6 +8,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
 
+import i18n from '@/lib/i18n';
+
 const variants = {
     open: {
         scale: 1,
@@ -148,23 +150,17 @@ const Modal: React.FC<ModalProps> = ({
                                                 </button>
                                             )}
                                         </div>
-                                        <div className={'flex px-6 overflow-y-auto'}>
-                                            <hr
-                                                style={{
-                                                    boxShadow: 'inset 0 0 .4rem .4rem #fff',
-                                                }}
-                                            />
+                                        <div className={'flex px-6 pb-6 overflow-y-auto'}>
                                             {iconPosition === 'container' && icon}
                                             <div className={'flex-1 max-h-[70vh] min-w-0'}>
                                                 <div className={'flex items-center'}>
                                                     {iconPosition !== 'container' && icon}
-                                                    {children}
-                                                    {/* <div className={'invisible h-6'} /> */}
                                                 </div>
+                                                {children}
                                                 {closeButton && (
                                                     <div className={`my-6 sm:flex items-center justify-end`}>
                                                         <ActionButton onClick={onDismissed} className={`min-w-full`}>
-                                                            <div>Close</div>
+                                                            <div>{i18n.t('strings:close')}</div>
                                                         </ActionButton>
                                                     </div>
                                                 )}

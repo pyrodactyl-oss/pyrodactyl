@@ -4,6 +4,8 @@ import { toast } from 'sonner';
 import ActionButton from '@/components/elements/ActionButton';
 import ContentBox from '@/components/elements/ContentBox';
 
+import i18n from '@/lib/i18n';
+
 import { ModCard } from './ModCard';
 import { ModrinthService, useGlobalStateContext } from './config';
 
@@ -69,9 +71,15 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
             }
             setHasMore(data.length >= 20);
         } catch (err) {
-            setError('Failed to load mods. Please try again later.');
+            setError(
+                i18n.t('server:modrinth.failed_load'),
+            );
             console.error('Mod fetch error:', err);
-            toast.error(err instanceof Error ? err.message : 'Failed to fetch mods');
+            toast.error(
+                err instanceof Error
+                    ? err.message
+                    : i18n.t('server:modrinth.failed_fetch'),
+            );
         } finally {
             setIsLoading(false);
         }
@@ -101,17 +109,20 @@ export const ModList = ({ showInstalled = false, showDependencies = false }: Mod
     return (
         <div className='space-y-6'>
             <div className='text-sm text-gray-400 px-2 py-1 bg-gray-800/50 rounded-lg inline-block'>
-                Showing {mods.length} {showInstalled ? 'plugins' : 'mods'}
+                {i18n.t('server:modrinth.showing_count', {
+                    count: mods.length,
+                    type: showInstalled ? i18n.t('server:modrinth.plugins') : i18n.t('server:modrinth.mods'),
+                })}
                 {searchQuery && (
                     <span className='text-gray-300'>
                         {' '}
-                        for &quot;<span className='text-blue-400'>{searchQuery}</span>&quot;
+                        {i18n.t('strings:for_query')}&nbsp;<span className='text-blue-400'>&quot;{searchQuery}&quot;</span>
                     </span>
                 )}
                 {/* TODO: Make this have a tooltip with selected Filters  */}
                 {/* TODO: Add a filter reset button */}
                 {(selectedLoaders.length > 0 || selectedVersions.length > 0) && (
-                    <span className='text-gray-300'>{' with filters'}</span>
+                    <span className='text-gray-300'>{i18n.t('server:modrinth.with_filters')}</span>
                 )}
             </div>
 
@@ -179,6 +190,6 @@ const ErrorDisplay = ({ message }: { message: string }) => (
 
 const EmptyState = () => (
     <ContentBox>
-        <div className='text-gray-400 p-4 text-center'>No mods found matching your criteria</div>
+        <div className='text-gray-400 p-4 text-center'>{i18n.t('server:modrinth.no_mods')}</div>
     </ContentBox>
 );

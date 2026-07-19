@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import React, { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
+import i18n from '@/lib/i18n';
+
 // ==================== TYPES ====================
 export type ModLoader = {
     id: string;
@@ -62,7 +64,7 @@ const fetchVersion = async () => {
         return response.data;
     } catch (error: any) {
         console.error('Error fetching app version:', error.response?.data || error.message);
-        toast.error('Failed to fetch app version. Using default.');
+        toast.error(i18n.t('server:modrinth.failed_fetch_version'));
         return { version: 'unknown' };
     }
 };
@@ -219,7 +221,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Loader fetch error:', error);
-            throw new EnhancedError('Failed to fetch loaders', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_loaders'), error);
         }
     },
 
@@ -241,7 +243,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Version fetch error:', error);
-            throw new EnhancedError('Failed to fetch game versions', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_versions'), error);
         }
     },
 
@@ -336,7 +338,7 @@ export const ModrinthService = {
                     config: error.config,
                 });
             }
-            throw new EnhancedError('Failed to search mods', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_search'), error);
         }
     },
 
@@ -360,7 +362,7 @@ export const ModrinthService = {
             };
         } catch (error) {
             console.error('Mod details error:', error);
-            throw new EnhancedError('Failed to get mod details', error);
+            throw new EnhancedError(i18n.t('strings:modrinth_failed_details'), error);
         }
     },
 };

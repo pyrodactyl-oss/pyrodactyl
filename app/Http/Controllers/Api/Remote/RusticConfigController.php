@@ -21,7 +21,7 @@ class RusticConfigController extends Controller
         $type = $request->query('type', 'local');
 
         if (!in_array($type, ['local', 's3'])) {
-            return response()->json(['error' => 'Invalid backup type'], 400);
+            return response()->json(['error' => trans('exceptions.elytra.invalid_backup_type')], 400);
         }
 
         $config = [
@@ -33,7 +33,7 @@ class RusticConfigController extends Controller
         if ($type === 's3') {
             $s3Credentials = $this->getS3Credentials($server);
             if (!$s3Credentials) {
-                return response()->json(['error' => 'S3 credentials not configured for this server'], 400);
+                return response()->json(['error' => trans('exceptions.elytra.s3_credentials_not_configured')], 400);
             }
             $config['s3_credentials'] = $s3Credentials;
         }
@@ -68,7 +68,7 @@ class RusticConfigController extends Controller
         $prefix = rtrim($s3Config['prefix'] ?? 'rustic-repos/', '/');
 
         if (empty($bucket)) {
-            throw new \InvalidArgumentException('S3 bucket not configured for rustic backups');
+            throw new \InvalidArgumentException(trans('exceptions.elytra.s3_bucket_not_configured'));
         }
 
         // Return the full S3 path for this server's repository

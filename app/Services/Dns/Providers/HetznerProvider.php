@@ -96,12 +96,12 @@ class HetznerProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if ($data['action']['error']) {
-                throw new \Exception('DNS provider rejected the record creation request.');
+                throw new \Exception(trans('exceptions.dns.record_creation_rejected'));
             }
 
             return $data['rrset']['id'] ?? '';
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordCreationFailed($domain, $name, 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordCreationFailed($domain, $name, trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -149,12 +149,12 @@ class HetznerProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if ($data['action']['error']) {
-                throw new \Exception('DNS provider rejected the record update request.');
+                throw new \Exception(trans('exceptions.dns.record_update_rejected'));
             }
 
             return $data['rrset']['id'] ?? '';
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordUpdateFailed($domain, [$recordId], 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordUpdateFailed($domain, [$recordId], trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -173,10 +173,10 @@ class HetznerProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if ($data['action']['error']) {
-                throw new \Exception('DNS provider rejected the record deletion request.');
+                throw new \Exception(trans('exceptions.dns.record_deletion_rejected'));
             }
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordDeletionFailed($domain, [$recordId], 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordDeletionFailed($domain, [$recordId], trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -194,12 +194,12 @@ class HetznerProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['rrset']) {
-                throw new \Exception("DNS record not found or inaccessible.");
+                throw new \Exception(trans('exceptions.dns.record_not_found'));
             }
 
             return $data['result'];
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('cloudflare', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('cloudflare', trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -236,7 +236,7 @@ class HetznerProvider implements DnsProviderInterface
                 $data = json_decode($response->getBody()->getContents(), true);
 
                 if (!isset($data['rrsets'])) {
-                    throw new \Exception('Failed to retrieve DNS records.');
+                    throw new \Exception(trans('exceptions.dns.failed_retrieve_records'));
                 }
 
                 $allRecords = array_merge($allRecords, $data['rrsets']);
@@ -248,7 +248,7 @@ class HetznerProvider implements DnsProviderInterface
 
             return $allRecords;
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('hetzner', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('hetzner', trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -261,7 +261,7 @@ class HetznerProvider implements DnsProviderInterface
             'api_token' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'Hetzner Cloud API Token with read/write permissions',
+                'description' => __('admin/general.dns_field_hetzner_api_token'),
                 'sensitive' => true,
             ],
         ];
@@ -300,12 +300,12 @@ class HetznerProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (empty($data['zones'])) {
-                throw new \Exception("Domain zone not found or inaccessible.");
+                throw new \Exception(trans('exceptions.dns.zone_not_found'));
             }
 
             return $data['zones'][0]['id'];
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('hetzner', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('hetzner', trans('exceptions.dns.service_unavailable'));
         }
     }
 }

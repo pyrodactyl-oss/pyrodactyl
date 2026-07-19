@@ -1,16 +1,17 @@
+{{-- Translated: server mounts (titles, breadcrumbs, table headers, status labels) --}}
 @extends('layouts.admin')
 
 @section('title')
-    Server — {{ $server->name }}: Mounts
+    {{ trans('admin/general.server_title_prefix') }} — {{ $server->name }}: {{ trans('admin/general.mounts') }}
 @endsection
 
 @section('content-header')
-    <h1>{{ $server->name }}<small>Manage server mounts.</small></h1>
+    <h1>{{ $server->name }}<small>{{ trans('admin/general.manage_server_mounts_desc') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li><a href="{{ route('admin.servers') }}">Servers</a></li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li><a href="{{ route('admin.servers') }}">{{ trans('strings.servers') }}</a></li>
         <li><a href="{{ route('admin.servers.view', $server->id) }}">{{ $server->name }}</a></li>
-        <li class="active">Mounts</li>
+        <li class="active">{{ trans('admin/general.mounts') }}</li>
     </ol>
 @endsection
 
@@ -21,17 +22,17 @@
         <div class="col-sm-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Available Mounts</h3>
+                    <h3 class="box-title">{{ trans('admin/general.available_mounts') }}</h3>
                 </div>
 
                 <div class="box-body table-responsible no-padding">
                     <table class="table table-hover">
                         <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Source</th>
-                            <th>Target</th>
-                            <th>Status</th>
+                            <th>{{ trans('strings.id') }}</th>
+                            <th>{{ trans('strings.name') }}</th>
+                            <th>{{ trans('admin/general.source') }}</th>
+                            <th>{{ trans('admin/general.target') }}</th>
+                            <th>{{ trans('strings.status') }}</th>
                             <th></th>
                         </tr>
 
@@ -44,7 +45,7 @@
 
                                 @if (! in_array($mount->id, $server->mounts->pluck('id')->toArray()))
                                     <td class="col-sm-2 middle">
-                                        <span class="label label-primary">Unmounted</span>
+                                        <span class="label label-primary">{{ trans('admin/general.unmounted') }}</span>
                                     </td>
 
                                     <td class="col-sm-1 middle">
@@ -56,7 +57,7 @@
                                     </td>
                                 @else
                                     <td class="col-sm-2 middle">
-                                        <span class="label label-success">Mounted</span>
+                                        <span class="label label-success">{{ trans('admin/general.mounted') }}</span>
                                     </td>
 
                                     <td class="col-sm-1 middle">

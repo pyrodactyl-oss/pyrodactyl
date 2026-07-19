@@ -3,18 +3,32 @@
 namespace Pterodactyl\Http\Controllers\Base;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Translation\Translator;
 use Illuminate\Contracts\Translation\Loader;
 use Pterodactyl\Http\Controllers\Controller;
+use Pterodactyl\Traits\Helpers\AvailableLanguages;
 use Pterodactyl\Http\Requests\Base\LocaleRequest;
 
 class LocaleController extends Controller
 {
+    use AvailableLanguages;
+
     protected Loader $loader;
 
     public function __construct(Translator $translator)
     {
         $this->loader = $translator->getLoader();
+    }
+
+    /**
+     * Returns the list of available languages.
+     */
+    public function languages(): JsonResponse
+    {
+        return new JsonResponse($this->getAvailableLanguages(true), 200, [
+            'Cache-Control' => 'public, max-age=3600',
+        ]);
     }
 
     /**
@@ -24,13 +38,16 @@ class LocaleController extends Controller
     {
         $locale = $request->input('locale');
         $namespace = $request->input('namespace');
-        $response[$locale][$namespace] = $this->i18n($this->loader->load($locale, $namespace));
+
+        try {
+            $response[$locale][$namespace] = $this->i18n($this->loader->load($locale, $namespace));
+        } catch (\Exception $e) {
+            Log::warning("Failed to load locale data for {$locale}/{$namespace}: {$e->getMessage()}");
+            $response[$locale][$namespace] = [];
+        }
 
         return new JsonResponse($response, 200, [
-            // Cache this in the browser for an hour, and allow the browser to use a stale
-            // cache for up to a day after it was created while it fetches an updated set
-            // of translation keys.
-            'Cache-Control' => 'public, max-age=3600, stale-while-revalidate=86400',
+            'Cache-Control' => 'public, max-age=60, must-revalidate',
             'ETag' => md5(json_encode($response, JSON_THROW_ON_ERROR)),
         ]);
     }
@@ -55,7 +72,7 @@ class LocaleController extends Controller
                 //
                 // Becomes:
                 // "Hello {{name}}, the {{notifications.0.title}} notification needs {{count}} actions {{foo.0.bar}}."
-                $data[$key] = preg_replace('/:([\w.-]+\w)([^\w:]?|$)/m', '{{$1}}$2', $value);
+                $data[$key] = preg_replace_callback('/:(\w[\w.-]*)/m', fn($m) => '{{' . $m[1] . '}}', $value);
             }
         }
 

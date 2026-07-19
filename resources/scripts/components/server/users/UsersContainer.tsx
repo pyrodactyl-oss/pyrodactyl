@@ -12,6 +12,8 @@ import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import UserRow from '@/components/server/users/UserRow';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import getServerSubusers from '@/api/server/users/getServerSubusers';
 
@@ -53,14 +55,16 @@ const UsersContainer = () => {
 
     if (!subusers.length && (loading || !Object.keys(permissions).length)) {
         return (
-            <ServerContentBlock title={'Users'}>
+            <ServerContentBlock title={i18n.t('server:users.title')}>
                 <FlashMessageRender byKey={'users'} />
                 <MainPageHeader
                     direction='column'
-                    title={'Users'}
+                    title={i18n.t('server:users.header')}
                     titleChildren={
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                            <p className='text-sm text-zinc-300 text-center sm:text-right'>0 users</p>
+                            <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                                {i18n.t('server:users.zero')}
+                            </p>
                             <Can action={'user.create'}>
                                 <ActionButton
                                     variant='primary'
@@ -68,16 +72,13 @@ const UsersContainer = () => {
                                     className='flex items-center gap-2'
                                 >
                                     <Plus width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                    New User
+                                    {i18n.t('server:users.new_button')}
                                 </ActionButton>
                             </Can>
                         </div>
                     }
                 >
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Manage user access to your server. Grant specific permissions to other users to help you manage
-                        and maintain your server.
-                    </p>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:users.description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -87,14 +88,16 @@ const UsersContainer = () => {
     }
 
     return (
-        <ServerContentBlock title={'Users'}>
+        <ServerContentBlock title={i18n.t('server:users.title')}>
             <FlashMessageRender byKey={'users'} />
             <MainPageHeader
                 direction='column'
-                title={'Users'}
+                title={i18n.t('server:users.header')}
                 titleChildren={
                     <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
-                        <p className='text-sm text-zinc-300 text-center sm:text-right'>{subusers.length} users</p>
+                        <p className='text-sm text-zinc-300 text-center sm:text-right'>
+                            {i18n.t('server:users.count', { count: subusers.length })}
+                        </p>
                         <Can action={'user.create'}>
                             <ActionButton
                                 variant='primary'
@@ -102,16 +105,13 @@ const UsersContainer = () => {
                                 className='flex items-center gap-2'
                             >
                                 <Plus width={22} height={22} className='w-4 h-4' fill='currentColor' />
-                                New User
+                                {i18n.t('server:users.new_button')}
                             </ActionButton>
                         </Can>
                     </div>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Manage user access to your server. Grant specific permissions to other users to help you manage and
-                    maintain your server.
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:users.description')}</p>
             </MainPageHeader>
             {!subusers.length ? (
                 <div className='flex flex-col items-center justify-center min-h-[60vh] py-12 px-4'>
@@ -119,10 +119,8 @@ const UsersContainer = () => {
                         <div className='w-16 h-16 mx-auto mb-4 rounded-full bg-[#ffffff11] flex items-center justify-center'>
                             <Person width={22} height={22} className='w-8 h-8 text-zinc-400' fill='currentColor' />
                         </div>
-                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>No users found</h3>
-                        <p className='text-sm text-zinc-400 max-w-sm'>
-                            Your server does not have any additional users. Add others to help you manage your server.
-                        </p>
+                        <h3 className='text-lg font-medium text-zinc-200 mb-2'>{i18n.t('server:users.empty')}</h3>
+                        <p className='text-sm text-zinc-400 max-w-sm'>{i18n.t('server:users.empty_description')}</p>
                     </div>
                 </div>
             ) : (

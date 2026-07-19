@@ -61,6 +61,7 @@ class SubuserCreationService
                     'name_first' => 'Server',
                     'name_last' => 'Subuser',
                     'root_admin' => false,
+                    'language' => config('app.locale', 'en'),
                 ]);
             }
 

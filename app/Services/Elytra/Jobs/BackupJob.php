@@ -69,13 +69,13 @@ class BackupJob implements Job
             'delete_all' => [
                 'operation' => 'required|string|in:delete_all',
             ],
-            default => throw new \Exception('Invalid or missing operation'),
+            default => throw new \Exception(trans('exceptions.elytra.invalid_operation')),
         };
 
         $validator = Validator::make($jobData, $rules);
 
         if ($validator->fails()) {
-            throw new \Exception('Invalid job data: ' . implode(', ', $validator->errors()->all()));
+            throw new \Exception(trans('exceptions.elytra.invalid_job_data') . implode(', ', $validator->errors()->all()));
         }
 
         return $validator->validated();
@@ -92,14 +92,14 @@ class BackupJob implements Job
             'restore' => $this->submitRestoreJob($server, $job, $elytraRepository),
             'download' => $this->submitDownloadJob($server, $job, $elytraRepository),
             'delete_all' => $this->submitDeleteAllJob($server, $job, $elytraRepository),
-            default => throw new \Exception("Unsupported backup operation: {$operation}"),
+            default => throw new \Exception(trans('exceptions.elytra.unsupported_backup_op')),
         };
     }
 
     public function cancelOnElytra(Server $server, ElytraJob $job, ElytraRepository $elytraRepository): void
     {
         if (!$job->elytra_job_id) {
-            throw new \Exception('No Elytra job ID to cancel');
+            throw new \Exception(trans('exceptions.elytra.no_elytra_job_id'));
         }
 
         $elytraRepository->setServer($server)->cancelJob($job->elytra_job_id);
@@ -119,7 +119,7 @@ class BackupJob implements Job
             'has_repository_size' => isset($statusData['repository_size']),
         ]);
 
-        $errorMessage = $successful ? null : ($statusData['error_message'] ?? 'Unknown error');
+        $errorMessage = $successful ? null : ($statusData['error_message'] ?? trans('exceptions.elytra.unknown_error'));
         if ($errorMessage) {
             $errorMessage = $this->sanitizeBackupError($errorMessage);
         }
@@ -127,7 +127,7 @@ class BackupJob implements Job
         $job->update([
             'status' => $successful ? ElytraJob::STATUS_COMPLETED : ElytraJob::STATUS_FAILED,
             'progress' => $successful ? 100 : $job->progress,
-            'status_message' => $statusData['message'] ?? ($successful ? 'Completed successfully' : 'Failed'),
+            'status_message' => $statusData['message'] ?? ($successful ? trans('exceptions.elytra.completed_successfully') : trans('exceptions.elytra.failed')),
             'error_message' => $errorMessage,
             'completed_at' => CarbonImmutable::now(),
         ]);
@@ -199,7 +199,7 @@ class BackupJob implements Job
 
         $response = $elytraRepository->setServer($server)->createJob('backup_create', $elytraJobData);
 
-        return $response['job_id'] ?? throw new \Exception('No job ID returned from Elytra');
+        return $response['job_id'] ?? throw new \Exception(trans('exceptions.elytra.no_job_id_returned'));
     }
 
     private function submitDeleteJob(Server $server, ElytraJob $job, ElytraRepository $elytraRepository): string
@@ -216,7 +216,7 @@ class BackupJob implements Job
 
         $response = $elytraRepository->setServer($server)->createJob('backup_delete', $elytraJobData);
 
-        return $response['job_id'] ?? throw new \Exception('No job ID returned from Elytra');
+        return $response['job_id'] ?? throw new \Exception(trans('exceptions.elytra.no_job_id_returned'));
     }
 
     private function submitRestoreJob(Server $server, ElytraJob $job, ElytraRepository $elytraRepository): string
@@ -234,7 +234,7 @@ class BackupJob implements Job
                     'backup_uuid' => $backup->uuid,
                     'error' => $e->getMessage(),
                 ]);
-                throw new \Exception('Failed to generate S3 download URL: ' . $e->getMessage());
+                throw new \Exception(trans('exceptions.elytra.failed_s3_url') . $e->getMessage());
             }
         }
 
@@ -249,12 +249,12 @@ class BackupJob implements Job
 
         $response = $elytraRepository->setServer($server)->createJob('backup_restore', $elytraJobData);
 
-        return $response['job_id'] ?? throw new \Exception('No job ID returned from Elytra');
+        return $response['job_id'] ?? throw new \Exception(trans('exceptions.elytra.no_job_id_returned'));
     }
 
     private function submitDownloadJob(Server $server, ElytraJob $job, ElytraRepository $elytraRepository): string
     {
-        throw new \Exception('Download jobs not yet implemented');
+        throw new \Exception(trans('exceptions.elytra.download_not_implemented'));
     }
 
     private function handleCreateCompletion(ElytraJob $job, array $statusData): void
@@ -395,7 +395,7 @@ class BackupJob implements Job
 
         $response = $elytraRepository->setServer($server)->createJob('backup_delete_all', $elytraJobData);
 
-        return $response['job_id'] ?? throw new \Exception('No job ID returned from Elytra');
+        return $response['job_id'] ?? throw new \Exception(trans('exceptions.elytra.no_job_id_returned'));
     }
 
     private function handleDeleteAllCompletion(ElytraJob $job, array $statusData): void
@@ -570,7 +570,7 @@ class BackupJob implements Job
      */
     private function sanitizeBackupError(string $errorMessage): string
     {
-        return 'Backup operation failed. Please contact an administrator for details.'; // todo: better sanitization - elllie
+        return trans('exceptions.backup.operation_failed');
     }
 }
 

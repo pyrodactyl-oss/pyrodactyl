@@ -72,7 +72,7 @@ class MountController extends Controller
         $model->saveOrFail();
         $mount = $model->fresh();
 
-        $this->alert->success('Mount was created successfully.')->flash();
+        $this->alert->success(trans('admin/general.mount_created'))->flash();
 
         return redirect()->route('admin.mounts.view', $mount->id);
     }
@@ -90,7 +90,7 @@ class MountController extends Controller
 
         $mount->forceFill($request->validated())->save();
 
-        $this->alert->success('Mount was updated successfully.')->flash();
+        $this->alert->success(trans('admin/general.mount_updated'))->flash();
 
         return redirect()->route('admin.mounts.view', $mount->id);
     }
@@ -121,7 +121,7 @@ class MountController extends Controller
             $mount->eggs()->attach($eggs);
         }
 
-        $this->alert->success('Mount was updated successfully.')->flash();
+        $this->alert->success(trans('admin/general.mount_updated'))->flash();
 
         return redirect()->route('admin.mounts.view', $mount->id);
     }
@@ -138,7 +138,7 @@ class MountController extends Controller
             $mount->nodes()->attach($nodes);
         }
 
-        $this->alert->success('Mount was updated successfully.')->flash();
+        $this->alert->success(trans('admin/general.mount_updated'))->flash();
 
         return redirect()->route('admin.mounts.view', $mount->id);
     }

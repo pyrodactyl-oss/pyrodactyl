@@ -15,6 +15,8 @@ import InputSpinner from '@/components/elements/InputSpinner';
 import { Switch } from '@/components/elements/SwitchV2';
 import { Input } from '@/components/elements/TextInput';
 
+import i18n from '@/lib/i18n';
+
 import { ServerEggVariable } from '@/api/server/types';
 import updateStartupVariable from '@/api/server/updateStartupVariable';
 import getServerStartup from '@/api/swr/getServerStartup';
@@ -98,11 +100,11 @@ const VariableBox = ({ variable }: Props) => {
                         <span className='text-sm font-medium text-neutral-300'>
                             {isStringSwitch
                                 ? variable.serverValue === 'true'
-                                    ? 'Enabled'
-                                    : 'Disabled'
+                                    ? i18n.t('server:startup.enabled')
+                                    : i18n.t('server:startup.disabled')
                                 : variable.serverValue === '1'
-                                  ? 'On'
-                                  : 'Off'}
+                                  ? i18n.t('server:startup.on')
+                                  : i18n.t('server:startup.off')}
                         </span>
                         <Switch
                             disabled={!canEdit || !variable.isEditable}
@@ -177,7 +179,7 @@ const VariableBox = ({ variable }: Props) => {
                                 readOnly={!canEdit || !variable.isEditable}
                                 name={variable.envVariable}
                                 defaultValue={variable.serverValue ?? ''}
-                                placeholder={variable.defaultValue || 'Enter value...'}
+                                placeholder={variable.defaultValue || i18n.t('server:startup.enter_value')}
                                 disabled={!canEdit || !variable.isEditable}
                             />
                         )}

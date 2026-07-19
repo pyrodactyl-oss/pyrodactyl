@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('title')
-    Application API
+    {{ trans('admin/general.application_api_title') }}
 @endsection
 
 @section('content-header')
-    <h1>Application API<small>Control access credentials for managing this Panel via the API.</small></h1>
+    <h1>{{ trans('admin/general.application_api_title') }}<small>{{ trans('admin/general.api_manage_desc') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li class="active">Application API</li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li class="active">{{ trans('admin/general.application_api_title') }}</li>
     </ol>
 @endsection
 
@@ -17,18 +17,18 @@
         <div class="col-xs-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Credentials List</h3>
+                    <h3 class="box-title">{{ trans('admin/general.credentials_list') }}</h3>
                     <div class="box-tools">
-                        <a href="{{ route('admin.api.new') }}" class="btn btn-sm btn-primary">Create New</a>
+                        <a href="{{ route('admin.api.new') }}" class="btn btn-sm btn-primary">{{ trans('admin/general.create_new') }}</a>
                     </div>
                 </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover">
                         <tr>
-                            <th>Key</th>
-                            <th>Memo</th>
-                            <th>Last Used</th>
-                            <th>Created</th>
+                            <th>{{ trans('admin/general.key') }}</th>
+                            <th>{{ trans('strings.memo') }}</th>
+                            <th>{{ trans('strings.last_used') }}</th>
+                            <th>{{ trans('strings.created') }}</th>
                             <th></th>
                         </tr>
                         @foreach($keys as $key)
@@ -37,12 +37,12 @@
                                 <td>{{ $key->memo }}</td>
                                 <td>
                                     @if(!is_null($key->last_used_at))
-                                        {{ $key->last_used_at->format('M j, Y g:i A') }}
+                                        {{ $key->last_used_at->locale(app()->getLocale())->isoFormat('LL') }}, {{ $key->last_used_at->locale(app()->getLocale())->isoFormat('LT') }}
                                     @else
                                         &mdash;
                                     @endif
                                 </td>
-                                    <td>{{ $key->created_at->format('M j, Y g:i A') }}</td>
+                                    <td>{{ $key->created_at->locale(app()->getLocale())->isoFormat('LL') }}, {{ $key->created_at->locale(app()->getLocale())->isoFormat('LT') }}</td>
                                 <td>
                                     <a href="#" data-action="revoke-key" data-attr="{{ $key->identifier }}">
                                         <i class="fa fa-trash-o text-danger"></i>
@@ -66,12 +66,12 @@
                 event.preventDefault();
                 swal({
                     type: 'error',
-                    title: 'Revoke API Key',
-                    text: 'Once this API key is revoked any applications currently using it will stop working.',
+                    title: '{{ trans('admin/general.revoke_api_key') }}',
+                    text: '{{ trans('admin/general.revoke_api_key_text') }}',
                     showCancelButton: true,
                     allowOutsideClick: true,
                     closeOnConfirm: false,
-                    confirmButtonText: 'Revoke',
+                    confirmButtonText: '{{ trans('admin/general.revoke') }}',
                     confirmButtonColor: '#d9534f',
                     showLoaderOnConfirm: true
                 }, function () {
@@ -85,15 +85,15 @@
                         swal({
                             type: 'success',
                             title: '',
-                            text: 'API Key has been revoked.'
+                            text: '{{ trans('admin/general.api_key_revoked') }}'
                         });
                         self.parent().parent().slideUp();
                     }).fail(function (jqXHR) {
                         console.error(jqXHR);
                         swal({
                             type: 'error',
-                            title: 'Whoops!',
-                            text: 'An error occurred while attempting to revoke this key.'
+                            title: '{{ trans('admin/general.whoops') }}',
+                            text: '{{ trans('admin/general.api_revoke_error') }}'
                         });
                     });
                 });

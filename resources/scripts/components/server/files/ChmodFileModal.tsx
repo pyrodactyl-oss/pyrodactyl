@@ -5,6 +5,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 
+import i18n from '@/lib/i18n';
+
 import chmodFiles from '@/api/server/files/chmodFiles';
 
 import { ServerContext } from '@/state/server';
@@ -59,7 +61,7 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
             {({ isSubmitting }) => (
                 <Modal
                     {...props}
-                    title='Configure permissions'
+                    title={i18n.t('server:files.configure_permissions')}
                     dismissable={!isSubmitting}
                     showSpinnerOverlay={isSubmitting}
                 >
@@ -70,16 +72,14 @@ const ChmodFileModal = ({ files, ...props }: OwnProps) => {
                                     type={'string'}
                                     id={'file_mode'}
                                     name={'mode'}
-                                    label={'File Mode'}
-                                    description={
-                                        'This is intended for advanced users. You may irreperably damage your server by changing file permissions.'
-                                    }
+                                    label={i18n.t('server:files.file_mode')}
+                                    description={i18n.t('server:files.file_mode_description')}
                                     autoFocus
                                 />
                             </div>
                             <div className={`flex justify-end w-full my-6`}>
                                 <ActionButton variant='primary' type='submit'>
-                                    Update
+                                    {i18n.t('server:files.update')}
                                 </ActionButton>
                             </div>
                         </div>

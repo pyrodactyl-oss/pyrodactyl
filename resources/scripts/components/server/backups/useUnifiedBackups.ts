@@ -1,5 +1,7 @@
 import { useCallback, useContext } from 'react';
 
+import i18n from '@/lib/i18n';
+
 import { getGlobalDaemonType } from '@/api/server/getServer';
 import getServerBackups from '@/api/swr/getServerBackups';
 
@@ -85,7 +87,11 @@ export const useUnifiedBackups = () => {
                 name: live?.backupName || backup.name,
                 status: live ? (live.status as any) : backup.isSuccessful ? 'completed' : 'failed',
                 progress: live ? live.progress : backup.isSuccessful ? 100 : 0,
-                message: live ? live.message : backup.isSuccessful ? 'Completed' : 'Failed',
+                message: live
+                    ? live.message
+                    : backup.isSuccessful
+                      ? i18n.t('server:backups.status_completed')
+                      : i18n.t('server:backups.status_failed'),
                 isSuccessful: backup.isSuccessful,
                 isLocked: backup.isLocked,
                 isAutomatic: backup.isAutomatic,
@@ -110,7 +116,7 @@ export const useUnifiedBackups = () => {
         if (!existsInSwr && !live.isDeletion) {
             unifiedBackups.push({
                 uuid: backupUuid,
-                name: live.backupName || live.message || 'Processing...',
+                name: live.backupName || live.message || i18n.t('server:backups.status_processing'),
                 status: live.status as any,
                 progress: live.progress,
                 message: live.message,

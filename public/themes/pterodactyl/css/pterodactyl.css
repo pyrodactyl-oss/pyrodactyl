@@ -474,13 +474,12 @@ label.control-label>span {
     color: #dd4b39;
 }
 
-label.control-label>span.field-required:before {
-    content: 'required';
+label.control-label>span.field-required {
     color: #dd4b39;
 }
 
-label.control-label>span.field-optional:before {
-    content: 'optional';
+label.control-label>span.field-optional {
+    color: #bbbbbb;
     color: #bbbbbb;
 }
 

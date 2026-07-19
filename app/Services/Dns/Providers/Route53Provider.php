@@ -120,7 +120,7 @@ class Route53Provider implements DnsProviderInterface
                 'domain' => $domain,
                 'name' => $name
             ]);
-            throw DnsProviderException::recordCreationFailed($domain, $name, 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordCreationFailed($domain, $name, trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -254,25 +254,25 @@ class Route53Provider implements DnsProviderInterface
             'access_key_id' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'AWS Access Key ID with Route53 permissions',
+                'description' => __('admin/general.dns_field_aws_access_key'),
                 'sensitive' => true,
             ],
             'secret_access_key' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'AWS Secret Access Key',
+                'description' => __('admin/general.dns_field_aws_secret_key'),
                 'sensitive' => true,
             ],
             'hosted_zone_id' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'Route53 Hosted Zone ID',
+                'description' => __('admin/general.dns_field_aws_zone_id'),
                 'sensitive' => false,
             ],
             'region' => [
                 'type' => 'string',
                 'required' => false,
-                'description' => 'AWS Region (default: us-east-1)',
+                'description' => __('admin/general.dns_field_aws_region'),
                 'default' => 'us-east-1',
                 'sensitive' => false,
             ],
@@ -318,7 +318,7 @@ class Route53Provider implements DnsProviderInterface
                 }
             }
 
-            throw new \Exception("Domain zone not found for: $domain");
+            throw new \Exception(trans('exceptions.dns.zone_not_found'));
         } catch (AwsException $e) {
             throw DnsProviderException::connectionFailed('route53', $e->getAwsErrorMessage());
         }

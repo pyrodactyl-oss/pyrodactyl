@@ -7,6 +7,8 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import ActionButton from '@/components/elements/ActionButton';
 import FormikFieldWrapper from '@/components/elements/FormikFieldWrapper';
 
+import i18n from '@/lib/i18n';
+
 import {
     SubdomainInfo,
     checkSubdomainAvailability,
@@ -58,14 +60,11 @@ CleanSelect.displayName = 'CleanSelect';
 const validationSchema = yup.object().shape({
     subdomain: yup
         .string()
-        .required('A subdomain name is required.')
-        .min(1, 'Subdomain must be at least 1 character.')
-        .max(63, 'Subdomain cannot exceed 63 characters.')
-        .matches(
-            /^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/i,
-            'Subdomain can only contain lowercase letters, numbers, and hyphens. It must start and end with a letter or number.',
-        ),
-    domain_id: yup.string().required('A domain must be selected.'),
+        .required(i18n.t('server:network.subdomain_required'))
+        .min(1, i18n.t('server:network.subdomain_min_length'))
+        .max(63, i18n.t('server:network.subdomain_max_length'))
+        .matches(/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/i, i18n.t('server:network.subdomain_invalid_format')),
+    domain_id: yup.string().required(i18n.t('server:network.domain_required')),
 });
 
 const SubdomainManagement = () => {
@@ -127,7 +126,7 @@ const SubdomainManagement = () => {
                 setAvailabilityStatus({
                     checked: true,
                     available: false,
-                    message: 'Failed to check availability. Please try again.',
+                    message: i18n.t('server:network.availability_check_failed'),
                 });
             } finally {
                 setCheckingAvailability(false);
@@ -181,11 +180,7 @@ const SubdomainManagement = () => {
     };
 
     const handleDeleteSubdomain = async () => {
-        if (
-            !confirm(
-                'Are you sure you want to delete this subdomain? This will remove all associated DNS records and cannot be undone.',
-            )
-        ) {
+        if (!confirm(i18n.t('server:network.delete_subdomain_message'))) {
             return;
         }
 
@@ -208,7 +203,7 @@ const SubdomainManagement = () => {
                 <div className='flex items-center justify-center py-12'>
                     <div className='flex flex-col items-center gap-3'>
                         <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-brand'></div>
-                        <p className='text-sm text-neutral-400'>Loading subdomain configuration...</p>
+                        <p className='text-sm text-neutral-400'>{i18n.t('strings:loading_subdomain_config')}</p>
                     </div>
                 </div>
             </div>
@@ -223,7 +218,9 @@ const SubdomainManagement = () => {
         return (
             <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
                 <div className='flex items-center justify-between mb-6'>
-                    <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
+                    <h3 className='text-xl font-extrabold tracking-tight'>
+                        {i18n.t('server:network.subdomain_management')}
+                    </h3>
                 </div>
                 <div className='flex flex-col items-center justify-center py-12'>
                     <div className='text-center'>
@@ -236,9 +233,11 @@ const SubdomainManagement = () => {
                                 />
                             </svg>
                         </div>
-                        <h4 className='text-md font-medium text-zinc-200 mb-1'>No domains configured</h4>
+                        <h4 className='text-md font-medium text-zinc-200 mb-1'>
+                            {i18n.t('server:network.no_domains')}
+                        </h4>
                         <p className='text-sm text-zinc-400 max-w-sm'>
-                            Contact your administrator to configure subdomain support for this server.
+                            {i18n.t('server:network.contact_admin_subdomain')}
                         </p>
                     </div>
                 </div>
@@ -250,7 +249,9 @@ const SubdomainManagement = () => {
         <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm'>
             <div className='flex items-center gap-3 mb-6'>
                 <Link className='w-6 h-6 text-zinc-400' fill='currentColor' />
-                <h3 className='text-xl font-extrabold tracking-tight'>Subdomain Management</h3>
+                <h3 className='text-xl font-extrabold tracking-tight'>
+                    {i18n.t('server:network.subdomain_management')}
+                </h3>
                 {subdomainInfo?.current_subdomain && (
                     <div className='flex items-center gap-2 text-sm ml-auto'>
                         <div
@@ -261,7 +262,9 @@ const SubdomainManagement = () => {
                                 subdomainInfo.current_subdomain.attributes.is_active ? 'text-green-400' : 'text-red-400'
                             }
                         >
-                            {subdomainInfo.current_subdomain.attributes.is_active ? 'Active' : 'Inactive'}
+                            {subdomainInfo.current_subdomain.attributes.is_active
+                                ? i18n.t('strings:active')
+                                : i18n.t('strings:inactive')}
                         </span>
                     </div>
                 )}
@@ -275,7 +278,9 @@ const SubdomainManagement = () => {
                     <div className='bg-[#ffffff08] border border-[#ffffff15] rounded-lg p-4'>
                         <div className='flex items-center justify-between'>
                             <div>
-                                <p className='text-sm text-zinc-400 mb-2'>Current Subdomain</p>
+                                <p className='text-sm text-zinc-400 mb-2'>
+                                    {i18n.t('server:network.current_subdomain')}
+                                </p>
                                 <p className='text-lg font-medium text-white font-mono'>
                                     {subdomainInfo?.current_subdomain?.attributes?.full_domain}
                                 </p>
@@ -290,7 +295,7 @@ const SubdomainManagement = () => {
                             disabled={loading}
                             size='sm'
                         >
-                            {loading ? 'Deleting...' : 'Delete Subdomain'}
+                            {loading ? i18n.t('strings:deleting') : i18n.t('server:network.delete_subdomain')}
                         </ActionButton>
                         <ActionButton
                             type='button'
@@ -299,7 +304,7 @@ const SubdomainManagement = () => {
                             disabled={loading}
                             size='sm'
                         >
-                            Edit Subdomain
+                            {i18n.t('server:network.edit_subdomain')}
                         </ActionButton>
                     </div>
                 </div>
@@ -325,14 +330,14 @@ const SubdomainManagement = () => {
                             <div className='space-y-4'>
                                 <FormikFieldWrapper
                                     name='subdomain'
-                                    label='Subdomain'
-                                    description='Choose a unique name for your subdomain. Only lowercase letters, numbers, and hyphens are allowed.'
+                                    label={i18n.t('server:network.subdomain_label')}
+                                    description={i18n.t('server:network.subdomain_description')}
                                 >
                                     <div className='flex items-center border border-[#ffffff15] overflow-hidden hover:border-[#ffffff25] transition-colors'>
                                         <Field
                                             as={CleanInput}
                                             name='subdomain'
-                                            placeholder='myserver'
+                                            placeholder={i18n.t('server:network.subdomain_placeholder')}
                                             className='flex-1 px-4 py-3'
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                                 const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -380,7 +385,7 @@ const SubdomainManagement = () => {
                                         {checkingAvailability ? (
                                             <div className='flex items-center text-sm text-blue-300'>
                                                 <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-blue-400 mr-3'></div>
-                                                Checking availability...
+                                                {i18n.t('strings:checking_availability')}
                                             </div>
                                         ) : (
                                             availabilityStatus && (
@@ -413,7 +418,7 @@ const SubdomainManagement = () => {
                                             }}
                                             disabled={isSubmitting || loading}
                                         >
-                                            Cancel
+                                            {i18n.t('strings:cancel')}
                                         </ActionButton>
                                         <ActionButton
                                             type='submit'
@@ -428,7 +433,7 @@ const SubdomainManagement = () => {
                                                 (availabilityStatus?.checked && !availabilityStatus?.available)
                                             }
                                         >
-                                            {isSubmitting ? 'Saving...' : 'Save Changes'}
+                                            {isSubmitting ? i18n.t('strings:saving') : i18n.t('strings:save_changes')}
                                         </ActionButton>
                                     </>
                                 ) : (
@@ -445,7 +450,9 @@ const SubdomainManagement = () => {
                                             (availabilityStatus?.checked && !availabilityStatus?.available)
                                         }
                                     >
-                                        {isSubmitting ? 'Creating...' : 'Create Subdomain'}
+                                        {isSubmitting
+                                            ? i18n.t('strings:creating')
+                                            : i18n.t('server:network.create_subdomain')}
                                     </ActionButton>
                                 )}
                             </div>

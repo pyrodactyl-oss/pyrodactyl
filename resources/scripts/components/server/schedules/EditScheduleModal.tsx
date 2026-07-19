@@ -1,7 +1,8 @@
 import ModalContext from '@/context/ModalContext';
 import { TZDate } from '@date-fns/tz';
 import { Link, TriangleExclamation } from '@gravity-ui/icons';
-import { toString } from 'cronstrue';
+import ExpressionDescriptor, { toString } from 'cronstrue';
+import { es } from 'cronstrue/locales/es';
 import { format } from 'date-fns';
 import { useStoreState } from 'easy-peasy';
 import { Form, Formik, FormikHelpers } from 'formik';
@@ -15,6 +16,8 @@ import ItemContainer from '@/components/elements/ItemContainer';
 
 import asModal from '@/hoc/asModal';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import createOrUpdateSchedule from '@/api/server/schedules/createOrUpdateSchedule';
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
@@ -22,6 +25,10 @@ import { Schedule } from '@/api/server/schedules/getServerSchedules';
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
+
+if (es) {
+    ExpressionDescriptor.locales.es = new es();
+}
 
 interface Props {
     schedule?: Schedule;
@@ -60,15 +67,15 @@ const getTimezoneInfo = (serverTimezone: string) => {
         // - values mean ahead of UTC
         offsetDifferenceMinutes = userOffsetValue - serverOffsetValue;
     } catch {
-        serverOffsetString = 'Unknown';
+        serverOffsetString = i18n.t('server:schedules.unknown');
         isServerTimezoneValid = false;
     }
 
     let differenceDescription = '';
     if (!isServerTimezoneValid) {
-        differenceDescription = 'at an unknown difference to';
+        differenceDescription = i18n.t('server:schedules.unknown_difference');
     } else if (offsetDifferenceMinutes === 0) {
-        differenceDescription = 'same time';
+        differenceDescription = i18n.t('server:schedules.same_time');
     } else {
         const offsetDifferenceHours = offsetDifferenceMinutes / 60;
         const absDifferenceHours = Math.abs(offsetDifferenceHours);
@@ -76,16 +83,24 @@ const getTimezoneInfo = (serverTimezone: string) => {
 
         if (absDifferenceHours === Math.floor(absDifferenceHours)) {
             // whole hours
-            differenceDescription = `${absDifferenceHours} hour${absDifferenceHours !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+            const unit =
+                absDifferenceHours === 1
+                    ? i18n.t('server:schedules.timezone_hour')
+                    : i18n.t('server:schedules.timezone_hours');
+            differenceDescription = `${absDifferenceHours} ${unit} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
         } else {
             // hours & minutes
             const hours = Math.floor(absDifferenceHours);
             const minutes = Math.abs(offsetDifferenceMinutes % 60);
 
             if (hours > 0) {
-                differenceDescription = `${hours}h ${minutes}m ${isAhead ? 'ahead of' : 'behind'}`;
+                differenceDescription = `${hours}${i18n.t('server:console.hours_short')} ${minutes}${i18n.t('server:console.minutes_short')} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
             } else {
-                differenceDescription = `${minutes} minute${minutes !== 1 ? 's' : ''} ${isAhead ? 'ahead of' : 'behind'}`;
+                const unit =
+                    minutes === 1
+                        ? i18n.t('server:schedules.timezone_minute')
+                        : i18n.t('server:schedules.timezone_minutes');
+                differenceDescription = `${minutes} ${unit} ${isAhead ? i18n.t('server:schedules.ahead_of') : i18n.t('server:schedules.behind')}`;
             }
         }
     }
@@ -95,6 +110,7 @@ const getTimezoneInfo = (serverTimezone: string) => {
         server: { timezone: serverTimezone, offset: serverOffsetString },
         difference: differenceDescription,
         isDifferent: userTimezone !== serverTimezone,
+        hasOffsetDifference: !isServerTimezoneValid || offsetDifferenceMinutes !== 0,
     };
 };
 
@@ -115,6 +131,7 @@ const getCronDescription = (
         const description = toString(cronExpression, {
             throwExceptionOnParseError: false,
             verbose: true,
+            locale: getCronstrueLocale(),
         });
 
         // Check if cronstrue returned an error message
@@ -122,12 +139,12 @@ const getCronDescription = (
             description ===
             'An error occurred when generating the expression description. Check the cron expression syntax.'
         ) {
-            return 'Invalid cron expression';
+            return i18n.t('server:schedules.invalid_cron');
         }
 
         return description;
     } catch {
-        return 'Invalid cron expression.';
+        return i18n.t('server:schedules.invalid_cron');
     }
 };
 
@@ -137,14 +154,18 @@ const EditScheduleModal = ({ schedule }: Props) => {
 
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSchedule = ServerContext.useStoreActions((actions) => actions.schedules.appendSchedule);
-    const serverTimezone = useStoreState((state) => state.settings.data?.timezone || 'Unknown');
+    const serverTimezone = useStoreState(
+        (state) => state.settings.data?.timezone || i18n.t('server:schedules.unknown'),
+    );
 
     const timezoneInfo = useMemo(() => {
         return getTimezoneInfo(serverTimezone);
     }, [serverTimezone]);
 
     useEffect(() => {
-        setPropOverrides({ title: schedule ? 'Edit schedule' : 'Create new schedule' });
+        setPropOverrides({
+            title: schedule ? i18n.t('server:schedules.edit_schedule') : i18n.t('server:schedules.create_new_schedule'),
+        });
     }, []);
 
     useEffect(() => {
@@ -211,25 +232,22 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         <FlashMessageRender byKey={'schedule:edit'} />
                         <Field
                             name={'name'}
-                            label={'Schedule name'}
-                            description={'A human readable identifier for this schedule.'}
+                            label={i18n.t('server:schedules.schedule_name')}
+                            description={i18n.t('server:schedules.schedule_name_desc')}
                         />
                         <div className={`grid grid-cols-2 sm:grid-cols-5 gap-4 mt-6`}>
-                            <Field name={'minute'} label={'Minute'} />
-                            <Field name={'hour'} label={'Hour'} />
-                            <Field name={'dayOfWeek'} label={'Day of week'} />
-                            <Field name={'dayOfMonth'} label={'Day of month'} />
-                            <Field name={'month'} label={'Month'} />
+                            <Field name={'minute'} label={i18n.t('server:schedules.minute')} />
+                            <Field name={'hour'} label={i18n.t('server:schedules.hour')} />
+                            <Field name={'dayOfWeek'} label={i18n.t('server:schedules.day_of_week')} />
+                            <Field name={'dayOfMonth'} label={i18n.t('server:schedules.day_of_month')} />
+                            <Field name={'month'} label={i18n.t('server:schedules.month')} />
                         </div>
 
                         <div className={`mt-3 p-3 rounded-lg bg-zinc-800/50 border border-zinc-700/50`}>
                             <p className={`text-sm text-zinc-200 font-medium`}>{cronDescription}</p>
                         </div>
 
-                        <p className={`text-zinc-400 text-xs mt-2`}>
-                            The schedule system uses Cronjob syntax when defining when tasks should begin running. Use
-                            the fields above to specify when these tasks should begin running.
-                        </p>
+                        <p className={`text-zinc-400 text-xs mt-2`}>{i18n.t('server:schedules.cron_description')}</p>
 
                         {timezoneInfo.isDifferent && (
                             <div className={'bg-blue-900/20 border border-blue-400/30 rounded-lg p-4 my-2'}>
@@ -241,19 +259,22 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                         className={'text-blue-400 mt-0.5 flex-shrink-0 h-5 w-5'}
                                     />
                                     <div className={'text-sm'}>
-                                        <p className={'text-blue-100 font-medium mb-1'}>Timezone Information</p>
+                                        <p className={'text-blue-100 font-medium mb-1'}>
+                                            {i18n.t('server:schedules.timezone_info')}
+                                        </p>
                                         <p className={'text-blue-200/80 text-xs mb-2'}>
-                                            Times shown here are configured for the server timezone.
-                                            {timezoneInfo.difference !== 'same time' && (
+                                            {i18n.t('server:schedules.timezone_note')}
+                                            {timezoneInfo.hasOffsetDifference && (
                                                 <span className={'text-blue-100 font-medium'}>
                                                     {' '}
-                                                    The server is {timezoneInfo.difference} your timezone.
+                                                    {i18n.t('server:schedules.server_is')} {timezoneInfo.difference}{' '}
+                                                    {i18n.t('server:schedules.your_timezone')}
                                                 </span>
                                             )}
                                         </p>
                                         <div className={'mt-2 text-xs space-y-1'}>
                                             <div className={'text-blue-200/60'}>
-                                                Your timezone:
+                                                {i18n.t('server:schedules.your_timezone')}
                                                 <span className={'font-mono'}>
                                                     {' '}
                                                     {formatTimezoneDisplay(
@@ -263,7 +284,7 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                                 </span>
                                             </div>
                                             <div className={'text-blue-200/60'}>
-                                                Server timezone:
+                                                {i18n.t('server:schedules.server_timezone')}
                                                 <span className={'font-mono'}>
                                                     {' '}
                                                     {formatTimezoneDisplay(
@@ -281,8 +302,8 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         <div className='gap-3 my-6 flex flex-col'>
                             <a href='https://crontab.guru/' target='_blank' rel='noreferrer'>
                                 <ItemContainer
-                                    description={'Online editor for cron schedule experessions.'}
-                                    title={'Crontab Guru'}
+                                    description={i18n.t('server:schedules.crontab_guru_desc')}
+                                    title={i18n.t('server:schedules.crontab_guru')}
                                     // defaultChecked={showCheatsheet}
                                     // onChange={() => setShowCheetsheet((s) => !s)}
                                     labelClasses='cursor-pointer'
@@ -299,13 +320,13 @@ const EditScheduleModal = ({ schedule }: Props) => {
                         )} */}
                             <FormikSwitchV2
                                 name={'onlyWhenOnline'}
-                                description={'Only execute this schedule when the server is running.'}
-                                label={'Only When Server Is Online'}
+                                description={i18n.t('server:schedules.only_when_online_desc')}
+                                label={i18n.t('server:schedules.only_when_online')}
                             />
                             <FormikSwitchV2
                                 name={'enabled'}
-                                description={'This schedule will be executed automatically if enabled.'}
-                                label={'Schedule Enabled'}
+                                description={i18n.t('server:schedules.auto_execute_desc')}
+                                label={i18n.t('server:schedules.schedule_enabled')}
                             />
                         </div>
                         <div className={`mb-6 text-right`}>
@@ -315,7 +336,9 @@ const EditScheduleModal = ({ schedule }: Props) => {
                                 type={'submit'}
                                 disabled={isSubmitting}
                             >
-                                {schedule ? 'Save changes' : 'Create schedule'}
+                                {schedule
+                                    ? i18n.t('server:schedules.save_changes')
+                                    : i18n.t('server:schedules.create_schedule')}
                             </ActionButton>
                         </div>
                     </Form>

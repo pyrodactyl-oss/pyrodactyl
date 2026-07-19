@@ -7,6 +7,8 @@ import Can from '@/components/elements/Can';
 import { PageListItem } from '@/components/elements/pages/PageList';
 import RemoveSubuserButton from '@/components/server/users/RemoveSubuserButton';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
@@ -31,7 +33,9 @@ const UserRow = ({ subuser }: Props) => {
             <div className={`sm:ml-4 flex-1 overflow-hidden flex flex-col`}>
                 <p className={`truncate text-lg`}>{subuser.email}</p>
                 <p className={`mt-1 md:mt-0 text-xs text-zinc-400 truncate sm:text-left text-center`}>
-                    {subuser.twoFactorEnabled ? 'MFA Enabled' : 'MFA Disabled'}
+                    {subuser.twoFactorEnabled
+                        ? i18n.t('server:users.mfa_enabled')
+                        : i18n.t('server:users.mfa_disabled')}
                 </p>
             </div>
 
@@ -40,7 +44,7 @@ const UserRow = ({ subuser }: Props) => {
                     <p className={`font-medium text-center`}>
                         {subuser.permissions.filter((permission) => permission !== 'websocket.connect').length}
                     </p>
-                    <p className={`text-xs text-zinc-500 uppercase`}>Permissions</p>
+                    <p className={`text-xs text-zinc-500 uppercase`}>{i18n.t('server:users.permissions')}</p>
                 </div>
                 {subuser.uuid !== uuid && (
                     <>
@@ -51,10 +55,10 @@ const UserRow = ({ subuser }: Props) => {
                                     size='sm'
                                     className='flex items-center gap-2'
                                     onClick={handleEditClick}
-                                    aria-label='Edit subuser'
+                                    aria-label={i18n.t('server:users.edit_subuser')}
                                 >
                                     <Pencil width={22} height={22} fill='currentColor' />
-                                    Edit
+                                    {i18n.t('strings:edit')}
                                 </ActionButton>
                             </Can>
                             <Can action={'user.delete'}>

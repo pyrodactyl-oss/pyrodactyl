@@ -50,6 +50,8 @@ public function index(Request $request): View
             'users.id',
             'users.username',
             'users.email',
+            'users.language',
+            'users.root_admin',
             'users.use_totp',
             'users.created_at',
             'users.updated_at',
@@ -62,6 +64,8 @@ public function index(Request $request): View
                 'users.id',
                 'users.username',
                 'users.email',
+                'users.language',
+                'users.root_admin',
                 'users.created_at',
                 'users.updated_at',
             ])
@@ -70,7 +74,10 @@ public function index(Request $request): View
         ->allowedSorts(['id', 'uuid'])
         ->paginate(50);
 
-    return $this->view->make('admin.users.index', ['users' => $users]);
+        return $this->view->make('admin.users.index', [
+            'users' => $users,
+            'languages' => $this->getAvailableLanguages(true),
+        ]);
 }
 
     /**

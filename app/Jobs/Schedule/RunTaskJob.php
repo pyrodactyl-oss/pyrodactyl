@@ -79,7 +79,7 @@ class RunTaskJob extends Job implements ShouldQueue
                         // TooManyBackupsException is currently scoped to daemon-level backup services,
                         // therefore BackupFailedException is used here to properly fail the scheduled task.
                         throw new BackupFailedException(
-                            'The permitted backup limit has been exceeded.'
+                            trans('exceptions.schedules.backup_limit_exceeded')
                         );
                     }
 

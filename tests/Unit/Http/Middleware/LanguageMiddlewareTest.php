@@ -27,6 +27,7 @@ class LanguageMiddlewareTest extends MiddlewareTestCase
      */
     public function testLanguageIsSetForGuest()
     {
+        $this->request->shouldReceive('is')->with('admin', 'admin/*')->andReturn(false);
         $this->request->shouldReceive('user')->withNoArgs()->andReturnNull();
         $this->appMock->shouldReceive('setLocale')->with('en')->once()->andReturnNull();
 
@@ -40,8 +41,22 @@ class LanguageMiddlewareTest extends MiddlewareTestCase
     {
         $user = User::factory()->make(['language' => 'de']);
 
+        $this->request->shouldReceive('is')->with('admin', 'admin/*')->andReturn(false);
         $this->request->shouldReceive('user')->withNoArgs()->andReturn($user);
         $this->appMock->shouldReceive('setLocale')->with('de')->once()->andReturnNull();
+
+        $this->getMiddleware()->handle($this->request, $this->getClosureAssertions());
+    }
+
+    /**
+     * Test that admin routes use the system default locale, not the user's language.
+     */
+    public function testLanguageIsSetFromConfigForAdminRoutes()
+    {
+        $user = User::factory()->make(['language' => 'de']);
+
+        $this->request->shouldReceive('is')->with('admin', 'admin/*')->andReturn(true);
+        $this->appMock->shouldReceive('setLocale')->with('en')->once()->andReturnNull();
 
         $this->getMiddleware()->handle($this->request, $this->getClosureAssertions());
     }

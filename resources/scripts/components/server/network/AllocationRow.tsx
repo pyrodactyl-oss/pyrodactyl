@@ -14,6 +14,7 @@ import { Dialog } from '@/components/elements/dialog';
 import { PageListItem } from '@/components/elements/pages/PageList';
 
 import { ip } from '@/lib/formatters';
+import i18n from '@/lib/i18n';
 
 import { Allocation } from '@/api/server/getServer';
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
@@ -128,7 +129,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                 {allocation.isDefault && (
                                     <span className='flex items-center gap-1 text-xs text-brand font-medium bg-brand/10 px-2 py-1 rounded'>
                                         <CrownDiamond width={22} height={22} fill='currentColor' className='' />
-                                        Primary
+                                        {i18n.t('strings:primary')}
                                     </span>
                                 )}
                             </div>
@@ -137,7 +138,9 @@ const AllocationRow = ({ allocation }: Props) => {
 
                     {/* Notes Section - Inline Editable */}
                     <div className='mt-3'>
-                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>Notes</p>
+                        <p className='text-xs text-zinc-500 uppercase tracking-wide mb-2'>
+                            {i18n.t('server:network.notes')}
+                        </p>
 
                         {isEditingNotes ? (
                             <div className='space-y-2'>
@@ -145,7 +148,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     <Textarea
                                         ref={textareaRef}
                                         className='w-full bg-[#ffffff06] border border-[#ffffff08] rounded-lg p-3 text-sm text-zinc-300 placeholder-zinc-500 resize-none focus:ring-1 focus:ring-[#ffffff20] focus:border-[#ffffff20] transition-all'
-                                        placeholder='Add notes for this allocation...'
+                                        placeholder={i18n.t('server:network.add_notes_placeholder')}
                                         value={notesValue}
                                         onChange={(e) => setNotesValue(e.currentTarget.value)}
                                         rows={3}
@@ -158,11 +161,11 @@ const AllocationRow = ({ allocation }: Props) => {
                                         ) : (
                                             <Check fill='currentColor' className='w-3 h-3 mr-1' />
                                         )}
-                                        Save
+                                        {i18n.t('strings:save')}
                                     </ActionButton>
                                     <ActionButton variant='secondary' size='sm' onClick={cancelEdit} disabled={loading}>
                                         <Xmark width={22} height={22} fill='currentColor' className='mr-1' />
-                                        Cancel
+                                        {i18n.t('strings:cancel')}
                                     </ActionButton>
                                 </div>
                             </div>
@@ -172,7 +175,7 @@ const AllocationRow = ({ allocation }: Props) => {
                                     className={`min-h-[2.5rem] p-3 rounded-lg border border-[#ffffff08] bg-[#ffffff03] cursor-pointer hover:border-[#ffffff15] transition-colors ${allocation.notes ? 'text-sm text-zinc-300' : 'text-sm text-zinc-500 italic'}`}
                                     onClick={startEdit}
                                 >
-                                    {allocation.notes || 'Click to add notes...'}
+                                    {allocation.notes || i18n.t('server:network.click_to_add_notes')}
                                 </div>
                             </Can>
                         )}
@@ -188,13 +191,13 @@ const AllocationRow = ({ allocation }: Props) => {
                             disabled={allocation.isDefault}
                             title={
                                 allocation.isDefault
-                                    ? 'This is already the primary allocation'
-                                    : 'Make this the primary allocation'
+                                    ? i18n.t('server:network.already_primary')
+                                    : i18n.t('server:network.make_primary')
                             }
                         >
                             <CrownDiamond width={22} height={22} fill='currentColor' className='mr-1' />
-                            <span className='hidden sm:inline'>Make Primary</span>
-                            <span className='sm:hidden'>Primary</span>
+                            <span className='hidden sm:inline'>{i18n.t('server:network.make_primary')}</span>
+                            <span className='sm:hidden'>{i18n.t('server:network.make_primary')}</span>
                         </ActionButton>
                     </Can>
                     <Can action={'allocation.delete'}>
@@ -204,7 +207,9 @@ const AllocationRow = ({ allocation }: Props) => {
                             onClick={() => setShowDeleteDialog(true)}
                             disabled={allocation.isDefault || deleteLoading}
                             title={
-                                allocation.isDefault ? 'Cannot delete the primary allocation' : 'Delete this allocation'
+                                allocation.isDefault
+                                    ? i18n.t('server:network.cannot_delete_primary')
+                                    : i18n.t('server:network.delete_allocation_title')
                             }
                         >
                             {deleteLoading ? (
@@ -212,7 +217,7 @@ const AllocationRow = ({ allocation }: Props) => {
                             ) : (
                                 <TrashBin width={22} height={22} fill='currentColor' className='mr-1' />
                             )}
-                            <span className='hidden sm:inline'>Delete</span>
+                            <span className='hidden sm:inline'>{i18n.t('strings:delete')}</span>
                         </ActionButton>
                     </Can>
                 </div>
@@ -220,11 +225,11 @@ const AllocationRow = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={showDeleteDialog}
                 onClose={() => setShowDeleteDialog(false)}
-                title={'Delete Allocation'}
-                confirm={'Delete'}
+                title={i18n.t('server:network.delete_allocation_title')}
+                confirm={i18n.t('strings:delete')}
                 onConfirmed={deleteAllocation}
             >
-                Are you sure you want to delete this allocation? This action cannot be undone.
+                {i18n.t('server:network.delete_allocation_message')}
             </Dialog.Confirm>
         </PageListItem>
     );

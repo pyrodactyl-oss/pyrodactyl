@@ -1,6 +1,6 @@
-import { Bars, ChevronDown, House, LayoutCellsLarge, SlidersVertical } from '@gravity-ui/icons';
-import { useStoreState } from 'easy-peasy';
+import { Bars, ChevronDown, Ghost, House, LayoutCellsLarge, SlidersVertical } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import useSWR from 'swr';
 
@@ -16,9 +16,14 @@ import Pagination from '@/components/elements/Pagination';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/elements/Tabs';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 
+import i18n from '@/lib/i18n';
+
+import { toggleGhostMode } from '@/api/account/ghostMode';
 import getServers from '@/api/getServers';
 import { PaginatedResult } from '@/api/http';
 import { Server } from '@/api/server/getServer';
+
+import { useStoreActions, useStoreState } from '@/state/hooks';
 
 import useFlash from '@/plugins/useFlash';
 import { usePersistedState } from '@/plugins/usePersistedState';
@@ -26,10 +31,12 @@ import { usePersistedState } from '@/plugins/usePersistedState';
 import { MainPageHeader } from '../elements/MainPageHeader';
 
 const DashboardContainer = () => {
+    const { t } = useTranslation('dashboard');
+
     const getTitle = () => {
-        if (serverViewMode === 'admin-all') return 'All Servers (Admin)';
-        if (serverViewMode === 'all') return 'All Accessible Servers';
-        return 'Your Servers';
+        if (serverViewMode === 'admin-all') return t('dashboard.all_servers_admin');
+        if (serverViewMode === 'all') return t('dashboard.all_servers');
+        return t('dashboard.your_servers');
     };
 
     const { search } = useLocation();
@@ -39,6 +46,9 @@ const DashboardContainer = () => {
     const { clearFlashes, clearAndAddHttpError } = useFlash();
     const uuid = useStoreState((state) => state.user.data!.uuid);
     const rootAdmin = useStoreState((state) => state.user.data!.rootAdmin);
+    const ghostMode = useStoreState((state) => state.user.data!.ghostMode);
+    const sizeDisplay = useStoreState((state) => state.user.data!.sizeDisplay);
+    const updateUserData = useStoreActions((actions) => actions.user.updateUserData);
     // const showOnlyAdmin = usePersistedState(`${uuid}:show_all_servers`, false);
 
     const [serverViewMode, setServerViewMode] = usePersistedState<'owner' | 'admin-all' | 'all'>(
@@ -83,7 +93,7 @@ const DashboardContainer = () => {
     }, [error]);
 
     return (
-        <PageContentBlock title={'Dashboard'} showFlashKey={'dashboard'}>
+        <PageContentBlock title={i18n.t('strings:dashboard')} showFlashKey={'dashboard'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 <Tabs
                     defaultValue={dashboardDisplayOption}
@@ -117,7 +127,7 @@ const DashboardContainer = () => {
                                                 onSelect={() => setServerViewMode('owner')}
                                                 className={serverViewMode === 'owner' ? 'bg-accent/20' : ''}
                                             >
-                                                Your Servers Only
+                                                {t('dashboard.your_servers_only')}
                                             </DropdownMenuItem>
 
                                             {rootAdmin && (
@@ -126,7 +136,7 @@ const DashboardContainer = () => {
                                                         onSelect={() => setServerViewMode('admin-all')}
                                                         className={serverViewMode === 'admin-all' ? 'bg-accent/20' : ''}
                                                     >
-                                                        All Servers (Admin)
+                                                        {t('dashboard.all_servers_admin')}
                                                     </DropdownMenuItem>
                                                 </>
                                             )}
@@ -134,19 +144,68 @@ const DashboardContainer = () => {
                                                 onSelect={() => setServerViewMode('all')}
                                                 className={serverViewMode === 'all' ? 'bg-accent/20' : ''}
                                             >
-                                                All Servers
+                                                {t('dashboard.all_servers')}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
 
                                     <TabsList>
-                                        <TabsTrigger aria-label='View servers in a list layout.' value='list'>
+                                        <TabsTrigger aria-label={t('dashboard.list_layout')} value='list'>
                                             <Bars width={18} height={20} color='white' />
                                         </TabsTrigger>
-                                        <TabsTrigger aria-label='View servers in a grid layout.' value='grid'>
+                                        <TabsTrigger aria-label={t('dashboard.grid_layout')} value='grid'>
                                             <LayoutCellsLarge width={20} height={20} color='white' />
                                         </TabsTrigger>
                                     </TabsList>
+                                    <div className='inline-flex h-9 items-center justify-center rounded-lg bg-[#ffffff11] p-1 text-[#ffffff88]'>
+                                        <button
+                                            type='button'
+                                            aria-label={t('dashboard.mib_display')}
+                                            className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                sizeDisplay === 'mib' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
+                                            }`}
+                                            onClick={() => {
+                                                updateUserData({ sizeDisplay: 'mib' });
+                                                localStorage.setItem(`${uuid}:size_display`, 'mib');
+                                            }}
+                                        >
+                                            {i18n.t('strings:MiB')}
+                                        </button>
+                                        <button
+                                            type='button'
+                                            aria-label={t('dashboard.mb_display')}
+                                            className={`inline-flex cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                sizeDisplay === 'mb' ? 'bg-[#ffffff23] text-[#ffffff] shadow-sm' : ''
+                                            }`}
+                                            onClick={() => {
+                                                updateUserData({ sizeDisplay: 'mb' });
+                                                localStorage.setItem(`${uuid}:size_display`, 'mb');
+                                            }}
+                                        >
+                                            {i18n.t('strings:MB')}
+                                        </button>
+                                    </div>
+                                    {rootAdmin && (
+                                        <button
+                                            className={`inline-flex h-9 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                                ghostMode
+                                                    ? 'bg-emerald-500/30 text-emerald-300 hover:bg-emerald-500/40 shadow-sm'
+                                                    : 'bg-[#ffffff11] text-[#ffffff88] hover:bg-[#ffffff23] hover:text-[#ffffff]'
+                                            }`}
+                                            onClick={() =>
+                                                toggleGhostMode()
+                                                    .then((enabled) => updateUserData({ ghostMode: enabled }))
+                                                    .catch(() => {})
+                                            }
+                                            title={
+                                                ghostMode
+                                                    ? t('dashboard.ghost_mode_active')
+                                                    : t('dashboard.enable_ghost_mode')
+                                            }
+                                        >
+                                            <Ghost width={18} height={18} />
+                                        </button>
+                                    )}
                                 </div>
                             }
                         />
@@ -188,13 +247,13 @@ const DashboardContainer = () => {
                                                     </div>
                                                     <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'No other servers found'
-                                                            : 'No servers found'}
+                                                            ? i18n.t('strings:no_other_servers_found')
+                                                            : i18n.t('strings:no_servers_found')}
                                                     </h3>
                                                     <p className='text-sm text-zinc-400 max-w-sm'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'There are no other servers to display.'
-                                                            : 'There are no servers associated with your account.'}
+                                                            ? i18n.t('strings:no_other_servers_description')
+                                                            : i18n.t('strings:no_servers_description')}
                                                     </p>
                                                 </div>
                                             </div>
@@ -233,13 +292,13 @@ const DashboardContainer = () => {
                                                     </div>
                                                     <h3 className='text-lg font-medium text-zinc-200 mb-2'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'No other servers found'
-                                                            : 'No servers found'}
+                                                            ? i18n.t('strings:no_other_servers_found')
+                                                            : i18n.t('strings:no_servers_found')}
                                                     </h3>
                                                     <p className='text-sm text-zinc-400 max-w-sm'>
                                                         {serverViewMode === 'admin-all'
-                                                            ? 'There are no other servers to display.'
-                                                            : 'There are no servers associated with your account.'}
+                                                            ? i18n.t('strings:no_other_servers_description')
+                                                            : i18n.t('strings:no_servers_description')}
                                                     </p>
                                                 </div>
                                             </div>

@@ -1,3 +1,4 @@
+import { FolderPlus } from '@gravity-ui/icons';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { join } from 'pathe';
 import { useContext, useEffect, useState } from 'react';
@@ -10,6 +11,8 @@ import Field from '@/components/elements/Field';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 
 import asDialog from '@/hoc/asDialog';
+
+import i18n from '@/lib/i18n';
 
 import createDirectory from '@/api/server/files/createDirectory';
 
@@ -24,7 +27,7 @@ interface Values {
 }
 
 const schema = object().shape({
-    directoryName: string().required('A valid directory name must be provided.'),
+    directoryName: string().required(i18n.t('server:files.folder_name_required')),
 });
 
 // removed to prevent linting issues, you're welcome.
@@ -45,7 +48,7 @@ const schema = object().shape({
 // });
 
 const NewDirectoryDialog = asDialog({
-    title: 'New Folder',
+    title: i18n.t('server:files.new_folder'),
 })(() => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
@@ -77,9 +80,14 @@ const NewDirectoryDialog = asDialog({
                 <>
                     <FlashMessageRender byKey='files:directory-modal' />
                     <Form className={`m-0`}>
-                        <Field autoFocus id={'directoryName'} name={'directoryName'} label={'Name'} />
+                        <Field
+                            autoFocus
+                            id={'directoryName'}
+                            name={'directoryName'}
+                            label={i18n.t('server:files.new_folder_name')}
+                        />
                         <p className={`mt-2 text-xs! break-all`}>
-                            <span className={`text-zinc-200`}>This folder will be created as&nbsp;</span>
+                            <span className={`text-zinc-200`}>{i18n.t('server:files.new_folder_hint')}&nbsp;</span>
                             <Code>
                                 /root/
                                 <span className={`text-blue-200`}>
@@ -90,10 +98,10 @@ const NewDirectoryDialog = asDialog({
                     </Form>
                     <Dialog.Footer>
                         <ActionButton variant='secondary' className={'w-full sm:w-auto'} onClick={close}>
-                            Cancel
+                            {i18n.t('strings:cancel')}
                         </ActionButton>
                         <ActionButton variant='primary' className={'w-full sm:w-auto'} onClick={submitForm}>
-                            Create
+                            {i18n.t('strings:create')}
                         </ActionButton>
                     </Dialog.Footer>
                 </>
@@ -108,8 +116,12 @@ const NewDirectoryButton = () => {
     return (
         <>
             <NewDirectoryDialog open={open} onClose={setOpen.bind(this, false)} />
-            <ActionButton variant='secondary' onClick={setOpen.bind(this, true)}>
-                New Folder
+            <ActionButton
+                variant='secondary'
+                onClick={setOpen.bind(this, true)}
+                title={i18n.t('server:files.new_folder')}
+            >
+                <FolderPlus className='h-4 w-4' />
             </ActionButton>
         </>
     );

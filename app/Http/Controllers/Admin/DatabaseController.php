@@ -75,9 +75,7 @@ class DatabaseController extends Controller
             $host = $this->creationService->handle($request->normalize());
         } catch (\Exception $exception) {
             if ($exception instanceof \PDOException || $exception->getPrevious() instanceof \PDOException) {
-                $this->alert->danger(
-                    sprintf('There was an error while trying to connect to the host or while executing a query: "%s"', $exception->getMessage())
-                )->flash();
+                $this->alert->danger(sprintf(trans('admin/general.db_connection_error'), $exception->getMessage()))->flash();
 
                 return redirect()->route('admin.databases')->withInput($request->validated());
             } else {
@@ -85,7 +83,7 @@ class DatabaseController extends Controller
             }
         }
 
-        $this->alert->success('Successfully created a new database host on the system.')->flash();
+        $this->alert->success(trans('admin/general.db_host_created'))->flash();
 
         return redirect()->route('admin.databases.view', $host->id);
     }
@@ -101,14 +99,12 @@ class DatabaseController extends Controller
 
         try {
             $this->updateService->handle($host->id, $request->normalize());
-            $this->alert->success('Database host was updated successfully.')->flash();
+            $this->alert->success(trans('admin/general.db_host_updated'))->flash();
         } catch (\Exception $exception) {
             // Catch any SQL related exceptions and display them back to the user, otherwise just
             // throw the exception like normal and move on with it.
             if ($exception instanceof \PDOException || $exception->getPrevious() instanceof \PDOException) {
-                $this->alert->danger(
-                    sprintf('There was an error while trying to connect to the host or while executing a query: "%s"', $exception->getMessage())
-                )->flash();
+                $this->alert->danger(sprintf(trans('admin/general.db_connection_error'), $exception->getMessage()))->flash();
 
                 return $redirect->withInput($request->normalize());
             } else {
@@ -127,7 +123,7 @@ class DatabaseController extends Controller
     public function delete(int $host): RedirectResponse
     {
         $this->deletionService->handle($host);
-        $this->alert->success('The requested database host has been deleted from the system.')->flash();
+        $this->alert->success(trans('admin/general.db_host_deleted'))->flash();
 
         return redirect()->route('admin.databases');
     }
@@ -174,9 +170,9 @@ class DatabaseController extends Controller
                 }
             }
 
-            $message = "Successfully connected to MySQL server (Version: {$version}).";
+            $message = trans('admin/general.db_connection_success', ['version' => $version]);
             if (!$hasGrantOption) {
-                $message .= " Warning: The user appears to lack GRANT OPTION permission which is required for creating databases and users.";
+                $message .= ' ' . trans('admin/general.db_connection_warning');
             }
 
             return response()->json([
@@ -188,12 +184,12 @@ class DatabaseController extends Controller
         } catch (PDOException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Connection failed: ' . $e->getMessage()
+                'message' => trans('admin/general.db_connection_failed', ['error' => $e->getMessage()])
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error: ' . $e->getMessage()
+                'message' => trans('admin/general.db_connection_failed', ['error' => $e->getMessage()])
             ], 422);
         }
     }

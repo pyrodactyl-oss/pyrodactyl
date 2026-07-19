@@ -68,6 +68,7 @@ class Permission extends Model
     public const ACTION_SETTINGS_REINSTALL = 'settings.reinstall';
 
     public const ACTION_ACTIVITY_READ = 'activity.read';
+    public const ACTION_ACTIVITY_DELETE = 'activity.delete';
 
     public const ACTION_MOD_DOWNLOAD = 'mod.download';
 
@@ -213,6 +214,7 @@ class Permission extends Model
             'description' => 'Permissions that control a user\'s access to the server activity logs.',
             'keys' => [
                 'read' => 'Allows a user to view the activity logs for the server.',
+                'delete' => 'Allows a user to delete activity logs for the server.',
             ],
         ],
 

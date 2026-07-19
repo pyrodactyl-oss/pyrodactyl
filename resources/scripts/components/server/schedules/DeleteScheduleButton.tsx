@@ -5,6 +5,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import { Dialog } from '@/components/elements/dialog';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteSchedule from '@/api/server/schedules/deleteSchedule';
 
@@ -44,15 +46,15 @@ const DeleteScheduleButton = ({ scheduleId, onDeleted }: Props) => {
             <Dialog.Confirm
                 open={visible}
                 onClose={() => setVisible(false)}
-                title={'Delete Schedule'}
-                confirm={'Delete'}
+                title={i18n.t('server:schedules.delete_schedule')}
+                confirm={i18n.t('strings:delete')}
                 onConfirmed={onDelete}
                 loading={isLoading}
             >
-                All tasks will be removed and any running processes will be terminated.
+                {i18n.t('server:schedules.delete_schedule_desc')}
             </Dialog.Confirm>
             <ActionButton variant='danger' className={'flex-1 sm:flex-none'} onClick={() => setVisible(true)}>
-                Delete
+                {i18n.t('strings:delete')}
             </ActionButton>
         </>
     );

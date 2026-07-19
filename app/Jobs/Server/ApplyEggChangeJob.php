@@ -104,7 +104,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             $this->logSuccessfulChange();
 
-            $operation->markAsCompleted('Software configuration applied successfully. Server installation completed.');
+            $operation->markAsCompleted(trans('server.shell.egg_change_completed'));
         } catch (Exception $e) {
             $this->handleJobFailure($e, $operation);
             throw $e;
@@ -116,17 +116,17 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
      */
     private function createBackup(ElytraJobService $elytraJobService, ServerOperation $operation): string
     {
-        $operation->updateProgress('Creating backup before proceeding...');
+        $operation->updateProgress(__('server.shell.op_creating_backup'));
 
         $currentEgg = $this->server->egg;
         $targetEgg = Egg::find($this->eggId);
 
-        $backupName = sprintf(
-            'Software Change: %s → %s (%s)',
-            $currentEgg->name ?? 'Unknown',
-            $targetEgg->name ?? 'Unknown',
-            now()->format('M j, g:i A')
-        );
+        $backupName = __('server.shell.software_change_backup_name', [
+            'from' => $currentEgg->name ?? 'Unknown',
+            'arrow' => "\u{2192}",
+            'to' => $targetEgg->name ?? 'Unknown',
+            'date' => now()->format('M j, g:i A'),
+        ]);
 
         if (strlen($backupName) > 190) {
             $backupName = substr($backupName, 0, 187) . '...';
@@ -155,11 +155,11 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                 ])
                 ->log();
 
-            $operation->updateProgress('Backup job submitted successfully');
+            $operation->updateProgress(__('server.shell.op_backup_submitted'));
 
             return $result['job_id'];
         } catch (\Exception $e) {
-            throw new BackupFailedException('Failed to create backup before egg change: ' . $e->getMessage());
+            throw new BackupFailedException(trans('exceptions.backup.egg_change_backup_failed', ['error' => $e->getMessage()]));
         }
     }
 
@@ -168,7 +168,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
      */
     private function waitForJobCompletion(ElytraJobService $elytraJobService, string $jobId, ServerOperation $operation, int $timeoutMinutes = 30): void
     {
-        $operation->updateProgress('Waiting for backup to complete before continuing...');
+        $operation->updateProgress(__('server.shell.op_waiting_backup'));
 
         $startTime = Carbon::now();
         $timeout = $startTime->addMinutes($timeoutMinutes);
@@ -178,29 +178,29 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
             $jobStatus = $elytraJobService->getJobStatus($this->server, $jobId);
 
             if (!$jobStatus) {
-                throw new BackupFailedException('Backup job not found');
+                throw new BackupFailedException(trans('exceptions.backup.backup_job_not_found'));
             }
 
             if ($jobStatus['status'] === 'completed') {
-                $operation->updateProgress('Backup completed successfully');
+                $operation->updateProgress(__('server.shell.op_backup_completed'));
                 return;
             }
 
             if (in_array($jobStatus['status'], ['failed', 'cancelled'])) {
-                throw new BackupFailedException('Backup failed: ' . ($jobStatus['error'] ?? 'Unknown error'));
+                throw new BackupFailedException(trans('exceptions.backup.backup_failed_with_error', ['error' => $jobStatus['error'] ?? 'Unknown error']));
             }
 
             $elapsed = Carbon::now()->diffInSeconds($startTime);
             if ($elapsed - $lastProgressUpdate >= 30) {
                 $progress = $jobStatus['progress'] ?? 0;
-                $operation->updateProgress("Backup in progress... {$progress}%");
+                $operation->updateProgress(__('server.shell.op_backup_progress', ['progress' => $progress]));
                 $lastProgressUpdate = $elapsed;
             }
 
             sleep(5);
         }
 
-        throw new BackupFailedException('Backup creation timed out after ' . $timeoutMinutes . ' minutes.');
+        throw new BackupFailedException(trans('exceptions.backup.backup_timed_out', ['minutes' => $timeoutMinutes]));
     }
 
     /**
@@ -208,7 +208,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
      */
     private function wipeServerFiles(DaemonFileRepository $fileRepository, ServerOperation $operation): void
     {
-        $operation->updateProgress('Wiping server files...');
+        $operation->updateProgress(__('server.shell.op_wiping_files'));
 
         try {
             $contents = $fileRepository->setServer($this->server)->getDirectory('/');
@@ -237,9 +237,9 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                     ])
                     ->log();
 
-                $operation->updateProgress('Server files wiped successfully');
+                $operation->updateProgress(__('server.shell.op_files_wiped'));
             } else {
-                $operation->updateProgress('No files found to wipe');
+                $operation->updateProgress(__('server.shell.op_no_files'));
             }
         } catch (Exception $e) {
             Log::error('Failed to wipe files', [
@@ -249,7 +249,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
             // If file wipe failed and we don't have a backup, this is dangerous
             if (!$this->shouldBackup) {
-                throw new \RuntimeException('File wipe failed and no backup was created. Aborting operation to prevent data loss.');
+                throw new \RuntimeException(trans('exceptions.backup.file_wipe_failed_no_backup'));
             }
 
             // If we have a backup, log the wipe failure but continue
@@ -270,7 +270,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         ServerOperation $operation,
         SubdomainManagementService $subdomainService
     ): void {
-        $operation->updateProgress('Applying software configuration...');
+        $operation->updateProgress(__('server.shell.op_applying_config'));
 
         DB::transaction(function () use ($egg, $startupModificationService, $reinstallServerService, $operation, $subdomainService) {
             // Check if we need to remove subdomain before changing egg
@@ -283,7 +283,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
 
                 // If new egg doesn't support subdomains, delete the existing subdomain
                 if (!$tempServer->supportsSubdomains()) {
-                    $operation->updateProgress('Removing incompatible subdomain...');
+                    $operation->updateProgress(__('server.shell.op_removing_subdomain'));
 
                     try {
                         $subdomainService->deleteSubdomain($activeSubdomain);
@@ -305,7 +305,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                         ]);
 
                         // Continue with egg change even if subdomain deletion fails
-                        $operation->updateProgress('Warning: Could not fully remove subdomain, continuing with egg change...');
+                        $operation->updateProgress(__('server.shell.op_subdomain_warning'));
                     }
                 }
             }
@@ -327,10 +327,10 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
                 ->setUserLevel(User::USER_LEVEL_ADMIN)
                 ->handle($this->server, $updateData);
 
-            $operation->updateProgress('Reinstalling server...');
+            $operation->updateProgress(__('server.shell.op_reinstalling'));
             $reinstallServerService->handle($updatedServer);
 
-            $operation->updateProgress('Finalizing installation...');
+            $operation->updateProgress(__('server.shell.op_finalizing'));
         });
     }
 
@@ -384,7 +384,7 @@ class ApplyEggChangeJob extends Job implements ShouldQueue
         ]);
 
         if ($operation) {
-            $operation->markAsFailed('Operation failed: ' . $exception->getMessage());
+            $operation->markAsFailed(trans('server.shell.op_failed') . $exception->getMessage());
         }
 
         Activity::actor($this->user)->event('server:software.change-failed')

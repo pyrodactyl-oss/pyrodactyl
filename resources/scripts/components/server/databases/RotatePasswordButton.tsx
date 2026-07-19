@@ -5,6 +5,8 @@ import { useState } from 'react';
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import { ServerDatabase } from '@/api/server/databases/getServerDatabases';
 import rotateDatabasePassword from '@/api/server/databases/rotateDatabasePassword';
@@ -37,7 +39,7 @@ const RotatePasswordButton = ({
                 console.error(error);
                 addFlash({
                     type: 'error',
-                    title: 'Error',
+                    title: i18n.t('strings:error'),
                     message: httpErrorToHuman(error),
                     key: 'database-connection-modal',
                 });

@@ -93,7 +93,7 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success']) {
-                throw new \Exception('DNS provider rejected the record creation request.');
+                throw new \Exception(trans('exceptions.dns.record_creation_rejected'));
             }
 
             /* Log::debug("Create Record", [ */
@@ -112,7 +112,7 @@ class CloudflareProvider implements DnsProviderInterface
                 $this->getRequestExceptionMessage($e)
             );
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordCreationFailed($domain, $displayName, 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordCreationFailed($domain, $displayName, trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -149,12 +149,12 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success']) {
-                throw new \Exception('DNS provider rejected the record update request.');
+                throw new \Exception(trans('exceptions.dns.record_update_rejected'));
             }
 
             return true;
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordUpdateFailed($domain, [$recordId], 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordUpdateFailed($domain, [$recordId], trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -170,10 +170,10 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success']) {
-                throw new \Exception('DNS provider rejected the record deletion request.');
+                throw new \Exception(trans('exceptions.dns.record_deletion_rejected'));
             }
         } catch (GuzzleException $e) {
-            throw DnsProviderException::recordDeletionFailed($domain, [$recordId], 'DNS service temporarily unavailable.');
+            throw DnsProviderException::recordDeletionFailed($domain, [$recordId], trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -189,12 +189,12 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success']) {
-                throw new \Exception("DNS record not found or inaccessible.");
+                throw new \Exception(trans('exceptions.dns.record_not_found'));
             }
 
             return $data['result'];
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('cloudflare', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('cloudflare', trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -221,12 +221,12 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success']) {
-                throw new \Exception('Failed to retrieve DNS records.');
+                throw new \Exception(trans('exceptions.dns.failed_retrieve_records'));
             }
 
             return $data['result'];
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('cloudflare', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('cloudflare', trans('exceptions.dns.service_unavailable'));
         }
     }
 
@@ -250,12 +250,12 @@ class CloudflareProvider implements DnsProviderInterface
     {
         $response = $e->getResponse();
         if (!$response) {
-            return 'DNS service temporarily unavailable.';
+            return trans('exceptions.dns.service_unavailable');
         }
 
         $data = json_decode((string) $response->getBody(), true);
         if (!is_array($data)) {
-            return 'DNS provider rejected the record creation request.';
+            return trans('exceptions.dns.record_creation_rejected');
         }
 
         $messages = [];
@@ -265,7 +265,7 @@ class CloudflareProvider implements DnsProviderInterface
             }
         }
 
-        return empty($messages) ? 'DNS provider rejected the record creation request.' : implode(' ', $messages);
+        return empty($messages) ? trans('exceptions.dns.record_creation_rejected') : implode(' ', $messages);
     }
 
     /**
@@ -277,13 +277,13 @@ class CloudflareProvider implements DnsProviderInterface
             'api_token' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'Cloudflare API Token with Zone:Edit permissions',
+                'description' => __('admin/general.dns_field_cloudflare_api_token'),
                 'sensitive' => true,
             ],
             'zone_id' => [
                 'type' => 'string',
                 'required' => true,
-                'description' => 'Cloudflare Zone ID',
+                'description' => __('admin/general.dns_field_cloudflare_zone_id'),
                 'sensitive' => false,
             ],
         ];
@@ -328,12 +328,12 @@ class CloudflareProvider implements DnsProviderInterface
             $data = json_decode($response->getBody()->getContents(), true);
 
             if (!$data['success'] || empty($data['result'])) {
-                throw new \Exception("Domain zone not found or inaccessible.");
+                throw new \Exception(trans('exceptions.dns.zone_not_found'));
             }
 
             return $data['result'][0]['id'];
         } catch (GuzzleException $e) {
-            throw DnsProviderException::connectionFailed('cloudflare', 'DNS service temporarily unavailable.');
+            throw DnsProviderException::connectionFailed('cloudflare', trans('exceptions.dns.service_unavailable'));
         }
     }
 }

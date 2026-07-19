@@ -3,6 +3,8 @@ import clsx from 'clsx';
 
 import ActionButton from '@/components/elements/ActionButton';
 
+import i18n from '@/lib/i18n';
+
 import { PaginationDataSet } from '@/api/http';
 
 interface Props {
@@ -34,11 +36,11 @@ const PaginationFooter = ({ pagination, className, onPageSelect }: Props) => {
     return (
         <div className={clsx('flex items-center justify-between my-2', className)}>
             <p className={'text-sm text-zinc-500'}>
-                Showing&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{Math.max(start, Math.min(pagination.total, 1))}</span>
-                &nbsp;to&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{end}</span> of&nbsp;
-                <span className={'font-semibold text-zinc-400'}>{pagination.total}</span> results.
+                {i18n.t('strings:pagination_showing', {
+                    start: Math.max(start, Math.min(pagination.total, 1)),
+                    end,
+                    total: pagination.total,
+                })}
             </p>
             {pagination.totalPages > 1 && (
                 <div className={'flex space-x-1'}>

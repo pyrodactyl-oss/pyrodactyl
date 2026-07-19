@@ -55,13 +55,13 @@ class AssignmentService
             
             // Validate that gethostbyname returned a valid IP
             if (!filter_var($underlying, FILTER_VALIDATE_IP)) {
-                throw new DisplayException("gethostbyname returned invalid IP address: {$underlying} for input: {$data['allocation_ip']}");
+                throw new DisplayException(trans('exceptions.allocations.gethostbyname_failed', ['underlying' => $underlying, 'input' => $data['allocation_ip']]));
             }
             
             $parsed = Network::parse($underlying);
         } catch (\Exception $exception) {
             /* @noinspection PhpUndefinedVariableInspection */
-            throw new DisplayException("Could not parse provided allocation IP address ({$underlying}): {$exception->getMessage()}", $exception);
+            throw new DisplayException(trans('exceptions.allocations.parse_ip_failed', ['underlying' => $underlying ?? 'unknown', 'error' => $exception->getMessage()]), $exception);
         }
 
         $this->connection->beginTransaction();
@@ -88,7 +88,7 @@ class AssignmentService
                         
                         // Validate the IP string before insertion
                         if (!filter_var($ipString, FILTER_VALIDATE_IP)) {
-                            throw new DisplayException("Invalid IP address generated: {$ipString}");
+                            throw new DisplayException(trans('exceptions.allocations.invalid_ip', ['ip' => $ipString]));
                         }
                         
                         $insertData[] = [
@@ -108,7 +108,7 @@ class AssignmentService
                     
                     // Validate the IP string before insertion
                     if (!filter_var($ipString, FILTER_VALIDATE_IP)) {
-                        throw new DisplayException("Invalid IP address generated: {$ipString}");
+                        throw new DisplayException(trans('exceptions.allocations.invalid_ip', ['ip' => $ipString]));
                     }
                     
                     $insertData[] = [

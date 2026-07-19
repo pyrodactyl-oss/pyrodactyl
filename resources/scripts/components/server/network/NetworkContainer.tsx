@@ -11,6 +11,8 @@ import { PageListContainer } from '@/components/elements/pages/PageList';
 import AllocationRow from '@/components/server/network/AllocationRow';
 import SubdomainManagement from '@/components/server/network/SubdomainManagement';
 
+import i18n from '@/lib/i18n';
+
 import createServerAllocation from '@/api/server/network/createServerAllocation';
 import getServerAllocations from '@/api/swr/getServerAllocations';
 
@@ -57,14 +59,11 @@ const NetworkContainer = () => {
     };
 
     return (
-        <ServerContentBlock title={'Network'}>
+        <ServerContentBlock title={i18n.t('server:network.title')}>
             <FlashMessageRender byKey={'server:network'} />
 
-            <MainPageHeader direction='column' title={'Networking'}>
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Configure network settings for your server. Manage subdomains, IP addresses and ports that your
-                    server can bind to for incoming connections.
-                </p>
+            <MainPageHeader direction='column' title={i18n.t('server:network.header')}>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:network.description')}</p>
             </MainPageHeader>
 
             <div className='space-y-12'>
@@ -72,29 +71,34 @@ const NetworkContainer = () => {
 
                 <div className='bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[1px] border-[#ffffff12] rounded-xl p-6 shadow-sm mt-8'>
                     <div className='flex items-center justify-between mb-6'>
-                        <h3 className='text-xl font-extrabold tracking-tight'>Port Allocations</h3>
+                        <h3 className='text-xl font-extrabold tracking-tight'>
+                            {i18n.t('server:network.port_allocations')}
+                        </h3>
                         {data && (
                             <Can action={'allocation.create'}>
                                 <div className='flex items-center gap-4'>
                                     {allocationLimit === null && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.length} allocations (unlimited)
+                                            {i18n.t('server:network.count', { count: data.length })}
                                         </span>
                                     )}
                                     {allocationLimit > 0 && (
                                         <span className='text-sm text-zinc-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            {data.length} of {allocationLimit}
+                                            {i18n.t('server:network.count_limited', {
+                                                count: data.length,
+                                                limit: allocationLimit,
+                                            })}
                                         </span>
                                     )}
                                     {allocationLimit === 0 && (
                                         <span className='text-sm text-red-400 bg-[#ffffff08] px-3 py-1 rounded-lg border border-[#ffffff15]'>
-                                            Allocations disabled
+                                            {i18n.t('server:network.disabled')}
                                         </span>
                                     )}
                                     {(allocationLimit === null ||
                                         (allocationLimit > 0 && allocationLimit > data.length)) && (
                                         <ActionButton variant='primary' onClick={onCreateAllocation} size='sm'>
-                                            New Allocation
+                                            {i18n.t('server:network.new_button')}
                                         </ActionButton>
                                     )}
                                 </div>
@@ -106,7 +110,7 @@ const NetworkContainer = () => {
                         <div className='flex items-center justify-center py-12'>
                             <div className='flex flex-col items-center gap-3'>
                                 <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-brand'></div>
-                                <p className='text-sm text-neutral-400'>Loading allocations...</p>
+                                <p className='text-sm text-neutral-400'>{i18n.t('server:network.loading')}</p>
                             </div>
                         </div>
                     ) : data.length > 0 ? (
@@ -133,12 +137,14 @@ const NetworkContainer = () => {
                                     </svg>
                                 </div>
                                 <h4 className='text-lg font-medium text-zinc-200 mb-2'>
-                                    {allocationLimit === 0 ? 'Allocations unavailable' : 'No allocations found'}
+                                    {allocationLimit === 0
+                                        ? i18n.t('server:network.unavailable')
+                                        : i18n.t('server:network.empty')}
                                 </h4>
                                 <p className='text-sm text-zinc-400 max-w-sm text-center'>
                                     {allocationLimit === 0
-                                        ? 'Network allocations cannot be created for this server.'
-                                        : 'Create your first allocation to get started.'}
+                                        ? i18n.t('server:network.unavailable_description')
+                                        : i18n.t('server:network.empty_description')}
                                 </p>
                             </div>
                         </div>

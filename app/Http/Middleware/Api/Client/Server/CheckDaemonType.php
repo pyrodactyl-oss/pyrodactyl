@@ -18,7 +18,7 @@ class CheckDaemonType
         }
 
         if ($daemonType !== $daemon) {
-            abort(400, "This endpoint requires daemon type '{$daemon}', but server is using '{$daemonType}'.");
+            abort(400, trans('exceptions.daemon.wrong_daemon_type', ['required' => $daemon, 'actual' => $daemonType]));
         }
 
         return $next($request);

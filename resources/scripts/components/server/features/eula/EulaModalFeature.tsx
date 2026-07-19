@@ -5,6 +5,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import saveFileContents from '@/api/server/files/saveFileContents';
 
 import { ServerContext } from '@/state/server';
@@ -66,28 +68,28 @@ const EulaModalFeature = () => {
             onDismissed={() => setVisible(false)}
             closeOnBackground={false}
             showSpinnerOverlay={loading}
-            title='Accept Minecraft EULA'
+            title={i18n.t('server:features.eula.title')}
         >
             <div className='flex flex-col'>
                 <FlashMessageRender key={'feature:eula'} />
                 <p className={`text-zinc-200`}>
-                    Before starting your Minecraft server, you need to accept the{' '}
+                    {i18n.t('server:features.eula.description')}{' '}
                     <a
                         target={'_blank'}
                         className={`text-zinc-300 underline transition-colors duration-150 hover:text-zinc-400`}
                         rel={'noreferrer noopener'}
                         href='https://www.aka.ms/MinecraftEULA'
                     >
-                        Minecraft EULA
+                        {i18n.t('strings:minecraft_eula')}
                     </a>
                     .
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
                     <ActionButton variant='secondary' onClick={() => setVisible(false)}>
-                        I don&apos;t accept
+                        {i18n.t('server:features.eula.decline')}
                     </ActionButton>
                     <ActionButton variant='primary' onClick={onAcceptEULA}>
-                        I accept
+                        {i18n.t('server:features.eula.accept')}
                     </ActionButton>
                 </div>
             </div>

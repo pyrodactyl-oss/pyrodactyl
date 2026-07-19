@@ -42,14 +42,14 @@ class ApplyEggChangeRequest extends ClientApiRequest
                     ->first();
                 
                 if (!$egg) {
-                    $validator->errors()->add('egg_id', 'The selected egg does not belong to the specified nest.');
+                    $validator->errors()->add('egg_id', trans('validation.egg_not_in_nest'));
                     return;
                 }
 
                 if ($this->filled('docker_image')) {
                     $dockerImages = array_values($egg->docker_images ?? []);
                     if (!empty($dockerImages) && !in_array($this->input('docker_image'), $dockerImages)) {
-                        $validator->errors()->add('docker_image', 'The selected Docker image is not allowed for this egg.');
+                        $validator->errors()->add('docker_image', trans('validation.egg_docker_image_not_allowed'));
                     }
                 }
 
@@ -57,7 +57,7 @@ class ApplyEggChangeRequest extends ClientApiRequest
                     $eggVariables = $egg->variables()->pluck('env_variable')->toArray();
                     foreach ($this->input('environment', []) as $key => $value) {
                         if (!in_array($key, $eggVariables)) {
-                            $validator->errors()->add("environment.{$key}", 'This environment variable is not valid for the selected egg.');
+                            $validator->errors()->add("environment.{$key}", trans('validation.egg_env_invalid'));
                         }
                     }
                 }

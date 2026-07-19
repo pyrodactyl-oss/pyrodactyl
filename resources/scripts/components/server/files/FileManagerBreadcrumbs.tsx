@@ -2,6 +2,8 @@ import { encodePathSegments } from '@/helpers';
 import { Fragment, useEffect, useState } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 interface Props {
@@ -49,7 +51,7 @@ const FileManagerBreadcrumbs = ({ renderLeft, withinFileEditor, isNewFile }: Pro
         <div className={`group select-none flex grow-0 items-center text-sm overflow-x-hidden`}>
             {renderLeft || <div className={`w-12`} />}
             <NavLink to={`/server/${id}/files`} className={`px-1 text-zinc-200 no-underline hover:text-zinc-100`}>
-                root
+                {i18n.t('server:files.root')}
             </NavLink>
             <svg
                 xmlns='http://www.w3.org/2000/svg'

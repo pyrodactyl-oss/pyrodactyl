@@ -25,6 +25,9 @@ Route::get('/version', function () {
     return response()->json(['version' => config('app.version')]);
 });
 
+Route::post('/ghost-mode', [Client\GhostModeController::class, 'toggle']);
+Route::get('/ghost-mode', [Client\GhostModeController::class, 'status']);
+
 Route::prefix('/nests')->group(function () {
     Route::get('/', [Client\Nests\NestController::class, 'index'])->name('api:client.nests');
     Route::get('/{nest}', [Client\Nests\NestController::class, 'view'])->name('api:client.nests.view');
@@ -40,6 +43,7 @@ Route::prefix('/account')->middleware(AccountSubject::class)->group(function () 
 
     Route::put('/email', [Client\AccountController::class, 'updateEmail'])->name('api:client.account.update-email');
     Route::put('/password', [Client\AccountController::class, 'updatePassword'])->name('api:client.account.update-password');
+    Route::put('/language', [Client\AccountController::class, 'updateLanguage'])->name('api:client.account.update-language');
 
     Route::get('/activity', Client\ActivityLogController::class)->name('api:client.account.activity');
 

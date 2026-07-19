@@ -1,6 +1,8 @@
 import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
 
+import i18n from '@/lib/i18n';
+
 import { Dialog, RenderDialogProps } from './';
 
 type ConfirmationProps = Omit<RenderDialogProps, 'description' | 'children'> & {
@@ -10,13 +12,19 @@ type ConfirmationProps = Omit<RenderDialogProps, 'description' | 'children'> & {
     onConfirmed: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
-const ConfirmationDialog = ({ confirm = 'Okay', children, onConfirmed, loading, ...props }: ConfirmationProps) => {
+const ConfirmationDialog = ({
+    confirm = i18n.t('strings:okay'),
+    children,
+    onConfirmed,
+    loading,
+    ...props
+}: ConfirmationProps) => {
     return (
         <Dialog {...props} description={typeof children === 'string' ? children : undefined}>
             {typeof children !== 'string' && children}
             <Dialog.Footer>
                 <ActionButton variant='secondary' onClick={props.onClose}>
-                    Cancel
+                    {i18n.t('strings:cancel')}
                 </ActionButton>
                 <ActionButton variant='danger' onClick={onConfirmed} disabled={loading}>
                     <div className='flex items-center gap-2'>

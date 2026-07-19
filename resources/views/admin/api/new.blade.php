@@ -1,15 +1,15 @@
 @extends('layouts.admin')
 
 @section('title')
-    Application API
+    {{ trans('admin/general.application_api_title') }}
 @endsection
 
 @section('content-header')
-    <h1>Application API<small>Create a new application API key.</small></h1>
+    <h1>{{ trans('admin/general.application_api_title') }}<small>{{ trans('admin/general.api_new_desc') }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li><a href="{{ route('admin.api.index') }}">Application API</a></li>
-        <li class="active">New Credentials</li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li><a href="{{ route('admin.api.index') }}">{{ trans('admin/general.application_api_title') }}</a></li>
+        <li class="active">{{ trans('admin/general.new_credentials') }}</li>
     </ol>
 @endsection
 
@@ -19,7 +19,7 @@
             <div class="col-sm-8 col-xs-12">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Select Permissions</h3>
+                        <h3 class="box-title">{{ trans('admin/general.select_permissions') }}</h3>
                     </div>
                     <div class="box-body table-responsive no-padding">
                         <table class="table table-hover">
@@ -28,15 +28,15 @@
                                     <td class="col-sm-3 strong">{{ str_replace('_', ' ', title_case($resource)) }}</td>
                                     <td class="col-sm-3 radio radio-primary text-center">
                                         <input type="radio" id="r_{{ $resource }}" name="r_{{ $resource }}" value="{{ $permissions['r'] }}">
-                                        <label for="r_{{ $resource }}">Read</label>
+                                        <label for="r_{{ $resource }}">{{ trans('admin/general.read') }}</label>
                                     </td>
                                     <td class="col-sm-3 radio radio-primary text-center">
                                         <input type="radio" id="rw_{{ $resource }}" name="r_{{ $resource }}" value="{{ $permissions['rw'] }}">
-                                        <label for="rw_{{ $resource }}">Read &amp; Write</label>
+                                        <label for="rw_{{ $resource }}">{{ trans('admin/general.read_write') }}</label>
                                     </td>
                                     <td class="col-sm-3 radio text-center">
                                         <input type="radio" id="n_{{ $resource }}" name="r_{{ $resource }}" value="{{ $permissions['n'] }}" checked>
-                                        <label for="n_{{ $resource }}">None</label>
+                                        <label for="n_{{ $resource }}">{{ trans('strings.none') }}</label>
                                     </td>
                                 </tr>
                             @endforeach
@@ -48,14 +48,14 @@
                 <div class="box box-primary">
                     <div class="box-body">
                         <div class="form-group">
-                            <label class="control-label" for="memoField">Description <span class="field-required"></span></label>
+                            <label class="control-label" for="memoField">{{ trans('strings.description') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                             <input id="memoField" type="text" name="memo" class="form-control">
                         </div>
-                        <p class="text-muted">Once you have assigned permissions and created this set of credentials you will be unable to come back and edit it. If you need to make changes down the road you will need to create a new set of credentials.</p>
+                        <p class="text-muted">{{ trans('admin/general.api_created_desc') }}</p>
                     </div>
                     <div class="box-footer">
                         {{ csrf_field() }}
-                        <button type="submit" class="btn btn-success btn-sm pull-right">Create Credentials</button>
+                        <button type="submit" class="btn btn-success btn-sm pull-right">{{ trans('admin/general.create_credentials') }}</button>
                     </div>
                 </div>
             </div>

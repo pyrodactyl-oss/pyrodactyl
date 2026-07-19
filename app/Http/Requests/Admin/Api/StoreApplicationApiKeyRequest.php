@@ -24,7 +24,7 @@ class StoreApplicationApiKeyRequest extends AdminFormRequest
     public function attributes(): array
     {
         return [
-            'memo' => 'Description',
+            'memo' => __('strings.description'),
         ];
     }
 

@@ -8,6 +8,8 @@ import ItemContainer from '@/components/elements/ItemContainer';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
 import TaskDetailsModal from '@/components/server/schedules/TaskDetailsModal';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteScheduleTask from '@/api/server/schedules/deleteScheduleTask';
 import { Schedule, Task } from '@/api/server/schedules/getServerSchedules';
@@ -24,13 +26,36 @@ interface Props {
 const getActionDetails = (action: string): [string, any, boolean?] => {
     switch (action) {
         case 'command':
-            return ['Send Command', Terminal, true];
+            return [i18n.t('server:schedules.send_command'), Terminal, true];
         case 'power':
-            return ['Send Power Action', Power];
+            return [i18n.t('server:schedules.send_power_action'), Power];
         case 'backup':
-            return ['Create Backup', CloudArrowUpIn];
+            return [i18n.t('server:schedules.create_backup'), CloudArrowUpIn];
         default:
-            return ['Unknown Action', CircleQuestion];
+            return [i18n.t('server:schedules.unknown_action'), CircleQuestion];
+    }
+};
+
+const getPayloadDisplay = (action: string, payload: string | null): string | null => {
+    if (!payload) return null;
+
+    switch (action) {
+        case 'power': {
+            switch (payload) {
+                case 'start':
+                    return i18n.t('server:schedules.start_server');
+                case 'restart':
+                    return i18n.t('server:schedules.restart_server');
+                case 'stop':
+                    return i18n.t('server:schedules.stop_server');
+                case 'kill':
+                    return i18n.t('server:schedules.terminate_server');
+                default:
+                    return payload;
+            }
+        }
+        default:
+            return payload.length > 100 ? `${payload.substring(0, 100)}...` : payload;
     }
 };
 
@@ -64,9 +89,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
     return (
         <ItemContainer
             title={title}
-            description={
-                task.payload && task.payload.length > 100 ? `${task.payload.substring(0, 100)}...` : task.payload
-            }
+            description={getPayloadDisplay(task.action, task.payload)}
             icon={icon}
             divClasses={`mb-2 gap-6`}
             copyDescription={copyOnClick}
@@ -80,13 +103,13 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 onModalDismissed={() => setIsEditing(false)}
             />
             <ConfirmationModal
-                title={'Confirm task deletion'}
-                buttonText={'Delete Task'}
+                title={i18n.t('server:schedules.delete_task_title')}
+                buttonText={i18n.t('server:schedules.delete_task_button')}
                 onConfirmed={onConfirmDeletion}
                 visible={visible}
                 onModalDismissed={() => setVisible(false)}
             >
-                Are you sure you want to delete this task? This action cannot be undone.
+                {i18n.t('server:schedules.delete_task_message')}
             </ConfirmationModal>
             {/* <FontAwesomeIcon icon={icon} className={`text-lg text-white hidden md:block`} /> */}
             {/* <div className={`flex-none sm:flex-1 w-full sm:w-auto overflow-x-auto`}>
@@ -94,7 +117,7 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 {task.payload && (
                     <div className={`md:ml-6 mt-2`}>
                         {task.action === 'backup' && (
-                            <p className={`text-xs uppercase text-zinc-400 mb-1`}>Ignoring files & folders:</p>
+                            <p className={`text-xs uppercase text-zinc-400 mb-1`}>{i18n.t('server:schedules.ignoring_files')}</p>
                         )}
                         <div
                             className={`font-mono bg-zinc-800 rounded-sm py-1 px-2 text-sm w-auto inline-block whitespace-pre-wrap break-all`}
@@ -110,11 +133,13 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                 <div className='mr-0 sm:mr-6'>
                     {task.continueOnFailure && (
                         <div className={`px-2 py-1 bg-yellow-500 text-yellow-800 text-sm rounded-full`}>
-                            Continues on Failure
+                            {i18n.t('server:schedules.continues_on_failure')}
                         </div>
                     )}
                     {task.sequenceId > 1 && task.timeOffset > 0 && (
-                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>{task.timeOffset}s later</div>
+                        <div className={`px-2 py-1 bg-zinc-500 text-sm rounded-full`}>
+                            {i18n.t('server:schedules.seconds_later', { seconds: task.timeOffset })}
+                        </div>
                     )}
                 </div>
                 <Can action={'schedule.update'}>
@@ -123,10 +148,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         className='flex flex-row items-center gap-2 ml-auto sm:ml-0'
                         onClick={() => setIsEditing(true)}
-                        aria-label='Edit scheduled task'
+                        aria-label={i18n.t('server:schedules.edit_task')}
                     >
                         <PencilToLine width={22} height={22} fill='currentColor' />
-                        Edit
+                        {i18n.t('strings:edit')}
                     </ActionButton>
                 </Can>
                 <Can action={'schedule.update'}>
@@ -135,10 +160,10 @@ const ScheduleTaskRow = ({ schedule, task }: Props) => {
                         size='sm'
                         onClick={() => setVisible(true)}
                         className='flex items-center gap-2'
-                        aria-label='Delete scheduled task'
+                        aria-label={i18n.t('server:schedules.delete_task')}
                     >
                         <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
-                        <span className='hidden sm:inline'>Delete</span>
+                        <span className='hidden sm:inline'>{i18n.t('strings:delete')}</span>
                     </ActionButton>
                 </Can>
             </div>

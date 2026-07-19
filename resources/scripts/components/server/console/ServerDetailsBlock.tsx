@@ -5,11 +5,13 @@ import StatBlock from '@/components/server/console/StatBlock';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import { bytesToString, ip, mbToBytes } from '@/lib/formatters';
+import i18n from '@/lib/i18n';
 
 import { SubdomainInfo, getSubdomainInfo } from '@/api/server/network/subdomain';
 
 import { ServerContext } from '@/state/server';
 
+import useFormatBytes from '@/plugins/useFormatBytes';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 type Stats = Record<'memory' | 'cpu' | 'disk' | 'uptime' | 'rx' | 'tx', number>;
@@ -41,20 +43,21 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const serverAllocations = ServerContext.useStoreState((state) => state.server.data!.allocations);
+    const formatBytes = useFormatBytes();
 
     const textLimits = useMemo(
         () => ({
             cpu: limits?.cpu ? `${limits.cpu}%` : null,
-            memory: limits?.memory ? bytesToString(mbToBytes(limits.memory)) : null,
-            disk: limits?.disk ? bytesToString(mbToBytes(limits.disk)) : null,
+            memory: limits?.memory ? formatBytes(mbToBytes(limits.memory)) : null,
+            disk: limits?.disk ? formatBytes(mbToBytes(limits.disk)) : null,
         }),
-        [limits],
+        [limits, formatBytes],
     );
 
     const allocation = ServerContext.useStoreState((state) => {
         const match = state.server.data!.allocations.find((allocation) => allocation.isDefault);
 
-        return !match ? 'n/a' : `${match.alias || ip(match.ip)}:${match.port}`;
+        return !match ? i18n.t('server:details.not_applicable') : `${match.alias || ip(match.ip)}:${match.port}`;
     });
 
     // Get display address (subdomain if available and active, otherwise IP)
@@ -118,7 +121,7 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                         'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                 }}
             >
-                <StatBlock title={'IP Address'} copyOnClick={displayAddress}>
+                <StatBlock title={i18n.t('server:details.ip_address')} copyOnClick={displayAddress}>
                     {displayAddress}
                 </StatBlock>
             </div>
@@ -130,9 +133,9 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                         'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                 }}
             >
-                <StatBlock title={'CPU'}>
+                <StatBlock title={i18n.t('server:details.cpu')}>
                     {status === 'offline' ? (
-                        <span className={'text-zinc-400'}>Offline</span>
+                        <span className={'text-zinc-400'}>{i18n.t('server:details.offline')}</span>
                     ) : (
                         <Limit limit={textLimits.cpu}>{stats.cpu.toFixed(2)}%</Limit>
                     )}
@@ -146,11 +149,11 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                         'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                 }}
             >
-                <StatBlock title={'RAM'}>
+                <StatBlock title={i18n.t('server:details.ram')}>
                     {status === 'offline' ? (
-                        <span className={'text-zinc-400'}>Offline</span>
+                        <span className={'text-zinc-400'}>{i18n.t('server:details.offline')}</span>
                     ) : (
-                        <Limit limit={textLimits.memory}>{bytesToString(stats.memory)}</Limit>
+                        <Limit limit={textLimits.memory}>{formatBytes(stats.memory)}</Limit>
                     )}
                 </StatBlock>
             </div>
@@ -162,8 +165,8 @@ const ServerDetailsBlock = ({ className }: { className?: string }) => {
                         'linear(0,0.01,0.04 1.6%,0.161 3.3%,0.816 9.4%,1.046,1.189 14.4%,1.231,1.254 17%,1.259,1.257 18.6%,1.236,1.194 22.3%,1.057 27%,0.999 29.4%,0.955 32.1%,0.942,0.935 34.9%,0.933,0.939 38.4%,1 47.3%,1.011,1.017 52.6%,1.016 56.4%,1 65.2%,0.996 70.2%,1.001 87.2%,1)',
                 }}
             >
-                <StatBlock title={'Storage'}>
-                    <Limit limit={textLimits.disk}>{bytesToString(stats.disk)}</Limit>
+                <StatBlock title={i18n.t('server:details.storage')}>
+                    <Limit limit={textLimits.disk}>{formatBytes(stats.disk)}</Limit>
                 </StatBlock>
             </div>
         </div>

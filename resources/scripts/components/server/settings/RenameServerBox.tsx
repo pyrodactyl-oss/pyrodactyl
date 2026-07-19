@@ -7,6 +7,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import renameServer from '@/api/server/renameServer';
 
@@ -20,13 +22,18 @@ interface Values {
 
 const RenameServerForm = () => {
     return (
-        <TitledGreyBox title={'Server Details'}>
+        <TitledGreyBox title={i18n.t('server:settings.server_details')}>
             <Form className='flex flex-col gap-4'>
-                <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
+                <Field id={'name'} name={'name'} label={i18n.t('server:settings.server_name')} type={'text'} />
+                <Field
+                    id={'description'}
+                    name={'description'}
+                    label={i18n.t('server:settings.server_description')}
+                    type={'text'}
+                />
                 <div className={`mt-6 text-right`}>
                     <ActionButton variant='primary' type={'submit'}>
-                        Save
+                        {i18n.t('server:settings.save')}
                     </ActionButton>
                 </div>
             </Form>
@@ -41,14 +48,14 @@ const RenameServerBox = () => {
 
     const submit = ({ name, description }: Values) => {
         clearFlashes('settings');
-        toast('Updating server details...');
+        toast(i18n.t('server:settings.updating_toast'));
         renameServer(server.uuid, name, description)
             .then(() => setServer({ ...server, name, description }))
             .catch((error) => {
                 console.error(error);
                 addError({ key: 'settings', message: httpErrorToHuman(error) });
             })
-            .then(() => toast.success('Server details updated!'));
+            .then(() => toast.success(i18n.t('server:settings.updated_toast')));
     };
 
     return (
@@ -59,7 +66,9 @@ const RenameServerBox = () => {
                 description: server.description,
             }}
             validationSchema={object().shape({
-                name: string().required().min(1),
+                name: string()
+                    .required(i18n.t('strings:validation.required'))
+                    .min(1, i18n.t('strings:validation.required')),
                 description: string().nullable(),
             })}
         >

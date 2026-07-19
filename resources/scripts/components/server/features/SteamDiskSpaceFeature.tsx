@@ -5,6 +5,8 @@ import FlashMessageRender from '@/components/FlashMessageRender';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useFlash from '@/plugins/useFlash';
@@ -48,28 +50,23 @@ const SteamDiskSpaceFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title='Out of available disk space'
+            title={i18n.t('server:features.steam_disk.title')}
         >
             <FlashMessageRender key={'feature:steamDiskSpace'} />
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
-                        <p>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process.
-                        </p>
+                        <p>{i18n.t('server:features.steam_disk.admin_description')}</p>
                         <p className='mt-3'>
-                            Ensure the machine has enough disk space by typing{' '}
-                            <code className={`font-mono bg-zinc-900 rounded-sm py-1 px-2`}>df -h</code> on the machine
-                            hosting this server. Delete files or increase the available disk space to resolve the issue.
+                            {i18n.t('server:features.steam_disk.admin_instructions', {
+                                // Preserve the original instruction text which references df -h
+                                interpolation: { escapeValue: false },
+                            })}
                         </p>
                     </>
                 ) : (
                     <>
-                        <p className={`mt-4`}>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
-                        </p>
+                        <p className={`mt-4`}>{i18n.t('server:features.steam_disk.user_description')}</p>
                     </>
                 )}
             </div>

@@ -50,19 +50,6 @@ class CaptchaSettingsFormRequest extends AdminFormRequest
         ];
     }
 
-    public function attributes(): array
-    {
-        return [
-            'pterodactyl:captcha:provider' => 'Captcha Provider',
-            'pterodactyl:captcha:turnstile:site_key' => 'Turnstile Site Key',
-            'pterodactyl:captcha:turnstile:secret_key' => 'Turnstile Secret Key',
-            'pterodactyl:captcha:hcaptcha:site_key' => 'hCaptcha Site Key',
-            'pterodactyl:captcha:hcaptcha:secret_key' => 'hCaptcha Secret Key',
-            'pterodactyl:captcha:recaptcha:site_key' => 'reCAPTCHA Site Key',
-            'pterodactyl:captcha:recaptcha:secret_key' => 'reCAPTCHA Secret Key',
-        ];
-    }
-
     public function normalize(?array $only = null): array
     {
         $data = $this->validated();

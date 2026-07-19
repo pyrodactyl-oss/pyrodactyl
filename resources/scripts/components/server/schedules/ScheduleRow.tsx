@@ -1,7 +1,11 @@
 import { Calendar } from '@gravity-ui/icons';
 import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 import ScheduleCronRow from '@/components/server/schedules/ScheduleCronRow';
+
+import i18n from '@/lib/i18n';
+import { getDateLocale } from '@/lib/localeMap';
 
 import { Schedule } from '@/api/server/schedules/getServerSchedules';
 
@@ -15,7 +19,12 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
                         <p>{schedule.name}</p>
                     </div>
                     <p className={`text-xs text-zinc-400`}>
-                        Last run at: {schedule.lastRunAt ? format(schedule.lastRunAt, "MMM do 'at' h:mma") : 'N/A'}
+                        {i18n.t('server:schedules.last_run')}{' '}
+                        {schedule.lastRunAt
+                            ? i18n.language === 'es'
+                                ? format(schedule.lastRunAt, "d 'de' MMMM 'a las' HH:mm", { locale: getDateLocale() })
+                                : format(schedule.lastRunAt, "MMM do 'at' h:mma")
+                            : i18n.t('server:schedules.not_applicable')}
                     </p>
                 </div>
             </div>
@@ -23,7 +32,11 @@ const ScheduleRow = ({ schedule }: { schedule: Schedule }) => (
         <ScheduleCronRow cron={schedule.cron} />
         <div className='flex-none w-20 sm:ml-2 flex items-center align-middle justify-center'>
             <p className='rounded-full px-2 py-px text-xs uppercase bg-neutral-600 text-white'>
-                {schedule.isProcessing ? 'Processing' : schedule.isActive ? 'Active' : 'Inactive'}
+                {schedule.isProcessing
+                    ? i18n.t('server:schedules.processing')
+                    : schedule.isActive
+                      ? i18n.t('server:schedules.active_status')
+                      : i18n.t('server:schedules.inactive_status')}
             </p>
         </div>
     </>

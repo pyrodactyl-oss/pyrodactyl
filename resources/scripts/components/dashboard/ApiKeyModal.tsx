@@ -6,6 +6,8 @@ import CopyOnClick from '@/components/elements/CopyOnClick';
 
 import asModal from '@/hoc/asModal';
 
+import i18n from '@/lib/i18n';
+
 import ActionButton from '../elements/ActionButton';
 
 interface Props {
@@ -17,31 +19,19 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 
     return (
         <div className='p-6 space-y-6 max-w-lg mx-auto rounded-lg shadow-lg'>
-            {/* Flash message section */}
             <FlashMessageRender byKey='account' />
-
-            {/* Modal Header */}
-            <p className='text-sm text-white-600 mt-2'>
-                The API key you have requested is shown below. Please store it in a safe place, as it will not be shown
-                again.
-            </p>
-
-            {/* API Key Display Section */}
+            <p className='text-sm text-white-600 mt-2'>{i18n.t('dashboard:api_key_modal.description')}</p>
             <div className='relative mt-6'>
                 <pre className='bg-gray-900 text-white p-4 rounded-lg font-mono overflow-x-auto'>
                     <CopyOnClick text={apiKey}>
                         <code className='text-sm break-words'>{apiKey}</code>
                     </CopyOnClick>
-
-                    {/* Copy button with icon */}
                     <div className='absolute top-2 right-2'></div>
                 </pre>
             </div>
-
-            {/* Action Buttons */}
             <div className='flex justify-end space-x-4'>
                 <ActionButton type='button' onClick={() => dismiss()} variant='danger' className='flex items-center'>
-                    Close
+                    {i18n.t('dashboard:api_key_modal.close_button')}
                 </ActionButton>
             </div>
         </div>
@@ -51,7 +41,7 @@ const ApiKeyModal = ({ apiKey }: Props) => {
 ApiKeyModal.displayName = 'ApiKeyModal';
 
 export default asModal<Props>({
-    title: 'Your API Key',
-    closeOnEscape: true, // Allows closing the modal by pressing Escape
-    closeOnBackground: true, // Allows closing by clicking outside the modal
+    title: i18n.t('dashboard:api_key_modal.title'),
+    closeOnEscape: true,
+    closeOnBackground: true,
 })(ApiKeyModal);

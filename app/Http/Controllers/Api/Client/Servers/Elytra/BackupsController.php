@@ -140,19 +140,19 @@ class BackupsController extends ClientApiController
             // Require password confirmation for this destructive operation
             $password = $request->input('password');
             if (empty($password) || !password_verify($password, $request->user()->password)) {
-                throw new BadRequestHttpException('The password provided was not valid.');
+                throw new BadRequestHttpException(trans('exceptions.auth.password_invalid'));
             }
 
             // If user has 2FA enabled, require TOTP code
             if ($request->user()->use_totp) {
                 $totpCode = $request->input('totp_code');
                 if (empty($totpCode)) {
-                    throw new BadRequestHttpException('Two-factor authentication code is required.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_required'));
                 }
 
                 $secret = Crypt::decrypt($request->user()->totp_secret);
                 if (!$this->google2FA->verifyKey($secret, $totpCode)) {
-                    throw new BadRequestHttpException('The two-factor authentication code provided was not valid.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_token_invalid'));
                 }
             }
         }
@@ -187,19 +187,19 @@ class BackupsController extends ClientApiController
             // Require password confirmation for this destructive operation
             $password = $request->input('password');
             if (empty($password) || !password_verify($password, $request->user()->password)) {
-                throw new BadRequestHttpException('The password provided was not valid.');
+                throw new BadRequestHttpException(trans('exceptions.auth.password_invalid'));
             }
 
             // If user has 2FA enabled, require TOTP code
             if ($request->user()->use_totp) {
                 $totpCode = $request->input('totp_code');
                 if (empty($totpCode)) {
-                    throw new BadRequestHttpException('Two-factor authentication code is required.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_required'));
                 }
 
                 $secret = Crypt::decrypt($request->user()->totp_secret);
                 if (!$this->google2FA->verifyKey($secret, $totpCode)) {
-                    throw new BadRequestHttpException('The two-factor authentication code provided was not valid.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_token_invalid'));
                 }
             }
         }
@@ -231,7 +231,7 @@ class BackupsController extends ClientApiController
         }
 
         if (!$backup->is_successful) {
-            throw new \Exception('Cannot download an incomplete backup.');
+            throw new BadRequestHttpException(trans('exceptions.backup.cannot_download_incomplete'));
         }
 
         $url = $this->downloadLinkService->handle($backup, $request->user());
@@ -306,19 +306,19 @@ class BackupsController extends ClientApiController
             // Require password confirmation for this destructive operation
             $password = $request->input('password');
             if (empty($password) || !password_verify($password, $request->user()->password)) {
-                throw new BadRequestHttpException('The password provided was not valid.');
+                throw new BadRequestHttpException(trans('exceptions.auth.password_invalid'));
             }
 
             // If user has 2FA enabled, require TOTP code
             if ($request->user()->use_totp) {
                 $totpCode = $request->input('totp_code');
                 if (empty($totpCode)) {
-                    throw new BadRequestHttpException('Two-factor authentication code is required.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_required'));
                 }
 
                 $secret = Crypt::decrypt($request->user()->totp_secret);
                 if (!$this->google2FA->verifyKey($secret, $totpCode)) {
-                    throw new BadRequestHttpException('The two-factor authentication code provided was not valid.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_token_invalid'));
                 }
             }
         }
@@ -327,7 +327,7 @@ class BackupsController extends ClientApiController
 
         if ($backupCount === 0) {
             return new JsonResponse([
-                'error' => 'No backups to delete.',
+                'error' => trans('exceptions.backup.no_backups_to_delete'),
             ], 400);
         }
 
@@ -359,19 +359,19 @@ class BackupsController extends ClientApiController
             // Require password confirmation for this destructive operation
             $password = $request->input('password');
             if (empty($password) || !password_verify($password, $request->user()->password)) {
-                throw new BadRequestHttpException('The password provided was not valid.');
+                throw new BadRequestHttpException(trans('exceptions.auth.password_invalid'));
             }
 
             // If user has 2FA enabled, require TOTP code
             if ($request->user()->use_totp) {
                 $totpCode = $request->input('totp_code');
                 if (empty($totpCode)) {
-                    throw new BadRequestHttpException('Two-factor authentication code is required.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_required'));
                 }
 
                 $secret = Crypt::decrypt($request->user()->totp_secret);
                 if (!$this->google2FA->verifyKey($secret, $totpCode)) {
-                    throw new BadRequestHttpException('The two-factor authentication code provided was not valid.');
+                    throw new BadRequestHttpException(trans('exceptions.auth.2fa_token_invalid'));
                 }
             }
         }
@@ -380,14 +380,14 @@ class BackupsController extends ClientApiController
         $backupUuids = $request->input('backup_uuids', []);
         if (empty($backupUuids) || !is_array($backupUuids)) {
             return new JsonResponse([
-                'error' => 'No backups specified for deletion.',
+                'error' => trans('exceptions.backup.no_backups_specified'),
             ], 400);
         }
 
         // Limit to reasonable number of backups at once
         if (count($backupUuids) > 50) {
             return new JsonResponse([
-                'error' => 'Cannot delete more than 50 backups at once. Use Delete All for larger operations.',
+                'error' => trans('exceptions.backup.delete_limit'),
             ], 400);
         }
 
@@ -395,7 +395,7 @@ class BackupsController extends ClientApiController
         $backups = $server->backups()->whereIn('uuid', $backupUuids)->get();
         if ($backups->count() !== count($backupUuids)) {
             return new JsonResponse([
-                'error' => 'One or more backups not found or do not belong to this server.',
+                'error' => trans('exceptions.backup.backups_not_found'),
             ], 404);
         }
 
@@ -431,7 +431,7 @@ class BackupsController extends ClientApiController
             ->log();
 
         return new JsonResponse([
-            'message' => 'Bulk delete jobs submitted successfully',
+            'message' => trans('admin/general.bulk_delete_submitted'),
             'job_count' => count($jobIds),
             'backup_count' => count($backupUuids),
         ]);

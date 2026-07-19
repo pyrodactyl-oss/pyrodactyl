@@ -1,6 +1,7 @@
 import type { ActionCreator } from 'easy-peasy';
 import { useFormikContext, withFormik } from 'formik';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Location, RouteProps } from 'react-router-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
@@ -29,6 +30,7 @@ type Props = OwnProps & {
 };
 
 function LoginCheckpointForm() {
+    const { t } = useTranslation('auth');
     const { isSubmitting, setFieldValue } = useFormikContext<Values>();
     const [isMissingDevice, setIsMissingDevice] = useState(false);
 
@@ -41,18 +43,16 @@ function LoginCheckpointForm() {
                     </div>
                 </Link>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
-                <h2 className='text-xl font-extrabold mb-2'>Two Factor Authentication</h2>
-                <div className='text-sm mb-6'>Check device linked with your account for code.</div>
+                <h2 className='text-xl font-extrabold mb-2'>{t('two_factor.title')}</h2>
+                <div className='text-sm mb-6'>{t('two_factor.description')}</div>
 
                 <div className={`mt-6`}>
                     <Field
                         name={isMissingDevice ? 'recoveryCode' : 'code'}
-                        title={isMissingDevice ? 'Recovery Code' : 'Authentication Code'}
+                        title={isMissingDevice ? t('two_factor.recovery_code_title') : t('two_factor.auth_code_title')}
                         placeholder='000000'
                         description={
-                            isMissingDevice
-                                ? 'Enter one of the recovery codes generated when you setup 2-Factor authentication on this account in order to continue.'
-                                : 'Enter the two-factor token displayed by your device.'
+                            isMissingDevice ? t('two_factor.recovery_description') : t('two_factor.auth_description')
                         }
                         type={'text'}
                         autoComplete={'one-time-code'}
@@ -67,7 +67,7 @@ function LoginCheckpointForm() {
                         disabled={isSubmitting}
                         isLoading={isSubmitting}
                     >
-                        Login
+                        {t('login')}
                     </Button>
                 </div>
                 <div aria-hidden className='my-8 bg-[#ffffff33] min-h-[1px]'></div>
@@ -81,16 +81,15 @@ function LoginCheckpointForm() {
                             setFieldValue('recoveryCode', '');
                             setIsMissingDevice((s) => !s);
                         }}
-                        // className={`cursor-pointer text-xs text-white tracking-wide uppercase no-underline hover:text-neutral-700`}
                         className={
                             'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                         }
                     >
-                        {!isMissingDevice ? "I've Lost My Device" : 'I Have My Device'}
+                        {!isMissingDevice ? t('two_factor.lost_device') : t('two_factor.have_device')}
                     </span>
                 </div>
                 <div
-                    className={`text-center w-full rounded-b-lg  border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
+                    className={`text-center w-full rounded-b-lg border-0 ring-0 outline-hidden capitalize font-bold text-sm py-2 hover:cursor-pointer `}
                 >
                     <Link
                         to={'/auth/login'}
@@ -98,7 +97,7 @@ function LoginCheckpointForm() {
                             'block w-full text-center py-2.5 px-4 text-xs font-medium tracking-wide uppercase text-white hover:text-white/80 transition-colors duration-200 border border-white/20 rounded-full hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30'
                         }
                     >
-                        Return to Login
+                        {t('two_factor.return_to_login')}
                     </Link>
                 </div>
             </LoginFormContainer>
@@ -114,7 +113,6 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
                     window.location = response.intended || '/';
                     return;
                 }
-
                 setSubmitting(false);
             })
             .catch((error) => {
@@ -132,13 +130,11 @@ const EnhancedForm = withFormik<Props & { location: Location }, Values>({
 
 const LoginCheckpointContainer = ({ ...props }: OwnProps) => {
     const { clearAndAddHttpError } = useFlash();
-
     const location = useLocation();
     const navigate = useNavigate();
 
     if (!location.state?.token) {
         navigate('/auth/login');
-
         return null;
     }
 

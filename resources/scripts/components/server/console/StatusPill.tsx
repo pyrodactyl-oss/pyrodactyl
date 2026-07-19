@@ -1,5 +1,7 @@
 import clsx from 'clsx';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 export const StatusPill = () => {
@@ -26,14 +28,14 @@ export const StatusPill = () => {
             ></div>
             <div className='text-sm font-bold'>
                 {status === 'offline'
-                    ? 'Offline'
+                    ? i18n.t('server:details.offline')
                     : status === 'running'
-                      ? 'Online'
+                      ? i18n.t('server:details.online')
                       : status === 'stopping'
-                        ? 'Stopping'
+                        ? i18n.t('server:details.stopping')
                         : status === 'starting'
-                          ? 'Starting'
-                          : 'Fetching'}
+                          ? i18n.t('server:details.starting')
+                          : i18n.t('server:details.fetching')}
             </div>
         </div>
     );

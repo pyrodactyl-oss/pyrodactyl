@@ -2,6 +2,7 @@ import React from 'react';
 
 import http from '@/api/http';
 import { getGlobalDaemonType } from '@/api/server/getServer';
+import i18n from '@/lib/i18n';
 
 /**
  * Server operation status constants.
@@ -86,7 +87,7 @@ export const pollOperationStatus = (
             attempts++;
 
             if (attempts > POLLING_CONFIG.MAX_ATTEMPTS) {
-                onError(new Error('Operation polling timed out after 15 minutes'));
+                onError(new Error(i18n.t('strings:operation_polling_timeout')));
                 return;
             }
 
@@ -109,7 +110,7 @@ export const pollOperationStatus = (
                 const jitter = Math.random() * POLLING_CONFIG.JITTER_RANGE;
                 timeoutId = setTimeout(poll, intervalMs + jitter);
             } else {
-                onError(new Error('Operation is no longer active'));
+                onError(new Error(i18n.t('strings:operation_not_active')));
             }
         } catch (error) {
             if (!stopped) {

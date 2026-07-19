@@ -19,6 +19,8 @@ import { toast } from 'sonner';
 
 import Can from '@/components/elements/Can';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import ModrinthLogo from '../ModrinthLogo';
@@ -34,11 +36,11 @@ const CommandMenu = () => {
     const cmdkPowerAction = (action: string) => {
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success(i18n.t('server:power.starting_toast'));
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success(i18n.t('server:power.restarting_toast'));
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success(i18n.t('server:power.stopping_toast'));
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
@@ -63,100 +65,100 @@ const CommandMenu = () => {
     }, []);
 
     return (
-        <Command.Dialog open={open} onOpenChange={setOpen} label='Global Command Menu'>
+        <Command.Dialog open={open} onOpenChange={setOpen} label={i18n.t('strings:global_command_menu')}>
             <Command.Input />
             <Command.List>
-                <Command.Empty>No results found.</Command.Empty>
+                <Command.Empty>{i18n.t('strings:no_results_found')}</Command.Empty>
 
-                <Command.Group heading='Pages'>
+                <Command.Group heading={i18n.t('strings:pages')}>
                     <Command.Item onSelect={() => cmdkNavigate('')}>
                         <House fill='currentColor' />
-                        Home
+                        {i18n.t('strings:nav.home')}
                     </Command.Item>
                     <Can action={'file.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/files')}>
                             <FolderOpen fill='currentColor' />
-                            Files
+                            {i18n.t('strings:nav.files')}
                         </Command.Item>
                     </Can>
                     <Can action={'database.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/databases')}>
                             <Database fill='currentColor' />
-                            Databases
+                            {i18n.t('strings:nav.databases')}
                         </Command.Item>
                     </Can>
                     <Can action={'backup.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/backups')}>
                             <CloudArrowUpIn fill='currentColor' />
-                            Backups
+                            {i18n.t('strings:nav.backups')}
                         </Command.Item>
                     </Can>
                     <Can action={'allocation.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/network')}>
                             <BranchesDown fill='currentColor' />
-                            Networking
+                            {i18n.t('strings:nav.networking')}
                         </Command.Item>
                     </Can>
                     <Can action={'user.*'} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/users')}>
                             <Persons fill='currentColor' />
-                            Users
+                            {i18n.t('strings:nav.users')}
                         </Command.Item>
                     </Can>
                     <Can action={['startup.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/startup')}>
                             <Terminal fill='currentColor' />
-                            Startup
+                            {i18n.t('strings:nav.startup')}
                         </Command.Item>
                     </Can>
                     <Can action={['schedule.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/schedules')}>
                             <ClockArrowRotateLeft fill='currentColor' />
-                            Schedules
+                            {i18n.t('strings:nav.schedules')}
                         </Command.Item>
                     </Can>
                     <Can action={['settings.*', 'file.sftp']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/settings')}>
                             <Gear fill='currentColor' />
-                            Settings
+                            {i18n.t('strings:nav.settings')}
                         </Command.Item>
                     </Can>
                     <Can action={['activity.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/activity')}>
                             <PencilToLine fill='currentColor' />
-                            Activity
+                            {i18n.t('strings:nav.activity')}
                         </Command.Item>
                     </Can>
                     <Can action={['modrinth.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/mods')}>
                             <ModrinthLogo />
-                            Mods/Plugins
+                            {i18n.t('server:modrinth.mods_plugins')}
                         </Command.Item>
                     </Can>
                     <Can action={['software.*']} matchAny>
                         <Command.Item onSelect={() => cmdkNavigate('/shell')}>
                             <Box fill='currentColor' />
-                            Software
+                            {i18n.t('strings:nav.software')}
                         </Command.Item>
                     </Can>
                 </Command.Group>
-                <Command.Group heading='Server'>
+                <Command.Group heading={i18n.t('strings:server')}>
                     <Can action={'control.start'}>
                         <Command.Item disabled={status !== 'offline'} onSelect={() => cmdkPowerAction('start')}>
                             <Power fill='currentColor' />
-                            Start Server
+                            {i18n.t('server:power.start')}
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={!status} onSelect={() => cmdkPowerAction('restart')}>
                             <Power fill='currentColor' />
-                            Restart Server
+                            {i18n.t('server:power.restart')}
                         </Command.Item>
                     </Can>
                     <Can action={'control.restart'}>
                         <Command.Item disabled={status === 'offline'} onSelect={() => cmdkPowerAction('stop')}>
                             <Power fill='currentColor' />
-                            Stop Server
+                            {i18n.t('server:power.stop')}
                         </Command.Item>
                     </Can>
                 </Command.Group>

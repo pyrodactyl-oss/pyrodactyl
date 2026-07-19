@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import CaptchaManager from '@/lib/captcha';
+import i18n from '@/lib/i18n';
 
 interface CaptchaProps {
     onSuccess?: (token: string) => void;
@@ -19,6 +21,7 @@ export default function Captcha({
     theme = 'dark',
     size = 'flexible',
 }: CaptchaProps) {
+    const { t } = useTranslation('strings');
     const containerRef = useRef<HTMLDivElement>(null);
     const [widgetId, setWidgetId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +45,12 @@ export default function Captcha({
     };
 
     const handleError = (err: any) => {
-        setError('Captcha verification failed');
+        setError(i18n.t('strings:captcha_verification_failed'));
         onErrorRef.current?.(err);
     };
 
     const handleExpired = () => {
-        setError('Captcha expired');
+        setError(i18n.t('strings:captcha_expired'));
         onExpiredRef.current?.();
     };
 
@@ -95,7 +98,7 @@ export default function Captcha({
                 }
             } catch (err) {
                 if (mounted) {
-                    setError('Failed to load captcha');
+                    setError(i18n.t('strings:failed_to_load_captcha'));
                 }
             } finally {
                 if (mounted) {
@@ -121,11 +124,11 @@ export default function Captcha({
         };
 
         const handleError = (event: CustomEvent) => {
-            setError('Captcha verification failed');
+            setError(i18n.t('strings:captcha_verification_failed'));
         };
 
         const handleExpired = (event: CustomEvent) => {
-            setError('Captcha expired');
+            setError(i18n.t('strings:captcha_expired'));
         };
 
         window.addEventListener('captcha:success', handleSuccess as EventListener);
@@ -147,7 +150,7 @@ export default function Captcha({
     return (
         <div className={className}>
             <div ref={containerRef} />
-            {isLoading && <div className='text-sm text-gray-500 mt-2'>Loading captcha...</div>}
+            {isLoading && <div className='text-sm text-gray-500 mt-2'>{t('loading')}</div>}
             {error && <div className='text-sm text-red-500 mt-2'>{error}</div>}
         </div>
     );

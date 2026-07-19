@@ -34,7 +34,7 @@ abstract class ApplicationApiRequest extends FormRequest
     public function authorize(): bool
     {
         if (is_null($this->resource)) {
-            throw new PterodactylException('An ACL resource must be defined on API requests.');
+            throw new PterodactylException(trans('exceptions.api.acl_resource_required'));
         }
 
         $token = $this->user()->currentAccessToken();

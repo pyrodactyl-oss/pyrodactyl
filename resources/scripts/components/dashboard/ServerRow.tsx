@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -6,6 +7,8 @@ import { bytesToString, ip } from '@/lib/formatters';
 
 import { Server } from '@/api/server/getServer';
 import getServerResourceUsage, { ServerPowerState, ServerStats } from '@/api/server/getServerResourceUsage';
+
+import useFormatBytes from '@/plugins/useFormatBytes';
 
 // Determines if the current value is in an alarm threshold so we can show it in red rather
 // than the more faded default style.
@@ -73,6 +76,8 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
     const [isSuspended, setIsSuspended] = useState(server.status === 'suspended');
     const [isInstalling, setIsInstalling] = useState(server.status === 'installing');
     const [stats, setStats] = useState<ServerStats | null>(null);
+    const formatBytes = useFormatBytes();
+    const { t } = useTranslation('dashboard');
 
     const getStats = () =>
         getServerResourceUsage(server.uuid)
@@ -142,29 +147,33 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                     isSuspended ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-red-100 text-xs`}>
-                                {server.status === 'suspended' ? 'Suspended' : 'Connection Error'}
+                                {server.status === 'suspended'
+                                    ? t('server_row.suspended')
+                                    : t('server_row.connection_error')}
                             </span>
                         </div>
                     ) : server.isTransferring || server.status ? (
                         <div className={`flex-1 text-center`}>
                             <span className={`text-zinc-100 text-xs`}>
                                 {server.isTransferring
-                                    ? 'Transferring'
+                                    ? t('server_row.transferring')
                                     : server.status === 'installing'
-                                      ? 'Installing'
+                                      ? t('server_row.installing')
                                       : server.status === 'restoring_backup'
-                                        ? 'Restoring Backup'
-                                        : 'Unavailable'}
+                                        ? t('server_row.restoring_backup')
+                                        : t('server_row.unavailable')}
                             </span>
                         </div>
                     ) : (
-                        <div className='text-xs opacity-25'>Sit tight!</div>
+                        <div className='text-xs opacity-25'>{t('server_row.sit_tight')}</div>
                     )
                 ) : (
                     <Fragment>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>CPU</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.cpu')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
                                     {stats.cpuUsagePercent.toFixed(2)}%
                                 </p>
@@ -172,17 +181,21 @@ const ServerRow = ({ server, className }: { server: Server; className?: string }
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>RAM</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.ram')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.memoryUsageInBytes, 0)}
+                                    {formatBytes(stats.memoryUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>
                         <div className={`sm:flex hidden`}>
                             <div className={`flex justify-center gap-2 w-fit`}>
-                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>Storage</p>
+                                <p className='text-xs text-zinc-400 font-medium w-fit whitespace-nowrap'>
+                                    {t('server_row.storage')}
+                                </p>
                                 <p className='text-xs font-bold w-fit whitespace-nowrap'>
-                                    {bytesToString(stats.diskUsageInBytes, 0)}
+                                    {formatBytes(stats.diskUsageInBytes, 0)}
                                 </p>
                             </div>
                         </div>

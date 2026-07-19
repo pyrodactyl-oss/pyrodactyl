@@ -14,6 +14,8 @@ import StatGraphs from '@/components/server/console/StatGraphs';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 import { CrashAnalysisCard } from '@/components/server/features/MclogsFeature';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
@@ -57,7 +59,7 @@ const ServerConsoleContainer = () => {
     });
 
     return (
-        <ServerContentBlock title={'Home'}>
+        <ServerContentBlock title={i18n.t('server:console.title')}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col px-2 sm:px-0'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <div
@@ -70,10 +72,10 @@ const ServerConsoleContainer = () => {
                     >
                         <Alert type={'warning'}>
                             {isNodeUnderMaintenance
-                                ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                                ? i18n.t('server:console.maintenance_message')
                                 : isInstalling
-                                  ? 'This server is currently running its installation process and most actions are unavailable.'
-                                  : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                                  ? i18n.t('server:console.installing_message')
+                                  : i18n.t('server:console.transferring_message')}
                         </Alert>
                     </div>
                 )}
@@ -89,7 +91,7 @@ const ServerConsoleContainer = () => {
                         title={name}
                         headChildren={
                             <p className='hidden bg-color ms:block ms:inline-flex md:inline-flex md:block absolute left-0 mb-4 mt-8 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-al283824000000l duration-150 shadow-sm '>
-                                Uptime: {UptimeDuration(uptime)}
+                                {i18n.t('server:console.uptime')} {UptimeDuration(uptime)}
                             </p>
                         }
                         titleChildren={
@@ -102,7 +104,7 @@ const ServerConsoleContainer = () => {
                                 }}
                             >
                                 <p className='inline-flex relative max-w-50 min-w-35 block ms:hidden md:hidden justify-left left-0 mb-4 p-1 text-zinc-300 border-2 bg-gradient-to-b from-[#ffffff08] to-[#ffffff05] border-[#ffffff12] rounded-lg hover:border-[#ffffff20] transition-all duration-150 shadow-sm '>
-                                    Uptime: {UptimeDuration(uptime)}
+                                    {i18n.t('server:console.uptime')} {UptimeDuration(uptime)}
                                 </p>
                                 <PowerButtons className='flex gap-1 items-center justify-center' />
                             </div>

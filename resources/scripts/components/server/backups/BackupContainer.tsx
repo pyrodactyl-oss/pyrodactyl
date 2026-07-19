@@ -21,6 +21,8 @@ import Spinner from '@/components/elements/Spinner';
 import { PageListContainer } from '@/components/elements/pages/PageList';
 import { SocketEvent } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteAllServerBackups from '@/api/server/backups/deleteAllServerBackups';
 import { getGlobalDaemonType } from '@/api/server/getServer';
@@ -34,6 +36,115 @@ import useFlash from '@/plugins/useFlash';
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
 import { useUnifiedBackups } from './useUnifiedBackups';
+
+const translateBackupMessage = (msg: string | null | undefined): string | null => {
+    if (!msg) return null;
+    const map: Record<string, string> = {
+        'Generating backup archive...': i18n.t('server:shell.dm_generating_archive'),
+        'Calculating repository size...': i18n.t('server:shell.dm_calculating_size'),
+        'Verifying backup integrity...': i18n.t('server:shell.dm_verifying_integrity'),
+        'Uploading backup parts...': i18n.t('server:shell.dm_uploading_parts'),
+        'Finalizing backup...': i18n.t('server:shell.dm_finalizing_backup'),
+        'Creating backup snapshot...': i18n.t('server:shell.dm_creating_snapshot'),
+        'Cleaning up temporary files...': i18n.t('server:shell.dm_cleaning_up'),
+        'Downloading backup parts...': i18n.t('server:shell.dm_downloading_parts'),
+        'Job completed successfully': i18n.t('server:shell.dm_job_completed'),
+        'Locating rustic S3 backup...': i18n.t('server:shell.dm_locating_rustic'),
+        'Deleting rustic S3 backup...': i18n.t('server:shell.dm_deleting_rustic'),
+        'Locating rustic local backup...': i18n.t('server:shell.dm_locating_rustic_local'),
+        'Deleting rustic local backup...': i18n.t('server:shell.dm_deleting_rustic_local'),
+        'Creating backup before proceeding...': i18n.t('server:shell.dm_creating_backup'),
+        'Wiping server files...': i18n.t('server:shell.dm_wiping_files'),
+        // src/jobs/backup_job.go:91
+        'Backup creation queued': i18n.t('server:shell.dm_backup_creation_queued'),
+        // src/jobs/backup_job.go:204
+        'Locating server...': i18n.t('server:shell.dm_locating_server'),
+        // src/jobs/backup_job.go:216
+        'Initializing backup adapter...': i18n.t('server:shell.dm_initializing_adapter'),
+        // src/jobs/backup_job.go:244
+        'Starting backup generation...': i18n.t('server:shell.dm_starting_generation'),
+        // src/jobs/backup_job.go:265
+        'Reading server ignore patterns...': i18n.t('server:shell.dm_reading_ignore_patterns'),
+        // src/jobs/backup_job.go:124
+        'Backup deletion queued': i18n.t('server:shell.dm_backup_deletion_queued'),
+        // src/jobs/backup_job.go:395
+        'Locating local backup...': i18n.t('server:shell.dm_locating_local'),
+        // src/jobs/backup_job.go:402
+        'Deleting local backup...': i18n.t('server:shell.dm_deleting_local'),
+        // src/jobs/backup_job.go:420
+        'Deleting S3 backup...': i18n.t('server:shell.dm_deleting_s3'),
+        // src/jobs/backup_job.go:439
+        'Getting rustic local configuration...': i18n.t('server:shell.dm_getting_rustic_local_config'),
+        // src/jobs/backup_job.go:547
+        'Getting rustic S3 configuration...': i18n.t('server:shell.dm_getting_rustic_s3_config'),
+        // src/jobs/backup_job.go:408
+        'Backup deleted successfully': i18n.t('server:shell.dm_backup_deleted'),
+        // src/jobs/backup_job.go:493
+        'Backup already deleted - cleanup successful': i18n.t('server:shell.dm_backup_already_deleted'),
+        // src/jobs/backup_job.go:162
+        'Backup restoration queued': i18n.t('server:shell.dm_backup_restoration_queued'),
+        // src/jobs/backup_job.go:703
+        'Preparing for backup restoration...': i18n.t('server:shell.dm_preparing_restoration'),
+        // src/jobs/backup_job.go:720
+        'Preparing server for restore...': i18n.t('server:shell.dm_preparing_server_restore'),
+        // src/jobs/backup_job.go:723
+        'Truncating server directory...': i18n.t('server:shell.dm_truncating_directory'),
+        // src/jobs/backup_job.go:756
+        'Locating backup...': i18n.t('server:shell.dm_locating_backup'),
+        // src/jobs/backup_job.go:787
+        'Starting restoration process...': i18n.t('server:shell.dm_starting_restoration'),
+        // src/jobs/backup_job.go:795
+        'Publishing completion events...': i18n.t('server:shell.dm_publishing_events'),
+        // src/jobs/backup_job.go:800
+        'Backup restored successfully': i18n.t('server:shell.dm_backup_restored'),
+        // src/jobs/backup_job.go:813
+        'Getting rustic configuration...': i18n.t('server:shell.dm_getting_rustic_config'),
+        // src/jobs/backup_job.go:820
+        'Locating rustic backup...': i18n.t('server:shell.dm_locating_rustic_backup'),
+        // src/jobs/backup_job.go:859
+        'Downloading S3 backup...': i18n.t('server:shell.dm_downloading_s3'),
+        // src/jobs/backup_job.go:874
+        'Establishing connection to S3...': i18n.t('server:shell.dm_establishing_s3_connection'),
+        // src/jobs/backup_job.go:882
+        'Downloading backup archive...': i18n.t('server:shell.dm_downloading_archive'),
+        // src/jobs/backup_job.go:901
+        'Starting file restoration...': i18n.t('server:shell.dm_starting_file_restoration'),
+        // src/jobs/backup_job.go:797
+        'Completed server restoration from local backup.': i18n.t('server:shell.dm_restore_completed_local'),
+        // src/jobs/backup_job.go:842
+        'Completed server restoration from rustic backup.': i18n.t('server:shell.dm_restore_completed_rustic'),
+        // src/jobs/backup_job.go:958
+        'Completed server restoration from S3 backup.': i18n.t('server:shell.dm_restore_completed_s3'),
+        // src/jobs/backup_job.go:1005
+        'Delete all backups queued': i18n.t('server:shell.dm_delete_all_queued'),
+        // src/jobs/backup_job.go:1136
+        'Checking for rustic repositories...': i18n.t('server:shell.dm_checking_rustic_repos'),
+        // src/jobs/backup_job.go:1185
+        'Destroying repositories...': i18n.t('server:shell.dm_destroying_repos'),
+        // src/jobs/backup_job.go:1229
+        'All backups and repositories destroyed': i18n.t('server:shell.dm_all_destroyed'),
+        // src/jobs/job.go:130
+        'Job queued': i18n.t('server:shell.dm_job_queued'),
+        // src/jobs/job.go:237
+        'Job executing': i18n.t('server:shell.dm_job_executing'),
+        // src/jobs/job.go:256
+        'Job failed': i18n.t('server:shell.dm_job_failed'),
+        // src/jobs/job.go:182
+        'Job cancelled': i18n.t('server:shell.dm_job_cancelled'),
+        // src/jobs/job.go:183
+        'Cancelled by user': i18n.t('server:shell.dm_cancelled_by_user'),
+    };
+    if (map[msg]) return map[msg];
+    const match = msg.match(/^Backup in progress\.\.\. (\d+)%$/);
+    if (match) return i18n.t('server:shell.op_backup_progress', { progress: match[1] });
+    // Handle "Deleting X backup files..." (src/jobs/backup_job.go:1052)
+    const deletingFilesMatch = msg.match(/^Deleting (\d+) backup files\.\.\.$/);
+    if (deletingFilesMatch) return i18n.t('server:shell.dm_deleting_backup_files', { count: deletingFilesMatch[1] });
+    // Handle "Deleting backup X of Y..." (src/jobs/backup_job.go:1062)
+    const deletingOfMatch = msg.match(/^Deleting backup (\d+) of (\d+)\.\.\.$/);
+    if (deletingOfMatch) return i18n.t('server:shell.dm_deleting_backup_of', { current: deletingOfMatch[1], total: deletingOfMatch[2] });
+    return msg;
+};
 
 const BackupItemElytra = lazy(() => import('./elytra/BackupItem'));
 const BackupItemWings = lazy(() => import('./wings/BackupItem'));
@@ -76,25 +187,20 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     const { isSubmitting } = useFormikContext<BackupValues>();
 
     return (
-        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Create server backup'>
+        <Modal {...props} showSpinnerOverlay={isSubmitting} title={i18n.t('server:backups.create_title')}>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
                 <Field
                     name={'name'}
-                    label={'Backup name'}
-                    description={'If provided, the name that should be used to reference this backup.'}
+                    label={i18n.t('server:backups.name_label')}
+                    description={i18n.t('server:backups.name_help')}
                 />
                 <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
                         className='flex flex-col gap-2'
                         name={'ignored'}
-                        label={'Ignored Files & Directories'}
-                        description={`
-                            Enter the files or folders to ignore while generating this backup. Leave blank to use
-                            the contents of the .pyroignore file in the root of the server directory if present.
-                            Wildcard matching of files and folders is supported in addition to negating a rule by
-                            prefixing the path with an exclamation point.
-                        `}
+                        label={i18n.t('server:backups.ignored_label')}
+                        description={i18n.t('server:backups.ignored_help')}
                     >
                         <FormikField
                             as={Textarea}
@@ -108,15 +214,15 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     <div className={`my-6`}>
                         <FormikSwitchV2
                             name={'isLocked'}
-                            label={'Locked'}
-                            description={'Prevents this backup from being deleted until explicitly unlocked.'}
+                            label={i18n.t('server:backups.locked_label')}
+                            description={i18n.t('server:backups.locked_help')}
                         />
                     </div>
                 </Can>
                 <div className={`flex justify-end mb-6`}>
                     <ActionButton variant='primary' type={'submit'} disabled={isSubmitting}>
                         {isSubmitting && <Spinner size='small' />}
-                        {isSubmitting ? 'Creating backup...' : 'Start backup'}
+                        {isSubmitting ? i18n.t('server:backups.creating') : i18n.t('server:backups.start_backup')}
                     </ActionButton>
                 </div>
             </Form>
@@ -178,12 +284,12 @@ const BackupContainer = () => {
 
     const handleDeleteAll = async () => {
         if (!deleteAllPassword) {
-            toast.error('Password is required to delete all backups.');
+            toast.error(i18n.t('server:backups.password_required'));
             return;
         }
 
         if (hasTwoFactor && !deleteAllTotpCode) {
-            toast.error('Two-factor authentication code is required.');
+            toast.error(i18n.t('server:backups.totp_required'));
             return;
         }
 
@@ -191,7 +297,7 @@ const BackupContainer = () => {
 
         try {
             await deleteAllServerBackups(uuid, deleteAllPassword, hasTwoFactor, deleteAllTotpCode);
-            toast.success('All backups and repositories are being deleted. This may take a few minutes.');
+            toast.success(i18n.t('server:backups.deleting_toast'));
 
             setDeleteAllModalVisible(false);
             setDeleteAllPassword('');
@@ -238,7 +344,7 @@ const BackupContainer = () => {
             addFlash({
                 key: 'backups:bulk_delete',
                 type: 'error',
-                message: 'Password is required to delete backups.',
+                message: i18n.t('server:backups.password_required'),
             });
             return;
         }
@@ -247,7 +353,7 @@ const BackupContainer = () => {
             addFlash({
                 key: 'backups:bulk_delete',
                 type: 'error',
-                message: 'Two-factor authentication code is required.',
+                message: i18n.t('server:backups.totp_required'),
             });
             return;
         }
@@ -257,7 +363,8 @@ const BackupContainer = () => {
 
         try {
             const http = (await import('@/api/http')).default;
-            await http.post(`/api/client/servers/${uuid}/backups/bulk-delete`, {
+            const dt = getGlobalDaemonType();
+            await http.post(`/api/client/servers/${dt}/${uuid}/backups/bulk-delete`, {
                 backup_uuids: Array.from(selectedBackups),
                 password: bulkDeletePassword,
                 ...(hasTwoFactor ? { totp_code: bulkDeleteTotpCode } : {}),
@@ -266,7 +373,7 @@ const BackupContainer = () => {
             addFlash({
                 key: 'backups',
                 type: 'success',
-                message: `${selectedBackups.size} backup${selectedBackups.size > 1 ? 's are' : ' is'} being deleted.`,
+                message: i18n.t('server:backups.deleting_toast_count', { count: selectedBackups.size }),
             });
 
             setBulkDeleteModalVisible(false);
@@ -293,13 +400,10 @@ const BackupContainer = () => {
 
     if (!backups || (error && isValidating)) {
         return (
-            <ServerContentBlock title={'Backups'}>
+            <ServerContentBlock title={i18n.t('server:backups.title')}>
                 <FlashMessageRender byKey={'backups'} />
-                <MainPageHeader direction='column' title={'Backups'}>
-                    <p className='text-sm text-neutral-400 leading-relaxed'>
-                        Create and manage server backups to protect your data. Schedule automated backups, download
-                        existing ones, and restore when needed.
-                    </p>
+                <MainPageHeader direction='column' title={i18n.t('server:backups.header')}>
+                    <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:backups.description')}</p>
                 </MainPageHeader>
                 <div className='flex items-center justify-center py-12'>
                     <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-brand'></div>
@@ -309,23 +413,32 @@ const BackupContainer = () => {
     }
 
     return (
-        <ServerContentBlock title={'Backups'}>
+        <ServerContentBlock title={i18n.t('server:backups.title')}>
             <FlashMessageRender byKey={'backups'} />
             <MainPageHeader
                 direction='column'
-                title={'Backups'}
+                title={i18n.t('server:backups.header')}
                 titleChildren={
                     <Can action={'backup.create'}>
                         <div className='flex flex-col sm:flex-row items-center justify-end gap-4'>
                             <div className='flex flex-col gap-1 text-center sm:text-right'>
                                 {/* Backup Count Display */}
-                                {backupLimit === null && <p className='text-sm text-zinc-300'>{backupCount} backups</p>}
-                                {backupLimit > 0 && (
+                                {backupLimit === null && (
                                     <p className='text-sm text-zinc-300'>
-                                        {backupCount} of {backupLimit} backups
+                                        {i18n.t('server:backups.count', { count: backupCount })}
                                     </p>
                                 )}
-                                {backupLimit === 0 && <p className='text-sm text-red-400'>Backups disabled</p>}
+                                {backupLimit > 0 && (
+                                    <p className='text-sm text-zinc-300'>
+                                        {i18n.t('server:backups.count_limited', {
+                                            count: backupCount,
+                                            limit: backupLimit,
+                                        })}
+                                    </p>
+                                )}
+                                {backupLimit === 0 && (
+                                    <p className='text-sm text-red-400'>{i18n.t('server:backups.disabled')}</p>
+                                )}
 
                                 {/* Storage Usage Display */}
                                 {storage && (
@@ -339,19 +452,19 @@ const BackupContainer = () => {
                                                     <span className='font-medium'>
                                                         {formatStorage(storage.used_mb)}
                                                     </span>{' '}
-                                                    storage used
+                                                    {i18n.t('server:backups.storage_used')}
                                                 </p>
                                                 {(storage.repository_usage_mb > 0 || storage.legacy_usage_mb > 0) &&
                                                     storage.repository_usage_mb > 0 &&
                                                     storage.legacy_usage_mb > 0 && (
                                                         <p className='text-xs text-zinc-400'>
                                                             {storage.repository_usage_mb > 0 &&
-                                                                `${formatStorage(storage.repository_usage_mb)} deduplicated`}
+                                                                `${formatStorage(storage.repository_usage_mb)} ${i18n.t('server:backups.deduplicated')}`}
                                                             {storage.repository_usage_mb > 0 &&
                                                                 storage.legacy_usage_mb > 0 &&
                                                                 ' + '}
                                                             {storage.legacy_usage_mb > 0 &&
-                                                                `${formatStorage(storage.legacy_usage_mb)} legacy`}
+                                                                `${formatStorage(storage.legacy_usage_mb)} ${i18n.t('server:backups.legacy')}`}
                                                         </p>
                                                     )}
                                             </>
@@ -364,25 +477,23 @@ const BackupContainer = () => {
                                                     <span className='font-medium'>
                                                         {formatStorage(storage.used_mb)}
                                                     </span>{' '}
-                                                    {backupStorageLimit === null ? (
-                                                        'used'
-                                                    ) : (
-                                                        <span className='font-medium'>
-                                                            of {formatStorage(backupStorageLimit)} used
-                                                        </span>
-                                                    )}
+                                                    {backupStorageLimit === null
+                                                        ? i18n.t('server:backups.space_used')
+                                                        : i18n.t('server:backups.of_used', {
+                                                              amount: formatStorage(backupStorageLimit),
+                                                          })}
                                                 </p>
                                                 {(storage.repository_usage_mb > 0 || storage.legacy_usage_mb > 0) &&
                                                     storage.repository_usage_mb > 0 &&
                                                     storage.legacy_usage_mb > 0 && (
                                                         <p className='text-xs text-zinc-400'>
                                                             {storage.repository_usage_mb > 0 &&
-                                                                `${formatStorage(storage.repository_usage_mb)} deduplicated`}
+                                                                `${formatStorage(storage.repository_usage_mb)} ${i18n.t('server:backups.deduplicated')}`}
                                                             {storage.repository_usage_mb > 0 &&
                                                                 storage.legacy_usage_mb > 0 &&
                                                                 ' + '}
                                                             {storage.legacy_usage_mb > 0 &&
-                                                                `${formatStorage(storage.legacy_usage_mb)} legacy`}
+                                                                `${formatStorage(storage.legacy_usage_mb)} ${i18n.t('server:backups.legacy')}`}
                                                         </p>
                                                     )}
                                             </>
@@ -410,7 +521,7 @@ const BackupContainer = () => {
                                                 d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16'
                                             />
                                         </svg>
-                                        Delete All Backups
+                                        {i18n.t('server:backups.delete_all_button')}
                                     </ActionButton>
                                 )}
                                 {(backupLimit === null || backupLimit > backupCount) &&
@@ -420,7 +531,7 @@ const BackupContainer = () => {
                                             onClick={() => setCreateModalVisible(true)}
                                             disabled={hasActiveOperation}
                                         >
-                                            New Backup
+                                            {i18n.t('server:backups.new_button')}
                                         </ActionButton>
                                     )}
                             </div>
@@ -428,11 +539,7 @@ const BackupContainer = () => {
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Create and manage server backups to protect your data. Schedule automated backups, download existing
-                    ones, and restore when needed. Backups are deduplicated, meaning unchanged files are only stored
-                    once across all backups
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:backups.description')}</p>
             </MainPageHeader>
 
             {createModalVisible && (
@@ -457,15 +564,11 @@ const BackupContainer = () => {
                         setDeleteAllPassword('');
                         setDeleteAllTotpCode('');
                     }}
-                    title='Delete All Backups'
+                    title={i18n.t('server:backups.delete_all_title')}
                 >
                     <div className='space-y-4'>
                         <p className='text-sm text-zinc-300'>
-                            You are about to permanently delete{' '}
-                            <span className='font-medium text-red-400'>
-                                {backupCount} {backupCount === 1 ? 'backup' : 'backups'}
-                            </span>{' '}
-                            and completely destroy the backup repository for this server.
+                            {i18n.t('server:backups.delete_all_message', { count: backupCount })}
                         </p>
 
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -484,13 +587,13 @@ const BackupContainer = () => {
                                     />
                                 </svg>
                                 <div className='text-sm'>
-                                    <p className='font-medium text-red-300'>This action cannot be undone</p>
+                                    <p className='font-medium text-red-300'>{i18n.t('server:backups.cannot_undo')}</p>
                                     <ul className='text-red-400 mt-2 space-y-1 list-disc list-inside'>
-                                        <li>All backup data will be permanently deleted</li>
-                                        <li>Locked backups will also be deleted</li>
-                                        <li>The entire backup repository will be destroyed</li>
-                                        <li>This operation may take several minutes to complete</li>
-                                        <li>You will not be able to restore any of these backups</li>
+                                        <li>{i18n.t('server:backups.all_data_deleted')}</li>
+                                        <li>{i18n.t('server:backups.locked_deleted')}</li>
+                                        <li>{i18n.t('server:backups.repository_destroyed')}</li>
+                                        <li>{i18n.t('server:backups.operation_minutes')}</li>
+                                        <li>{i18n.t('server:backups.cannot_restore')}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -499,13 +602,13 @@ const BackupContainer = () => {
                         <div className='space-y-3'>
                             <div>
                                 <label htmlFor='password' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                    Password
+                                    {i18n.t('server:backups.password_label')}
                                 </label>
                                 <input
                                     id='password'
                                     type='password'
                                     className='w-full px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm border border-zinc-700 focus:border-brand'
-                                    placeholder='Enter your password'
+                                    placeholder={i18n.t('server:backups.password_placeholder')}
                                     value={deleteAllPassword}
                                     onChange={(e) => setDeleteAllPassword(e.target.value)}
                                     disabled={isDeleting}
@@ -515,13 +618,13 @@ const BackupContainer = () => {
                             {hasTwoFactor && (
                                 <div>
                                     <label htmlFor='totp_code' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                        Two-Factor Authentication Code
+                                        {i18n.t('server:backups.totp_label')}
                                     </label>
                                     <input
                                         id='totp_code'
                                         type='text'
                                         className='w-full px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm border border-zinc-700 focus:border-brand'
-                                        placeholder='6-digit code'
+                                        placeholder={i18n.t('server:backups.totp_placeholder')}
                                         maxLength={6}
                                         value={deleteAllTotpCode}
                                         onChange={(e) => setDeleteAllTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
@@ -541,11 +644,13 @@ const BackupContainer = () => {
                                 }}
                                 disabled={isDeleting}
                             >
-                                Cancel
+                                {i18n.t('strings:cancel')}
                             </ActionButton>
                             <ActionButton variant='danger' onClick={handleDeleteAll} disabled={isDeleting}>
                                 {isDeleting && <Spinner size='small' />}
-                                {isDeleting ? 'Deleting...' : 'Delete All Backups'}
+                                {isDeleting
+                                    ? i18n.t('server:backups.deleting')
+                                    : i18n.t('server:backups.delete_all_button')}
                             </ActionButton>
                         </div>
                     </div>
@@ -561,16 +666,12 @@ const BackupContainer = () => {
                         setBulkDeletePassword('');
                         setBulkDeleteTotpCode('');
                     }}
-                    title='Delete Selected Backups'
+                    title={i18n.t('server:backups.delete_selected_title')}
                 >
                     <FlashMessageRender byKey={'backups:bulk_delete'} />
                     <div className='space-y-4'>
                         <p className='text-sm text-zinc-300'>
-                            You are about to permanently delete{' '}
-                            <span className='font-medium text-red-400'>
-                                {selectedBackups.size} backup{selectedBackups.size > 1 ? 's' : ''}
-                            </span>
-                            . This action cannot be undone.
+                            {i18n.t('server:backups.delete_selected_message', { count: selectedBackups.size })}
                         </p>
 
                         <div className='p-4 bg-red-500/10 border border-red-500/20 rounded-lg'>
@@ -589,11 +690,8 @@ const BackupContainer = () => {
                                     />
                                 </svg>
                                 <div className='text-sm'>
-                                    <p className='font-medium text-red-300'>Warning</p>
-                                    <p className='text-red-400 mt-1'>
-                                        The selected backup files and their snapshots will be permanently deleted. You
-                                        will not be able to restore them.
-                                    </p>
+                                    <p className='font-medium text-red-300'>{i18n.t('server:backups.warning')}</p>
+                                    <p className='text-red-400 mt-1'>{i18n.t('server:backups.selected_warning')}</p>
                                 </div>
                             </div>
                         </div>
@@ -601,13 +699,13 @@ const BackupContainer = () => {
                         <div className='space-y-3'>
                             <div>
                                 <label htmlFor='bulk-password' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                    Password
+                                    {i18n.t('server:backups.password_label')}
                                 </label>
                                 <input
                                     id='bulk-password'
                                     type='password'
                                     className='w-full px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm border border-zinc-700 focus:border-brand'
-                                    placeholder='Enter your password'
+                                    placeholder={i18n.t('server:backups.password_placeholder')}
                                     value={bulkDeletePassword}
                                     onChange={(e) => setBulkDeletePassword(e.target.value)}
                                     disabled={isBulkDeleting}
@@ -617,13 +715,13 @@ const BackupContainer = () => {
                             {hasTwoFactor && (
                                 <div>
                                     <label htmlFor='bulk-totp' className='block text-sm font-medium text-zinc-300 mb-1'>
-                                        Two-Factor Authentication Code
+                                        {i18n.t('server:backups.totp_label')}
                                     </label>
                                     <input
                                         id='bulk-totp'
                                         type='text'
                                         className='w-full px-4 py-2 rounded-lg outline-hidden bg-[#ffffff17] text-sm border border-zinc-700 focus:border-brand'
-                                        placeholder='6-digit code'
+                                        placeholder={i18n.t('server:backups.totp_placeholder')}
                                         maxLength={6}
                                         value={bulkDeleteTotpCode}
                                         onChange={(e) => setBulkDeleteTotpCode(e.target.value.replace(/[^0-9]/g, ''))}
@@ -643,13 +741,13 @@ const BackupContainer = () => {
                                 }}
                                 disabled={isBulkDeleting}
                             >
-                                Cancel
+                                {i18n.t('strings:cancel')}
                             </ActionButton>
                             <ActionButton variant='danger' onClick={handleBulkDelete} disabled={isBulkDeleting}>
                                 {isBulkDeleting && <Spinner size='small' />}
                                 {isBulkDeleting
-                                    ? 'Deleting...'
-                                    : `Delete ${selectedBackups.size} Backup${selectedBackups.size > 1 ? 's' : ''}`}
+                                    ? i18n.t('server:backups.deleting')
+                                    : `${i18n.t('server:backups.delete_selected_title')} (${selectedBackups.size})`}
                             </ActionButton>
                         </div>
                     </div>
@@ -668,12 +766,12 @@ const BackupContainer = () => {
                             />
                         </div>
                         <h3 className='text-lg font-medium text-zinc-200 mb-2'>
-                            {backupLimit === 0 ? 'Backups unavailable' : 'No backups found'}
+                            {backupLimit === 0 ? i18n.t('server:backups.unavailable') : i18n.t('server:backups.empty')}
                         </h3>
                         <p className='text-sm text-zinc-400 max-w-sm'>
                             {backupLimit === 0
-                                ? 'Backups cannot be created for this server.'
-                                : 'Your server does not have any backups. Create one to get started.'}
+                                ? i18n.t('server:backups.unavailable_description')
+                                : i18n.t('server:backups.empty_description')}
                         </p>
                     </div>
                 </div>
@@ -693,10 +791,11 @@ const BackupContainer = () => {
                                 <span className='text-sm text-zinc-300'>
                                     {selectedBackups.size > 0 ? (
                                         <>
-                                            <span className='font-medium'>{selectedBackups.size}</span> selected
+                                            <span className='font-medium'>{selectedBackups.size}</span>{' '}
+                                            {i18n.t('server:backups.selected')}
                                         </>
                                     ) : (
-                                        'Select backups'
+                                        i18n.t('server:backups.select_backups')
                                     )}
                                 </span>
                             </div>
@@ -705,11 +804,13 @@ const BackupContainer = () => {
                                 className={`flex items-center gap-3 transition-opacity ${selectedBackups.size > 0 ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                             >
                                 <ActionButton variant='secondary' onClick={clearSelection}>
-                                    Clear
+                                    {i18n.t('server:backups.clear')}
                                 </ActionButton>
                                 <Can action='backup.delete'>
                                     <ActionButton variant='danger' onClick={() => setBulkDeleteModalVisible(true)}>
-                                        Delete Selected ({selectedBackups.size})
+                                        {i18n.t('server:backups.delete_selected_button', {
+                                            count: selectedBackups.size,
+                                        })}
                                     </ActionButton>
                                 </Can>
                             </div>
@@ -792,7 +893,9 @@ const BackupContainerWrapper = () => {
                 const currentState = prevProgress[backup_uuid];
                 const newProgress = progress || 0;
                 const isCompleted = status === 'completed' && newProgress === 100;
-                const displayMessage = errorMsg ? `${message || 'Operation failed'}: ${errorMsg}` : message || '';
+                const displayMessage = errorMsg
+                    ? `${translateBackupMessage(message || i18n.t('server:operations.failed'))}: ${errorMsg}`
+                    : translateBackupMessage(message) || '';
 
                 if (currentState?.completed && !isCompleted) {
                     return prevProgress;

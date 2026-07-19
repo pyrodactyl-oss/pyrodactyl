@@ -38,7 +38,7 @@ class SystemStatusController extends Controller
     } catch (\Exception $e) {
       return response()->json([
         'status' => 'error',
-        'message' => 'Failed to retrieve system metrics',
+        'message' => trans('admin/general.system_metrics_failed'),
         'error' => $e->getMessage()
       ], 500);
     }

@@ -47,7 +47,7 @@ class ServerOperationService
         ?string $message = null
     ): ServerOperation {
         if (!$this->canAcceptOperation($server)) {
-            throw new ConflictHttpException('Server cannot accept new operations at this time.');
+            throw new ConflictHttpException(trans('exceptions.server.cannot_accept_operations'));
         }
 
         $operationId = Str::uuid()->toString();
@@ -58,7 +58,7 @@ class ServerOperationService
             'user_id' => $user->id,
             'type' => $type,
             'status' => ServerOperation::STATUS_PENDING,
-            'message' => $message ?? 'Operation queued for processing...',
+            'message' => $message ?? __('server.shell.op_queued'),
             'parameters' => $parameters,
         ]);
     }
@@ -73,7 +73,7 @@ class ServerOperationService
             ->firstOrFail();
 
         if ($operation->hasTimedOut()) {
-            $operation->markAsFailed('Operation timed out');
+            $operation->markAsFailed(trans('server.shell.op_timed_out'));
         }
 
         return $operation;
@@ -105,7 +105,7 @@ class ServerOperationService
             $timedOutOperations = ServerOperation::forServer($server)->timedOut()->get();
             
             foreach ($timedOutOperations as $operation) {
-                $operation->markAsFailed('Operation timed out');
+                $operation->markAsFailed(trans('server.shell.op_timed_out'));
             }
 
             return $timedOutOperations->count();

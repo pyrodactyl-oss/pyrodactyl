@@ -1,5 +1,6 @@
 import { AbbrApi, Gear, House, Key, Xmark } from '@gravity-ui/icons';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import type { FeatureLimitKey, ServerRouteDefinition } from '@/routers/routes';
@@ -18,6 +19,8 @@ interface MobileFullScreenMenuProps {
 }
 
 const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreenMenuProps) => {
+    const { t } = useTranslation('strings');
+
     if (!isVisible) return null;
 
     return (
@@ -26,7 +29,7 @@ const MobileFullScreenMenu = ({ isVisible, onClose, children }: MobileFullScreen
             <button
                 onClick={onClose}
                 className='absolute top-4 right-4 p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200'
-                aria-label='Close menu'
+                aria-label={t('ui.close_menu')}
             >
                 <Xmark width={22} height={22} fill='currentColor' />
             </button>
@@ -76,19 +79,21 @@ interface DashboardMobileMenuProps {
 }
 
 export const DashboardMobileMenu = ({ isVisible, onClose }: DashboardMobileMenuProps) => {
+    const { t } = useTranslation('strings');
+
     return (
         <MobileFullScreenMenu isVisible={isVisible} onClose={onClose}>
             <NavigationItem to='/' icon={House} end onClick={onClose}>
-                Servers
+                {t('nav.servers')}
             </NavigationItem>
             <NavigationItem to='/account/api' icon={AbbrApi} end onClick={onClose}>
-                API Keys
+                {t('nav.api_keys')}
             </NavigationItem>
             <NavigationItem to='/account/ssh' icon={Key} end onClick={onClose}>
-                SSH Keys
+                {t('nav.ssh_keys')}
             </NavigationItem>
             <NavigationItem to='/account' icon={Gear} end onClick={onClose}>
-                Settings
+                {t('nav.settings')}
             </NavigationItem>
         </MobileFullScreenMenu>
     );
@@ -104,6 +109,7 @@ interface ServerMobileNavItemProps {
  * Mobile navigation item that handles permission and feature limit checks.
  */
 const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemProps) => {
+    const { t } = useTranslation('strings');
     const { icon: Icon, name, path, permission, featureLimit, end } = route;
 
     // Feature limits from server state
@@ -148,7 +154,7 @@ const ServerMobileNavItem = ({ route, serverId, onClose }: ServerMobileNavItemPr
 
     const NavContent = (
         <NavigationItem to={to} icon={Icon} end={end} onClick={onClose}>
-            {name}
+            {t(name)}
         </NavigationItem>
     );
 

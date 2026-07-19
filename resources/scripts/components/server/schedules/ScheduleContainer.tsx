@@ -10,6 +10,8 @@ import { PageListContainer, PageListItem } from '@/components/elements/pages/Pag
 import EditScheduleModal from '@/components/server/schedules/EditScheduleModal';
 import ScheduleRow from '@/components/server/schedules/ScheduleRow';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import getServerSchedules from '@/api/server/schedules/getServerSchedules';
 
@@ -39,23 +41,20 @@ function ScheduleContainer() {
     }, []);
 
     return (
-        <ServerContentBlock title={'Schedules'}>
+        <ServerContentBlock title={i18n.t('server:schedules.title')}>
             <FlashMessageRender byKey={'schedules'} />
             <MainPageHeader
                 direction='column'
-                title={'Schedules'}
+                title={i18n.t('server:schedules.header')}
                 titleChildren={
                     <Can action={'schedule.create'}>
                         <ActionButton variant='primary' onClick={() => setVisible(true)}>
-                            New Schedule
+                            {i18n.t('server:schedules.new_button')}
                         </ActionButton>
                     </Can>
                 }
             >
-                <p className='text-sm text-neutral-400 leading-relaxed'>
-                    Automate server tasks with scheduled commands. Create recurring tasks to manage your server, run
-                    backups, or execute custom commands.
-                </p>
+                <p className='text-sm text-neutral-400 leading-relaxed'>{i18n.t('server:schedules.description')}</p>
             </MainPageHeader>
             <Can action={'schedule.create'}>
                 <EditScheduleModal visible={visible} onModalDismissed={() => setVisible(false)} />
@@ -74,10 +73,11 @@ function ScheduleContainer() {
                                         />
                                     </svg>
                                 </div>
-                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>No schedules found</h3>
+                                <h3 className='text-lg font-medium text-zinc-200 mb-2'>
+                                    {i18n.t('server:schedules.empty')}
+                                </h3>
                                 <p className='text-sm text-zinc-400 max-w-sm'>
-                                    Your server does not have any scheduled tasks. Create one to automate server
-                                    management.
+                                    {i18n.t('server:schedules.empty_description')}
                                 </p>
                             </div>
                         </div>

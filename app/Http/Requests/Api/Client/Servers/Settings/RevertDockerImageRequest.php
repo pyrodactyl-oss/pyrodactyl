@@ -27,14 +27,6 @@ class RevertDockerImageRequest extends ClientApiRequest implements ClientPermiss
         ];
     }
 
-    public function messages(): array
-    {
-        return [
-            'confirm.required' => 'You must confirm that you understand this action cannot be undone without administrator assistance.',
-            'confirm.accepted' => 'You must confirm that you understand this action cannot be undone without administrator assistance.',
-        ];
-    }
-
     /**
      * Check if the server has a custom docker image that can be reverted.
      */

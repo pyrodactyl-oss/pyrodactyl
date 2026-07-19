@@ -10,6 +10,14 @@ class MailTested extends Notification
 {
     public function __construct(private User $user)
     {
+        $this->locale = config('app.locale', 'en');
+    }
+
+    public function locale(mixed $locale): static
+    {
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
     }
 
     public function via(): array
@@ -19,9 +27,16 @@ class MailTested extends Notification
 
     public function toMail(): MailMessage
     {
-        return (new MailMessage())
-            ->subject('Pyrodactyl Test Message')
-            ->greeting('Hello ' . $this->user->name . '!')
-            ->line('This is a test of the Pyrodactyl mail system. You\'re good to go!');
+        $previousLocale = app()->getLocale();
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_mail_tested.subject'))
+                ->greeting(__('auth.email_mail_tested.greeting', ['name' => $this->user->name]))
+                ->line(__('auth.email_mail_tested.line'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
     }
 }

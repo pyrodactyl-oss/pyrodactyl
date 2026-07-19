@@ -1,3 +1,5 @@
+import i18n from '@/lib/i18n';
+
 import http from '@/api/http';
 
 interface LoginData {
@@ -25,7 +27,7 @@ export default async (data: LoginData): Promise<LoginResponse> => {
         const response = await http.post('/auth/login', payload);
 
         if (!response.data || typeof response.data !== 'object') {
-            throw new Error('Invalid server response format');
+            throw new Error(i18n.t('strings:invalid_server_response'));
         }
 
         return {

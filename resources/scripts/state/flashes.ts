@@ -2,6 +2,8 @@ import { Action, action } from 'easy-peasy';
 
 import { FlashMessageType } from '@/components/MessageBox';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 
 export interface FlashStore {
@@ -28,7 +30,7 @@ const flashes: FlashStore = {
     }),
 
     addError: action((state, payload) => {
-        state.items.push({ type: 'error', title: 'Error', ...payload });
+        state.items.push({ type: 'error', title: i18n.t('strings:error'), ...payload });
     }),
 
     clearAndAddHttpError: action((state, payload) => {
@@ -40,7 +42,7 @@ const flashes: FlashStore = {
             state.items = [
                 {
                     type: 'error',
-                    title: 'Error',
+                    title: i18n.t('strings:error'),
                     key: payload.key,
                     message: httpErrorToHuman(payload.error),
                 },

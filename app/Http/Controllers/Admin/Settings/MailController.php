@@ -52,7 +52,7 @@ class MailController extends Controller
     public function update(MailSettingsFormRequest $request): Response
     {
         if ($this->config->get('mail.default') !== 'smtp') {
-            throw new DisplayException('This feature is only available if SMTP is the selected email driver for the Panel.');
+            throw new DisplayException(trans('exceptions.general.smtp_only'));
         }
 
         $values = $request->normalize();

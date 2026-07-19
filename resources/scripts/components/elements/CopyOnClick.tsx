@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import * as React from 'react';
 import { toast } from 'sonner';
 
+import i18n from '@/lib/i18n';
+
 interface CopyOnClickProps {
     text: string | number | null | undefined;
     showInNotification?: boolean;
@@ -23,7 +25,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${truncatedText} to clipboard.`);
+        toast(i18n.t('strings:toast.copied_to_clipboard', { text: truncatedText }));
 
         const timeout = setTimeout(() => {
             setCopied(false);

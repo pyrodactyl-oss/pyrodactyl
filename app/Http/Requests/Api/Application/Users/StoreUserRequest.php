@@ -46,16 +46,4 @@ class StoreUserRequest extends ApplicationApiRequest
         return $data;
     }
 
-    /**
-     * Rename some fields to be more user friendly.
-     */
-    public function attributes(): array
-    {
-        return [
-            'external_id' => 'Third Party Identifier',
-            'name_first' => 'First Name',
-            'name_last' => 'Last Name',
-            'root_admin' => 'Root Administrator Status',
-        ];
-    }
 }

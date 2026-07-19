@@ -1,14 +1,14 @@
 @extends('layouts.admin')
 
 @section('title')
-    Nests &rarr; {{ $nest->name }}
+    {{ trans('admin/general.nests') }} &rarr; {{ $nest->name }}
 @endsection
 
 @section('content-header')
     <h1>{{ $nest->name }}<small>{{ str_limit($nest->description, 50) }}</small></h1>
     <ol class="breadcrumb">
-        <li><a href="{{ route('admin.index') }}">Admin</a></li>
-        <li><a href="{{ route('admin.nests') }}">Nests</a></li>
+        <li><a href="{{ route('admin.index') }}">{{ trans('strings.admin') }}</a></li>
+        <li><a href="{{ route('admin.nests') }}">{{ trans('admin/general.nests') }}</a></li>
         <li class="active">{{ $nest->name }}</li>
     </ol>
 @endsection
@@ -20,22 +20,22 @@
             <div class="box">
                 <div class="box-body">
                     <div class="form-group">
-                        <label class="control-label">Name <span class="field-required"></span></label>
+                        <label class="control-label">{{ trans('strings.name') }} <span class="field-required">{{ __('strings.required') }}</span></label>
                         <div>
-                            <input type="text" name="name" class="form-control" value="{{ $nest->name }}" />
-                            <p class="text-muted"><small>This should be a descriptive category name that encompasses all of the options within the service.</small></p>
+                            <input type="text" name="name" class="form-control" value="{{ old('name', $nest->name) }}" />
+                            <p class="text-muted"><small>{{ trans('admin/general.nest_name_help') }}</small></p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">Description</label>
+                        <label class="control-label">{{ trans('strings.description') }}</label>
                         <div>
-                            <textarea name="description" class="form-control" rows="7">{{ $nest->description }}</textarea>
+                            <textarea name="description" class="form-control" rows="7">{{ old('description', $nest->description) }}</textarea>
                         </div>
                     </div>
                 </div>
                 <div class="box-footer">
                     {!! csrf_field() !!}
-                    <button type="submit" name="_method" value="PATCH" class="btn btn-primary btn-sm pull-right">Save</button>
+                    <button type="submit" name="_method" value="PATCH" class="btn btn-primary btn-sm pull-right">{{ trans('strings.save') }}</button>
                     <button id="deleteButton" type="submit" name="_method" value="DELETE" class="btn btn-sm btn-danger muted muted-hover"><i class="fa fa-trash-o"></i></button>
                 </div>
             </div>
@@ -45,24 +45,24 @@
         <div class="box">
             <div class="box-body">
                 <div class="form-group">
-                    <label class="control-label">Nest ID</label>
+                    <label class="control-label">{{ trans('admin/general.nest_id') }}</label>
                     <div>
                         <input type="text" readonly class="form-control" value="{{ $nest->id }}" />
-                        <p class="text-muted small">A unique ID used for identification of this nest internally and through the API.</p>
+                        <p class="text-muted small">{{ trans('admin/general.nest_id_help') }}</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Author</label>
+                    <label class="control-label">{{ trans('admin/general.author') }}</label>
                     <div>
                         <input type="text" readonly class="form-control" value="{{ $nest->author }}" />
-                        <p class="text-muted small">The author of this service option. Please direct questions and issues to them unless this is an official option authored by <code>support@pterodactyl.io</code>.</p>
+                        <p class="text-muted small">{!! trans('admin/general.nest_author_desc') !!}</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">UUID</label>
+                    <label class="control-label">{{ trans('admin/general.uuid') }}</label>
                     <div>
                         <input type="text" readonly class="form-control" value="{{ $nest->uuid }}" />
-                        <p class="text-muted small">A UUID that all servers using this option are assigned for identification purposes.</p>
+                        <p class="text-muted small">{{ trans('admin/general.nest_uuid_desc') }}</p>
                     </div>
                 </div>
             </div>
@@ -73,15 +73,15 @@
     <div class="col-xs-12">
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Nest Eggs</h3>
+                <h3 class="box-title">{{ trans('admin/general.nest_eggs') }}</h3>
             </div>
             <div class="box-body table-responsive no-padding">
                 <table class="table table-hover">
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th class="text-center">Servers</th>
+                        <th>{{ trans('strings.id') }}</th>
+                        <th>{{ trans('strings.name') }}</th>
+                        <th>{{ trans('strings.description') }}</th>
+                        <th class="text-center">{{ trans('strings.servers') }}</th>
                         <th class="text-center"></th>
                     </tr>
                     @foreach($nest->eggs as $egg)
@@ -98,7 +98,7 @@
                 </table>
             </div>
             <div class="box-footer">
-                <a href="{{ route('admin.nests.egg.new') }}"><button class="btn btn-success btn-sm pull-right">New Egg</button></a>
+                <a href="{{ route('admin.nests.egg.new') }}"><button class="btn btn-success btn-sm pull-right">{{ trans('admin/general.new_egg') }}</button></a>
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@
     @parent
     <script>
         $('#deleteButton').on('mouseenter', function (event) {
-            $(this).find('i').html(' Delete Nest');
+            $(this).find('i').html('{{ trans('admin/general.delete_nest_hover') }}');
         }).on('mouseleave', function (event) {
             $(this).find('i').html('');
         });

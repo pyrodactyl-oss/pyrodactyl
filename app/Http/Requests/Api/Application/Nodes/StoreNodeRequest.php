@@ -44,19 +44,6 @@ class StoreNodeRequest extends ApplicationApiRequest
     }
 
     /**
-     * Fields to rename for clarity in the API response.
-     */
-    public function attributes(): array
-    {
-        return [
-            'daemon_base' => 'Daemon Base Path',
-            'upload_size' => 'File Upload Size Limit',
-            'location_id' => 'Location',
-            'public' => 'Node Visibility',
-        ];
-    }
-
-    /**
      * Change the formatting of some data keys in the validated response data
      * to match what the application expects in the services.
      */

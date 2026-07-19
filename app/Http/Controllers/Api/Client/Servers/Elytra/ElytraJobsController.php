@@ -79,7 +79,7 @@ class ElytraJobsController extends ClientApiController
         $job = $this->elytraJobService->getJobStatus($server, $jobId);
 
         if (!$job) {
-            return response()->json(['error' => 'Job not found'], 404);
+            return response()->json(['error' => trans('admin/general.job_not_found')], 404);
         }
 
         $handler = $this->elytraJobService->getJobHandler($job['type']);
@@ -102,7 +102,7 @@ class ElytraJobsController extends ClientApiController
         $job = $this->elytraJobService->getJobStatus($server, $jobId);
 
         if (!$job) {
-            return response()->json(['error' => 'Job not found'], 404);
+            return response()->json(['error' => trans('admin/general.job_not_found')], 404);
         }
 
         $handler = $this->elytraJobService->getJobHandler($job['type']);

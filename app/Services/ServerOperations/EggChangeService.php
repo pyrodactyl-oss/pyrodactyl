@@ -37,7 +37,7 @@ class EggChangeService
             ->findOrFail($eggId);
         
         if ($egg->nest_id !== $nestId) {
-            throw new BadRequestHttpException('The specified egg does not belong to the specified nest.');
+            throw new BadRequestHttpException(trans('exceptions.egg.not_in_nest'));
         }
         
         $variables = $egg->variables()->orderBy('name')->get();
@@ -94,20 +94,20 @@ class EggChangeService
             ->findOrFail($eggId);
         
         if ($egg->nest_id !== $nestId) {
-            throw new BadRequestHttpException('The specified egg does not belong to the specified nest.');
+            throw new BadRequestHttpException(trans('exceptions.egg.not_in_nest'));
         }
         
         $startupCommand = $startupCommand ? trim($startupCommand) : null;
         $dockerImage = $dockerImage ? trim($dockerImage) : null;
         
         if ($startupCommand && strlen($startupCommand) > 2048) {
-            throw new BadRequestHttpException('Startup command is too long (max 2048 characters).');
+            throw new BadRequestHttpException(trans('exceptions.egg.startup_too_long'));
         }
         
         if ($dockerImage) {
             $allowedImages = array_values($egg->docker_images ?? []);
             if (!empty($allowedImages) && !in_array($dockerImage, $allowedImages)) {
-                throw new BadRequestHttpException('The specified Docker image is not allowed for this egg.');
+                throw new BadRequestHttpException(trans('exceptions.egg.image_not_allowed'));
             }
         }
         
@@ -186,11 +186,11 @@ class EggChangeService
                 'error' => $e->getMessage(),
             ]);
             
-            throw new \RuntimeException('Failed to queue egg change operation. Please try again.');
+            throw new \RuntimeException(trans('exceptions.server_operations.failed_queue_egg_change'));
         }
         
         return [
-            'message' => 'Egg change operation has been queued for processing.',
+            'message' => trans('exceptions.server_operations.egg_change_queued'),
             'operation_id' => $operation->operation_id,
             'status' => 'pending',
         ];
@@ -226,7 +226,7 @@ class EggChangeService
         if (!$newSupportsSubdomain) {
             return [
                 'type' => 'subdomain_incompatible',
-                'message' => "Warning: The new egg does not support subdomains. Your current subdomain ({$activeSubdomain->full_domain}) will be deleted when you apply this change.",
+                'message' => trans('server.shell.egg_subdomain_warning', ['domain' => $activeSubdomain->full_domain]),
                 'severity' => 'warning',
             ];
         }

@@ -41,3 +41,13 @@ const useActivityLogs = (
 };
 
 export { useActivityLogs };
+
+export const deleteActivityLog = (uuid: string, id: string): Promise<void> => {
+    const daemonType = getGlobalDaemonType();
+    return http.delete(`/api/client/servers/${daemonType}/${uuid}/activity/${id}`).then(() => undefined);
+};
+
+export const clearActivityLogs = (uuid: string): Promise<void> => {
+    const daemonType = getGlobalDaemonType();
+    return http.delete(`/api/client/servers/${daemonType}/${uuid}/activity`).then(() => undefined);
+};

@@ -19,6 +19,7 @@ class RemovedFromServer extends Notification implements ShouldQueue
     public function __construct(array $server)
     {
         $this->server = (object) $server;
+        $this->locale = config('app.locale', 'en');
     }
 
     /**
@@ -34,11 +35,29 @@ class RemovedFromServer extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
-        return (new MailMessage())
-            ->error()
-            ->greeting('Hello ' . $this->server->user . '.')
-            ->line('You have been removed as a subuser for the following server.')
-            ->line('Server Name: ' . $this->server->name)
-            ->action('Visit Panel', route('index'));
+        $previousLocale = app()->getLocale();
+        app()->setLocale($this->locale ?: config('app.locale', 'en'));
+
+        try {
+            return (new MailMessage())
+                ->subject(__('auth.email_subuser_removed.subject'))
+                ->error()
+                ->greeting(__('auth.email_subuser_removed.greeting', ['name' => $this->server->user]))
+                ->line(__('auth.email_subuser_removed.line'))
+                ->line(__('auth.label_value', ['label' => __('auth.email_subuser_removed.server_name'), 'value' => $this->server->name]))
+                ->action(__('auth.email_subuser_removed.visit'), route('index'));
+        } finally {
+            app()->setLocale($previousLocale);
+        }
+    }
+
+    /**
+     * Set the locale for the notification based on panel default.
+     */
+    public function locale(mixed $locale): static
+    {
+        $this->locale = config('app.locale', 'en');
+
+        return $this;
     }
 }

@@ -1,7 +1,8 @@
 import { AntennaSignal, Calendar, Copy, Database, FolderOpen, Gear, Person, Server, Shield } from '@gravity-ui/icons';
 import { Actions, useStoreActions, useStoreState } from 'easy-peasy';
 import { Form, Formik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { array, object, string } from 'yup';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
@@ -9,6 +10,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import Field from '@/components/elements/Field';
 import PermissionRow from '@/components/server/users/PermissionRow';
+
+import i18n from '@/lib/i18n';
 
 import createOrUpdateSubuser from '@/api/server/users/createOrUpdateSubuser';
 
@@ -36,6 +39,7 @@ interface Props {
 const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmitting, setIsSubmitting }: Props) => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const appendSubuser = ServerContext.useStoreActions((actions) => actions.subusers.appendSubuser);
+    const { t } = useTranslation('server');
     const { clearFlashes, clearAndAddHttpError } = useStoreActions(
         (actions: Actions<ApplicationStore>) => actions.flashes,
     );
@@ -120,9 +124,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                 }
                 validationSchema={object().shape({
                     email: string()
-                        .max(191, 'Email addresses must not exceed 191 characters.')
-                        .email('A valid email address must be provided.')
-                        .required('A valid email address must be provided.'),
+                        .max(191, i18n.t('server:users.validation_email_max'))
+                        .email(i18n.t('server:users.validation_email_valid'))
+                        .required(i18n.t('server:users.validation_email_required')),
                     permissions: array().of(string()),
                 })}
             >
@@ -140,14 +144,14 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             className='w-5 h-5 text-brand'
                                         />
                                     </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>User Information</h3>
+                                    <h3 className='text-xl font-semibold text-zinc-100'>
+                                        {i18n.t('server:users.user_info')}
+                                    </h3>
                                 </div>
                                 <Field
                                     name={'email'}
-                                    label={'Email Address'}
-                                    description={
-                                        'Enter the email address of the user you wish to invite as a subuser for this server.'
-                                    }
+                                    label={i18n.t('server:users.email_address')}
+                                    description={i18n.t('server:users.email_description')}
                                 />
                             </div>
                         )}
@@ -164,7 +168,9 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             className='w-5 h-5 text-brand'
                                         />
                                     </div>
-                                    <h3 className='text-xl font-semibold text-zinc-100'>Detailed Permissions</h3>
+                                    <h3 className='text-xl font-semibold text-zinc-100'>
+                                        {i18n.t('server:users.permissions')}
+                                    </h3>
                                 </div>
                                 {canEditUser && (
                                     <button
@@ -183,8 +189,8 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                         className='text-sm px-4 py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 hover:border-brand/30 transition-colors font-medium'
                                     >
                                         {editablePermissions.every((p) => values.permissions.includes(p))
-                                            ? 'Deselect All'
-                                            : 'Select All'}
+                                            ? i18n.t('server:users.deselect_all')
+                                            : i18n.t('server:users.select_all')}
                                     </button>
                                 )}
                             </div>
@@ -198,10 +204,12 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                             fill='currentColor'
                                             className='w-5 h-5 text-brand'
                                         />
-                                        <span className='text-sm font-semibold text-brand'>Permission Restriction</span>
+                                        <span className='text-sm font-semibold text-brand'>
+                                            {i18n.t('server:users.permission_restriction')}
+                                        </span>
                                     </div>
                                     <p className='text-sm text-zinc-300 leading-relaxed'>
-                                        You can only assign permissions that you currently have access to.
+                                        {i18n.t('server:users.permission_restriction_text')}
                                     </p>
                                 </div>
                             )}
@@ -225,9 +233,13 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                         );
                                                     })()}
                                                     <div className='flex-1 min-w-0'>
-                                                        <h4 className='font-medium text-zinc-200 capitalize'>{key}</h4>
+                                                        <h4 className='font-medium text-zinc-200 capitalize'>
+                                                            {t(`users.permissions_list.${key}.title`, { defaultValue: key })}
+                                                        </h4>
                                                         <p className='text-xs text-zinc-400 mt-1 break-words'>
-                                                            {permissions[key]?.description}
+                                                            {t(`users.permissions_list.${key}.desc`, {
+                                                                defaultValue: permissions[key]?.description || '',
+                                                            })}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -266,8 +278,8 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                                                         {Object.keys(permissions[key]?.keys ?? {})
                                                             .map((pkey) => `${key}.${pkey}`)
                                                             .every((p) => values.permissions.includes(p))
-                                                            ? 'Deselect All'
-                                                            : 'Select All'}
+                                                            ? i18n.t('server:users.deselect_all')
+                                                            : i18n.t('server:users.select_all')}
                                                     </button>
                                                 )}
                                             </div>
@@ -293,10 +305,10 @@ const UserFormComponent = ({ subuser, onSuccess, onCancel, flashKey, isSubmittin
                         <Can action={subuser ? 'user.update' : 'user.create'}>
                             <div className='flex gap-3 justify-end pt-4 border-t border-[#ffffff12]'>
                                 <ActionButton variant='secondary' type='button' onClick={onCancel}>
-                                    Cancel
+                                    {i18n.t('strings:cancel')}
                                 </ActionButton>
                                 <ActionButton variant='primary' type='submit' disabled={isSubmitting}>
-                                    {subuser ? 'Save Changes' : 'Invite User'}
+                                    {subuser ? i18n.t('server:users.save_changes') : i18n.t('server:users.invite_user')}
                                 </ActionButton>
                             </div>
                         </Can>

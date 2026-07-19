@@ -30,14 +30,4 @@ class ServerOperationRequest extends ClientApiRequest
         ];
     }
 
-    /**
-     * Get custom messages for validator errors.
-     */
-    public function messages(): array
-    {
-        return [
-            'operation_id.required' => 'An operation ID is required.',
-            'operation_id.uuid' => 'The operation ID must be a valid UUID.',
-        ];
-    }
 }

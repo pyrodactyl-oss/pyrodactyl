@@ -51,18 +51,6 @@ class StoreServerDatabaseRequest extends ApplicationApiRequest
     }
 
     /**
-     * Format error messages in a more understandable format for API output.
-     */
-    public function attributes(): array
-    {
-        return [
-            'host' => 'Database Host Server ID',
-            'remote' => 'Remote Connection String',
-            'database' => 'Database Name',
-        ];
-    }
-
-    /**
      * Returns the database name in the expected format.
      */
     public function databaseName(): string

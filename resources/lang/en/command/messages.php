@@ -1,5 +1,14 @@
 <?php
 
+/*
+|--------------------------------------------------------------------------
+| Console Command Language Lines
+|--------------------------------------------------------------------------
+|
+| Contains all of the console command translation strings
+| for the Artisan CLI commands.
+|
+*/
 return [
     'location' => [
         'no_location_found' => 'Could not locate a record matching the provided short code.',

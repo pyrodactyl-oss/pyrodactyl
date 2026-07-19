@@ -6,6 +6,8 @@ import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import Modal, { RequiredModalProps } from '@/components/elements/Modal';
 
+import i18n from '@/lib/i18n';
+
 import { ServerContext } from '@/state/server';
 
 type Props = RequiredModalProps & {
@@ -29,7 +31,9 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
             onSubmit={submit}
             initialValues={{ fileName: '' }}
             validationSchema={object().shape({
-                fileName: string().required().min(1),
+                fileName: string()
+                    .required(i18n.t('strings:validation.required'))
+                    .min(1, i18n.t('strings:validation.required')),
             })}
         >
             {({ resetForm }) => (
@@ -38,19 +42,19 @@ const FileNameModal = ({ onFileNamed, onDismissed, ...props }: Props) => {
                         resetForm();
                         onDismissed();
                     }}
-                    title='New file'
+                    title={i18n.t('server:files.new_file')}
                     {...props}
                 >
                     <Form className='m-0 w-full flex flex-col gap-4'>
                         <Field
                             id={'fileName'}
                             name={'fileName'}
-                            label={'File Name'}
-                            description={'Enter the name that this file should be saved as.'}
+                            label={i18n.t('server:files.file_name')}
+                            description={i18n.t('server:files.file_save_as_description')}
                             autoFocus
                         />
                         <div className={`flex justify-end w-full my-4`}>
-                            <ActionButton variant='primary'>Create File</ActionButton>
+                            <ActionButton variant='primary'>{i18n.t('server:files.create_file')}</ActionButton>
                         </div>
                     </Form>
                 </Modal>

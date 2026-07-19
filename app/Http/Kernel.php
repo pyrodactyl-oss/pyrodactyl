@@ -74,7 +74,7 @@ class Kernel extends HttpKernel
             TrackAPIKey::class,
             RequireTwoFactorAuthentication::class,
             AuthenticateIPAccess::class,
-
+            LanguageMiddleware::class,
         ],
         'application-api' => [
             SubstituteBindings::class,

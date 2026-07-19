@@ -1,10 +1,16 @@
+import { FileArrowUp, FolderArrowUp } from '@gravity-ui/icons';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 import ActionButton from '@/components/elements/ActionButton';
 import { ModalMask } from '@/components/elements/Modal';
+import { Dialog } from '@/components/elements/dialog';
+import ConfirmationDialog from '@/components/elements/dialog/ConfirmationDialog';
 import FadeTransition from '@/components/elements/transitions/FadeTransition';
 
+import i18n from '@/lib/i18n';
+
+import createDirectory from '@/api/server/files/createDirectory';
 import getFileUploadUrl from '@/api/server/files/getFileUploadUrl';
 
 import { ServerContext } from '@/state/server';
@@ -21,19 +27,68 @@ function isFileOrDirectory(event: DragEvent): boolean {
     return event.dataTransfer.types.some((value) => value.toLowerCase() === 'files');
 }
 
+async function collectFilesFromEntry(
+    entry: FileSystemEntry,
+    basePath: string,
+): Promise<Array<{ file: File; path: string }>> {
+    const results: Array<{ file: File; path: string }> = [];
+
+    if (entry.isFile) {
+        const file = await new Promise<File>((resolve, reject) => {
+            (entry as FileSystemFileEntry).file(resolve, reject);
+        });
+        results.push({ file, path: basePath });
+    } else if (entry.isDirectory) {
+        const dirEntry = entry as FileSystemDirectoryEntry;
+        const dirPath = basePath ? `${basePath}/${entry.name}` : entry.name;
+        const reader = dirEntry.createReader();
+
+        const readAllEntries = (): Promise<FileSystemEntry[]> => {
+            return new Promise((resolve) => {
+                const allEntries: FileSystemEntry[] = [];
+                const readBatch = () => {
+                    reader.readEntries((entries) => {
+                        if (entries.length === 0) {
+                            resolve(allEntries);
+                        } else {
+                            allEntries.push(...entries);
+                            readBatch();
+                        }
+                    });
+                };
+                readBatch();
+            });
+        };
+
+        const entries = await readAllEntries();
+        for (const child of entries) {
+            const childResults = await collectFilesFromEntry(child, dirPath);
+            results.push(...childResults);
+        }
+    }
+
+    return results;
+}
+
 const UploadButton = () => {
     const fileUploadInput = useRef<HTMLInputElement>(null);
-    const [timeouts, _] = useState<NodeJS.Timeout[]>([]);
+    const folderUploadInput = useRef<HTMLInputElement>(null);
     const [visible, setVisible] = useState(false);
-    const { mutate } = useFileManagerSwr();
+    const [pendingFolder, setPendingFolder] = useState<{
+        files: Array<{ file: File; relDir: string }>;
+        dirsNeeded: string[];
+    } | null>(null);
+    const [pendingConflicts, setPendingConflicts] = useState<{
+        files: Array<{ file: File; relDir: string }>;
+        existing: string[];
+    } | null>(null);
+    const { data: currentFiles, mutate } = useFileManagerSwr();
     const { addError, clearAndAddHttpError } = useFlashKey('files');
 
     const name = ServerContext.useStoreState((state) => state.server.data!.name);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const directory = ServerContext.useStoreState((state) => state.files.directory);
-    const { clearFileUploads, removeFileUpload, pushFileUpload } = ServerContext.useStoreActions(
-        (actions) => actions.files,
-    );
+    const { clearFileUploads, pushFileUpload } = ServerContext.useStoreActions((actions) => actions.files);
 
     useEventListener(
         'dragenter',
@@ -53,44 +108,288 @@ const UploadButton = () => {
         if (visible) setVisible(false);
     });
 
-    useEffect(() => {
-        return () => timeouts.forEach(clearTimeout);
-    }, []);
+    const ensureDirectories = async (paths: string[]) => {
+        const uniqueDirs = [...new Set(paths)];
+        for (const dir of uniqueDirs) {
+            try {
+                await createDirectory(uuid, directory, dir);
+            } catch {
+                // Directory may already exist, continue
+            }
+        }
+    };
 
-    const onFileSubmission = (files: FileList) => {
-        clearAndAddHttpError();
-        const list = Array.from(files);
-        if (list.some((file) => !file.size || (!file.type && file.size === 4096))) {
-            return addError('Folder uploads are not supported at this time.', 'Error');
+    const uploadFile = (file: File, targetDir: string) => {
+        const controller = new AbortController();
+        const uploadKey = targetDir ? `${targetDir}/${file.name}` : file.name;
+        pushFileUpload({
+            name: uploadKey,
+            data: { abort: controller, loaded: 0, total: file.size },
+        });
+
+        return getFileUploadUrl(uuid)
+            .then((url) =>
+                axios
+                    .post(
+                        url,
+                        { files: file },
+                        {
+                            signal: controller.signal,
+                            headers: { 'Content-Type': 'multipart/form-data' },
+                            params: { directory: targetDir || directory },
+                        },
+                    )
+                    .then(() =>
+                        pushFileUpload({
+                            name: uploadKey,
+                            data: { abort: controller, loaded: file.size, total: file.size },
+                        }),
+                    ),
+            )
+            .catch((error) => {
+                const message = axios.isAxiosError(error)
+                    ? error.response?.data?.error || error.message
+                    : i18n.t('server:files.upload_failed');
+                pushFileUpload({
+                    name: uploadKey,
+                    data: { abort: new AbortController(), loaded: file.size, total: file.size, error: message } as any,
+                });
+            });
+    };
+
+    const onFileSubmission = async (files: FileList) => {
+        const maxFiles = 500;
+        const validFiles = Array.from(files).filter((file) => file.size > 0 && (file.type || file.size !== 4096));
+
+        if (validFiles.length > maxFiles) {
+            return addError(
+                i18n.t('server:files.too_many_files_message', { max: maxFiles, count: validFiles.length }),
+                i18n.t('server:files.too_many_files_title'),
+            );
         }
 
-        const uploads = list.map((file) => {
-            const controller = new AbortController();
-            pushFileUpload({
-                name: file.name,
-                data: { abort: controller, loaded: 0, total: file.size },
-            });
+        clearAndAddHttpError();
 
-            return () =>
-                getFileUploadUrl(uuid).then((url) =>
-                    axios
-                        .post(
-                            url,
-                            { files: file },
-                            {
-                                signal: controller.signal,
-                                headers: { 'Content-Type': 'multipart/form-data' },
-                                params: { directory },
-                            },
-                        )
-                        .then(() => timeouts.push(setTimeout(() => removeFileUpload(file.name), 500))),
-                );
+        // Check for folders via webkitRelativePath (from input webkitdirectory)
+        const hasFolders = Array.from(files).some((f) => f.webkitRelativePath);
+
+        // Check via DataTransferItem for drag events
+        if (!hasFolders) {
+            const regularFiles = Array.from(files).filter((file) => file.size > 0 && (file.type || file.size !== 4096));
+            const existing = currentFiles?.map((f) => f.name) ?? [];
+
+            const uploads = regularFiles.map((file) => {
+                const conflict = existing.includes(file.name);
+                const name = conflict ? `${file.name} (${i18n.t('strings:replace')})` : file.name;
+                return () => uploadFile(file, directory);
+            });
+            const conflicts = regularFiles.filter((f) => existing.includes(f.name));
+
+            if (conflicts.length > 0) {
+                setPendingConflicts({
+                    files: conflicts.map((f) => ({ file: f, relDir: '' })),
+                    existing: conflicts.map((f) => f.name),
+                });
+                return;
+            }
+
+            Promise.all(uploads.map((fn) => fn()))
+                .then(() => mutate())
+                .catch((error) => {
+                    clearAndAddHttpError(error);
+                });
+            return;
+        }
+
+        // Folder upload: group files by their relative directory
+        const filePaths: Array<{ file: File; relDir: string }> = [];
+        const dirsNeeded = new Set<string>();
+
+        for (const file of Array.from(files)) {
+            if (!file.size || (!file.type && file.size === 4096)) continue;
+            const relPath = file.webkitRelativePath;
+            const parts = relPath ? relPath.split('/') : [file.name];
+            parts.pop();
+            const relDir = parts.join('/');
+
+            if (relDir) dirsNeeded.add(relDir);
+            filePaths.push({ file, relDir });
+        }
+
+        if (filePaths.length > 50) {
+            setPendingFolder({ files: filePaths, dirsNeeded: [...dirsNeeded] });
+            return;
+        }
+
+        try {
+            await ensureDirectories([...dirsNeeded]);
+        } catch {
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+        }
+
+        const uploads = filePaths.map(
+            ({ file, relDir }) =>
+                () =>
+                    uploadFile(file, directory + (relDir ? '/' + relDir : '')),
+        );
+
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
+            });
+    };
+
+    const confirmReplaceAll = async () => {
+        if (!pendingConflicts) return;
+        const { files } = pendingConflicts;
+        setPendingConflicts(null);
+
+        const uploads = files.map(
+            ({ file, relDir }) =>
+                () =>
+                    uploadFile(file, directory + (relDir ? '/' + relDir : '')),
+        );
+
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
+            });
+    };
+
+    const getNextRenameIndex = (fileName: string): number => {
+        const nameParts = fileName.split('.');
+        const ext = nameParts.length > 1 ? '.' + nameParts.pop()! : '';
+        const base = nameParts.join('.');
+        const existing = currentFiles?.map((f) => f.name) ?? [];
+
+        let maxIndex = 0;
+        const pattern = new RegExp(
+            `^${base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\((\\d+)\\)${ext.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+        );
+        for (const name of existing) {
+            const match = name.match(pattern);
+            if (match) {
+                maxIndex = Math.max(maxIndex, parseInt(match[1], 10));
+            }
+        }
+        // Also check if the base name (without number) exists
+        if (maxIndex === 0 && existing.includes(fileName)) {
+            maxIndex = 0;
+        }
+        return maxIndex + 1;
+    };
+
+    const confirmRenameAll = async () => {
+        if (!pendingConflicts) return;
+        const { files } = pendingConflicts;
+        setPendingConflicts(null);
+
+        const uploads = files.map(({ file, relDir }) => {
+            const nameParts = file.name.split('.');
+            const ext = nameParts.length > 1 ? '.' + nameParts.pop()! : '';
+            const base = nameParts.join('.');
+            const nextIndex = getNextRenameIndex(file.name);
+            const renamed = new File([file], `${base} (${nextIndex})${ext}`, { type: file.type });
+            return () => uploadFile(renamed, directory + (relDir ? '/' + relDir : ''));
         });
 
         Promise.all(uploads.map((fn) => fn()))
             .then(() => mutate())
             .catch((error) => {
-                clearFileUploads();
+                clearAndAddHttpError(error);
+            });
+    };
+
+    const confirmFolderUpload = async () => {
+        if (!pendingFolder) return;
+        const { files, dirsNeeded } = pendingFolder;
+        setPendingFolder(null);
+
+        try {
+            await ensureDirectories(dirsNeeded);
+        } catch {
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+        }
+
+        const uploads = files.map(
+            ({ file, relDir }) =>
+                () =>
+                    uploadFile(file, directory + (relDir ? '/' + relDir : '')),
+        );
+
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
+                clearAndAddHttpError(error);
+            });
+    };
+
+    const onDrop = async (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setVisible(false);
+
+        const items = e.dataTransfer?.items;
+        if (!items || items.length === 0) return;
+
+        // Collect all files from the drop using webkitGetAsEntry for folder support
+        const collected: Array<{ file: File; path: string }> = [];
+        const promises: Promise<void>[] = [];
+
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (item.kind !== 'file') continue;
+            const entry = item.webkitGetAsEntry?.();
+            if (entry) {
+                promises.push(
+                    collectFilesFromEntry(entry, '').then((results) => {
+                        collected.push(...results);
+                    }),
+                );
+            } else {
+                const file = item.getAsFile();
+                if (file) collected.push({ file, path: '' });
+            }
+        }
+
+        await Promise.all(promises);
+
+        if (collected.length === 0) return;
+        clearAndAddHttpError();
+
+        const dirsNeeded = new Set<string>();
+        const uploadItems: Array<{ file: File; relDir: string }> = [];
+
+        for (const { file, path } of collected) {
+            if (file.size === 0 || (!file.type && file.size === 4096)) continue;
+            if (path) dirsNeeded.add(path);
+            uploadItems.push({ file, relDir: path });
+        }
+
+        const existing = currentFiles?.map((f) => f.name) ?? [];
+        const conflicts = uploadItems.filter(({ file, relDir }) => !relDir && existing.includes(file.name));
+        if (conflicts.length > 0) {
+            setPendingConflicts({ files: conflicts, existing: conflicts.map((f) => f.file.name) });
+            return;
+        }
+
+        try {
+            await ensureDirectories([...dirsNeeded]);
+        } catch {
+            return addError(i18n.t('server:files.upload_failed'), i18n.t('strings:error'));
+        }
+
+        const uploads = uploadItems.map(
+            ({ file, relDir }) =>
+                () =>
+                    uploadFile(file, directory + (relDir ? '/' + relDir : '')),
+        );
+
+        Promise.all(uploads.map((fn) => fn()))
+            .then(() => mutate())
+            .catch((error) => {
                 clearAndAddHttpError(error);
             });
     };
@@ -102,19 +401,10 @@ const UploadButton = () => {
                     className='flex'
                     onClick={() => setVisible(false)}
                     onDragOver={(e) => e.preventDefault()}
-                    // why doesn't vanilla pterodactyl have this?
                     onDragLeave={() => {
                         setVisible(false);
                     }}
-                    onDrop={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        setVisible(false);
-                        if (!e.dataTransfer?.files.length) return;
-
-                        onFileSubmission(e.dataTransfer.files);
-                    }}
+                    onDrop={onDrop}
                 >
                     <div className={'w-full flex items-center justify-center pointer-events-none'}>
                         <div
@@ -147,7 +437,7 @@ const UploadButton = () => {
                                     'flex-1 text-lg font-bold tracking-tight text-center truncate w-full relative px-4'
                                 }
                             >
-                                Upload to {name}
+                                {i18n.t('server:files.upload_to', { name })}
                             </h1>
                         </div>
                     </div>
@@ -159,7 +449,6 @@ const UploadButton = () => {
                 className={`hidden`}
                 onChange={(e) => {
                     if (!e.currentTarget.files) return;
-
                     onFileSubmission(e.currentTarget.files);
                     if (fileUploadInput.current) {
                         fileUploadInput.current.files = null;
@@ -167,12 +456,90 @@ const UploadButton = () => {
                 }}
                 multiple
             />
-            <ActionButton
-                variant='secondary'
-                onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
+            <input
+                type={'file'}
+                ref={folderUploadInput}
+                className={`hidden`}
+                onChange={(e) => {
+                    if (!e.currentTarget.files) return;
+                    onFileSubmission(e.currentTarget.files);
+                    if (folderUploadInput.current) {
+                        folderUploadInput.current.value = '';
+                    }
+                }}
+                webkitdirectory=''
+                multiple
+            />
+            <div className='flex flex-row gap-1'>
+                <ActionButton
+                    variant='secondary'
+                    onClick={() => folderUploadInput.current && folderUploadInput.current.click()}
+                    title={i18n.t('server:files.upload_folder')}
+                >
+                    <FolderArrowUp className='h-4 w-4' />
+                </ActionButton>
+                <ActionButton
+                    variant='secondary'
+                    onClick={() => fileUploadInput.current && fileUploadInput.current.click()}
+                    title={i18n.t('server:files.upload_file')}
+                >
+                    <FileArrowUp className='h-4 w-4' />
+                </ActionButton>
+            </div>
+            <ConfirmationDialog
+                open={pendingFolder !== null}
+                onClose={() => setPendingFolder(null)}
+                onConfirmed={confirmFolderUpload}
+                title={i18n.t('server:files.large_folder_upload')}
+                confirm={i18n.t('server:files.large_folder_upload_confirm', {
+                    count: pendingFolder?.files.length ?? 0,
+                })}
             >
-                Upload
-            </ActionButton>
+                <p>
+                    {i18n.t('server:files.large_folder_upload_body', { count: pendingFolder?.files.length ?? 0 })}
+                    {pendingFolder?.files[0]?.webkitRelativePath && (
+                        <>
+                            {' '}
+                            {i18n.t('server:files.large_folder_upload_from', {
+                                source: pendingFolder.files[0].webkitRelativePath.split('/')[0],
+                            })}
+                        </>
+                    )}
+                    .
+                    {pendingFolder && pendingFolder.dirsNeeded.length > 0 && (
+                        <>
+                            {' '}
+                            {i18n.t('server:files.large_folder_upload_subfolders', {
+                                count: pendingFolder.dirsNeeded.length,
+                            })}
+                        </>
+                    )}
+                </p>
+                <p className='mt-2 text-sm text-zinc-400'>{i18n.t('server:files.large_folder_upload_hint')}</p>
+            </ConfirmationDialog>
+            <Dialog
+                open={pendingConflicts !== null}
+                onClose={() => setPendingConflicts(null)}
+                title={i18n.t('server:files.file_already_exists')}
+            >
+                <p>{i18n.t('server:files.file_exists_body', { count: pendingConflicts?.existing.length ?? 0 })}</p>
+                <ul className='mt-2 text-sm text-zinc-400 list-disc pl-4 max-h-32 overflow-y-auto'>
+                    {pendingConflicts?.existing.map((name) => (
+                        <li key={name}>{name}</li>
+                    ))}
+                </ul>
+                <Dialog.Footer>
+                    <ActionButton variant='secondary' onClick={() => setPendingConflicts(null)}>
+                        {i18n.t('strings:cancel')}
+                    </ActionButton>
+                    <ActionButton variant='primary' onClick={confirmRenameAll}>
+                        {i18n.t('server:files.rename')}
+                    </ActionButton>
+                    <ActionButton variant='danger' onClick={confirmReplaceAll}>
+                        {i18n.t('server:files.replace')}
+                    </ActionButton>
+                </Dialog.Footer>
+            </Dialog>
         </>
     );
 };

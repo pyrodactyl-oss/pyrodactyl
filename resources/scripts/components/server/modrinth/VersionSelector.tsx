@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react';
 import { Checkbox } from '@/components/elements/CheckboxLabel';
 import Input from '@/components/elements/Input';
 
+import i18n from '@/lib/i18n';
+
 import { useGlobalStateContext } from './config';
 
 export const VersionSelector = () => {
@@ -48,7 +50,7 @@ export const VersionSelector = () => {
             <div className='relative'>
                 <Input
                     type='text'
-                    placeholder='Search versions...'
+                    placeholder={i18n.t('server:modrinth.search_versions')}
                     value={searchQuery}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                     className='w-full pl-3 pr-8 py-1 text-sm'
@@ -64,10 +66,10 @@ export const VersionSelector = () => {
             </div>
 
             {gameVersions.length === 0 ? (
-                <p className='text-sm text-gray-500'>No versions available</p>
+                <p className='text-sm text-gray-500'>{i18n.t('server:modrinth.no_versions')}</p>
             ) : !hasSearchResults ? (
                 <p className='text-sm text-gray-500 text-center py-2'>
-                    No versions found matching &quot;{searchQuery}&quot;
+                    {i18n.t('server:modrinth.no_versions_found_query', { searchQuery })}
                 </p>
             ) : (
                 <>
@@ -75,7 +77,11 @@ export const VersionSelector = () => {
                         {/* Show releases first */}
                         {hasReleases && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium'>Releases</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium'>
+                                        {i18n.t('server:modrinth.releases')}
+                                    </p>
+                                )}
                                 {releases.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -95,7 +101,11 @@ export const VersionSelector = () => {
                         {/* Show snapshots if enabled or searching */}
                         {(showSnapshots || searchQuery) && hasSnapshots && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Snapshots</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium pt-1'>
+                                        {i18n.t('server:modrinth.snapshots')}
+                                    </p>
+                                )}
                                 {snapshots.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -115,7 +125,11 @@ export const VersionSelector = () => {
                         {/* Show betas */}
                         {hasBetas && (
                             <div className='space-y-1'>
-                                {!searchQuery && <p className='text-xs text-gray-500 font-medium pt-1'>Betas</p>}
+                                {!searchQuery && (
+                                    <p className='text-xs text-gray-500 font-medium pt-1'>
+                                        {i18n.t('server:modrinth.betas')}
+                                    </p>
+                                )}
                                 {betas.map((version) => (
                                     <Checkbox
                                         key={version.id}
@@ -134,14 +148,16 @@ export const VersionSelector = () => {
                     </div>
 
                     <div className='flex justify-between items-center pt-1 border-t border-gray-200'>
-                        <span className='text-xs text-gray-500'>{selectedVersions.length} selected</span>
+                        <span className='text-xs text-gray-500'>
+                            {i18n.t('server:modrinth.selected_count', { count: selectedVersions.length })}
+                        </span>
 
                         {searchQuery && (
                             <button
                                 onClick={() => setSearchQuery('')}
                                 className='text-xs text-gray-600 hover:text-gray-800 font-medium'
                             >
-                                Clear search
+                                {i18n.t('server:modrinth.clear_search')}
                             </button>
                         )}
                     </div>
@@ -153,7 +169,9 @@ export const VersionSelector = () => {
                                 className='w-full text-xs text-white-600 hover:text-gray-300 font-medium py-1 flex items-center justify-center gap-1'
                             >
                                 <span>{showSnapshots ? '-' : '+'}</span>
-                                {showSnapshots ? 'Hide Snapshots' : 'Show Snapshots'}
+                                {showSnapshots
+                                    ? i18n.t('server:modrinth.hide_snapshots')
+                                    : i18n.t('server:modrinth.show_snapshots')}
                             </button>
                         </div>
                     )}

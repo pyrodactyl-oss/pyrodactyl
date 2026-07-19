@@ -6,6 +6,7 @@ interface FileUploadData {
     loaded: number;
     readonly abort: AbortController;
     readonly total: number;
+    error?: string;
 }
 
 interface ServerFileStore {

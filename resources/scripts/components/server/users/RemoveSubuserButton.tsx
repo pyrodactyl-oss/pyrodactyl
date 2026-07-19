@@ -5,6 +5,8 @@ import { useState } from 'react';
 import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 
+import i18n from '@/lib/i18n';
+
 import { httpErrorToHuman } from '@/api/http';
 import deleteSubuser from '@/api/server/users/deleteSubuser';
 
@@ -39,24 +41,26 @@ const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     return (
         <>
             <ConfirmationModal
-                title={`Remove ${subuser.username}?`}
-                buttonText={`Remove ${subuser.username}`}
+                title={i18n.t('server:users.remove_user')}
+                buttonText={i18n.t('server:users.remove_user')}
                 visible={showConfirmation}
                 loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
-                All access to the server will be removed immediately.
+                {i18n.t('server:users.remove_user_text')}
+                <br /><br />
+                {i18n.t('server:users.remove_message')}
             </ConfirmationModal>
             <ActionButton
                 variant='danger'
                 size='sm'
                 className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
-                aria-label='Delete subuser'
+                aria-label={i18n.t('server:users.delete_subuser')}
             >
                 <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
-                Delete
+                {i18n.t('strings:delete')}
             </ActionButton>
         </>
     );

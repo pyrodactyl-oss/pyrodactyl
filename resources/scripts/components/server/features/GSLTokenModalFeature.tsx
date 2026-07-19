@@ -7,6 +7,8 @@ import Field from '@/components/elements/Field';
 import Modal from '@/components/elements/Modal';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
+import i18n from '@/lib/i18n';
+
 import updateStartupVariable from '@/api/server/updateStartupVariable';
 
 import { ServerContext } from '@/state/server';
@@ -75,26 +77,23 @@ const GSLTokenModalFeature = () => {
                 onDismissed={() => setVisible(false)}
                 closeOnBackground={false}
                 showSpinnerOverlay={loading}
-                title='Invalid GSL token!'
+                title={i18n.t('server:features.gsl.title')}
             >
                 <FlashMessageRender key={'feature:gslToken'} />
                 <Form>
-                    <p>It seems like your Gameserver Login Token (GSL token) is invalid or has expired.</p>
-                    <p className={`mt-3`}>
-                        You can either generate a new one and enter it below or leave the field blank to remove it
-                        completely.
-                    </p>
+                    <p>{i18n.t('server:features.gsl.description')}</p>
+                    <p className={`mt-3`}>{i18n.t('server:features.gsl.instructions')}</p>
                     <div className={`sm:flex items-center mt-6`}>
                         <Field
                             name={'gslToken'}
-                            label={'GSL Token'}
-                            description={'Visit https://steamcommunity.com/dev/managegameservers to generate a token.'}
+                            label={i18n.t('server:features.gsl.token_label')}
+                            description={i18n.t('server:features.gsl.token_help')}
                             autoFocus
                         />
                     </div>
                     <div className={`my-6 sm:flex items-center justify-end`}>
                         <ActionButton variant='primary' type={'submit'}>
-                            Update GSL Token
+                            {i18n.t('server:features.gsl.update_button')}
                         </ActionButton>
                     </div>
                 </Form>
